@@ -35,17 +35,21 @@ clear y_stretch;
 %% EM iterations
 num_iter = 100;
 xest = zeros(L,num_iter+1);
-xest(:,1) = randn(L,1);
-xest(:,1) = xest(:,1)/norm(xest(:,1))*norm(x);
+xest(:,1) = fft(randn(L,1)); xest(B+2:L-B,1) = 0; 
+xest(:,1) = real(ifft(xest(:,1)));
+% xest(:,1) = randn(L,1);
+% xest(:,1) = xest(:,1)/norm(xest(:,1))*norm(x);
 err = zeros(num_iter+1,1);
 err(1) = norm(x - xest(:,1))/norm(x);
 w = zeros(N,1);
-sigma_em = 10*sigma;
+sigma_em = 100*sigma;
 
 for iter = 1:num_iter
     X = repmat(xest(:,iter),1,N)';
     w = exp(-0.5/(sigma_em^2)*sum((X-y_mat).^2,2));
-    w = w/sum(w); %w = circshift(w,(L-1)/2);
+    w = w/sum(w);% w = circshift(w,(L-1)/2-2);
+    %Maxw = max(w);
+    %w(w<0.01*Maxw) = 0;
     xest(:,iter+1) = w'*y_mat; xest(:,iter+1) = xest(:,iter+1)/norm(xest(:,iter+1))*norm(x);
     err(iter+1) = norm(x - xest(:,iter+1))/norm(x);
     if abs(err(iter+1) - err(iter))<10^-8

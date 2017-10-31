@@ -5,8 +5,8 @@ clear; close all; clc;
 %% Defining the problem
 
 L = 21; % length of signal
-k = 500000; % # of signal's repetitions (maximal number)
-sigma = 2;  % noise level
+k = 100000; % # of signal's repetitions (maximal number)
+sigma = .5;  % noise level
 window_size = 4*L; 
 Nfactor = 6; % Sparsity factor, should be ~6
 N = window_size*k*Nfactor; % # of measurements
@@ -17,8 +17,8 @@ x = randn(L,1);
 [y,yc, ind] = gen_data(x,N,k,sigma,window_size);
 snr = norm(yc)^2/norm(y)^2; % The problem's SNR
 k_eff = length(ind); % The actual nunber of signal's repetitions
-fprintf('Measurement length  = %e \n',N);
-fprintf('The measurement contains %.1e repetitions of the underlying signal (from %.1e)\n',k_eff,k);
+fprintf('Measurement length  = %g \n',N);
+fprintf('The measurement contains %g repetitions of the underlying signal (from %g)\n',k_eff,k);
 fprintf('SNR = %.4f \n',snr);
 fprintf('Generating data time = %.2f [sec] \n',toc);
 
@@ -44,9 +44,7 @@ tic
 x_est = real(ifft(sqrt(P_est).*z));
 xref = zeros(window_size,1); xref(1:L) = x;
 [x_aligned,~, ~] = align_to_reference(x_est, xref);
-x_aligned = x_aligned(1:L); 
-% using norm(x) for for a while
-x_aligned = x_aligned/norm(x_aligned)*norm(x);
+x_aligned = x_aligned(1:L); x_aligned = x_aligned/norm(x_aligned)*norm(x);
 fprintf('Algorithm time = %.2f [sec] \n',toc);
 
 %% plotting
@@ -55,10 +53,9 @@ err = norm(x_aligned - x)/norm(x);
 inds = ind(10) - 200; indf = inds + 400;
 
 figure; 
-subplot(211); hold on; stem(1:L,x); stem(1:L,x_aligned,'xr'); 
-title(strcat('Error = ',num2str(err)));
+subplot(211); hold on; stem(x); stem(x_aligned,'xr'); title(strcat('Error = ',num2str(err)));
 legend('signal','estimation');
 subplot(212); hold on; plot(inds:indf,yc(inds:indf),'linewidth',2); plot(inds:indf,y(inds:indf)); legend('clean data','data');
 title(strcat('N =', num2str(N),', L=',num2str(L), ', K=',num2str(k_eff),', SNR=',num2str(snr)));
-axis tight
+
     
