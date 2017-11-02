@@ -1,16 +1,14 @@
 clear; close all; clc;
 
-% Comment: Need to find a norm estimator!
-
 %% Defining the problem
 
 L = 21; % length of signal
-k = 2e4; %2*500000; % # of signal's repetitions (maximal number)
+k = 1e3; %5e6; %2*500000; % # of signal's repetitions (maximal number)
 sigma = 1;  % noise level2
 window_size = 4*L; 
-Nfactor = 6; % Sparsity factor, should be ~6
+Nfactor = 4; % Sparsity factor, should be ~6
 N = window_size*k*Nfactor; % # of measurements
-overlapping_factor = 2; % windows are overlapped by window_size/overlapping_factor
+overlapping_factor = 1; % windows are overlapped by window_size/overlapping_factor
 %% Generating data
 tic
 x = randn(L,1); 
@@ -58,9 +56,14 @@ fprintf('Algorithm time = %.2f [sec] \n',toc);
 
 %% plotting
 
-err = norm(x_aligned - x)/norm(x);
+err = norm(x_aligned - x)/norm(x)
 inds = ind(10) - 300; indf = inds + 600;
+% 
+% save('x.mat','x');
+% save('x_aligned.mat','x_aligned');
+% save('err.mat','err');
 
+if 0
 figure; 
 subplot(211); hold on; stem(1:L,x); stem(1:L,x_aligned,'xr'); 
 title(strcat('Error = ',num2str(err)));
@@ -68,4 +71,4 @@ legend('signal','estimation');
 subplot(212); hold on; plot(inds:indf,yc(inds:indf),'linewidth',2); plot(inds:indf,y(inds:indf)); legend('clean data','data');
 title(strcat('N =', num2str(N),', L=',num2str(L), ', K=',num2str(k_eff),', SNR=',num2str(snr)));
 axis tight
-    
+end    
