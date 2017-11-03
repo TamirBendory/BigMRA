@@ -98,11 +98,17 @@ Then,
 \begin{equation}
 y = \xz \ast s + \varepsilon.
 \end{equation}
-The goal is then to estimate $x$ from $y$, while $s$ is unknown as well. The support signal $s$ is the latent or hidden variable of the problem. This is quite common in blind deconvolution problem. For instance, in image deblurring, the both the blurring kernel and the high-resolution image are unknown, but the main goal is merely to sharpen the image. 
+The goal is then to estimate $x$ from $y$, while $s$ is unknown as well. The support signal $s$ is the latent or hidden variable of the problem. This is quite common in blind deconvolution problem. For instance, in image deblurring, the both the blurring kernel and the high-resolution image are unknown, but the main goal is merely to sharpen the image. In Section~\ref{sec:literature} we survey previous results on blind deconvolution.
 
-Recent papers on blind deconvolution and deconvolution.
+Figure~\ref{fig:example} shows examples for the data in different noise levels. In the low noise regime (for instance, the first row), the problem is easy. In this case, one can identify $x$ in $y$ by simple detection algorithms (e.g., thresholding on the correlation function). Once several copies of  signal were detected and cropped from $y$, then one can  improve the SNR by averaging. We are interest in the more challenging regime of high noise level, in which the signal is completely swamped in the noise, and one cannot detect the signal's appearances. In this case, one need to use the prior information that the signal appears many times across the measurement.
 
-For small values of $\sigma$,  the problem is easy. In this case, one can identify $x$ in $y$ by simple detection algorithms (e.g., thresholding). Once several copies of  signal were detected and cropped from $y$, then one can  improve the SNR by averaging. We are interest in the more challenging regime of high noise level, in which the signal is completely swamped in the noise, and one cannot detect the signal's appearances. In this case, one need to use the prior information that the signal appears many times across the measurement.
+\begin{figure}
+	\begin{center}
+	\includegraphics[scale = .4]{example}
+	\end{center}
+\caption{fdnjfk}
+\label{fig:example}
+\end{figure}
 
 To perform this blind deconvolution, we use the invariant approach proposed for multireference alignment in a previous paper. Let us  first introduce  notation. We crop the measurement $y\in\RN$ into a series of analysis windows: 
 \begin{equation}

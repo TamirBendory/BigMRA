@@ -3,8 +3,8 @@ clear; close all; clc;
 %% Defining the problem
 
 L = 21; % length of signal
-k = 1e2; %5e6; %2*500000; % # of signal's repetitions (maximal number)
-sigma = 0.5;  % noise level2
+k = 1e3; %5e6; %2*500000; % # of signal's repetitions (maximal number)
+sigma = 0.1;  % noise level2
 window_size = 4*L; 
 Nfactor = 6; % Sparsity factor, should be ~6
 N = window_size*k*Nfactor; % # of measurements
@@ -36,7 +36,7 @@ end
 clear y_stretch;
 
 %% EM iterations
-num_iter = 10;
+num_iter = 100;
 xest = zeros(L,num_iter+1);
 %xest(:,1) = x; %intial guess
 xest(:,1) = fft(randn(L,1)); xest(B+2:L-B,1) = 0; 
@@ -47,16 +47,16 @@ w = zeros(N,1); sigma_em = sigma;
 
 for iter = 1:num_iter
     X = repmat(xest(:,iter),1,N)';
-    S = sum((X-y_mat).^2,2);
+    S = -0.5/(sigma_em^2)*sum((X-y_mat).^2,2);
     S = S - max(S(:));
-    w = exp(-0.5/(sigma_em^2)*S);
+    w = exp(S);
     w = w/sum(w); 
     %Maxw = max(w);
     %w(w<0.01*Maxw) = 0;
     xest(:,iter+1) = w'*y_mat; 
     xest(:,iter+1) = xest(:,iter+1)/norm(xest(:,iter+1))*norm(x); %plugging in norm(x)
     err(iter+1) = norm(x - xest(:,iter+1))/norm(x);
-    if norm(xest(:,iter+1) - xest(:,iter))<10^-6
+    if norm(xest(:,iter+1) - xest(:,iter))<10^-10
         break
     end
 end
@@ -82,6 +82,6 @@ subplot(413); hold on; plot(inds:indf,w(inds:indf),'linewidth',2);
 title('weights');
 axis tight
 
-subplot(414); hold on; plot(err,'linewidth',2); 
+subplot(414); hold on; plot(err(1:iter+1),'linewidth',2); 
 title('Error'); xlabel('iteration'); ylabel('error')
 axis tight
