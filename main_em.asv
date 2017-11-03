@@ -13,7 +13,7 @@ N = window_size*k*Nfactor; % # of measurements
 tic
 B = 2; % bandwidth
 x = fft(randn(L,1)); x(B+2:L-B) = 0; 
-x = real(ifft(x)); % generating low-pass signal
+x = real(ifft(x));
 [y,yc, ind] = gen_data(x,N,k,sigma,window_size);
 snr = norm(yc)^2/norm(y-yc)^2; % The problem's SNR
 k_eff = length(ind); % The actual nunber of signal's repetitions
@@ -36,9 +36,9 @@ end
 clear y_stretch;
 
 %% EM iterations
-num_iter = 10;
+num_iter = 100;
 xest = zeros(L,num_iter+1);
-%xest(:,1) = x; %intial guess
+%xest(:,1) = x;
 xest(:,1) = fft(randn(L,1)); xest(B+2:L-B,1) = 0; 
 xest(:,1) = real(ifft(xest(:,1)));
 
@@ -49,12 +49,11 @@ for iter = 1:num_iter
     X = repmat(xest(:,iter),1,N)';
     S = sum((X-y_mat).^2,2);
     S = S - max(S(:));
-    w = exp(-0.5/(sigma_em^2)*S);
+    w = exp(0.5/(sigma_em^2)*S);
     w = w/sum(w); 
     %Maxw = max(w);
     %w(w<0.01*Maxw) = 0;
-    xest(:,iter+1) = w'*y_mat; 
-    xest(:,iter+1) = xest(:,iter+1)/norm(xest(:,iter+1))*norm(x); %plugging in norm(x)
+    xest(:,iter+1) = w'*y_mat; xest(:,iter+1) = xest(:,iter+1)/norm(xest(:,iter+1))*norm(x);
     err(iter+1) = norm(x - xest(:,iter+1))/norm(x);
     if norm(xest(:,iter+1) - xest(:,iter))<10^-6
         break
@@ -68,20 +67,24 @@ fprintf('# of iterations %u (out of %u)\n',iter,num_iter);
 
 lag = 600;
 inds = ind(10) - lag/2; indf = inds + lag;
+% 
+% save('x.mat','x');
+% save('x_aligned.mat','x_aligned');
+% save('err.mat','err');
 
 figure; 
-subplot(411); %title(strcat('Error = ',num2str(err)));
+subplot(311); %title(strcat('Error = ',num2str(err)));
 hold on; stem(1:L,x); stem(1:L,xest(:,iter+1),'xr'); 
 legend('signal','estimation');
 
-subplot(412); hold on; plot(inds:indf,yc(inds:indf),'linewidth',2); plot(inds:indf,y(inds:indf)); legend('clean data','data');
+subplot(312); hold on; plot(inds:indf,yc(inds:indf),'linewidth',2); plot(inds:indf,y(inds:indf)); legend('clean data','data');
 title(strcat('N =', num2str(N),', L=',num2str(L), ', K=',num2str(k_eff),', SNR=',num2str(snr)));
 axis tight
 
-subplot(413); hold on; plot(inds:indf,w(inds:indf),'linewidth',2); 
+subplot(313); hold on; plot(inds:indf,w(inds:indf),'linewidth',2); 
 title('weights');
 axis tight
 
-subplot(414); hold on; plot(err,'linewidth',2); 
-title('Error'); xlabel('iteration'); ylabel('error')
+subplot(313); hold on; plot(err,'linewidth',2); 
+title('Error'); ylabel('error')
 axis tight

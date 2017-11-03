@@ -3,17 +3,17 @@ clear; close all; clc;
 %% Defining the problem
 
 L = 21; % length of signal
-k = 1e3; %5e6; %2*500000; % # of signal's repetitions (maximal number)
-sigma = 1;  % noise level2
+k = 1e4; %5e6; %2*500000; % # of signal's repetitions (maximal number)
+sigma = 3;  % noise level2
 window_size = 4*L; 
-Nfactor = 4; % Sparsity factor, should be ~6
+Nfactor = 6; % Sparsity factor, should be ~6
 N = window_size*k*Nfactor; % # of measurements
 overlapping_factor = 1; % windows are overlapped by window_size/overlapping_factor
 %% Generating data
 tic
 x = randn(L,1); 
 [y,yc, ind] = gen_data(x,N,k,sigma,window_size);
-snr = norm(yc)^2/norm(y)^2; % The problem's SNR
+snr = norm(yc)^2/norm(y-yc)^2; % The problem's SNR
 k_eff = length(ind); % The actual nunber of signal's repetitions
 fprintf('Measurement length  = %e \n',N);
 fprintf('The measurement contains %.1e repetitions of the underlying signal (from %.1e)\n',k_eff,k);
@@ -31,7 +31,11 @@ fprintf('Error of norm''s estimation = %.4f  \n',Err_normX);
 %% rearraging the matrix data
 
 tic
+if overlapping_factor == 1
+y_mat = reshape(y, window_size,N/window_size);
+else
 y_mat = gen_data_mtx(y,window_size,overlapping_factor);
+end
 assert(size(y_mat,1)==window_size && size(y_mat,2)==N/window_size*overlapping_factor, 'Something is wrong with the data dimensions');
 fprintf('Constructing data matrix time = %.2f [sec] \n',toc);     
 
@@ -48,27 +52,28 @@ x_est = real(ifft(sqrt(P_est).*z));
 xref = zeros(window_size,1); xref(1:L) = x;
 [x_aligned,~, ~] = align_to_reference(x_est, xref);
 x_aligned = x_aligned(1:L); 
-% using norm(x) for for a while
-%x_aligned = x_aligned/norm(x_aligned)*norm(x);
-% correcting with norm estimation
 x_aligned = x_aligned/norm(x_aligned)*normX;
 fprintf('Algorithm time = %.2f [sec] \n',toc);
 
 %% plotting
 
 err = norm(x_aligned - x)/norm(x)
-inds = ind(10) - 300; indf = inds + 600;
+lag = 600;
+inds = ind(10) - lag/2; indf = inds + lag;
 % 
 % save('x.mat','x');
 % save('x_aligned.mat','x_aligned');
 % save('err.mat','err');
 
-if 0
 figure; 
-subplot(211); hold on; stem(1:L,x); stem(1:L,x_aligned,'xr'); 
+subplot(311); hold on; stem(1:L,x); stem(1:L,x_aligned,'xr'); 
 title(strcat('Error = ',num2str(err)));
 legend('signal','estimation');
-subplot(212); hold on; plot(inds:indf,yc(inds:indf),'linewidth',2); plot(inds:indf,y(inds:indf)); legend('clean data','data');
+subplot(312); hold on; plot(inds:indf,yc(inds:indf),'linewidth',2); plot(inds:indf,y(inds:indf)); legend('clean data','data');
 title(strcat('N =', num2str(N),', L=',num2str(L), ', K=',num2str(k_eff),', SNR=',num2str(snr)));
 axis tight
-end    
+w = flipud(xcorr(x,y(inds:indf)));
+subplot(313);  plot(inds:indf,w(lag+1:end)); 
+title('correlation between x and y');
+axis tight
+   

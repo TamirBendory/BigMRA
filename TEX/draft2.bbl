@@ -1,0 +1,64 @@
+\begin{thebibliography}{10}
+
+\bibitem{ayers1988iterative}
+GR~Ayers and J~Christopher Dainty.
+\newblock Iterative blind deconvolution method and its applications.
+\newblock {\em Optics letters}, 13(7):547--549, 1988.
+
+\bibitem{campisi2016blind}
+Patrizio Campisi and Karen Egiazarian.
+\newblock {\em Blind image deconvolution: theory and applications}.
+\newblock CRC press, 2016.
+
+\bibitem{chan1998total}
+Tony~F Chan and Chiu-Kwong Wong.
+\newblock Total variation blind deconvolution.
+\newblock {\em IEEE transactions on Image Processing}, 7(3):370--375, 1998.
+
+\bibitem{jefferies1993restoration}
+Stuart~M Jefferies and Julian~C Christou.
+\newblock Restoration of astronomical images by iterative blind deconvolution.
+\newblock {\em The Astrophysical Journal}, 415:862, 1993.
+
+\bibitem{krishnan2011blind}
+Dilip Krishnan, Terence Tay, and Rob Fergus.
+\newblock Blind deconvolution using a normalized sparsity measure.
+\newblock In {\em Computer Vision and Pattern Recognition (CVPR), 2011 IEEE
+  Conference on}, pages 233--240. IEEE, 2011.
+
+\bibitem{kundur1996blind}
+Deepa Kundur and Dimitrios Hatzinakos.
+\newblock Blind image deconvolution.
+\newblock {\em IEEE signal processing magazine}, 13(3):43--64, 1996.
+
+\bibitem{levin2009understanding}
+Anat Levin, Yair Weiss, Fredo Durand, and William~T Freeman.
+\newblock Understanding and evaluating blind deconvolution algorithms.
+\newblock In {\em Computer Vision and Pattern Recognition, 2009. CVPR 2009.
+  IEEE Conference on}, pages 1964--1971. IEEE, 2009.
+
+\bibitem{levin2011understanding}
+Anat Levin, Yair Weiss, Fredo Durand, and William~T Freeman.
+\newblock Understanding blind deconvolution algorithms.
+\newblock {\em IEEE transactions on pattern analysis and machine intelligence},
+  33(12):2354--2367, 2011.
+
+\bibitem{michaeli2014blind}
+Tomer Michaeli and Michal Irani.
+\newblock Blind deblurring using internal patch recurrence.
+\newblock In {\em European Conference on Computer Vision}, pages 783--798.
+  Springer, 2014.
+
+\bibitem{shalvi1990new}
+Ofir Shalvi and Ehud Weinstein.
+\newblock New criteria for blind deconvolution of nonminimum phase systems
+  (channels).
+\newblock {\em IEEE Transactions on information theory}, 36(2):312--321, 1990.
+
+\bibitem{tong1994blind}
+Lang Tong, Guanghan Xu, and Thomas Kailath.
+\newblock Blind identification and equalization based on second-order
+  statistics: A time domain approach.
+\newblock {\em IEEE Transactions on information Theory}, 40(2):340--349, 1994.
+
+\end{thebibliography}
