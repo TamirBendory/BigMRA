@@ -3,7 +3,7 @@ clear; close all; clc;
 %% Defining the problem
 
 L = 21; % length of signal
-k = 1e4; %5e6; %2*500000; % # of signal's repetitions (maximal number)
+k = 1e3; %5e6; %2*500000; % # of signal's repetitions (maximal number)
 sigma = 0.1;  % noise level2
 window_size = 4*L; 
 Nfactor = 6; % Sparsity factor, should be ~6
@@ -38,21 +38,25 @@ clear y_stretch;
 %% EM iterations
 num_iter = 100;
 xest = zeros(L,num_iter+1);
+
 %xest(:,1) = x; %intial guess
-xest(:,1) = fft(randn(L,1)); xest(B+2:L-B,1) = 0; 
+
+xest(:,1) = fft(randn(L,1));
+xest(B+2:L-B,1) = 0; 
 xest(:,1) = real(ifft(xest(:,1)));
 
-err = zeros(num_iter+1,1); err(1) = norm(x - xest(:,1))/norm(x);
+err = zeros(num_iter+1,1);
+err(1) = norm(x - xest(:,1))/norm(x);
 w = zeros(N,1); sigma_em = sigma;
 
 for iter = 1:num_iter
     X = repmat(xest(:,iter),1,N)';
-    S = -0.5/(sigma_em^2)*sum((X-y_mat).^2,2);
+    S = (-0.5/(sigma_em^2))*sum((X-y_mat).^2, 2);
     S = S - max(S(:));
     w = exp(S);
     w = w/sum(w);
-    xest(:,iter+1) = w'*y_mat; 
-    xest(:,iter+1) = xest(:,iter+1)/norm(xest(:,iter+1))*norm(x); % plugging in norm(x)
+    xest(:,iter+1) = w'*y_mat;
+    xest(:,iter+1) = xest(:,iter+1)*(norm(x)/norm(xest(:,iter+1))); % plugging in norm(x)
     err(iter+1) = norm(x - xest(:,iter+1))/norm(x);
     if norm(xest(:, iter+1) - xest(:, iter)) < 1e-10 * norm(xest(:, iter)) % relative difference
         break
