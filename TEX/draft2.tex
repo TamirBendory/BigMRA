@@ -174,10 +174,10 @@ Apparently, three moments are required. The first is mean of the signal, denoted
 B_x[k_1,k_2] = (Fx)[k_1]\overline{(Fx)[k_2]}(Fx)[k_2-k_1].
 \end{equation}  
 These features can be estimated directly from the measured data by
-\begin{align}
-\frac{1}{N}\sum_{i=1}^N\mu_{y_j}  &\,\to \, \mu_x, \\
+\begin{align} \label{eq:moment_estimation}
+\frac{1}{N}\sum_{i=1}^N\mu_{y_j}  &\,\to \, \mu_x, \nonumber\\
 \frac{1}{N}\sum_{i=1}^NP_{y_j}  &\,\to \, P_x + L\sigma^2, \\
-\frac{1}{N}\sum_{i=1}^NB_{y_j}  &\,\to \, B_x + \mu_x\sigma^2L^2A, 
+\frac{1}{N}\sum_{i=1}^NB_{y_j}  &\,\to \, B_x + \mu_x\sigma^2L^2A,  \nonumber
 \end{align} 
 where $A$ is a known deterministic matrix. Therefore, by proper debiasing, one can get a reliable estimating of these features. For large enough $\sigma$, the variance of the estimators  is dominated by the bispectrum and thus goes as $\sigma^6/N$. This estimation rate is optimal under the assumption that distribution of translations is uniform~\cite{bandeira2017optimal}. If the distribution is non-uniform, then one can do better using only the first two moments, see~\cite{abbe2017multireference}. 
  Given enough measurements, one can obtain reliable estimation of the features, and then to estimate the underlying signal, up to cyclic translation, using a variety of algorithms~\cite{bendory2017bispectrum}. In this work, we use a simple non-convex least-squares estimator.... \TODO{Need to see what do we actually solve...}
@@ -188,14 +188,15 @@ where $A$ is a known deterministic matrix. Therefore, by proper debiasing, one c
 \subsection{Connections with the cryo--EM problem} \label{sec:cryoEM}
 
 This work is partially motivated by the imaging
-technique called single particle Cryo--EM, enabling the visualization of molecules at near atomic resolution~\cite{bartesaghi20152,sirohi20163}. Cryo--EM gained a lot of popularity in recent years in the structural biology community. As an evidence, Dubochet, Frank and Henderson were awarded the 
+technique called single particle cryo--EM, enabling the visualization of molecules at near atomic resolution~\cite{bartesaghi20152,sirohi20163}. Cryo--EM gained a lot of popularity in recent years in the structural biology community. As a result, Dubochet, Frank and Henderson were recently awarded the 
 the Nobel prize for their contribution in the development of this technique~\cite{nobel}. 
 
 In cryo--EM, many samples of a molecule are frozen in a thin sheet of ice. 
-The microscope transmits electrons that pass through the ice and are recorded by an array of detectors and we acquire  several images, called \emph{micrographs}. Each micrograph  contains many two-dimensional (2D) tomographic projections of the samples. 
- The  cryo--EM problem is then to estimate the molecules from several micrographs. This process is illustrated by in Figures~\ref{fig:cryo-EM} and~\ref{fig:cryo-EM-problem}. 
+An electron beam then passes through the ice and the samples  and recorded by an array of detectors. Cryo--EM contains several such images, which are
+called \emph{micrographs}. Each micrograph  contains many two-dimensional (2D) tomographic projections of the samples. 
+ The  cryo--EM problem is then to estimate the molecules from the micrographs. This process is illustrated by in Figures~\ref{fig:cryo-EM} and~\ref{fig:cryo-EM-problem}. 
 
-From signal processing point--of--view, the cryo--EM problem arises two main challenges compared to more traditional tomographic methods, like computerized tomography. First, the orientation of each sample is unknown since the samples are rapidly frozen in the ice sheet. The experimentalist does not have control over these orientations. Second, the $\SNR$ in each projection is very low since the electron dosage must be kept low in oder to limit  radiation damage to the molecules. In real cryo--EM data there are some additional challenges, like the contrast transfer function of the microscope that corrupts the acquired image. 
+Compared to more traditional tomographic methods, like computerized tomography (CT), the cryo--EM problem arises two main challenges. First, the 3D orientation of each sample is unknown since the samples are rapidly frozen in the ice sheet. The experimentalist does not have control over these orientations. Second, the $\SNR$ in each projection is very low since the electron dosage must be restricted to limit  radiation damage to the molecules. In real cryo--EM data sets, there are some additional challenges, like the contrast transfer function of the microscope that corrupts the acquired image. 
 
 
 \begin{figure}
@@ -214,18 +215,21 @@ From signal processing point--of--view, the cryo--EM problem arises two main cha
 	\label{fig:cryo-EM-problem}
 \end{figure}
 
-The first stage of a cryo--EM reconstruction algorithm is the so called \emph{particle picking} [ref]. In this stage, the projections are detected in the micrographs, and then cropped as demonstrated by the red rectangulars in Figure~\ref{fig:cryo-EM}.
-Then, ideally, one get a set of measurements of the form 
+The first stage of a cryo--EM reconstruction algorithm is the so called \emph{particle picking} stage. In this stage, the projections are detected in the micrographs, and then cropped to a series of 2D images.  Many algorithms were proposed to this detection problem based on support vector machine classifiers, deep learning and template matching and more; see for instance \cite{frank1983automatic,scheres2015semi,arbelaez2011experimental,zhu2016deep}.
+ The most popular techniques are based on the latter, where the templates can manually or automatically selected.  The underlying idea is that the cross-correlation  should be high in the presence of a signal in the template. However, this is not true anymore in the presence of high noise level, even if the signal itself is known, as demonstrated in Figure~\ref{fig:example}. An illuminating examples are given in~\cite{shatsky2009method,bandeira2015non}, where the famous picture of Albert Einstein is used to match pure noise and rotated images of the mathematician  Hermann Weyl.
+ 
+ 
+After the particle picking, ideally, one gets a set of measurements of the form 
 \begin{equation} \label{eq:cryo-em}
 y_j = \mathcal{P}( g_j\circ x) + \varepsilon_j,\quad j=1,\ldots,N, 
 \end{equation}
-where $x$ is the three-dimensional (3D) molecule to be estimated,  $g_j\in SO(3)$ are unknown 3D rotations that act on the molecule and $\mathcal{P}$ is a linear tomographic projection. This model has been analyzed theoretically from different point--of-views~\cite{bandeira2015non,hadani2011representation} [more ref]. The MRA model~\ref{eq:mra} can be interpreted as a simplification of the cryo--EM problem, where the unknown cyclic-shifts correspond to the unknown rotations (but there is no analog for the projection operation).
+where $x$ is the three-dimensional (3D) molecule to be estimated,  $g_j\in SO(3)$ are unknown 3D rotations that act on the molecule and $\mathcal{P}$ is a linear tomographic projection. This model has been analyzed theoretically from different point--of-views~\cite{bandeira2015non,hadani2011representation}. The MRA model~\eqref{eq:mra} can be interpreted as a simplification of the model~\eqref{eq:cryo-em}, where the unknown cyclic-shifts correspond to the unknown rotations (but there is no analog for the projection operation).
 
-In practice, particle picking algorithms are far from being optimal, mainly because the high noise level prevents reliable detection. 
- For instance, the projections in the cropped images are not centered, and therefore an unknown 2D translation should be added to the model~\eqref{eq:cryo-em}.
- In addition, many samples in the micrograph are non detected or ignored. 
+In practice, particle picking algorithms are far from being optimal, mainly because the high noise level prevents reliable detection. One result is that the cropped images are usually not centered,  and therefore an unknown 2D translation should be added to the model~\eqref{eq:cryo-em}.
+In addition, many samples in the micrograph are non detected or ignored.
+After the particle picking stage, the molecule is estimated from the 2D images, where the most popular algorithms are based on expectation--maximization (see for instance~\cite{scheres2012relion}). Other techniques, such as the common-lines\cite{van1987angular,singer2011three} method or auto-correlation analysis~\cite{kam1980reconstruction,levin20173d}, can be used for ab initio modeling. 
  
- Our model can be seen as a highly simplified cryo--EM model, where $y$ corresponds to the micrograph and the signal repeated signal $x$ to a  ``one-dimensional molecule" (the tomographic projection $\mathcal{P}$ does not appear in the model). We are interest in the question whether we can estimate the signal $x$, even if the $\SNR$ is so low that we cannot detect the locations of $x$ in $y$. In the perspective of the cryo--EM problem. the success to estimate the signal in the very low SNR regime may indicate that the molecule can be estimated directly from the cryo--EM micrographs, even if the SNR is so low that particle picking algorithm work poorly. 
+ Our model can be seen as a highly simplified cryo--EM model, where $y$ corresponds to the micrograph and the signal repeated $x$ to a  ``one-dimensional molecule" (the tomographic projection $\mathcal{P}$ does not appear in the model). We are interest in the question whether we can estimate the signal $x$, even if the $\SNR$ is so low that we cannot detect the locations of $x$, in $y$. In the perspective of the cryo--EM problem. the success to estimate the signal in the very low SNR regime may indicate that the molecule can be estimated directly from the cryo--EM micrographs, even if the SNR is so low that particle picking algorithm work poorly. 
 
   %In addition, most particle picking algorithms throw away many particles since they fail to detect them. Hence, a necessary condition for the success of such algorithm is that the noise level would low enough so that detection would be possible.
 
@@ -234,28 +238,30 @@ In practice, particle picking algorithms are far from being optimal, mainly beca
 
 \section{Algorithm} \label{sec:algorithm}
 
-The algorithm is inspired by invariant features approach proposed in~\cite{bendory2017bispectrum}. Let $L<W\in\mathbb{Z}$ ans assume, for simplicity, that $W$ divides $N$. The algorithm starts with splitting the measurement $y\in\RN$ into a series of analysis windows $y_i\in\mathbb{R}^W,\,i=1,\ldots,N/W$, where  
+The blind deconvolution algorithm is inspired by the recent MRA approach using translation invariant features proposed in~\cite{bendory2017bispectrum}. The algorithm requires setting a parameter $W\in\mathbb{N}$ obeying $W>L$  which is the length of the \emph{analysis window}. We assume henceforth, to ease notation, that $W$ divides $N$. 
+The algorithm begins with splitting the measurement $y\in\RN$ into a series of analysis windows $y_i\in\mathbb{R}^W,\,i=1,\ldots,N/W$, where  
 \begin{equation} \label{eq:analysis_window}
 y_i[n] = y[(i-1)W + n] , \quad n=1,\ldots,W. 
 \end{equation}
-By assumption, there are exactly $N/W$ windows. Of course, one can use overlapping windows, however, our numerical experiments indicate it does not improve the numerical behavior.  Then, for each window, we compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum and average over all windows. Finally, once we estimated these features, we look for a signal $\tilde{x}\in\mathbb{R}^W$ that is consistent with the data. 
+By assumption, there are exactly $N/W$ windows. Of course, one can easily modify the algorithm using overlapping windows, however, our numerical experiments indicate it does not improve the numerical performance.  For each window, we then compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum, and then  average them over all windows according to~\eqref{eq:moment_estimation}. Finally, once we estimated these features, we look for a signal $\tilde{x}\in\mathbb{R}^W$ that is consistent with the data by solving ??
 
-Note that the signal is not scaled properly since, in contrast to the MRA model of~\cite{bendory2017bispectrum}, many windows contain no information on the signal, but pure noise. Therefore, we estimate the norm of the signal separately and use it to rescale the estimation. 
-The norm estimation can be done as follows. For short, we denote $x_K[n]=\sum_{i=1}^K \xz[n-n_i]$ and note that $\|x_K\|_2^2 = K\|x\|_2^2$. 
+The scaling of the output of~? is incorrect, since the averaging in done over many windows containing pure noise with no information on the signal itself. 
+To rescale the estimated signal, we estimate the norm of the signal separately.
+The norm estimation can be done as follows. For short, we denote $x_K[n]=\sum_{i=1}^K \xz[n-n_i]$ and note that $\|x_K\|_2^2 = K\|x\|_2^2$ if a separation of $\vert n_i - n_j\vert >L$ is satisfied. 
 Then,
 \begin{equation}
-\| y\|_2^2 =  \| x_K\|_2^2 + \|\varepsilon\|_2^2 + 2\varepsilon^Tx_K. 
+\| y\|_2^2 =  \| x_K\|_2^2 + \|\varepsilon\|_2^2 + 2\varepsilon^Tx_K, 
 \end{equation}  
-As $N\to\infty$, we can estimate 
+and therefore 
 \begin{equation}
 \begin{split}
 \E{\| y\|_2^2} &=  \| x_K\|_2^2 + \E{\|\varepsilon\|_2^2} + 2\E{\varepsilon^Tx_K} \\ 
 &= K\|x\|_2^2 + N\sigma^2. 
 \end{split}	 
 \end{equation}   
-And therefore, 
+As $N\to\infty$,  we then obtain
 \begin{equation} \label{eq:norm_estimation}
-\|x\|_2^2 \approxeq \frac{\| y\|_2^2 - N\sigma^2}{K}. 
+\|x\|_2^2 \approx \frac{\| y\|_2^2 - N\sigma^2}{K}. 
 \end{equation}
 The estimation error for different values of $\sigma$ is depicted in Figure~\ref{fig:norn_error}. 
 
@@ -263,26 +269,27 @@ The estimation error for different values of $\sigma$ is depicted in Figure~\ref
 	\begin{center}
 		\includegraphics[scale = .5]{NormError}		
 	\end{center}
-	\caption{The normalized error for norm estimation over 200 experiments per values. Will need to do that again, but it is sufficient for now.}
+	\caption{The normalized error for norm estimation $\frac{\vert \|\hat{x}\|  - \|x\|\vert }{\|x\|}$, where $\|\hat{x}\|$ is the norm estimation. The error was averaged over 200 experiments for each value of $k$.}
 	\label{fig:norn_error}
 \end{figure}
 
+The output of the algorithm is a signal of length $W$, that, ideally, contains $x$, shifted by some unknown shift, and padded by $W-L$ zeros. 
 The algorithm is summarized in Algorithm~\ref{alg:1}.
-
+\TODO{We should come up with a method to automatic aligning of the signal}.
 
 
 \begin{algorithm}[h]
-		\textbf{Input:} Moments $\mu$ and $M$; power spectrum $P_x$. \\ 
+		\textbf{Input:} The measurement $y\in\RN$ \\ 
 		\textbf{Output:} A signal $\tilde x\in\mathbb{R}^W$  \\ 
 		\begin{enumerate}
 			\item Split $y$ into a set of $N/W$ analysis windows $y_i\in\mathbb{R}^W$ according to~\eqref{eq:analysis_window}
-			\item  For each analysis window, compute the mean $\mu_i$, power spectrum $P_i$ and bispectrum $B_i$ according to ?
-			\item  Average over the feature according to ?
+			\item  Compute the average mean, power spectrum and bispectrum according to~\eqref{eq:moment_estimation} 
 			\item  Estimate the signal $\tilde{x}\in\mathbb{R}^W$ by~?
 			\item  Compute the estimated norm $x_{\textrm{norm}}$  by~\eqref{eq:norm_estimation}
-			\item  Rescale the signal $\tilde x \gets \frac{\tilde{x}\cdot x_{\textrm{norm}}}{\|\tilde{x}\|_2} $    
+			\item  Rescale the signal $\tilde x \gets \frac{\tilde{x}\cdot x_{\textrm{norm}}}{\|\tilde{x}\|_2} $   
+			\TODO{Need to find a good alignment method} 
 		\end{enumerate}
-	\caption{Blind devolution by features that are invariant to cyclic-translations} 	\label{alg:1}
+	\caption{Blind devolution by invariant features} 	\label{alg:1}
 \end{algorithm}
 
 

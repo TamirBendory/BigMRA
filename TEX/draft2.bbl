@@ -26,6 +26,13 @@ Ali Ahmed, Benjamin Recht, and Justin Romberg.
 \newblock {\em IEEE Transactions on Information Theory}, 60(3):1711--1732,
   2014.
 
+\bibitem{arbelaez2011experimental}
+Pablo Arbel{\'a}ez, Bong-Gyoon Han, Dieter Typke, Joseph Lim, Robert~M Glaeser,
+  and Jitendra Malik.
+\newblock Experimental evaluation of support vector machine-based and
+  correlation-based approaches to automatic particle selection.
+\newblock {\em Journal of Structural Biology}, 175(3):319--328, 2011.
+
 \bibitem{ayers1988iterative}
 GR~Ayers and J~Christopher Dainty.
 \newblock Iterative blind deconvolution method and its applications.
@@ -156,6 +163,11 @@ Hassan Foroosh, Josiane~B Zerubia, and Marc Berthod.
 \newblock Extension of phase correlation to subpixel registration.
 \newblock {\em IEEE transactions on image processing}, 11(3):188--200, 2002.
 
+\bibitem{frank1983automatic}
+Joachim Frank and Terence Wagenknecht.
+\newblock Automatic selection of molecular images from electron micrographs.
+\newblock {\em Ultramicroscopy}, 12(3):169--175, 1983.
+
 \bibitem{hadani2011representation}
 Ronny Hadani and Amit Singer.
 \newblock Representation theoretic patterns in three dimensional cryo-electron
@@ -166,6 +178,12 @@ Ronny Hadani and Amit Singer.
 Stuart~M Jefferies and Julian~C Christou.
 \newblock Restoration of astronomical images by iterative blind deconvolution.
 \newblock {\em The Astrophysical Journal}, 415:862, 1993.
+
+\bibitem{kam1980reconstruction}
+Zvi Kam.
+\newblock The reconstruction of structure from electron micrographs of randomly
+  oriented particles.
+\newblock {\em Journal of Theoretical Biology}, 82(1):15--39, 1980.
 
 \bibitem{kech2017optimal}
 Michael Kech and Felix Krahmer.
@@ -201,6 +219,11 @@ Anat Levin, Yair Weiss, Fredo Durand, and William~T Freeman.
 \newblock Understanding blind deconvolution algorithms.
 \newblock {\em IEEE transactions on pattern analysis and machine intelligence},
   33(12):2354--2367, 2011.
+
+\bibitem{levin20173d}
+Eitan Levin, Tamir Bendory, Nicolas Boumal, Joe Kileel, and Amit Singer.
+\newblock 3d ab initio modeling in cryo-em by autocorrelation analysis.
+\newblock {\em arXiv preprint arXiv:1710.08076}, 2017.
 
 \bibitem{li2016rapid}
 Xiaodong Li, Shuyang Ling, Thomas Strohmer, and Ke~Wei.
@@ -251,11 +274,34 @@ Amelia Perry, Jonathan Weed, Afonso Bandeira, Philippe Rigollet, and Amit
 \newblock The sample complexity of multi-reference alignment.
 \newblock {\em arXiv preprint arXiv:1707.00943}, 2017.
 
+\bibitem{scheres2012relion}
+Sjors~HW Scheres.
+\newblock {RELION}: implementation of a bayesian approach to cryo-em structure
+  determination.
+\newblock {\em Journal of structural biology}, 180(3):519--530, 2012.
+
+\bibitem{scheres2015semi}
+Sjors~HW Scheres.
+\newblock Semi-automated selection of cryo-em particles in relion-1.3.
+\newblock {\em Journal of structural biology}, 189(2):114--122, 2015.
+
 \bibitem{shalvi1990new}
 Ofir Shalvi and Ehud Weinstein.
 \newblock New criteria for blind deconvolution of nonminimum phase systems
   (channels).
 \newblock {\em IEEE Transactions on information theory}, 36(2):312--321, 1990.
+
+\bibitem{shatsky2009method}
+Maxim Shatsky, Richard~J Hall, Steven~E Brenner, and Robert~M Glaeser.
+\newblock A method for the alignment of heterogeneous macromolecules from
+  electron microscopy.
+\newblock {\em Journal of structural biology}, 166(1):67--78, 2009.
+
+\bibitem{singer2011three}
+Amit Singer and Yoel Shkolnisky.
+\newblock Three-dimensional structure determination from common lines in
+  cryo-em by eigenvectors and semidefinite programming.
+\newblock {\em SIAM journal on imaging sciences}, 4(2):543--572, 2011.
 
 \bibitem{sirohi20163}
 Devika Sirohi, Zhenguo Chen, Lei Sun, Thomas Klose, Theodore~C Pierson,
@@ -275,6 +321,18 @@ J.~W. Tukey.
   higher moments of stationary time series.
 \newblock In D.~R. Brillinger, editor, {\em The Collected Works of John W.
   Tukey}, volume~1, chapter~4, pages 165--184. Wadsworth,, 1984.
+
+\bibitem{van1987angular}
+Marin Van~Heel.
+\newblock Angular reconstitution: a posteriori assignment of projection
+  directions for 3d reconstruction.
+\newblock {\em Ultramicroscopy}, 21(2):111--123, 1987.
+
+\bibitem{zhu2016deep}
+Yanan Zhu, Qi~Ouyang, and Youdong Mao.
+\newblock A deep learning approach to single-particle recognition in
+  cryo-electron microscopy.
+\newblock {\em arXiv preprint arXiv:1605.05543}, 2016.
 
 \bibitem{zwart2003fast}
 J~Portegies Zwart, Ren{\'e} van~der Heiden, Sjoerd Gelsema, and Frans Groen.
