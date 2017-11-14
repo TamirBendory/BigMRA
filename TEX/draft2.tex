@@ -56,6 +56,7 @@
 \newcommand{\RN}{\mathbb{R}^N}
 \newcommand{\CL}{\mathbb{C}^L}
 \newcommand{\CN}{\mathbb{C}^N}
+\newcommand{\RW}{\mathbb{R}^W}
 \newcommand{\RNN}{\mathbb{R}^{N\times N}}
 \newcommand{\CNN}{\mathbb{C}^{N\times N}}
 \newcommand{\inner}[1]{\left\langle {#1} \right\rangle}
@@ -243,9 +244,22 @@ The algorithm begins with splitting the measurement $y\in\RN$ into a series of a
 \begin{equation} \label{eq:analysis_window}
 y_i[n] = y[(i-1)W + n] , \quad n=1,\ldots,W. 
 \end{equation}
-By assumption, there are exactly $N/W$ windows. Of course, one can easily modify the algorithm using overlapping windows, however, our numerical experiments indicate it does not improve the numerical performance.  For each window, we then compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum, and then  average them over all windows according to~\eqref{eq:moment_estimation}. Finally, once we estimated these features, we look for a signal $\tilde{x}\in\mathbb{R}^W$ that is consistent with the data by solving ??
+By assumption, there are exactly $N/W$ windows. Of course, one can easily modify the algorithm using overlapping windows, however, our numerical experiments indicate it does not improve the numerical performance.  For each window, we then compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum, and then  average them over all windows according to~\eqref{eq:moment_estimation}. Finally, once we estimated these features, we look for a signal $\hat{x}\in\mathbb{R}^W$ that is consistent with the data by solving ??
 
-The scaling of the output of~? is incorrect, since the averaging in done over many windows containing pure noise with no information on the signal itself. 
+Recall that the current estimate $\hat{x}$ is a signal of length $W$, whereas the underlying signal of length $L$.
+Ideally, it is cyclic-shifted version of $x$, padded with $W-L$ zeros.
+ To crop the signal correctly, we simply search for the  segment of length $L$ with maximal energy. Formally, let  $T_\ell:\RW\to\RL$ be the operator that takes $L$ consecutive entries of the signal, starting at $\ell$. The signal is treated as periodic.   
+Then, by letting
+\begin{equation}
+\ell_{\max} =  {\arg\max}_{\ell=0,\ldots,W-1} \|T_\ell\hat{x} \|_2,
+\end{equation}
+we map
+\begin{equation} \label{eq:align}
+\hat{x}\gets T_{\ell_{\max}}\hat{x}.
+\end{equation}
+
+
+The scaling of $\hat{x}$ is incorrect, since the averaging in done over many windows containing pure noise with no information on the signal itself. 
 To rescale the estimated signal, we estimate the norm of the signal separately.
 The norm estimation can be done as follows. For short, we denote $x_K[n]=\sum_{i=1}^K \xz[n-n_i]$ and note that $\|x_K\|_2^2 = K\|x\|_2^2$ if a separation of $\vert n_i - n_j\vert >L$ is satisfied. 
 Then,
@@ -284,10 +298,10 @@ The algorithm is summarized in Algorithm~\ref{alg:1}.
 		\begin{enumerate}
 			\item Split $y$ into a set of $N/W$ analysis windows $y_i\in\mathbb{R}^W$ according to~\eqref{eq:analysis_window}
 			\item  Compute the average mean, power spectrum and bispectrum according to~\eqref{eq:moment_estimation} 
-			\item  Estimate the signal $\tilde{x}\in\mathbb{R}^W$ by~?
+			\item  Estimate the signal $\hat{x}\in\mathbb{R}^W$ by~?
+			\item  Map $\hat{x}\gets T_{\ell_{\max}}\hat{x}$ according to~\eqref{eq:align}
 			\item  Compute the estimated norm $x_{\textrm{norm}}$  by~\eqref{eq:norm_estimation}
 			\item  Rescale the signal $\tilde x \gets \frac{\tilde{x}\cdot x_{\textrm{norm}}}{\|\tilde{x}\|_2} $   
-			\TODO{Need to find a good alignment method} 
 		\end{enumerate}
 	\caption{Blind devolution by invariant features} 	\label{alg:1}
 \end{algorithm}

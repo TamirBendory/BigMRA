@@ -3,7 +3,7 @@ clear; close all; clc;
 %% Defining the problem
 
 L = 21; % length of signal
-k = 1e4; % # of signal's repetitions (maximal number)
+k = 1e5; % # of signal's repetitions (maximal number)
 sigma = 0.5;  % noise level2
 W = 4*L; 
 Nfactor = 6; % Sparsity factor, should be ~6
@@ -52,9 +52,11 @@ x_est = real(ifft(sqrt(P_est).*z));
 
 %% automatic alignment
 
-x_aligned = auto_alignment(x_est,L,1,x);
+x_aligned = auto_alignment(x_est,L);
 x_aligned = x_aligned/norm(x_aligned)*normX;
 fprintf('Algorithm time = %.2f [sec] \n',toc);
+
+figure; plot(
 
 %% plotting
 
