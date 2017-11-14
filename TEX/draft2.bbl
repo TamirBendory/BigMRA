@@ -1,5 +1,8 @@
 \begin{thebibliography}{10}
 
+\bibitem{nobel}
+\url{https://www.nobelprize.org/nobel_prizes/chemistry/laureates/2017/press.html}.
+
 \bibitem{abbe2017multireference}
 Emmanuel Abbe, Tamir Bendory, William Leeb, Jo{\~a}o Pereira, Nir Sharon, and
   Amit Singer.
@@ -68,6 +71,11 @@ Tamir Bendory, Avinoam~David Bar-Zion, Dan Adam, Shai Dekel, and Arie Feuer.
 \newblock Stable support recovery of stream of pulses with application to
   ultrasound imaging.
 \newblock {\em IEEE Trans. Signal Processing}, 64(14):3750--3759, 2016.
+
+\bibitem{bendory2017fourier}
+Tamir Bendory, Robert Beinert, and Yonina~C Eldar.
+\newblock Fourier phase retrieval: Uniqueness and algorithms.
+\newblock {\em arXiv preprint arXiv:1705.09590}, 2017.
 
 \bibitem{bendory2017bispectrum}
 Tamir Bendory, Nicolas Boumal, Chao Ma, Zhizhen Zhao, and Amit Singer.
@@ -260,6 +268,13 @@ Lang Tong, Guanghan Xu, and Thomas Kailath.
 \newblock Blind identification and equalization based on second-order
   statistics: A time domain approach.
 \newblock {\em IEEE Transactions on information Theory}, 40(2):340--349, 1994.
+
+\bibitem{tukey1953}
+J.~W. Tukey.
+\newblock The spectral representation and transformation properties of the
+  higher moments of stationary time series.
+\newblock In D.~R. Brillinger, editor, {\em The Collected Works of John W.
+  Tukey}, volume~1, chapter~4, pages 165--184. Wadsworth,, 1984.
 
 \bibitem{zwart2003fast}
 J~Portegies Zwart, Ren{\'e} van~der Heiden, Sjoerd Gelsema, and Frans Groen.

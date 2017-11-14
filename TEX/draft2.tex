@@ -1,4 +1,3 @@
-
 \documentclass[journal]{IEEEtran} 
 
 \pdfoutput=1
@@ -15,6 +14,7 @@
 \usepackage{color}
 \usepackage{url}
 
+\usepackage{algorithm}
 
 \newcommand{\TODO}[1]{{\color{red}{[#1]}}}
 
@@ -55,13 +55,15 @@
 \newcommand{\RL}{\mathbb{R}^L}
 \newcommand{\RN}{\mathbb{R}^N}
 \newcommand{\CL}{\mathbb{C}^L}
+\newcommand{\CN}{\mathbb{C}^N}
 \newcommand{\RNN}{\mathbb{R}^{N\times N}}
 \newcommand{\CNN}{\mathbb{C}^{N\times N}}
 \newcommand{\inner}[1]{\left\langle {#1} \right\rangle}
 \newcommand{\E}[1]{\mathbb{E}\left\{{#1} \right\}}
 \newcommand{\order}[1]{\mathcal{O}\left({#1} \right)}
 \newcommand{\xz}{x_{\textrm{zp}}}
-\newcommand{\DFT}[1]{\operatorname{DFT}\!\left( {#1} \right)}
+\newcommand{\DFT}{\operatorname{DFT}}
+\newcommand{\SNR}{\operatorname{SNR}}
 \newcommand{\hx}{\hat{x}} 
 
 
@@ -78,97 +80,123 @@
 	Here comes the abstract
 \end{abstract}
 
+\begin{IEEEkeywords}
+	Blind deconvolution, multireference alignment, bispectrum, cryo-EM
+\end{IEEEkeywords}
+
 
 \section{Introduction} \label{sec:introduction}
 
-Blind deconvolution is the problem of estimating a signal from its convolution with an unknown kernel. This problem arises in many engineering and scientific applications, such as astronomy, communication, deblurring, acoustics, system identification and optics; see   \cite{jefferies1993restoration,tong1994blind,chan1998total,campisi2016blind,kundur1996blind,levin2011understanding,shalvi1990new,levin2009understanding,krishnan2011blind,ayers1988iterative,michaeli2014blind,lin2005relevant,abed1997blind}, just to name a few.
+Blind deconvolution is a longstanding problem, arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see   \cite{jefferies1993restoration,tong1994blind,chan1998total,campisi2016blind,kundur1996blind,levin2011understanding,shalvi1990new,levin2009understanding,krishnan2011blind,ayers1988iterative,michaeli2014blind,lin2005relevant,abed1997blind}, just to name a few. In blind deconvolution, we aim at estimating  a signal from its convolution with an unknown kernel. 
+Clearly, without additional information, the problem is ill-posed.
 
-Without prior information, the blind deconvolution is clearly ill-posed. In this note, we consider a special case of the problem. We aim at estimating a signal $x\in\RL$ from $y\in\RN, \thinspace N\gg L$. The acquired data, the measurement $y$, is composed of many repetitions of $x$, at different positions, and i.i.d.\ normal noise $\varepsilon$ with mean zero and variance $\sigma^2$. 
-Formally, our model read
+In this paper, we consider a particular case, in which one signal is of finite support, while the other is a binary sparse signal. Let us define the (zero-padded) signal 
+$$\xz  = [x, \underbrace{0,0,\ldots,0}_{N-L \text{ zeros}}]\in\RN,\quad N\gg L,$$
+and a binary signal $s\in\{0,1\}^N$. Then, our goal is to estimate $x$ from \begin{equation} \label{eq:blind_deconvolution}
+y = \xz \ast s + \varepsilon,
+\end{equation}
+where $\varepsilon$ is an i.i.d.\ normal noise $\varepsilon$ with mean zero and variance $\sigma^2$.
+As can be seen, the measurement $y\in\RN$ is composed of repetitions of an underlying signal $x\in\RL$, located at different positions. So, we can also write the model as  
 \begin{equation}
 y[n] = \sum_{i=1}^K \xz [n-n_i] + \varepsilon[n], 
 \end{equation}
-where $\xz\in\RN$ is a zero-padded version of $x\in\RL$  
-defined as $$\xz  = [x, \underbrace{0,0,\ldots,0}_{N-L \text{ zeros}}],$$ and
- $n_i,\quad i=1,\ldots,K,$ are the translations of $\xz$.
+where the $n_i$'s are the non-zero values of $s$.
 
+While most works on blind deconvolution tries to estimate both unknown signals (see Section~\ref{sec:blind_deconvolution}), in most cases, the goal is merely to estimate one of the signals.
+For instance, in image deblurring, both the blurring kernel and the high-resolution image are unknown, but the main goal is only to sharpen the image. In~\eqref{eq:blind_deconvolution}, the signal $s$ is referred to as the latent or hidden variable of the problem. Our goal is to estimate  $x$ and we focus  on the low signal--to--noise ratio ($\SNR$) regime. As will be demonstrated, in this case, estimating $s$ is impossible, even if $\xz$ is known. However, we show, maybe surprisingly, that one can estimate $x$ accurately in some cases.  We support this statement by theoretical analysis and numerical  experiments.
 
-Note that both $x$ and the translations, or positions, $n_i$ are unknown. Let $s\in\{0,1\}^N$ be the ``support" signal, which takes the value 1 at the locations $n_i$ are zero otherwise. 
-Then, 
-\begin{equation}
-y = \xz \ast s + \varepsilon.
-\end{equation}
-The goal is then to estimate $x$ from $y$, while $s$ is unknown as well. The support signal $s$ is the latent or hidden variable of the problem. The situation where both signals are unknown, but the goal is merely estimating one of them  is quite common situation in blind deconvolution problem. For instance, in image deblurring, both the blurring kernel and the high-resolution image are unknown, but the main goal is merely to sharpen the image. In Section~\ref{sec:literature} we survey previous results on blind deconvolution.
-
-Figure~\ref{fig:example} shows examples of the problemin different noise levels. In the low noise regime (for instance, the first row), the problem is rather easy. In this case, one can identify $x$ in $y$ by simple detection algorithms (e.g., thresholding on the correlation function). Once several copies of the signal were detected and cropped from $y$, then one can  improve the SNR by averaging. We are interest in the more challenging regime of high noise level, in which the signal is completely swamped in the noise, and one cannot detect the signal's appearances. In this case, one need to use the prior information that the signal appears many times across the measurement.
+Figure~\ref{fig:example} shows examples of the problem in different noise levels. In the example, the signal $x$ appears twice in $y$ so that $\| s \|^2 = 2$. The first row demonstrates a high $\SNR$ regime with $\sigma = 0.1$. As can be seen, in this regime  the problem is rather easy. In this case, one can easily the support of $s$ (namely, the repetition of $x$ in $y$) by simple detection algorithms. This is demonstrated by the correlation function between $\xz$ and $y$ that exhibits two unmistakable peaks in the support of $x$.  Once several copies of the signal were detected and cropped from $y$, then one can  improve the $\SNR$ by averaging. We are interest in the more challenging regime of high noise level, as exemplified in the bottom row ($\sigma  = 3$)
+in which the signal is completely swamped in the noise, and one cannot detect the signal's appearances. In this case, one need to use the prior information that the signal appears many times across the measurement.
 
 \begin{figure*}
 	\begin{center}
 	\includegraphics[scale = .5]{example}
 	\end{center}
-\caption{The left column presents the clean data and the measurement in different noise levels. In this example, a signal of length $L=21$ appears twice in a measurement of length $N=336$ with different noise levels. Note to the different scale of the y-axis. The right column presents the correlation between the signal and the measurement for the associated problems. }
+\caption{The left column presents the clean data and the measurement in different noise levels. In this example, a rectangular signal of length $L=21$ appears twice in a measurement of length $N=336$ with different noise levels. Note to the different scale of the y-axis. The right column presents the correlation between the rectangular signal and the measurement for the associated problems. }
 \label{fig:example}
 \end{figure*}
 
-Our approach for this blind deconvolution problem utilized  tools recently that were developed for the multireference alignment problem. Multireference alignment (MRA) is the problem of estimating a signal from its circularly-shifted noisy measurements~\cite{bandeira2014multireference,bendory2017bispectrum}. In Section~\ref{sec:mra}, we survey recent works in this field and its relation with our problem. Particularly, we use the method proposed in~\cite{bendory2017bispectrum} of invariant features. In short, the idea is to split $y$ into a bunch of shorter windows. If each window contains exactly  one signal, then the problem reduces exactly the MRA problem. However, this is not the case. Some windows contain only noise, while others contain both noise and parts of a signal. In Section~\ref{sec:algorithm} we present and discuss the algorithm. 
-
-The outline of this paper is as follows. In Section~\ref{sec:literature} we introduce the background of relevant papers for this work. Particularly, in Section~\ref{sec:blind_deconvolution} we discuss the blind deconvolution problem and in Section~\ref{sec:mra} we introduce and survey the MRA problem. In Section~\ref{sec:cryoEM} we introduce the mathematical formulation of the cryo--electron microscopy (EM) imaging technique. The model we consider in this note can be viewed as a simplified model for the cryo--EM problem as will be explained. In Section~\ref{sec:algorithm} we introduce of algorithm and analyze it in Section~\ref{sec:analysis}. Section~\ref{sec:experiments} is devoted for numerical experiments. Section~\ref{sec:conclusion} concludes the manuscript.
+Our approach for this blind deconvolution problem is based on  tools that were developed for the multireference alignment (MRA) problem. MRA is the problem of estimating a signal from its circularly-shifted noisy measurements~\cite{bandeira2014multireference,bendory2017bispectrum} 
+ In Section~\ref{sec:mra}, we survey recent works in this field. We use a recent suggestion to estimate the signal from feature that are invariant under cyclic-translation~\cite{bendory2017bispectrum}. 
+ In essence, our method is based on \emph{approximate reduction} of the blind deconvolution problem into the MRA model. This is done be splitting $y$ into shorter windows and treat them as the MRA measurements. If each window contains exactly  one signal, then the problem reduces exactly the MRA problem. However, this is not the case. Some windows contain only noise, while others contain both noise and parts of a signal.  
+ We analyze the estimation rate of this method and its deviation from the MRA model. 
+ 
+ A motivation for this work arises from the cryo--electron microscopy (EM) problem. Cryo--EM received a great deal of attention in structural biology in recent years as it allows visualizing molecules that were not stained in any way, showing them in their native environment. In Section~\ref{sec:cryoEM} we draw the connections between  blind deconvolution and the cryo--EM problem.
+ 
+ The outline of this paper is as follows. In Section~\ref{sec:literature} we introduce background  on blind deconvolution (Section~\ref{sec:blind_deconvolution}) and MRA (Section~\ref{sec:mra}).  
+ In Section~\ref{sec:cryoEM} we discuss the connection with the  cryo--EM problem.  In Section~\ref{sec:algorithm} we introduce the algorithm and analyze it in Section~\ref{sec:analysis}. Section~\ref{sec:experiments} is devoted for numerical experiments. Section~\ref{sec:conclusion} concludes the manuscript.
  
 
 
 
-\section{background and literature survey} \label{sec:literature}
+\section{background} \label{sec:literature}
 
-In this section, we introduce the two main ingredients of this work, blind deconvolution and MRA.
+In this section, we introduce the two main ingredients of this work, blind deconvolution and MRA. Then, we draw connections  with the cryo--EM problem.
 
 \subsection{Blind deconvolution} \label{sec:blind_deconvolution}
 
 
-Blind deconvolution is the problem of recovering a signal from its convolution with unknown kernel. That is, recovery of $x$ from
+Blind deconvolution is the problem of recovering a signal from its convolution with an unknown kernel $h$. That is, we aim to recover  $x$ from
 \begin{equation}
-y = x\ast k,
+y = x\ast h,
 \end{equation}
-where both $x$ and $k$ are unknown. In the Fourier domain, it takes the form of 
+where both $x$ and $h$ are unknown. In the Fourier domain, it takes the form of 
 \begin{equation}
-Fy = Fx \odot Fk,
+Fy = Fx \odot Fh,
 \end{equation}
-where $Fz$ stands for the Fourier transform of $z$.
+where $Fz$ stands for the Fourier transform of $z$ and $\odot$ for entry-wise product.
+Clearly, without prior information of the signal, it is impossible to estimate the signal. For instance, even if we assume that the $\DFT$ of both signals are non-vanishing, then $Fy$ remains unchanged if we replace $(Fx)[k],(Fh)[k]$ by $a(Fx)[k],\frac{1}{a}(Fh)[k]$ for any $a\in\CN\backslash\{0\}$ and any $k$.
 
-Clearly, without prior information of the signal, it is impossible to estimate the signal. The problem has been analyzed recently with a various convex and non-convex algorithms under the assumption that the signal is in a known  subspace spanned by vectors with random entries~\cite{ahmed2014blind,li2016rapid,ling2017blind} 
-and under sparsity in a random linear subspaces~\cite{lee2017blind,li2016identifiability,kech2017optimal,ling2015self,chi2016guaranteed,li2015unified}. 
 
-We briefly mention that the deconvolution problem, namely, when the kernel is assumed to be known, has been analyzed throughly in recent years under sparsity constraints~\cite{bendory2016robust,bendory2017robust,bendory2016stable,boyer2017adapting,bernstein2017deconvolution,de2012exact,azais2015spike,duval2015exact,duval2015sparse}.  Nonetheless, the problem under consideration is essentially different. From two reasons. First, of course, we consider the blind setting when the kernel is unknown. Second, these works considered the recovery of sparse signal, with Gaussian-like kernel. In our problem, the convolution kernel is sparse, and we aim to recover a general signal. 
+The blind deconvolution  has been analyzed recently with a various convex and non-convex algorithms. These works assume that the signal lies in a known  subspace spanned by vectors with random entries~\cite{ahmed2014blind,li2016rapid,ling2017blind}. A somewhat more related line of works assume sparsity in a random linear subspaces~\cite{lee2017blind,ling2015self,chi2016guaranteed}. 
+The papers 
+\cite{choudhary2014sparse,li2016identifiability,kech2017optimal,li2015unified} deals with the fundamental question of identifiability of the problems, but none of these paper consider our setup, namely, when the sparse signal is in the canonical basis. 
 
-As far as we know, no work considered the blind deconvolution considered in this manuscript. In~\cite{choudhary2014sparse}, it  was shown that 
-a simple sparsity assumption in the canonical basis is insufficient
-for unique recovery. However, here we also assume that the sparse signal is binary. In addition, we mainly care of the problem in the high noise regime and understanding how the relations between the parameters of the data effects the estimation error. 
+Our problem is very different from all previous works in at least two ways. First, 
+while we do assume that one of the signals is sparse,  our goal is to estimate the other signal. We do not claim that we can estimate the sparse signal. Second, we are mainly care of accurate estimation of $x$ in the low $\SNR$ regime. In this regime, it seems that estimating the sparse signal $s$ is impossible. This is contrast to previous works that focused on the high $\SNR$ regime.
+
+We briefly mention that the deconvolution problem, namely, when the kernel is assumed to be known, has been analyzed throughly in recent years under sparsity constraints~\cite{bendory2016robust,bendory2017robust,bendory2016stable,boyer2017adapting,bernstein2017deconvolution,de2012exact,azais2015spike,duval2015exact,duval2015sparse}.  Nevertheless, the problem under consideration is essentially different  from two reasons. First, of course, we consider the blind setting when the kernel is unknown. Second, these works considered the recovery of sparse signal, with Gaussian-like kernel. In our problem, the convolution itself kernel is sparse, while we aim to recover a general signal. 
+. 
 
 
 \subsection{Multireference alignment} \label{sec:mra}
 
-
-Multireference alignment is the problem of estimating a signal $x\in\RL$ from its circularly shifted noisy measurements
+Our approach for blind deconvolution is based on reducing the problem, approximately, to an MRA problem.
+In MRA, we aim at estimating a signal $x\in\RL$ from its circularly shifted noisy measurements
 \begin{equation} \label{eq:mra}
-y_j = R_{r_j}x + \varepsilon_j, \quad j = 1,\ldots,N
+y_j = R_{r_j}x + \varepsilon_j, \quad j = 1,\ldots,N,
 \end{equation}
-where $R_{r}$ translates a signal by $r$ locations, namely, $(R_rx)[i] = x[i-r]$, and $\varepsilon$ is an i.i.d.\ normal noise with mean zero and variance $\sigma^2$. This problem has application in radar, image processing and structural biology~\cite{zwart2003fast,foroosh2002extension,diamond1992multiple}. The algorithmic and statistical characterizations of this problem have been analyzed thoroughly in the last couple of years, see~\cite{bendory2017bispectrum,bandeira2014multireference,bandeira2017optimal,perry2017sample,boumal2017heterogeneous,abbe2017multireference,abbe2017sample}.
+where $R_{r}$ translates a signal by $r$ locations, namely, $(R_rx)[i] = x[(i-r)\mod L]$, and $\varepsilon$ is an i.i.d.\ normal noise with mean zero and variance $\sigma^2$. This problem finds applications in radar, image processing and structural biology~\cite{zwart2003fast,foroosh2002extension,diamond1992multiple}. The algorithmic and statistical characterizations of this problem have been analyzed thoroughly in the last couple of years, see~\cite{bendory2017bispectrum,bandeira2014multireference,bandeira2017optimal,perry2017sample,boumal2017heterogeneous,abbe2017multireference,abbe2017sample}.
 
-In this work, we exploit the framework proposed in~\cite{bendory2017bispectrum}. The idea is to use features of the signal that are invariant under translation. Specifically, it was proposed to estimate the mean, power spectrum and bispectrum of the signal from the data. The estimation is performed by averaging over the features of the measurements. Let $\mu_z,P_z$ and $B_z$ denote the mean, power spectrum and bispectrum of a signal $z$. Then, it can be shown that 
+In this work, we exploit the algorithmic framework proposed in~\cite{bendory2017bispectrum}. In order to estimate the signal, this paper suggests to use features of the signal that are invariant under cyclic translation.
+Apparently, three moments are required. The first is mean of the signal, denoted by $\mu_x$, or, equivalently, it DC component $(Fx)[0]$. The second feature is the power spectrum of the signal $P_x[k] = \vert (Fx)[k]\vert^2$ for $k=0,1,\ldots L-1$. Since in general one cannot estimate  a signal from its power spectrum~\cite{bendory2017fourier}, one needs a third order feature. This third order feature, called bispectrum, is defined as~\cite{tukey1953}
+\begin{equation}
+B_x[k_1,k_2] = (Fx)[k_1]\overline{(Fx)[k_2]}(Fx)[k_2-k_1].
+\end{equation}  
+These features can be estimated directly from the measured data by
 \begin{align}
 \frac{1}{N}\sum_{i=1}^N\mu_{y_j}  &\,\to \, \mu_x, \\
 \frac{1}{N}\sum_{i=1}^NP_{y_j}  &\,\to \, P_x + L\sigma^2, \\
 \frac{1}{N}\sum_{i=1}^NB_{y_j}  &\,\to \, B_x + \mu_x\sigma^2L^2A, 
 \end{align} 
-where $A$ is a known deterministic matrix. Therefore, by proper debiasing, one can get a reliable estimating of these features. For $\sigma,N\to\infty$, the estimation rate is dominated by the bispectrum and thus the estimation rate is $\sigma^6/N$, which is optimal for uniform distribution of translations~\cite{bandeira2017optimal}. Given reliable estimation of the features, the signal can be accurately estimated, up to translation, using a variety of algorithms~\cite{bendory2017bispectrum}.
+where $A$ is a known deterministic matrix. Therefore, by proper debiasing, one can get a reliable estimating of these features. For large enough $\sigma$, the variance of the estimators  is dominated by the bispectrum and thus goes as $\sigma^6/N$. This estimation rate is optimal under the assumption that distribution of translations is uniform~\cite{bandeira2017optimal}. If the distribution is non-uniform, then one can do better using only the first two moments, see~\cite{abbe2017multireference}. 
+ Given enough measurements, one can obtain reliable estimation of the features, and then to estimate the underlying signal, up to cyclic translation, using a variety of algorithms~\cite{bendory2017bispectrum}. In this work, we use a simple non-convex least-squares estimator.... \TODO{Need to see what do we actually solve...}
 
 
 
 
-\subsection{Connection with the cryo--EM problem} \label{sec:cryoEM}
+\subsection{Connections with the cryo--EM problem} \label{sec:cryoEM}
 
 This work is partially motivated by the imaging
-technique called single particle Cryo--EM, enabling the visualization of molecules at near atomic resolution~\cite{bartesaghi20152,sirohi20163}. In cryo--EM, many samples of a molecule are frozen in a thin sheet of ice. Then, the microscope transmits electrons and we acquire  several images, called \emph{micrographs}, that contains the two-dimensional tomographic projections of the samples. The  cryo--EM 
-problem is then to estimate the molecules from several micrographs. 
+technique called single particle Cryo--EM, enabling the visualization of molecules at near atomic resolution~\cite{bartesaghi20152,sirohi20163}. Cryo--EM gained a lot of popularity in recent years in the structural biology community. As an evidence, Dubochet, Frank and Henderson were awarded the 
+the Nobel prize for their contribution in the development of this technique~\cite{nobel}. 
+
+In cryo--EM, many samples of a molecule are frozen in a thin sheet of ice. 
+The microscope transmits electrons that pass through the ice and are recorded by an array of detectors and we acquire  several images, called \emph{micrographs}. Each micrograph  contains many two-dimensional (2D) tomographic projections of the samples. 
+ The  cryo--EM problem is then to estimate the molecules from several micrographs. This process is illustrated by in Figures~\ref{fig:cryo-EM} and~\ref{fig:cryo-EM-problem}. 
+
+From signal processing point--of--view, the cryo--EM problem arises two main challenges compared to more traditional tomographic methods, like computerized tomography. First, the orientation of each sample is unknown since the samples are rapidly frozen in the ice sheet. The experimentalist does not have control over these orientations. Second, the $\SNR$ in each projection is very low since the electron dosage must be kept low in oder to limit  radiation damage to the molecules. In real cryo--EM data there are some additional challenges, like the contrast transfer function of the microscope that corrupts the acquired image. 
+
 
 \begin{figure}
 	\begin{center}
@@ -186,23 +214,34 @@ problem is then to estimate the molecules from several micrographs.
 	\label{fig:cryo-EM-problem}
 \end{figure}
 
-A standard cryo--EM reconstruction algorithm starts with a stage called \emph{particle picking} [ref]. In this stage, the projections are detected in the micrographs, and then cropped. Then, ideally, one get a set of measurements of the form 
+The first stage of a cryo--EM reconstruction algorithm is the so called \emph{particle picking} [ref]. In this stage, the projections are detected in the micrographs, and then cropped as demonstrated by the red rectangulars in Figure~\ref{fig:cryo-EM}.
+Then, ideally, one get a set of measurements of the form 
 \begin{equation} \label{eq:cryo-em}
 y_j = \mathcal{P}( g_j\circ x) + \varepsilon_j,\quad j=1,\ldots,N, 
 \end{equation}
-where $x$ is the three-dimensional molecule to be estimated,  $g_j\in SO(3)$ are unknown 3D rotations that act on the molecule and $\mathcal{P}$ is a tomographic projection. This model has been analyzed theoretically from different point--of-views~\cite{bandeira2015non,hadani2011representation} [more ref]. The MRA model~\ref{eq:mra} can be interpreted as a simplification of the cryo--EM problem, where the unknown shifts correspond to the unknown rotations (but there is no analog for the projection operation).
+where $x$ is the three-dimensional (3D) molecule to be estimated,  $g_j\in SO(3)$ are unknown 3D rotations that act on the molecule and $\mathcal{P}$ is a linear tomographic projection. This model has been analyzed theoretically from different point--of-views~\cite{bandeira2015non,hadani2011representation} [more ref]. The MRA model~\ref{eq:mra} can be interpreted as a simplification of the cryo--EM problem, where the unknown cyclic-shifts correspond to the unknown rotations (but there is no analog for the projection operation).
 
-In practice, particle picking algorithms are far from being optimal. For instance, the projections in the cropped images are not centered, and therefore an unknown  two-dimensional translation should be added to the model~\eqref{eq:cryo-em}. In addition, most of the particle picking algorithms throw away many particles since they fail to detect them. Hence, a necessary condition for the success of such algorithm is that the noise level would low enough so that detection would be possible.
+In practice, particle picking algorithms are far from being optimal, mainly because the high noise level prevents reliable detection. 
+ For instance, the projections in the cropped images are not centered, and therefore an unknown 2D translation should be added to the model~\eqref{eq:cryo-em}.
+ In addition, many samples in the micrograph are non detected or ignored. 
+ 
+ Our model can be seen as a highly simplified cryo--EM model, where $y$ corresponds to the micrograph and the signal repeated signal $x$ to a  ``one-dimensional molecule" (the tomographic projection $\mathcal{P}$ does not appear in the model). We are interest in the question whether we can estimate the signal $x$, even if the $\SNR$ is so low that we cannot detect the locations of $x$ in $y$. In the perspective of the cryo--EM problem. the success to estimate the signal in the very low SNR regime may indicate that the molecule can be estimated directly from the cryo--EM micrographs, even if the SNR is so low that particle picking algorithm work poorly. 
 
-Our work can be viewed as a first stage towards answering the question whether molecule estimation is possible in a very low SNR regime, where \emph{detection is impossible}. Our model can be seen as a very simplified cryo--EM model, where $y$ corresponds to the micrograph and the signal repeated signal $x$ to the molecule. The success to estimate the signal in the very low SNR regime may indicate that the molecule can be estimated directly from the cryo--EM micrographs, even if the SNR is so low that particle picking fails. 
+  %In addition, most particle picking algorithms throw away many particles since they fail to detect them. Hence, a necessary condition for the success of such algorithm is that the noise level would low enough so that detection would be possible.
+
 
    
 
 \section{Algorithm} \label{sec:algorithm}
 
+The algorithm is inspired by invariant features approach proposed in~\cite{bendory2017bispectrum}. Let $L<W\in\mathbb{Z}$ ans assume, for simplicity, that $W$ divides $N$. The algorithm starts with splitting the measurement $y\in\RN$ into a series of analysis windows $y_i\in\mathbb{R}^W,\,i=1,\ldots,N/W$, where  
+\begin{equation} \label{eq:analysis_window}
+y_i[n] = y[(i-1)W + n] , \quad n=1,\ldots,W. 
+\end{equation}
+By assumption, there are exactly $N/W$ windows. Of course, one can use overlapping windows, however, our numerical experiments indicate it does not improve the numerical behavior.  Then, for each window, we compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum and average over all windows. Finally, once we estimated these features, we look for a signal $\tilde{x}\in\mathbb{R}^W$ that is consistent with the data. 
 
-Before moving ahead to the feature estimators, we need to estimate the norm of the signal. This is necessary since many analysis windows do not contain information on the signal, but pure noise. We will use the norm to scale the the signal's estimator.
-This can be done as follows. For short, we denote $x_K[n]=\sum_{i=1}^K \xz[n-n_i]$ and note that $\|x_K\|_2^2 = K\|x\|_2^2$. 
+Note that the signal is not scaled properly since, in contrast to the MRA model of~\cite{bendory2017bispectrum}, many windows contain no information on the signal, but pure noise. Therefore, we estimate the norm of the signal separately and use it to rescale the estimation. 
+The norm estimation can be done as follows. For short, we denote $x_K[n]=\sum_{i=1}^K \xz[n-n_i]$ and note that $\|x_K\|_2^2 = K\|x\|_2^2$. 
 Then,
 \begin{equation}
 \| y\|_2^2 =  \| x_K\|_2^2 + \|\varepsilon\|_2^2 + 2\varepsilon^Tx_K. 
@@ -215,32 +254,55 @@ As $N\to\infty$, we can estimate
 \end{split}	 
 \end{equation}   
 And therefore, 
-\begin{equation}
+\begin{equation} \label{eq:norm_estimation}
 \|x\|_2^2 \approxeq \frac{\| y\|_2^2 - N\sigma^2}{K}. 
 \end{equation}
+The estimation error for different values of $\sigma$ is depicted in Figure~\ref{fig:norn_error}. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale = .5]{NormError}		
+	\end{center}
+	\caption{The normalized error for norm estimation over 200 experiments per values. Will need to do that again, but it is sufficient for now.}
+	\label{fig:norn_error}
+\end{figure}
+
+The algorithm is summarized in Algorithm~\ref{alg:1}.
 
 
 
+\begin{algorithm}[h]
+		\textbf{Input:} Moments $\mu$ and $M$; power spectrum $P_x$. \\ 
+		\textbf{Output:} A signal $\tilde x\in\mathbb{R}^W$  \\ 
+		\begin{enumerate}
+			\item Split $y$ into a set of $N/W$ analysis windows $y_i\in\mathbb{R}^W$ according to~\eqref{eq:analysis_window}
+			\item  For each analysis window, compute the mean $\mu_i$, power spectrum $P_i$ and bispectrum $B_i$ according to ?
+			\item  Average over the feature according to ?
+			\item  Estimate the signal $\tilde{x}\in\mathbb{R}^W$ by~?
+			\item  Compute the estimated norm $x_{\textrm{norm}}$  by~\eqref{eq:norm_estimation}
+			\item  Rescale the signal $\tilde x \gets \frac{\tilde{x}\cdot x_{\textrm{norm}}}{\|\tilde{x}\|_2} $    
+		\end{enumerate}
+	\caption{Blind devolution by features that are invariant to cyclic-translations} 	\label{alg:1}
+\end{algorithm}
 
-To perform this blind deconvolution, we use the invariant approach proposed for multireference alignment in a previous paper. Let us  first introduce  notation. We crop the measurement $y\in\RN$ into a series of analysis windows: 
-\begin{equation}
-y_i = y[(i-1)W + 1 : iW ]\in\mathbb{R}^W, \quad i=1,\ldots,N/W, 
-\end{equation}
-To ease notation, we assume that  $W$ divides $N$  so that there are exactly $N/W$ windows. We also assume that $\vert n_i - n_j\vert >W$ so that each window contains no more than one signal (in general, we can introduce overlapping windows. The code enables it, but it does not seem to improve performance.).
-For each one of the windows, we compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum. We then hope that averaging over these features will produce a reliable estimation of the invariant features of the signal itself. 
-We recall that given accurate estimators of those features, we can estimate the signal itself reliably. Therefore, the question boils down to the accuracy of these feature estimations.
 
 \section{Analysis} \label{sec:analysis}
 
+For the sake of analyzing Algoritmh~\ref{alg:1}, we make the following assumptions. We consider the regime in which $N,\sigma,K\to\infty$ and  $L,W$ are fixed. We introduce to rations. The first is a ``sparsity factor" defined as $S = \frac{N}{WK}$, $WK$ is a measure for the ``active" windows and $1<S<\infty$. The second is $P = W/L>1$, measuring the ``padding factor"; the ratio between the lengths of the analysis window and the signal. We assume that positions $n_i$ are well-separated so that $\vert n_i - n_j\vert >2W$. The factor 2 is merely to ease the analysis is not really required by the algorithm. We also assume that each $n_i$ is uniformly distributed within the window. 
 
-Next, we analyze the feature estimation in the asymptotic regime of $N,\sigma,K\to\infty$ and fixed $L,W$. We introduce the ``sparsity factor" defined as $S = \frac{N}{WK}<\infty$, $WK$ is a measure for the ``active" windows. We also define  another zero padded signal $x_W  = [x, \underbrace{0,0,\ldots,0}_{N-W \text{ zeros}}]\in\mathbb{R}^W$.
 
-We want to estimate the features of this signal, and focus on the bispectrum for the sake of simplicity (the estimation of the power spectrum and mean obeys the same methodology). 
-In order to estimate the bispectrum we average over the bispectra of the windows, namely, (for the power spectrum, we need to do unbiasing. In addition, we can replace the mean by more robust estimator, like the median.)
+Let us define  the zero padded signal $$x_W  = [x, \underbrace{0,0,\ldots,0}_{N-W \text{ zeros}}]\in\mathbb{R}^W.$$ 
+We want to estimate the features of this signal from the features the $y_i$'s. We analyze the estimation error of the bispectrum, and mention that the same methodology and conclusions hold for the power spectrum and mean.
+
+
+In order to estimate the bispectrum of the signal, we average over the bispectra of the analysis windows, namely,
 \begin{eqnarray}
 \hat{B}_{x_W} = \frac{W}{N}\sum_{i=1}^{N/W}B_{y_i}.
 \end{eqnarray}
-We split the sum into three groups of the windows:
+For the power spectrum, we need  to be somewhat careful with the bias. We will assume here that the mean of the signal is zero. Since the mean can be easily estimated from the data, it can be subtracted from each window before the averaging. 
+ In addition, as discussed in~\cite{bendory2017bispectrum}, we can replace the mean by more robust estimator, like the median.
+
+We first observe that the analysis windows can be split into three groups and written as:
 \begin{eqnarray}
 \hat{B}_{x_W} = B_\textrm{signal} + B_\textrm{clutter} + B_\textrm{noise}, 
 \end{eqnarray}
@@ -251,29 +313,31 @@ where
 	\item $B_\textrm{clutter}$ - sum of the bispectra of the segments that contain only part of $x$ and noise.
 \end{itemize}
 
-We first observe that $B_\textrm{noise}\to 0$ (note that this is the zero matrix). More precisely, the variance of the noise goes to zero at rate  $\order{\frac{W}{N}\left(1-\frac{1}{S}\right)\sigma^6}$. In addition, under the assumption that $n_i$ (if appear) are distributed uniformly in the window (we need to come up with precise statistical model; but it would be rather easy), there are (asymptotically) $K(1-L/W)$ windows with complete signals. Therefore,
-$B_\textrm{signal}\to \frac{KW(1-L/W)}{N}B_x$ at rate $\order{\frac{\sigma^6}{K(1-L/W)}}$. (Here we need to be a bit careful with the mean of the signal, or to assume it is zero.) Note that the scaling would be corrected at the last stage of the algorithm, by rescaling according to the estimated  norm.
+We analyze each group separately. First, we observe that $B_\textrm{noise}\to 0$ (note that this is the zero matrix). Since this a triple product, and we have, at least, $N/W-2K =N/W(1-2/S) $ such windows, the variance of $B_\textrm{noise}$ reduces to zero at rate  $\order{\frac{W}{N}\left(1-\frac{2}{S}\right)\sigma^6}$. This imply that for large $S$, the estimation rate of this factor reduces since we ``inject" pure noise to the estimation, with no relevant information on the signal.
 
-The more interesting term is the ``clutter" --- the cropped signals. Since each such signal appears in two windows,
-we have $2KL/W$ clutter segments. Of course, the noise in this segments goes to zero
-at rate $\order{\frac{W\sigma^6}{2KL}}$. However, we have an additional error term arises from  the cropped signals. To analyze the effect of this term, let us assume that $N/\sigma^6$ is great enough so that $B_\textrm{noise}\to 0$. Then,
+The second group contains windows with a full signal. Indeed, the signal may appear anywhere, but since we work with features that are invariant to translation, that exact position is irrelevant as long as we have the full information of the signal. Since we assumed that the positions  $n_i$ are distributed uniformly in the window, there are (asymptotically) $K(1-L/W) = K(1-1/P)$ windows in this group. 
+Therefore, $B_\textrm{signal}$ converges to a scaled version of $B_x$  \ at rate $\order{\frac{\sigma^6}{K(1-P)}}$. The scaling will be corrected in the last stage of the algorithm. This implies that the larger $P$, the faster the estimation rate of this group. This makes a lot of sense since it means that will find more windows with full signal and less cropped signals.
+
+Finally, we analyze the third group, the  ``clutter" --- the cropped signals. Since each such signal appears in two windows,
+we have $2KL/W = 2K/P$ clutter segments. Of course, the noise in this segments goes to zero
+at rate $\order{\frac{P\sigma^6}{2K}}$. However, we have an additional error term arises from  the cropped signals. This term does not reduce to zero, but can be bounded. 
+ To analyze the effect of this term, let us assume that $N/\sigma^6$ is great enough so that $B_\textrm{noise}\to 0$ and also $\left\|B_{y_i}\right\|_{\textrm{F}} \approxeq \left\|B_x\right\|_{\textrm{F}}$. Then,
 \begin{equation}
 \begin{split}
 \left\| \hat{B}_{x_W} - B_\textrm{signal}\right\|_{\textrm{F}} \approxeq&  \left\|B_\textrm{clutter}\right\|_{\textrm{F}}
 = \left\|\frac{W}{N}\sum_{i\in\textrm{clutter}}B_{y_i}\right\|_{\textrm{F}}
 \\ \leq & 
-\frac{W}{N}\frac{2KL}{W}\left\|B_x\right\|_{\textrm{F}} = \frac{2L}{SW}
+\frac{W}{N}\frac{2KL}{W}\left\|B_x\right\|_{\textrm{F}} = \frac{2}{SP}
 \|B_x\|_{\textrm{F}}.
 \end{split}
 \end{equation}
-Therefore, for large sparsity term $S$ or large $W/L$, we get an accurate estimation of a scaled version of the signal's bispectrum. 
+Therefore, for large sparsity term $S$ or large $P$, we get an accurate estimation of a scaled version of the signal's bispectrum. 
 
-
-Few insights from the analysis: (need to check numerically)
+Few insights from the analysis: (need to verified numerically)
 \begin{itemize}
 	\item Larger $S$ reduces the clutter error, however, increases the variance of the noise estimation.
-	\item Larger $W/L$ reduces the clutter error, however, increases the variance of the noise  of $B_\textrm{noise}$.
-	\item We must keep $W/L$ large enough to see enough full signals.    
+	\item Larger $P$ reduces the clutter error, however, increases the variance of the noise  where the signal appears.
+	\item We must keep $P$ large enough to see enough full signals.    
 \end{itemize} 
 
 

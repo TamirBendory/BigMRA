@@ -10,10 +10,11 @@ N = window_size*k*Nfactor; % # of measurements
 overlapping_factor = 1; % windows are overlapped by window_size/overlapping_factor
 %% Generating data
 tic
-x = randn(L,1); 
+%x = randn(L,1); 
+x = ones(L,1);
 [y,yc, ind] = gen_data(x,N,k,0,window_size);
 
-sigma_vec = [0.1 , 0.7, 2.5];  % noise level2
+sigma_vec = [0.1 , 0.7, 3];  % noise level2
 
 figure; 
 
@@ -51,4 +52,4 @@ axis tight
 
 end
 
-pdf_print_code(gcf, 'example', 11)
+pdf_print_code(gcf, 'example.pdf', 11)
