@@ -364,8 +364,28 @@ Few insights from the analysis: (need to verified numerically)
 
 \section{Numerical experiments} \label{sec:experiments}
 
-\section{Conclusion} \label{sec:conclusion}
+We use the definition of signal--to--noise ratio ($\SNR$) as
+\begin{equation}
+\SNR = \frac{\|y_c\|_2^2}{\|y_c-y\|_2^2},
+\end{equation}
+where $y_c$ is the measurement before adding the noise. The error is measured as 
+\begin{equation}
+\textrm{error}  = \frac{\|\hat{x}-x\|}{\|x\|}.
+\end{equation}
 
+A representative example is given in Figure ?
+
+
+An experiment for constant noise level $\sigma=1$ and varying $k$ appears in Figure~\ref{fig:varyingK}. The error stops decreasing at some level from obvious reasons.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{errXP1.pdf}
+	\caption{\label{fig:varyingK}The recovery error as a function of $k$, the number of signal appearances (approximately!) for $\sigma=1$. We worked with i.i.d.\ signal of length $L=1$ (same signal for all experiments), the window size was chosen as $W=10L$ and the number of measurements was chosen as $N =6Wk $. In average, $1/\SNR\approx 30$.}
+\end{figure}
+\section{Conclusion} \label{sec:conclusion}
+Here we conclude the paper
 
 
 

@@ -3,27 +3,42 @@ clear; close all; clc;
 %% Defining the problem
 
 L = 21; % length of signal
-k = 1e4; % # of signal's repetitions (maximal number)
 sigma = 1;  % noise level2
-W = 8*L; 
+W = 10*L; 
 Nfactor = 6; % Sparsity factor, should be ~6
-N = W*k*Nfactor; % # of measurements
 overlapping_factor = 1; % windows are overlapped by window_size/overlapping_factor
+x = randn(L,1); 
+k_length = 10;
+k_vec = round(logspace(2,5,k_length));
+num_rep = 100;
+
+if isempty(gcp('nocreate'))
+            parpool(30, 'IdleTimeout', 240);
+end
+
+err = zeros(k_length,num_rep);
+snr = err; 
+time = err;
+
 %% Generating data
-tic
-x = randn(L,1);
-%x = ones(L,1);
+for i = 1:length(k_vec)
+    for iter = 1:num_rep
+
+%tic
+
+k = k_vec(i);
+N = W*k*Nfactor; % # of measurements
 [y,yc, ind] = gen_data(x,N,k,sigma,W);
-snr = norm(yc)^2/norm(y-yc)^2; % The problem's SNR
+snr(i,iter) = norm(yc)^2/norm(y-yc)^2; % The problem's SNR
 k_eff = length(ind); % The actual nunber of signal's repetitions
-fprintf('Measurement length  = %e \n',N);
-fprintf('The measurement contains %.1e repetitions of the underlying signal (from %.1e)\n',k_eff,k);
-fprintf('SNR = %.4f \n',snr);
-fprintf('Generating data time = %.2f [sec] \n',toc);
+%fprintf('Measurement length  = %e \n',N);
+%fprintf('The measurement contains %.1e repetitions of the underlying signal (from %.1e)\n',k_eff,k);
+fprintf('SNR = %.4f \n',snr(i,iter));
+%fprintf('Generating data time = %.2f [sec] \n',toc);
 %estimating the signal's norm from the data
 normX = sqrt((norm(y)^2 - sigma^2*N)/k_eff);
-Err_normX = abs(norm(x) - normX)/norm(x);
-fprintf('Error of norm''s estimation = %.4f  \n',Err_normX);
+%Err_normX = abs(norm(x) - normX)/norm(x);
+%fprintf('Error of norm''s estimation = %.4f  \n',Err_normX);
 
 %sanity check: note that yc == cconv(x,s,N);
 %s = zeros(N,1); s(ind) = 1;
@@ -42,10 +57,6 @@ assert(size(y_mat,1)==W && size(y_mat,2)==N/W*overlapping_factor, 'Something is 
 
 %% invariants
 
-if isempty(gcp('nocreate'))
-            parpool(2, 'IdleTimeout', 240);
-end
-
 tic
 [mean_est, P_est, B_est] = invariants_from_data(y_mat, sigma);
 [z, problem] = phases_from_bispectrum_real(B_est, sign(mean_est), randn(W,1));
@@ -53,33 +64,44 @@ x_est = real(ifft(sqrt(P_est).*z));
 
 %% automatic alignment
 
-x_aligned = auto_alignment(x_est,L,1,x);
+x_aligned = auto_alignment(x_est,L,0,x);
 x_aligned = x_aligned/norm(x_aligned)*normX;
-fprintf('Algorithm time = %.2f [sec] \n',toc);
+time(i,iter) = toc;
+%fprintf('Algorithm time = %.2f [sec] \n',toc);
 
 %% plotting
 
-err = norm(x_aligned - x)/norm(x)
-lag = 600;
+err(i,iter) = norm(x_aligned - x)/norm(x);
+
+
+    end
+    
+    save('err','err');
+    save('time','time');
+    save('snr','snr');
+    
+end
+
+if 0
+
+    lag = 600;
 inds = ind(10) - lag/2; indf = inds + lag;
-yc_ind = yc(inds:indf);
-y_ind = y(inds:indf);
 
-save('x.mat','x');
-save('x_aligned.mat','x_aligned');
-save('err.mat','err');
-save('y_ind.mat','y_ind');
-save('yc_ind.mat','yc_ind');
-
+end
+%
+% save('x.mat','x');
+% save('x_aligned.mat','x_aligned');
+% save('err.mat','err');
+if 0
 figure; 
 subplot(311); hold on; stem(1:L,x); stem(1:L,x_aligned,'xr'); 
 title(strcat('Error = ',num2str(err)));
 legend('signal','estimation');
-subplot(312); hold on; plot(inds:indf,yc_ind,'linewidth',2); plot(inds:indf,y_ind); legend('clean data','data');
+subplot(312); hold on; plot(inds:indf,yc(inds:indf),'linewidth',2); plot(inds:indf,y(inds:indf)); legend('clean data','data');
 title(strcat('N =', num2str(N),', L=',num2str(L), ', K=',num2str(k_eff),', SNR=',num2str(snr)));
 axis tight
-w = flipud(xcorr(x,y_ind));
+w = flipud(xcorr(x,y(inds:indf)));
 subplot(313);  plot(inds:indf,w(lag+1:end)); 
 title('correlation between x and y');
 axis tight
-   
+end
