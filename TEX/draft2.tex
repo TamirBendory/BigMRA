@@ -244,7 +244,15 @@ The algorithm begins with splitting the measurement $y\in\RN$ into a series of a
 \begin{equation} \label{eq:analysis_window}
 y_i[n] = y[(i-1)W + n] , \quad n=1,\ldots,W. 
 \end{equation}
-By assumption, there are exactly $N/W$ windows. Of course, one can easily modify the algorithm using overlapping windows, however, our numerical experiments indicate it does not improve the numerical performance.  For each window, we then compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum, and then  average them over all windows according to~\eqref{eq:moment_estimation}. Finally, once we estimated these features, we look for a signal $\hat{x}\in\mathbb{R}^W$ that is consistent with the data by solving ??
+By assumption, there are exactly $N/W$ windows. Of course, one can easily modify the algorithm using overlapping windows, however, our numerical experiments indicate it does not improve the numerical performance.  For each window, we then compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum, and then  average them over all windows according to~\eqref{eq:moment_estimation}
+Following~\eqref{eq:moment_estimation}, we estimate the features of the signal by average over the features of the analysis windows, namely,
+\begin{align} \label{eq:estimated_features_win}
+\hat{\mu}_{x} &= \frac{W}{N}\sum_{i=1}^{N/W}\mu_{y_i}, \\ \nonumber
+\hat{P}_{x} &= \frac{W}{N}\sum_{i=1}^{N/W}P_{y_i} - L\sigma^2, \\
+\hat{B}_{x} &= \frac{W}{N}\sum_{i=1}^{N/W}B_{y_i-\hat{\mu}_{x_W}}.  \nonumber
+\end{align}
+As discussed in~\cite{bendory2017bispectrum}, we can replace the mean by more robust estimator, like the median.
+ Finally, once we estimated these features, we look for a signal $\hat{x}\in\mathbb{R}^W$ that is consistent with the data by solving ??
 
 Recall that the current estimate $\hat{x}$ is a signal of length $W$, whereas the underlying signal of length $L$.
 Ideally, it is cyclic-shifted version of $x$, padded with $W-L$ zeros.
@@ -289,7 +297,6 @@ The estimation error for different values of $\sigma$ is depicted in Figure~\ref
 
 The output of the algorithm is a signal of length $W$, that, ideally, contains $x$, shifted by some unknown shift, and padded by $W-L$ zeros. 
 The algorithm is summarized in Algorithm~\ref{alg:1}.
-\TODO{We should come up with a method to automatic aligning of the signal}.
 
 
 \begin{algorithm}[h]
@@ -309,21 +316,24 @@ The algorithm is summarized in Algorithm~\ref{alg:1}.
 
 \section{Analysis} \label{sec:analysis}
 
-For the sake of analyzing Algoritmh~\ref{alg:1}, we make the following assumptions. We consider the regime in which $N,\sigma,K\to\infty$ and  $L,W$ are fixed. We introduce to rations. The first is a ``sparsity factor" defined as $S = \frac{N}{WK}$, $WK$ is a measure for the ``active" windows and $1<S<\infty$. The second is $P = W/L>1$, measuring the ``padding factor"; the ratio between the lengths of the analysis window and the signal. We assume that positions $n_i$ are well-separated so that $\vert n_i - n_j\vert >2W$. The factor 2 is merely to ease the analysis is not really required by the algorithm. We also assume that each $n_i$ is uniformly distributed within the window. 
+In this section, we analyze the performance of Algoritmh~\ref{alg:1}. Our analysis is based on the asymptotic regime in which  $N,\sigma,K\to\infty$ and  $L,W$ are fixed. Since we work in high noise regime, We focus on the converges rate of the noise terms. In addition, we analyze the error occurred due to the proposed technique independent of the noise.
+ We assume that positions $n_i$ are well-separated so that $\vert n_i - n_j\vert >2W$. The factor 2 is merely to ease the analysis is not really required by the algorithm. We also assume that each $n_i$ is uniformly distributed within the window. 
+
+
+Our framework is based on splitting the measurement into $N/W$ windows $y_i\in\RW$. Since in the high noise regime, we cannot detect the appearances of the signal in $y$, the devision is somewhat arbitrary. The windows $y_i,\,i=1,\ldots,N/W$ can be classified into three classes.  The first class contains a signal in an unknown location and noise. These are ``good" windows since they are perfectly match the MRA model. The second class contains only noise -- no signal.  As will be demonstrated, these windows cause only a scaling problem which is easily fixed by estimation the signal's norm separately~\eqref{eq:norm_estimation}. The third class of signals contains only part of a signal and the noise. These are the ``bad" windows, as they do not contain the entire information of the signal, but, also, do not obey the Gaussian statistics of the noise. These windows induce estimation error, independently of the noise.  
+
+The performance of the algorithm relies on the factors.  The first is the ratio between the length of the analysis window and the signal, namely, 
+$$P := W/L>1.$$ Clearly, the larger this ratio is, the less windows are with the class of ``bad" windows; the windows with part of the signal.  On the other hand, if we impose large $P$, we restrict ourselves to work with very sparse signals. The second factor is defined as $$S = \frac{N}{WK},$$ where $WK$ is a measure for the ``active" windows. We refer to $S$ as the  ``sparsity factor". Clearly,  $1<S<\infty$. The larger $S$ is, the more sparse the signal is.
 
 
 Let us define  the zero padded signal $$x_W  = [x, \underbrace{0,0,\ldots,0}_{N-W \text{ zeros}}]\in\mathbb{R}^W.$$ 
-We want to estimate the features of this signal from the features the $y_i$'s. We analyze the estimation error of the bispectrum, and mention that the same methodology and conclusions hold for the power spectrum and mean.
+We want to estimate the features of this signal from the features of the $y_i$'s.
+In Algorithm~\ref{alg:1} there is another step of trimming this padded signal to a shorter signal of length $L$ that contains most of the information, but we currently ignore this stage. 
+ 
+We next analyze the estimation error of the invariant features, estimated by~\eqref{eq:estimated_features_win}.  
+In the ideal case, when one has $n$ windows with signal and noise, them  the asymptotic  estimation rate of the mean, power spectrum and bispectrum is $\sigma^2/n,\,\sigma^4/n,\,\sigma^6/n$, respectively. We are interest in how this rate is changed in the model under consideration.
 
-
-In order to estimate the bispectrum of the signal, we average over the bispectra of the analysis windows, namely,
-\begin{eqnarray}
-\hat{B}_{x_W} = \frac{W}{N}\sum_{i=1}^{N/W}B_{y_i}.
-\end{eqnarray}
-For the power spectrum, we need  to be somewhat careful with the bias. We will assume here that the mean of the signal is zero. Since the mean can be easily estimated from the data, it can be subtracted from each window before the averaging. 
- In addition, as discussed in~\cite{bendory2017bispectrum}, we can replace the mean by more robust estimator, like the median.
-
-We first observe that the analysis windows can be split into three groups and written as:
+For each feature, the sum in~\eqref{eq:estimated_features_win} can be split into three classed. For instance, the estimated bispectrum can be written as
 \begin{eqnarray}
 \hat{B}_{x_W} = B_\textrm{signal} + B_\textrm{clutter} + B_\textrm{noise}, 
 \end{eqnarray}
@@ -333,26 +343,28 @@ where
 	\item $B_\textrm{signal}$ - sum of the bispectra of the segments that contain a full signal (one appearance of $x$) and noise,
 	\item $B_\textrm{clutter}$ - sum of the bispectra of the segments that contain only part of $x$ and noise.
 \end{itemize}
+The same of course holds for the mean and the power spectrum. 
 
-We analyze each group separately. First, we observe that $B_\textrm{noise}\to 0$ (note that this is the zero matrix). Since this a triple product, and we have, at least, $N/W-2K =N/W(1-2/S) $ such windows, the variance of $B_\textrm{noise}$ reduces to zero at rate  $\order{\frac{W}{N}\left(1-\frac{2}{S}\right)\sigma^6}$. This imply that for large $S$, the estimation rate of this factor reduces since we ``inject" pure noise to the estimation, with no relevant information on the signal.
 
-The second group contains windows with a full signal. Indeed, the signal may appear anywhere, but since we work with features that are invariant to translation, that exact position is irrelevant as long as we have the full information of the signal. Since we assumed that the positions  $n_i$ are distributed uniformly in the window, there are (asymptotically) $K(1-L/W) = K(1-1/P)$ windows in this group. 
-Therefore, $B_\textrm{signal}$ converges to a scaled version of $B_x$  \ at rate $\order{\frac{\sigma^6}{K(1-P)}}$. The scaling will be corrected in the last stage of the algorithm. This implies that the larger $P$, the faster the estimation rate of this group. This makes a lot of sense since it means that will find more windows with full signal and less cropped signals.
+We analyze each class separately. First, we observe that for the noise class, all features converges to zero, namely, $\hat{\mu}_\textrm{noise}\to 0$, $\hat{P}_\textrm{noise}\to 0$ and $\hat{B}_\textrm{noise}\to 0$. Since  we have, at least, $N/W-2K =N/W(1-2/S) $ such windows, and the converges is controlled by the bispectrum, the estimation rate is  $\order{\frac{W}{N}\left(1-\frac{2}{S}\right)\sigma^6}$. This imply that for large $S$, the estimation rate of this factor reduces since we ``inject" pure noise to the estimation, with no relevant information on the signal.
 
-Finally, we analyze the third group, the  ``clutter" --- the cropped signals. Since each such signal appears in two windows,
+The class group contains windows with a full signal. Indeed, the signal may appear anywhere, but since we work with features that are invariant to cyclic-translation, that exact position is irrelevant as long as we have the full information of the signal. Since we assumed that the positions  $n_i$ are distributed uniformly in the window, there are (asymptotically) $K(1-L/W) = K(1-1/P)$ windows in this class. 
+Therefore, $B_\textrm{signal}$ converges to a scaled version of $B_x$  at rate $\order{\frac{\sigma^6}{K(1-1/P)}}$. The scaling will be corrected in the last stage of Algorithm~\ref{alg:1}. This implies that the larger $P$, the faster the estimation rate of this group. This makes a lot of sense since it means that will find more windows with full signal and less cropped signals.
+
+Finally, we analyze the third class, the  ``clutter" --- the cropped signals. Since each such signal appears in two windows,
 we have $2KL/W = 2K/P$ clutter segments. Of course, the noise in this segments goes to zero
 at rate $\order{\frac{P\sigma^6}{2K}}$. However, we have an additional error term arises from  the cropped signals. This term does not reduce to zero, but can be bounded. 
  To analyze the effect of this term, let us assume that $N/\sigma^6$ is great enough so that $B_\textrm{noise}\to 0$ and also $\left\|B_{y_i}\right\|_{\textrm{F}} \approxeq \left\|B_x\right\|_{\textrm{F}}$. Then,
 \begin{equation}
 \begin{split}
-\left\| \hat{B}_{x_W} - B_\textrm{signal}\right\|_{\textrm{F}} \approxeq&  \left\|B_\textrm{clutter}\right\|_{\textrm{F}}
+\left\| \hat{B}_{x_W} - B_\textrm{signal}\right\|_{\textrm{F}} \approx&  \left\|B_\textrm{clutter}\right\|_{\textrm{F}}
 = \left\|\frac{W}{N}\sum_{i\in\textrm{clutter}}B_{y_i}\right\|_{\textrm{F}}
 \\ \leq & 
 \frac{W}{N}\frac{2KL}{W}\left\|B_x\right\|_{\textrm{F}} = \frac{2}{SP}
 \|B_x\|_{\textrm{F}}.
 \end{split}
 \end{equation}
-Therefore, for large sparsity term $S$ or large $P$, we get an accurate estimation of a scaled version of the signal's bispectrum. 
+Therefore, for large sparsity term $S$ or large $P$, we get an accurate estimation of a scaled version of the signal's bispectrum. Similar analysis holds for the mean and power spectrum.
 
 Few insights from the analysis: (need to verified numerically)
 \begin{itemize}
@@ -373,7 +385,15 @@ where $y_c$ is the measurement before adding the noise. The error is measured as
 \textrm{error}  = \frac{\|\hat{x}-x\|}{\|x\|}.
 \end{equation}
 
-A representative example is given in Figure ?
+Two representative examples are for recovery in low $\SNR$ are given in Figure~\ref{fig:representative_example}.  In these experiments, the signal appears $5\cdot10^6$ times in the noise measurement with noise level $\sigma=2.5$ and $\SNR\approx 1/180$. The figure also presents a segment from the  correlation between the underlying signal and the measurement. As can be seen, even if the signal was known, it is impossible to detect its appearances from the data. In other words, even in the end of the task, after we accurately estimated the signal, it is impossible to identify its locations. 
+
+
+\begin{figure*}
+	\centering
+	\includegraphics[scale=0.26]{example_random_signal.pdf}
+	\includegraphics[scale=0.26]{example_rect_signal.pdf}	
+	\caption{\label{fig:representative_example} Two representative examples of accurate estimation of an i.i.d./ random signal (left) and a rectangular signal (right), both of length $L=21$, from noisy measurements with $\sigma=2.5$ and $\SNR\approx 1/180$. The signal appearances $K=5\cdot 10^6$ times in the measurements of length $N=6WK$ for $W=10L$. The upper figure show the estimated signal versus the original one. Below that, we plot a typical segment of the noisy data. The bottom figures present a segment of the correlation between the underlying signals and the data.}
+\end{figure*}
 
 
 An experiment for constant noise level $\sigma=1$ and varying $k$ appears in Figure~\ref{fig:varyingK}. The error stops decreasing at some level from obvious reasons.
@@ -384,12 +404,15 @@ An experiment for constant noise level $\sigma=1$ and varying $k$ appears in Fig
 	\includegraphics[scale=0.5]{errXP1.pdf}
 	\caption{\label{fig:varyingK}The recovery error as a function of $k$, the number of signal appearances (approximately!) for $\sigma=1$. We worked with i.i.d.\ signal of length $L=1$ (same signal for all experiments), the window size was chosen as $W=10L$ and the number of measurements was chosen as $N =6Wk $. In average, $1/\SNR\approx 30$.}
 \end{figure}
+
+
+
 \section{Conclusion} \label{sec:conclusion}
 Here we conclude the paper
 
 
 
-\bibliographystyle{plain}
+\bibliographystyle{ieeetran}
 \bibliography{ref}
 
 \end{document}
