@@ -3,23 +3,26 @@ clear; close all;
 
 %% Defining the problem
 
-L = 11;      %length of signal
-sigma = 1;   % noise level
-W = 2*L;     %window length
-Nfactor = 4; % Sparsity factor
-overlapping = 1; %maximal overlap
-K = 2;  %number signals
+L = 11;             % length of signal
+sigma = 1;          % noise level
+W = 2*L;            % window length
+Nfactor = 4;        % Sparsity factor
+window_shift = 1;   % by how much does the window slide at each step?
+K = 2;              % number of distinct signals (heterogeneity)
 
 % generating non-centered signals
-x = zeros(L,K); 
-for k=1:K
-x(:,k) = randn(L,1) + randn(1);
+x = zeros(L, K); 
+for k = 1:K
+    x(:, k) = randn(L, 1) + randn(1);
 end
 
 m_vec = 1000; %round(logspace(2,4,10)); % # of signal's repetitions (maximal number)
 num_rep = 1;
 
-M1_err = zeros(length(m_vec),num_rep); M2_err = M1_err; M3_err = M1_err; M2nd_err = M1_err;
+M1_err = zeros(length(m_vec),num_rep);
+M2_err = M1_err;
+M3_err = M1_err;
+M2nd_err = M1_err;
 
 for mm = 1:length(m_vec)
     m = m_vec(mm);
@@ -31,12 +34,12 @@ for mm = 1:length(m_vec)
         
         %% Generating data
         %tic
-        [y,yc, ind, class] = gen_data(x,N,m,sigma,W,K);
+        [y,yc, ind, class] = gen_data(x, N, m, sigma, W, K);
         %snr = norm(yc)^2/norm(y-yc)^2; % The problem's SNR
         % we assume to know how many signals at each class 
         m_eff = zeros(K,1);
         for k = 1:K
-        m_eff(k) = sum(class==k);
+            m_eff(k) = sum(class==k);
         end
         
         %fprintf('Measurement length  = %e \n',N);
@@ -47,7 +50,7 @@ for mm = 1:length(m_vec)
         
         %% rearraging the matrix data
         %tic
-        y_mat = gen_data_mtx(y,W,overlapping);
+        y_mat = gen_data_mtx(y, W, window_shift);
         %fprintf('Constructing data matrix time = %.2f [sec] \n',toc);
         
         if isempty(gcp('nocreate'))
@@ -62,10 +65,19 @@ for mm = 1:length(m_vec)
         M2nd = compute_2M(y_mat);
         
         % Expectations by analytical formulas 
-        M1_est = sum(x)*m_eff/N;
-        M2_est = psx(x,W,sigma,m_eff,N);
-        M3_est = bsx(x,W,sigma,m_eff,N,M1);
+        M1_est = mux(x, m_eff, N);
+        M2_est = psx(x, m_eff, N, W);
+        M3_est = bsx(x, m_eff, N, W);
         M2nd_est = M2ndx(x,W,sigma,m_eff,N);
+
+        % Add bias on power spectrum
+        M2_est = M2_est + sigma^2*W;
+        
+        % Add bias on bispectrum
+        A = eye(W);
+        A(:, 1) = A(:, 1) + 1;
+        A(1, :) = A(1, :) + 1;
+        M3_est = M3_est + sigma^2*W^2*M1*A;
         
         % computing estimation errors
         M1_err(mm,iter) = abs(M1 - M1_est)/abs(M1); 
