@@ -1,36 +1,34 @@
-function bs = bsx(x,W,sigma,m,N,M1)
+function B = bsx(x, m, N, W)
+% Produce the sliding-window average bispectrum one would see without noise
+% 
+% x - matrix of size L x K, where each column is a signal
+% m - vector of length K, such that x(:, k) appears m(k) times
+% N - length of the long observation
+% W - length of the sliding window
+%
+% B is a matrix of size W x W.
 
-% x - signal
-% W - window's length
-% sigma - noise level
-% m - # signals' repetitions
-% N - measurement length
-% M1 - the first moment (I am considering the real one; not the estimated)
+    [L, K] = size(x);
 
+    m = m(:);
+    assert(length(m) == K);
 
-%fftz = @(x) fft(z);
-compute_bs = @(z) (fft(z)*(fft(z)')) .* circulant(fft(z));
-L = length(x); % signal's length
-K = length(m); % # of different signals (assumed to be in the same length(
-%ps = zeros(W,1);
-M = repmat(m',W,1);
-bs = zeros(W);
-A = eye(W); A(1,:) = A(1,:)+1; A(:,1) = A(:,1)+1;
+    B = zeros(W);
 
-for k = 1:K
-    
-    bs = bs + m(k)*(W-L+1)*compute_bs([x(:,k); zeros(W-L,1)]);
-    
-    for ii = 0:L-2
-        bs = bs + m(k)*compute_bs([x(1:ii+1,k) ;  zeros(W-ii-1,1)]);
+    for k = 1 : K
+
+        B = B + m(k)*(W-L+1)*bispectrum_from_signal([x(:, k) ; zeros(W-L, 1)]);
+
+        for ii = 0:(L-2)
+            B = B + m(k)*bispectrum_from_signal([zeros(W-ii-1, 1) ; x(1:(ii+1), k)]);
+        end
+
+        for ii = 1:(L-1)
+            B = B + m(k)*bispectrum_from_signal([x(ii+1:end, k) ; zeros(W-L+ii, 1)]);
+        end
+
     end
-    
-    for ii = 1:L-1
-        bs = bs + m(k)*compute_bs([x(ii+1:end,k); zeros(W-L+ii,1)]);
-    end
-    
-end
 
-bs = bs/N + sigma^2*W^2*A*M1;
+    B = B/N;
 
 end
