@@ -1,41 +1,44 @@
-function [y, yc, ind, class] = gen_data(x,N,m,sigma,W,K)
-
-% generating the problem measurements
-% input:
-% x - the underlying signal
-% N - length of measurement
-% m - number of repetitions
+function [y, y_clean, ind, class] = gen_data(x, N, m, sigma, W)
+% Generate data following the Big-MRA model
+%
+% Input:
+%
+% x - the K signals to be hidden in noise (LxK matrix)
+% N - total length of the observation
+% m - vector of length K such that x(:, k) is repeated (nearly) m(k) times
 % sigma - noise level
-% W - the size of analysis window
-% K - # of different signals
+% W - length of intended sliding window: only used to ensure proper separation
+%
+% Output:
+%
+% y - noisy measurement of length N
+% y_clean - clean (noiseless) measurement
+% ind - locations of x in y_clean
+% class - for each location in ind, specifies which signal (1..K) is there.
 
-% output:
-% y - noisy measurement
-% yc - clean (noiseless) measurement
-% ind - location of x in yc
+    y_clean = zeros(N, 1);
+    [L, K] = size(x);
+    ind = randi(N-L+1, sum(m), 1);
+    ind = sort(ind);
+    indn = ind(1);
 
-yc = zeros(N,1);
-L = length(x);
-ind = randi([L,N-L], m, 1); ind  = sort(ind);
-indn = ind(1);
+    % removing adjacent signals (need to be rewritten)
 
-% removing adjacent signals (need to be rewritten)
-
-for i = 1:length(ind)-1
-    if ind(i+1) - ind(i) > 2*W
-        indn = [indn; ind(i+1)];
+    for i = 1:length(ind)-1
+        if ind(i+1) - ind(i) > 2*W
+            indn = [indn; ind(i+1)];
+        end
     end
-end
-ind = indn;
-% drawing classes
-class = randi([1,K], length(ind), 1);
+    ind = indn;
+    % drawing classes
+    class = randi([1,K], length(ind), 1);
 
-% generating noiseless measurement(depends on the window length)
-for i = 1:length(ind)
-    yc( ind(i): ind(i)+L-1) = yc( ind(i): ind(i)+L-1) +  x(:,class(i));
-end
+    % generating noiseless measurement(depends on the window length)
+    for i = 1:length(ind)
+        y_clean( ind(i) : ind(i)+L-1 ) = y_clean( ind(i) : ind(i)+L-1 ) +  x(:, class(i));
+    end
 
-% add noise
-y = yc + sigma*randn(N,1);
+    % add noise
+    y = y_clean + sigma*randn(N, 1);
 
 end
