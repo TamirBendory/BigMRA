@@ -1,5 +1,5 @@
-function problem = manoptAD(M, costfun, param) %, parameter_positions, parameter_values)
-% Assuming f = costfun(param, x).
+function problem = manoptAD(M, costfun, params) %, parameter_positions, parameter_values)
+% Assuming f = costfun(x, params).
 
     % Follow tips to make it faster here:
     % https://adimat.sc.informatik.tu-darmstadt.de/doc/adimat-16.html
@@ -8,7 +8,7 @@ function problem = manoptAD(M, costfun, param) %, parameter_positions, parameter
     
     problem.M = M;
     
-    problem.cost = @(x) costfun(param, x);
+    problem.cost = @(x) costfun(x, params);
     
     problem.costgrad = @costgrad;
 
@@ -20,13 +20,13 @@ function problem = manoptAD(M, costfun, param) %, parameter_positions, parameter
     % ADiMat's call overhead.
         
     ad_opts = admOptions(...
-        'independents', 2, ...   % positions of inputs of f that are variables
+        'independents', 1, ...   % positions of inputs of f that are variables
         'functionResults', {1}); % any matrix of the same size as the output of f, in a cell (allows multiple outputs)
 
     
     function [f, g] = costgrad(x)
 
-        [g, f] = admDiffRev(costfun, 1, param, x, ad_opts);
+        [g, f] = admDiffRev(costfun, 1, x, params, ad_opts);
         g = reshape(g, size(x));
         g = M.egrad2rgrad(x, g);
         
