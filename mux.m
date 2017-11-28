@@ -7,7 +7,7 @@ function mu = mux(x, m, N)
 %
 % mu is a scalar
 
-    [~, K] = size(x);
+    [L, K] = size(x); %#ok<ASGLU>
 
     m = m(:);
     assert(length(m) == K);
