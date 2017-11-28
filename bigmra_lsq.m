@@ -32,21 +32,17 @@ function x_est = bigmra_lsq(M1, M2, M3, W, sigma, N, L, m)
     % than just the most promising one (which tends to be the just-computed
     % estimated.) In the revised version, we pick the most promising shift,
     % discarding the non-shift, and pick the best of both obtained signals.
+    %
+    % So, that also didn't work. Seems like we need to reoptimize from all
+    % possible shifts...
     if K == 1
-        for repeat = 1 : 10
-            losses = zeros(L-1, 1);
-    %         losses(L) = loss; % don't even consider it
-            for shift = 1 : L-1
-                losses(shift) = getCost(problem, circshift(x_est, shift));
-            end
-            [~, best_shift] = min(losses);
-            x_est_shifted = circshift(x_est, best_shift);
-            [x_est_shifted , loss_shifted] = trustregions(problem, x_est_shifted);
+        x_base = x_est;
+        for shift = 1 : L-1
+            x_est_shifted = circshift(x_base, shift);
+            [x_est_shifted, loss_shifted] = trustregions(problem, x_est_shifted);
             if loss_shifted < loss
                 loss = loss_shifted;
                 x_est = x_est_shifted;
-            else
-                break;
             end
         end
     end

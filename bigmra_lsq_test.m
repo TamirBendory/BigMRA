@@ -4,8 +4,8 @@ clc;
 
 %% Problem parameters
 L = 11;             % length of signal
-sigma = 0;          % noise level
-W = 5*L;            % window length
+sigma = 1;          % noise level
+W = 2*L;            % window length
 Nfactor = 4;        % Sparsity factor
 K = 1;              % Number of distinct signals (heterogeneity)
 m = 1e3*ones(K, 1); % Number of repetitions of each signal
@@ -40,7 +40,6 @@ x_est = bigmra_lsq(M1, M2, M3, W, sigma, N, L, m_eff);
 
 %% Visualization
 if K == 1
-    % There is no reason why it should be up to cyclic shift..........
-    x_est_shift = align_to_reference(x_est, x_true);
-    plot(1:L, x_true, 1:L, x_est, 1:L, x_est_shift);
+    plot(1:L, x_true, 'o-', 1:L, x_est, '.-');
+    title(sprintf('Relative error: %g', norm(x_true - x_est, 'fro')/norm(x_true, 'fro')));
 end
