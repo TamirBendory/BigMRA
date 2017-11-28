@@ -13,7 +13,7 @@ function P = psx(x, m, N, W)
     m = m(:);
     assert(length(m) == K);
 
-    P = zeros(W);
+    P = zeros(W, 1);
 
     for k = 1 : K
 
