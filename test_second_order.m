@@ -1,6 +1,6 @@
 %% Forward model
 L = 5;
-W = 10;
+W = 2*L-1;
 x_true = randn(L, 1);
 x_obs = [zeros(W-1, 1) ; x_true ; zeros(W-1, 1)];
 
@@ -22,6 +22,8 @@ params.M = M;
 f = @test_second_order_cost;
 
 manifold = euclideanfactory(L, 1);
+% Anytime complex numbers might appear you need this for AD ..
+manifold.egrad2rgrad = @(x, g) real(g);
 
 problem = manoptAD(manifold, f, params);
 
@@ -29,6 +31,10 @@ x_est = trustregions(problem);
 
 norm(x_true - x_est) / norm(x_true)
 norm(x_true + x_est) / norm(x_true)
+
+% Same observation as for the full second order test: the true signal is an
+% isolated global optimizer, at least for W = 2L, and we can get it (by
+% chance.)
 
 %%
 return;
