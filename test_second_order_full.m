@@ -1,6 +1,6 @@
 %% Forward model
 L = 5;
-W = 10;
+W = 2*L;
 x_true = randn(L, 1);
 x_obs = [zeros(W-1, 1) ; x_true ; zeros(W-1, 1)];
 
@@ -33,6 +33,8 @@ problem = manoptAD(manifold, f, params);
 % minimizers appear to be isolated (see below), this suggests there are a
 % finite number of global opts, and one of them is right. Just need a
 % criterion to pick the right one.. (and a way to list them.) Count?
+%
+% The observation holds even with W = L (original test was W = 2L.)
 x_est = trustregions(problem);
 
 % hessianspectrum(problem, x_est) % -- suggests minimizers are isolated.
