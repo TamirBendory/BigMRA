@@ -4,11 +4,11 @@ W = 10;
 x_true = randn(L, 1);
 x_obs = [zeros(W-1, 1) ; x_true ; zeros(W-1, 1)];
 
-M = zeros(W, 1);
+M = zeros(W, W);
 count = length(x_obs) - (W-1);
 for k = 1 : count
     y = x_obs(k + (0:(W-1)));
-    M = M + abs(fft(y)).^2;
+    M = M + fft(y)*fft(y)';
 end
 M = M / count;
 
@@ -19,13 +19,23 @@ params.L = L;
 params.W = W;
 params.M = M;
 
-f = @test_second_order_cost;
+f = @test_second_order_full_cost;
 
 manifold = euclideanfactory(L, 1);
 
+% Needed to add this in reverse mode (it solved the problem I had then)
+manifold.egrad2rgrad = @(x, g) real(g);
+
 problem = manoptAD(manifold, f, params);
 
+% Run it a few times from different random inits: you get a global opt
+% pretty much every time, and at some point you get the right signal. Since
+% minimizers appear to be isolated (see below), this suggests there are a
+% finite number of global opts, and one of them is right. Just need a
+% criterion to pick the right one.. (and a way to list them.) Count?
 x_est = trustregions(problem);
+
+% hessianspectrum(problem, x_est) % -- suggests minimizers are isolated.
 
 norm(x_true - x_est) / norm(x_true)
 norm(x_true + x_est) / norm(x_true)
