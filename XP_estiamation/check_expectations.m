@@ -4,7 +4,7 @@ clear; close all;
 %% Defining the problem
 
 L = 11;      %length of signal
-sigma = 1.2;   % noise level
+sigma = 0;   % noise level
 W = 2*L;     %window length
 Nfactor = 4; % Sparsity factor
 overlapping = 1; %maximal overlap
