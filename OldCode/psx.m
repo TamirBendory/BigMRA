@@ -1,46 +1,34 @@
-function ps = psx(x,W,sigma,m,N)
+function P = psx(x, m, N, W)
+% Produce the sliding-window average power spectrum one would see w/o noise
+% 
+% x - matrix of size L x K, where each column is a signal
+% m - vector of length K, such that x(:, k) appears m(k) times
+% N - length of the long observation
+% W - length of the sliding window
+%
+% P is a vector of length W
 
-% Computing the power spectrum
-% x - signal
-% W - window's length
-% sigma - noise level
-% m - # signals' repetitions
-% N - measurement length
+    [L, K] = size(x);
 
-compute_ps = @(z) abs(fft(z)).^2;
+    m = m(:);
+    assert(length(m) == K);
 
-L = length(x); % signal's length
-K = length(m); % # of different signals (assumed to be in the same length(
-%ps = zeros(W,1);
-M = repmat(m',W,1);
-ps = (W-L+1)*M.*compute_ps([x; zeros(W-L,K)]);
+    P = zeros(W, 1);
 
-for ii = 0:L-2
-    ps = ps + M.*compute_ps([x(1:ii+1,:) ;  zeros(W-ii-1,K)]);
+    for k = 1 : K
+
+        P = P + m(k)*(W-L+1)*powerspectrum_from_signal([x(:, k) ; zeros(W-L, 1)]);
+
+        for ii = 0:(L-2)
+            P = P + m(k)*powerspectrum_from_signal([zeros(W-ii-1, 1) ; x(1:(ii+1), k)]);
+        end
+
+        for ii = 1:(L-1)
+            P = P + m(k)*powerspectrum_from_signal([x(ii+1:end, k) ; zeros(W-L+ii, 1)]);
+        end
+
+    end
+
+    P = P/N;
+
 end
-
-for ii = 1:L-1
-    ps = ps + M.*compute_ps([x(ii+1:end,:); zeros(W-L+ii,K)]);
-end
-
-ps = sum(ps,2)/N + sigma^2*W;
-
-end
-
-
-
-%
-%
-% for k = 1:K
-%
-%     ps = ps + m(k)*(W-L+1)*compute_ps([x(:,k); zeros(W-L,1)]);
-%
-%     for ii = 0:L-2
-%         ps = ps + m(k)*compute_ps([x(1:ii+1,k) ;  zeros(W-ii-1,1)]);
-%     end
-%
-%     for ii = 1:L-1
-%         ps = ps + m(k)*compute_ps([x(ii+1:end,k); zeros(W-L+ii,1)]);
-%     end
-%
-% end
