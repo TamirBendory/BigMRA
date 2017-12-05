@@ -1,13 +1,12 @@
 function a = comp_A3x(x,W)
 % computing the 3-order AC of x
-% I am using the definition from our paper 
 
-a = zeros(2*W+1);
+a = zeros(W);
 
-for i = -(W-1):W-1
-    for j = -(W-1):W-1
+for i = 0:W-1
+    for j = 0:W-1
    
-        a(i+W,j+W) = sum(x.*circshift(x,i).*circshift(x,j));
+        a(i+1,j+1) = sum(x.*circshift(x,i).*circshift(x,j));
         
     end
 end
