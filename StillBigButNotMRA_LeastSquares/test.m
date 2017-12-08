@@ -4,11 +4,11 @@ clc;
 
 %% Problem parameters
 L = 11;             % length of signal
-sigma = 1e-1;       % noise level
+sigma = 0;          % noise level
 W = 2*L;            % window length
 Nfactor = 4;        % Sparsity factor
 K = 1;              % Number of distinct signals (heterogeneity)
-m = 1e3*ones(K, 1); % Number of repetitions of each signal
+m = 1e1*ones(K, 1); % Number of repetitions of each signal
 
 %% Generate signals
 x_true = randn(L, K);
@@ -39,6 +39,8 @@ x_est = least_squares(M1, M2, M3, W, sigma, N, L, m_eff);
 
 %% Visualization
 if K == 1
-    plot(1:L, x_true, 'o-', 1:L, x_est, '.-');
-    title(sprintf('Relative error: %g', norm(x_true - x_est, 'fro')/norm(x_true, 'fro')));
+    x_true_zp = [x_true ; zeros(W-L, 1)];
+    x_est = align_to_reference(x_est, x_true_zp);
+    plot(1:W, x_true_zp, 'o-', 1:W, x_est, '.-');
+    title(sprintf('Relative error: %g', norm(x_true_zp - x_est, 'fro')/norm(x_true_zp, 'fro')));
 end
