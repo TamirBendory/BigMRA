@@ -381,13 +381,18 @@ function [a_y nr_M1 nr_M2 nr_M3] = a_moments_from_data_no_debias(y, W, a_M1, a_M
 %     y is the long observation
 %     W is the window length (maximum shift used in computing correlations)
 % First order moment
+   tmpca10 = 0;
    tmpca2 = 0;
    tmpca3 = 0;
-   tmpca4 = 0;
-   tmpca5 = 0;
-   tmpca6 = 0;
+   tmpca7 = 0;
+   tmpca8 = 0;
+   tmpca9 = 0;
    tmpda1 = 0;
    tmpda2 = 0;
+   tmpda3 = 0;
+   tmpda4 = 0;
+   tmpda5 = 0;
+   tmpda6 = 0;
    tmplia1 = 0;
    j = 0;
    M1 = sum(y);
@@ -407,36 +412,46 @@ function [a_y nr_M1 nr_M2 nr_M3] = a_moments_from_data_no_debias(y, W, a_M1, a_M
    end
    adimat_push1(tmpfra1_2);
    M3 = zeros(W, W);
-   tmpfra1_2 = W - 1;
+   tmpfra1_1 = -(W - 1) / 2;
+   tmpfra1_2 = (W - 1) / 2;
    adimat_push1(k);
-   for k=0 : tmpfra1_2
-      tmpfra2_2 = W - 1;
+   for k=tmpfra1_1 : tmpfra1_2
+      tmpfra2_1 = -(W - 1) / 2;
+      tmpfra2_2 = (W - 1) / 2;
       adimat_push1(j);
-      for j=0 : tmpfra2_2
-         adimat_push1(tmpca6);
-         tmpca6 = rec_circshift_ad(y, j);
-         adimat_push1(tmpca5);
-         tmpca5 = rec_circshift_ad(y, k);
-         adimat_push1(tmpca4);
-         tmpca4 = y .* tmpca5;
-         adimat_push1(tmpca3);
-         tmpca3 = tmpca4 .* tmpca6;
+      for j=tmpfra2_1 : tmpfra2_2
+         adimat_push1(tmpca10);
+         tmpca10 = rec_circshift_ad(y, -j);
+         adimat_push1(tmpca9);
+         tmpca9 = rec_circshift_ad(y, k);
+         adimat_push1(tmpca8);
+         tmpca8 = y .* tmpca9;
+         adimat_push1(tmpca7);
+         tmpca7 = tmpca8 .* tmpca10;
+         adimat_push1(tmpda6);
+         tmpda6 = W + 1;
+         adimat_push1(tmpda5);
+         tmpda5 = tmpda6 / 2;
+         adimat_push1(tmpda4);
+         tmpda4 = j + tmpda5;
+         adimat_push1(tmpda3);
+         tmpda3 = W + 1;
          adimat_push1(tmpda2);
-         tmpda2 = j + 1;
+         tmpda2 = tmpda3 / 2;
          adimat_push1(tmpda1);
-         tmpda1 = k + 1;
+         tmpda1 = k + tmpda2;
          adimat_push1(tmplia1);
-         tmplia1 = sum(tmpca3);
-         adimat_push_index2(M3, tmpda1, tmpda2);
-         M3(tmpda1, tmpda2) = tmplia1;
+         tmplia1 = sum(tmpca7);
+         adimat_push_index2(M3, tmpda1, tmpda4);
+         M3(tmpda1, tmpda4) = tmplia1;
       end
-      adimat_push1(tmpfra2_2);
+      adimat_push(tmpfra2_1, tmpfra2_2);
    end
-   adimat_push1(tmpfra1_2);
+   adimat_push(tmpfra1_1, tmpfra1_2);
    nr_M1 = M1;
    nr_M2 = M2;
    nr_M3 = M3;
-   [a_tmpca2 a_tmpca3 a_tmpca4 a_tmpca5 a_tmpca6 a_tmplia1 a_y] = a_zeros(tmpca2, tmpca3, tmpca4, tmpca5, tmpca6, tmplia1, y);
+   [a_tmpca10 a_tmpca2 a_tmpca3 a_tmpca7 a_tmpca8 a_tmpca9 a_tmplia1 a_y] = a_zeros(tmpca10, tmpca2, tmpca3, tmpca7, tmpca8, tmpca9, tmplia1, y);
    if nargin < 3
       a_M1 = a_zeros1(M1);
    end
@@ -446,32 +461,32 @@ function [a_y nr_M1 nr_M2 nr_M3] = a_moments_from_data_no_debias(y, W, a_M1, a_M
    if nargin < 5
       a_M3 = a_zeros1(M3);
    end
-   tmpfra1_2 = adimat_pop1;
-   for k=fliplr(0 : tmpfra1_2)
-      tmpfra2_2 = adimat_pop1;
-      for j=fliplr(0 : tmpfra2_2)
-         M3 = adimat_pop_index2(M3, tmpda1, tmpda2);
-         a_tmplia1 = adimat_adjsum(a_tmplia1, adimat_adjred(tmplia1, adimat_adjreshape(tmplia1, a_M3(tmpda1, tmpda2))));
-         a_M3 = a_zeros_index2(a_M3, M3, tmpda1, tmpda2);
+   [tmpfra1_2 tmpfra1_1] = adimat_pop;
+   for k=fliplr(tmpfra1_1 : tmpfra1_2)
+      [tmpfra2_2 tmpfra2_1] = adimat_pop;
+      for j=fliplr(tmpfra2_1 : tmpfra2_2)
+         M3 = adimat_pop_index2(M3, tmpda1, tmpda4);
+         a_tmplia1 = adimat_adjsum(a_tmplia1, adimat_adjred(tmplia1, adimat_adjreshape(tmplia1, a_M3(tmpda1, tmpda4))));
+         a_M3 = a_zeros_index2(a_M3, M3, tmpda1, tmpda4);
          tmplia1 = adimat_pop1;
-         a_tmpca3 = adimat_adjsum(a_tmpca3, a_sum(a_tmplia1, tmpca3));
+         a_tmpca7 = adimat_adjsum(a_tmpca7, a_sum(a_tmplia1, tmpca7));
          a_tmplia1 = a_zeros1(tmplia1);
-         [tmpda1 tmpda2 tmpca3] = adimat_pop;
-         a_tmpca4 = adimat_adjsum(a_tmpca4, adimat_adjred(tmpca4, a_tmpca3 .* tmpca6));
-         a_tmpca6 = adimat_adjsum(a_tmpca6, adimat_adjred(tmpca6, tmpca4 .* a_tmpca3));
-         a_tmpca3 = a_zeros1(tmpca3);
-         tmpca4 = adimat_pop1;
-         a_y = adimat_adjsum(a_y, adimat_adjred(y, a_tmpca4 .* tmpca5));
-         a_tmpca5 = adimat_adjsum(a_tmpca5, adimat_adjred(tmpca5, y .* a_tmpca4));
-         a_tmpca4 = a_zeros1(tmpca4);
-         [tmpadjc1] = ret_circshift_ad(a_tmpca5);
-         tmpca5 = adimat_pop1;
+         [tmpda1 tmpda2 tmpda3 tmpda4 tmpda5 tmpda6 tmpca7] = adimat_pop;
+         a_tmpca8 = adimat_adjsum(a_tmpca8, adimat_adjred(tmpca8, a_tmpca7 .* tmpca10));
+         a_tmpca10 = adimat_adjsum(a_tmpca10, adimat_adjred(tmpca10, tmpca8 .* a_tmpca7));
+         a_tmpca7 = a_zeros1(tmpca7);
+         tmpca8 = adimat_pop1;
+         a_y = adimat_adjsum(a_y, adimat_adjred(y, a_tmpca8 .* tmpca9));
+         a_tmpca9 = adimat_adjsum(a_tmpca9, adimat_adjred(tmpca9, y .* a_tmpca8));
+         a_tmpca8 = a_zeros1(tmpca8);
+         [tmpadjc1] = ret_circshift_ad(a_tmpca9);
+         tmpca9 = adimat_pop1;
          a_y = adimat_adjsum(a_y, tmpadjc1);
-         a_tmpca5 = a_zeros1(tmpca5);
-         [tmpadjc1] = ret_circshift_ad(a_tmpca6);
-         tmpca6 = adimat_pop1;
+         a_tmpca9 = a_zeros1(tmpca9);
+         [tmpadjc1] = ret_circshift_ad(a_tmpca10);
+         tmpca10 = adimat_pop1;
          a_y = adimat_adjsum(a_y, tmpadjc1);
-         a_tmpca6 = a_zeros1(tmpca6);
+         a_tmpca10 = a_zeros1(tmpca10);
       end
       j = adimat_pop1;
    end
@@ -496,13 +511,18 @@ function [a_y nr_M1 nr_M2 nr_M3] = a_moments_from_data_no_debias(y, W, a_M1, a_M
 end
 
 function [M1 M2 M3] = rec_moments_from_data_no_debias(y, W)
+   tmpca10 = 0;
    tmpca2 = 0;
    tmpca3 = 0;
-   tmpca4 = 0;
-   tmpca5 = 0;
-   tmpca6 = 0;
+   tmpca7 = 0;
+   tmpca8 = 0;
+   tmpca9 = 0;
    tmpda1 = 0;
    tmpda2 = 0;
+   tmpda3 = 0;
+   tmpda4 = 0;
+   tmpda5 = 0;
+   tmpda6 = 0;
    tmplia1 = 0;
    j = 0;
    M1 = sum(y);
@@ -522,32 +542,42 @@ function [M1 M2 M3] = rec_moments_from_data_no_debias(y, W)
    end
    adimat_push1(tmpfra1_2);
    M3 = zeros(W, W);
-   tmpfra1_2 = W - 1;
+   tmpfra1_1 = -(W - 1) / 2;
+   tmpfra1_2 = (W - 1) / 2;
    adimat_push1(k);
-   for k=0 : tmpfra1_2
-      tmpfra2_2 = W - 1;
+   for k=tmpfra1_1 : tmpfra1_2
+      tmpfra2_1 = -(W - 1) / 2;
+      tmpfra2_2 = (W - 1) / 2;
       adimat_push1(j);
-      for j=0 : tmpfra2_2
-         adimat_push1(tmpca6);
-         tmpca6 = rec_circshift_ad(y, j);
-         adimat_push1(tmpca5);
-         tmpca5 = rec_circshift_ad(y, k);
-         adimat_push1(tmpca4);
-         tmpca4 = y .* tmpca5;
-         adimat_push1(tmpca3);
-         tmpca3 = tmpca4 .* tmpca6;
+      for j=tmpfra2_1 : tmpfra2_2
+         adimat_push1(tmpca10);
+         tmpca10 = rec_circshift_ad(y, -j);
+         adimat_push1(tmpca9);
+         tmpca9 = rec_circshift_ad(y, k);
+         adimat_push1(tmpca8);
+         tmpca8 = y .* tmpca9;
+         adimat_push1(tmpca7);
+         tmpca7 = tmpca8 .* tmpca10;
+         adimat_push1(tmpda6);
+         tmpda6 = W + 1;
+         adimat_push1(tmpda5);
+         tmpda5 = tmpda6 / 2;
+         adimat_push1(tmpda4);
+         tmpda4 = j + tmpda5;
+         adimat_push1(tmpda3);
+         tmpda3 = W + 1;
          adimat_push1(tmpda2);
-         tmpda2 = j + 1;
+         tmpda2 = tmpda3 / 2;
          adimat_push1(tmpda1);
-         tmpda1 = k + 1;
+         tmpda1 = k + tmpda2;
          adimat_push1(tmplia1);
-         tmplia1 = sum(tmpca3);
-         adimat_push_index2(M3, tmpda1, tmpda2);
-         M3(tmpda1, tmpda2) = tmplia1;
+         tmplia1 = sum(tmpca7);
+         adimat_push_index2(M3, tmpda1, tmpda4);
+         M3(tmpda1, tmpda4) = tmplia1;
       end
-      adimat_push1(tmpfra2_2);
+      adimat_push(tmpfra2_1, tmpfra2_2);
    end
-   adimat_push(tmpfra1_2, k, j, tmpca2, tmpca3, tmpca4, tmpca5, tmpca6, tmpda1, tmpda2, tmplia1, M1, M2, M3, y);
+   adimat_push(tmpfra1_1, tmpfra1_2, k, j, tmpca10, tmpca2, tmpca3, tmpca7, tmpca8, tmpca9, tmpda1, tmpda2, tmpda3, tmpda4, tmpda5, tmpda6, tmplia1, M1, M2, M3, y);
    if nargin > 1
       adimat_push1(W);
    end
@@ -559,8 +589,8 @@ function a_y = ret_moments_from_data_no_debias(a_M1, a_M2, a_M3)
    if tmpnargin > 1
       W = adimat_pop1;
    end
-   [y M3 M2 M1 tmplia1 tmpda2 tmpda1 tmpca6 tmpca5 tmpca4 tmpca3 tmpca2 j k] = adimat_pop;
-   [a_tmpca2 a_tmpca3 a_tmpca4 a_tmpca5 a_tmpca6 a_tmplia1 a_y] = a_zeros(tmpca2, tmpca3, tmpca4, tmpca5, tmpca6, tmplia1, y);
+   [y M3 M2 M1 tmplia1 tmpda6 tmpda5 tmpda4 tmpda3 tmpda2 tmpda1 tmpca9 tmpca8 tmpca7 tmpca3 tmpca2 tmpca10 j k] = adimat_pop;
+   [a_tmpca10 a_tmpca2 a_tmpca3 a_tmpca7 a_tmpca8 a_tmpca9 a_tmplia1 a_y] = a_zeros(tmpca10, tmpca2, tmpca3, tmpca7, tmpca8, tmpca9, tmplia1, y);
    if nargin < 1
       a_M1 = a_zeros1(M1);
    end
@@ -570,32 +600,32 @@ function a_y = ret_moments_from_data_no_debias(a_M1, a_M2, a_M3)
    if nargin < 3
       a_M3 = a_zeros1(M3);
    end
-   tmpfra1_2 = adimat_pop1;
-   for k=fliplr(0 : tmpfra1_2)
-      tmpfra2_2 = adimat_pop1;
-      for j=fliplr(0 : tmpfra2_2)
-         M3 = adimat_pop_index2(M3, tmpda1, tmpda2);
-         a_tmplia1 = adimat_adjsum(a_tmplia1, adimat_adjred(tmplia1, adimat_adjreshape(tmplia1, a_M3(tmpda1, tmpda2))));
-         a_M3 = a_zeros_index2(a_M3, M3, tmpda1, tmpda2);
+   [tmpfra1_2 tmpfra1_1] = adimat_pop;
+   for k=fliplr(tmpfra1_1 : tmpfra1_2)
+      [tmpfra2_2 tmpfra2_1] = adimat_pop;
+      for j=fliplr(tmpfra2_1 : tmpfra2_2)
+         M3 = adimat_pop_index2(M3, tmpda1, tmpda4);
+         a_tmplia1 = adimat_adjsum(a_tmplia1, adimat_adjred(tmplia1, adimat_adjreshape(tmplia1, a_M3(tmpda1, tmpda4))));
+         a_M3 = a_zeros_index2(a_M3, M3, tmpda1, tmpda4);
          tmplia1 = adimat_pop1;
-         a_tmpca3 = adimat_adjsum(a_tmpca3, a_sum(a_tmplia1, tmpca3));
+         a_tmpca7 = adimat_adjsum(a_tmpca7, a_sum(a_tmplia1, tmpca7));
          a_tmplia1 = a_zeros1(tmplia1);
-         [tmpda1 tmpda2 tmpca3] = adimat_pop;
-         a_tmpca4 = adimat_adjsum(a_tmpca4, adimat_adjred(tmpca4, a_tmpca3 .* tmpca6));
-         a_tmpca6 = adimat_adjsum(a_tmpca6, adimat_adjred(tmpca6, tmpca4 .* a_tmpca3));
-         a_tmpca3 = a_zeros1(tmpca3);
-         tmpca4 = adimat_pop1;
-         a_y = adimat_adjsum(a_y, adimat_adjred(y, a_tmpca4 .* tmpca5));
-         a_tmpca5 = adimat_adjsum(a_tmpca5, adimat_adjred(tmpca5, y .* a_tmpca4));
-         a_tmpca4 = a_zeros1(tmpca4);
-         [tmpadjc1] = ret_circshift_ad(a_tmpca5);
-         tmpca5 = adimat_pop1;
+         [tmpda1 tmpda2 tmpda3 tmpda4 tmpda5 tmpda6 tmpca7] = adimat_pop;
+         a_tmpca8 = adimat_adjsum(a_tmpca8, adimat_adjred(tmpca8, a_tmpca7 .* tmpca10));
+         a_tmpca10 = adimat_adjsum(a_tmpca10, adimat_adjred(tmpca10, tmpca8 .* a_tmpca7));
+         a_tmpca7 = a_zeros1(tmpca7);
+         tmpca8 = adimat_pop1;
+         a_y = adimat_adjsum(a_y, adimat_adjred(y, a_tmpca8 .* tmpca9));
+         a_tmpca9 = adimat_adjsum(a_tmpca9, adimat_adjred(tmpca9, y .* a_tmpca8));
+         a_tmpca8 = a_zeros1(tmpca8);
+         [tmpadjc1] = ret_circshift_ad(a_tmpca9);
+         tmpca9 = adimat_pop1;
          a_y = adimat_adjsum(a_y, tmpadjc1);
-         a_tmpca5 = a_zeros1(tmpca5);
-         [tmpadjc1] = ret_circshift_ad(a_tmpca6);
-         tmpca6 = adimat_pop1;
+         a_tmpca9 = a_zeros1(tmpca9);
+         [tmpadjc1] = ret_circshift_ad(a_tmpca10);
+         tmpca10 = adimat_pop1;
          a_y = adimat_adjsum(a_y, tmpadjc1);
-         a_tmpca6 = a_zeros1(tmpca6);
+         a_tmpca10 = a_zeros1(tmpca10);
       end
       j = adimat_pop1;
    end
