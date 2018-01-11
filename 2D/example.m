@@ -7,12 +7,12 @@ clc;
 % Load a grayscale image of size LxL and scale between 0 and 1.
 L = 3;
 W = 2*L-1;
-x = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
-x = imresize(x, [L, L]);
-xmin = min(x(:));
-x = x - xmin;
-xmax = max(x(:));
-x = x / xmax;
+X = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
+X = imresize(X, [L, L]);
+xmin = min(X(:));
+X = X - xmin;
+xmax = max(X(:));
+X = X / xmax;
 
 sigma = 0.1;
 m = 10;
@@ -24,9 +24,9 @@ end
 
 %% Generating data
 tic;
-[Y, Yc, ind, class] = gen_data2D(x, N, m, sigma, W);
+[Y_obs, Y_clean, ind, class] = gen_data2D(X, N, m, sigma, W);
 fprintf('Gen data time: %.2g [s]\n', toc());
-snr = norm(Yc(:))/norm(Y(:)-Yc(:));
+snr = norm(Y_clean(:))/norm(Y_obs(:)-Y_clean(:));
 m_eff = size(ind, 1);
 fprintf('SNR: %.2g\n', snr);
 fprintf('m_eff: %d\n', m_eff);
@@ -57,8 +57,16 @@ end
 
 
 %%
-[M1, M2, M3] = moments_from_data_no_debias_2D(Y, list2, list3);
+X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
+
+[M1, M2, M3] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
+
+X0 = [];
+% X0 = X_zp; % cheat by giving true signal as initial guess
 [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m_eff, list2, list3, []);
-% X_est = least_squares_2D(M1, M2, M3, W, sigma, N, L, m_eff, list2, list3, x);
-% X_est = least_squares_2D(M1, M2, M3, W, sigma, N, L, m_eff, list2, list3, [x zeros(L, W-L) ; zeros(W-L, W)]);
-imagesc([[x zeros(L, W-L) ; zeros(W-L, W)], X_est]); axis equal;
+
+
+% Align X_est to X_zp for display
+X_est = align_to_reference(X_est, X_zp);
+
+imagesc([X_zp, X_est]); axis equal;
