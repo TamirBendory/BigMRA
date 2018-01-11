@@ -29,7 +29,7 @@ end
 %     parpool(2, 'IdleTimeout', 240);
 % end
 
-% computing the empirical invariants of the data
+% computing the empirical moments of the data
 [M1, M2, M3] = moments_from_data_no_debias(y, W);
 
 %% Run the least squares
