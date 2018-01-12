@@ -38,11 +38,11 @@ err = zeros(num_iter+1,1);
 xest(:, 1) = zeros(L, 1);
 
 err(1) = norm(x - xest(:,1))/norm(x);
-w = zeros(N,1); 
+w = zeros(N, 1); 
 sigma_em = sigma;
 
 for iter = 1:num_iter
-    X = repmat(xest(:,iter),1,N)';
+    X = repmat(xest(:, iter), 1, N)';
     S = (-0.5/(sigma_em^2))*sum((X-y_mat).^2, 2);
     S = S - max(S(:));
     w = exp(S);
