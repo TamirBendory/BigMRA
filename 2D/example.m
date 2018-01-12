@@ -15,8 +15,8 @@ xmax = max(X(:));
 X = X / xmax;
 
 sigma = 0.1;
-m = 10;
-N = 100;
+m = 100;
+N = 800;
 
 if isempty(gcp('nocreate'))
     parpool(2, 'IdleTimeout', 240);
