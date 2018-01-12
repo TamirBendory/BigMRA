@@ -31,7 +31,12 @@ clear y_stretch;
 num_iter = 100;
 xest = zeros(L,num_iter+1);
 err = zeros(num_iter+1,1);
-xest(:,1) = x  + 0.1*randn(L,1); %randn(L,1);
+
+% Initialize
+% xest(:, 1) = x  + 0.1*randn(L, 1);
+% xest(:, 1) = randn(L, 1);
+xest(:, 1) = zeros(L, 1);
+
 err(1) = norm(x - xest(:,1))/norm(x);
 w = zeros(N,1); 
 sigma_em = sigma;
