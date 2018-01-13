@@ -65,6 +65,9 @@ X0 = [];
 % X0 = X_zp; % cheat by giving true signal as initial guess
 [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m_eff, list2, list3, []);
 
+% Actually, BFGS seems to works nicely for this problem; keep it in mind.
+% problem.linesearch = @(in1, in2) 2;
+% X_est_2 = rlbfgs(problem);
 
 % Align X_est to X_zp for display
 X_est = align_to_reference(X_est, X_zp);
