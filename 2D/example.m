@@ -5,7 +5,7 @@ clc;
 %% Defining the problem
 
 % Load a grayscale image of size LxL and scale between 0 and 1.
-L = 25;
+L = 5;
 W = 2*L-1;
 X = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
 X = imresize(X, [L, L]);
