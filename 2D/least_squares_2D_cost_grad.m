@@ -6,9 +6,11 @@ function [f, g] = least_squares_2D_cost_grad(X, params)
     M1data = params.M1;
     M2data = params.M2;
     M3data = params.M3;
-    sigma = params.sigma;
+    sigma = params.sigma; %#ok<NASGU>
     list2 = params.list2;
     list3 = params.list3;
+    bias2 = params.bias2;
+    bias3 = params.bias3;
     
     % This L is as defined by the size of the optimization variable: it
     % need not be equal to the L as defined by the size of the true signal.
@@ -43,18 +45,15 @@ function [f, g] = least_squares_2D_cost_grad(X, params)
     
     % Second-order moments, forward model
     n2 = size(list2, 1);
-    M2 = zeros(n2, 1);
-    for k = 1 : n2
+    parfor k = 1 : n2
         
         shift = list2(k, :);
         CX = CS(ZPX, shift);
-        M2(k) = m*inner(CX, ZPX);
+        M2k = m*inner(CX, ZPX);
         
-        if shift(1) == 0 && shift(2) == 0 % bias could be handled separately (precompute sparse correction)
-            M2(k) = M2(k) + N^2*sigma^2;
-        end
+        M2k = M2k + bias2(k);
         
-        R2 = M2(k) - M2data(k);
+        R2 = M2k - M2data(k);
         f = f + w2*R2^2;
         
         % remainder for gradient
@@ -66,27 +65,19 @@ function [f, g] = least_squares_2D_cost_grad(X, params)
     
     % Third-order moments, forward model
     n3 = size(list3, 1);
-    M3 = zeros(n3, 1);
-    for k = 1 : n3
+    parfor k = 1 : n3
         
-        shift1 = list3(k, [1, 2]);
-        shift2 = list3(k, [3, 4]);
+        line = list3(k, :);     % intermediate step to help parfor
+        shift1 = line([1, 2]);
+        shift2 = line([3, 4]);
         CX1 = CS(ZPX, shift1);
         CX2 = CS(ZPX, shift2);
         T1 = CX1.*CX2;
-        M3(k) = m*inner(T1, ZPX);
+        M3k = m*inner(T1, ZPX);
 
-        if all(shift1 == [0, 0])
-            M3(k) = M3(k) + M1data*sigma^2;
-        end
-        if all(shift2 == [0, 0])
-            M3(k) = M3(k) + M1data*sigma^2;
-        end
-        if all(shift1 == shift2)
-            M3(k) = M3(k) + M1data*sigma^2;
-        end
+        M3k = M3k + bias3(k);
         
-        R3 = M3(k) - M3data(k);
+        R3 = M3k - M3data(k);
         f = f + w3*R3^2;
         
         % remainder for gradient
