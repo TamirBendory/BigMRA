@@ -5,7 +5,7 @@ clc;
 %% Defining the problem
 
 % Load a grayscale image of size LxL and scale between 0 and 1.
-L = 5;
+L = 6;
 W = 2*L-1;
 X = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
 X = imresize(X, [L, L]);
@@ -15,12 +15,12 @@ xmax = max(X(:));
 X = X / xmax;
 
 sigma = 0.1;
-m = 100;
-N = 1000;
+m = 3;
+N = 100;
 
-if isempty(gcp('nocreate'))
-    parpool(2, 'IdleTimeout', 240);
-end
+% if isempty(gcp('nocreate'))
+%     parpool(2, 'IdleTimeout', 240);
+% end
 
 %% Generating data
 tic;
@@ -32,28 +32,51 @@ fprintf('SNR: %.2g\n', snr);
 fprintf('m_eff: %d\n', m_eff);
 
 %% Pick which correlation coefficients de sample -- all for now
-list2 = zeros(W^2, 2);
-k = 0;
-range = (-(W-1)/2) : ((W-1)/2);
-for k1 = range
-    for k2 = range
-        k = k + 1;
-        list2(k, :) = [k1, k2];
-    end
-end
+assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
 
-list3 = zeros(W^4, 4);
-k = 0;
-for k1 = range
-    for k2 = range
-        for l1 = range
-            for l2 = range
-                k = k + 1;
-                list3(k, :) = [k1, k2, l1, l2];
-            end
-        end
-    end
-end
+% Load lists of distinct moments of order 2 and 3 (if those were
+% precomputed for that W; if not, call generate_list2_list3 with proper
+% values of W (no need to recompute the ones that are already done: it
+% takes a while.)
+data = load(sprintf('lists_W_%d.mat', W));
+assert(W == data.W);
+list2 = data.list2;
+list3 = data.list3;
+
+% Can subsample if necessary
+n3 = size(list3, 1);
+nkeep = round(n3/W); % keep only nkeep elements
+keep = randperm(n3, nkeep);
+list3 = list3(keep, :);
+n3 = size(list3, 1);
+
+% list2 = zeros(ceil(W^2/2), 2);
+% k = 0;
+% top = (W-1)/2;
+% for k1 = 0 : top
+%     k = k + 1;
+%     list2(k, :) = [k1, 0];
+% end
+% for k1 = (-top) : top
+%     for k2 = 1 : top
+%         k = k + 1;
+%         list2(k, :) = [k1, k2];
+%     end
+% end
+% 
+% list3 = zeros(W^4, 4);
+% range = (-(W-1)/2) : ((W-1)/2);
+% k = 0;
+% for k1 = range
+%     for k2 = range
+%         for l1 = range
+%             for l2 = range
+%                 k = k + 1;
+%                 list3(k, :) = [k1, k2, l1, l2];
+%             end
+%         end
+%     end
+% end
 
 
 %%
