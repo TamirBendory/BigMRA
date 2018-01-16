@@ -45,16 +45,29 @@ range1 = max(1, 1+shift1(1)) : min(L, L+shift1(1));
 range2 = max(1, 1+shift1(2)) : min(L, L+shift1(2));
 inner(X(range1, range2), X(range1-shift1(1), range2-shift1(2)))
 
+% With more intermediate steps (easier to get gradient)
+[L1, L2] = size(X);
+vals1 = [0, shift1(1)];
+range1 = (1+max(vals1)) : (L1+min(vals1));
+vals2 = [0, shift1(2)];
+range2 = (1+max(vals2)) : (L2+min(vals2));
+X1 = X(range1, range2);
+X2 = X(range1-shift1(1), range2-shift1(2));
+sum(X1(:) .* X2(:))
+
 
 %% Going for third order
 shift1 = [0,  2];
 shift2 = [5, -3];
+
+% original code
 ZPX = ZP(X);
 CX1 = CS(ZPX, shift1);
 CX2 = CS(ZPX, shift2);
 T1 = CX1.*CX2;
 inner(ZPadj(T1), X)
 
+% new code
 [L1, L2] = size(X);
 vals1 = [0, shift1(1), shift2(1)];
 range1 = (1+max(vals1)) : (L1+min(vals1));
