@@ -5,7 +5,7 @@ clc;
 %% Defining the problem
 
 % Load a grayscale image of size LxL and scale between 0 and 1.
-L = 6;
+L = 10;
 W = 2*L-1;
 X = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
 X = imresize(X, [L, L]);
@@ -15,8 +15,8 @@ xmax = max(X(:));
 X = X / xmax;
 
 sigma = 0.1;
-m = 3;
-N = 100;
+m = 5000;
+N = 3000;
 
 % if isempty(gcp('nocreate'))
 %     parpool(2, 'IdleTimeout', 240);
@@ -24,11 +24,11 @@ N = 100;
 
 %% Generating data
 tic;
-[Y_obs, Y_clean, ind, class] = gen_data2D(X, N, m, sigma, W);
+[Y_clean, m_eff] = generate_clean_micrograph_2D(X, W, N, m);
+Y_obs = Y_clean + sigma*randn(N, N);
 fprintf('Gen data time: %.2g [s]\n', toc());
-snr = norm(Y_clean(:))/norm(Y_obs(:)-Y_clean(:));
-m_eff = size(ind, 1);
-fprintf('SNR: %.2g\n', snr);
+SNR = norm(Y_clean, 'fro')/norm(Y_obs-Y_clean, 'fro');
+fprintf('SNR: %.2g\n', SNR);
 fprintf('m_eff: %d\n', m_eff);
 
 %% Pick which correlation coefficients de sample -- all for now
