@@ -50,34 +50,6 @@ keep = randperm(n3, nkeep);
 list3 = list3(keep, :);
 n3 = size(list3, 1);
 
-% list2 = zeros(ceil(W^2/2), 2);
-% k = 0;
-% top = (W-1)/2;
-% for k1 = 0 : top
-%     k = k + 1;
-%     list2(k, :) = [k1, 0];
-% end
-% for k1 = (-top) : top
-%     for k2 = 1 : top
-%         k = k + 1;
-%         list2(k, :) = [k1, k2];
-%     end
-% end
-% 
-% list3 = zeros(W^4, 4);
-% range = (-(W-1)/2) : ((W-1)/2);
-% k = 0;
-% for k1 = range
-%     for k2 = range
-%         for l1 = range
-%             for l2 = range
-%                 k = k + 1;
-%                 list3(k, :) = [k1, k2, l1, l2];
-%             end
-%         end
-%     end
-% end
-
 
 %%
 X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
