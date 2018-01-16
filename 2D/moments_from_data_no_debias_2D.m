@@ -11,7 +11,7 @@ function [M1, M2, M3] = moments_from_data_no_debias_2D(Y, list2, list3)
 %     l2 = 0;
 %     shiftedY = zeros(size(Y));
 %     shiftedYY = zeros(size(Y));
-    
+
     [N1, N2] = size(Y);
 
     M1 = sum(Y(:));
@@ -27,8 +27,8 @@ function [M1, M2, M3] = moments_from_data_no_debias_2D(Y, list2, list3)
         vals2 = [0, shift1(2)];
         range2 = (1+max(vals2)) : (N2+min(vals2));
         
-        X1 = X(range1, range2);
-        X2 = X(range1-shift1(1), range2-shift1(2));
+        X1 = Y(range1, range2); %#ok<PFBNS>
+        X2 = Y(range1-shift1(1), range2-shift1(2));
         
         M2(k) = sum(X1(:) .* X2(:));
         
@@ -47,9 +47,9 @@ function [M1, M2, M3] = moments_from_data_no_debias_2D(Y, list2, list3)
         vals2 = [0, shift1(2), shift2(2)];
         range2 = (1+max(vals2)) : (N2+min(vals2));
         
-        X1 = X(range1, range2);
-        X2 = X(range1-shift1(1), range2-shift1(2));
-        X3 = X(range1-shift2(1), range2-shift2(2));
+        X1 = Y(range1, range2); %#ok<PFBNS>
+        X2 = Y(range1-shift1(1), range2-shift1(2));
+        X3 = Y(range1-shift2(1), range2-shift2(2));
         
         M3(k) = sum(X1(:) .* X2(:) .* X3(:));
         
