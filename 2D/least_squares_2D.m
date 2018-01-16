@@ -42,19 +42,25 @@ function [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list
 % % % % %     problem = manoptAD(manifold, @least_squares_cost_2D, params);
 
     problem.M = manifold;
-	problem.costgrad = @(X) least_squares_2D_cost_grad(X, params);
+% 	problem.costgrad = @(X) least_squares_2D_cost_grad(X, params);
+	problem.costgrad = @(X) least_squares_2D_cost_grad_new(X, params);
 % % %     checkgradient(problem); pause;
     
-    warning('off', 'manopt:getHessian:approx');
     
 %     keyboard;
 
     opts = struct();
 %     opts.maxtime = 240;
-    [X_est, loss] = trustregions(problem, X0, opts); %#ok<ASGLU>
 
 %     [X_est, loss] = conjugategradient(problem, X0, opts); %#ok<ASGLU>
 
+%     [X_est, loss] = barzilaiborwein(problem, X0, opts); %#ok<ASGLU>
+
+    opts.maxiter = 500;
+%     problem.linesearch = @(in1, in2) 2; % optimism in BFGS linesearch -- not sure this is a good idea
+    [X_est, loss] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
+    warning('off', 'manopt:getHessian:approx');
+    [X_est, loss] = trustregions(problem, X_est, opts); %#ok<ASGLU>
     warning('on', 'manopt:getHessian:approx');
     
 end
