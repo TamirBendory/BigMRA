@@ -52,9 +52,10 @@ n3 = size(list3, 1);
 
 
 %%
-X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
 
+tic;
 [M1, M2, M3] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
+fprintf('Moment computation on micrograph: %.2g [s]\n', toc());
 
 X0 = [];
 % X0 = X_zp; % cheat by giving true signal as initial guess
@@ -64,7 +65,8 @@ X0 = [];
 % problem.linesearch = @(in1, in2) 2;
 % X_est_2 = rlbfgs(problem);
 
-% Align X_est to X_zp for display
+% Align X_est to X_zp (zero padded ground truth) for display
+X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
 X_est = align_to_reference(X_est, X_zp);
 
 imagesc([X_zp, X_est]); axis equal;
