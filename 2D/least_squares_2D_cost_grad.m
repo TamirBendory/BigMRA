@@ -1,6 +1,6 @@
 function [f, g] = least_squares_2D_cost_grad(X, params)
 
-    N = params.N;
+    N = params.N; %#ok<NASGU>
     m = params.m;
     W = params.W;
     M1data = params.M1;
