@@ -17,20 +17,18 @@ function [M1, M2, M3] = moments_from_data_no_debias_2D(Y, list2, list3)
     n2 = size(list2, 1);
     M2 = zeros(n2, 1);
     parfor k = 1 : n2
-        k1 = list2(k, 1);
-        k2 = list2(k, 2);
-        shiftedY = circshift_ad_2D(Y, [k1, k2]);
+        shift = list2(k, :);
+        shiftedY = circshift_ad_2D(Y, shift);
         M2(k) = Y(:)'*shiftedY(:);
     end
     
     n3 = size(list3, 1);
     M3 = zeros(n3, 1);
     parfor k = 1 : n3
-        k1 = list3(k, 1);
-        k2 = list3(k, 2);
-        l1 = list3(k, 3);
-        l2 = list3(k, 4);
-        shiftedYY = circshift_ad_2D(Y, [k1, k2]) .* circshift_ad_2D(Y, [l1, l2]);
+        shifts = list3(k, :);
+        shift1 = shifts([1, 2]);
+        shift2 = shifts([3, 4]);
+        shiftedYY = circshift_ad_2D(Y, shift1) .* circshift_ad_2D(Y, shift2);
         M3(k) = Y(:)'*shiftedYY(:);
     end
     
