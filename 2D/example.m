@@ -5,7 +5,7 @@ clc;
 %% Defining the problem
 
 % Load a grayscale image of size LxL and scale between 0 and 1.
-L = 10;
+L = 3;
 W = 2*L-1;
 X = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
 X = imresize(X, [L, L]);
@@ -13,23 +13,18 @@ xmin = min(X(:));
 X = X - xmin;
 xmax = max(X(:));
 X = X / xmax;
+%X = X - mean(X(:));
 
-sigma = 0.1;
-m = 5000;
-N = 3000;
+sigma = 1;
+m = 40000; % per micrograph
+Num_micrographs = 1000;
+N = 1000; % size of single micrograph
 
-% if isempty(gcp('nocreate'))
-%     parpool(2, 'IdleTimeout', 240);
-% end
+if isempty(gcp('nocreate'))
+    parpool(2, 'IdleTimeout', 480);
+end
 
 %% Generating data
-tic;
-[Y_clean, m_eff] = generate_clean_micrograph_2D(X, W, N, m);
-Y_obs = Y_clean + sigma*randn(N, N);
-fprintf('Gen data time: %.2g [s]\n', toc());
-SNR = norm(Y_clean, 'fro')/norm(Y_obs-Y_clean, 'fro');
-fprintf('SNR: %.2g\n', SNR);
-fprintf('m_eff: %d\n', m_eff);
 
 %% Pick which correlation coefficients de sample -- all for now
 assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
@@ -38,10 +33,12 @@ assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
 % precomputed for that W; if not, call generate_list2_list3 with proper
 % values of W (no need to recompute the ones that are already done: it
 % takes a while.)
-data = load(sprintf('lists_W_%d.mat', W));
-assert(W == data.W);
-list2 = data.list2;
-list3 = data.list3;
+[list2, list3] = list_distinct_moments_2D(W,0);
+%
+% data = load(sprintf('lists_W_%d.mat', W));
+% assert(W == data.W);
+% list2 = data.list2;
+% list3 = data.list3;
 
 % Can subsample if necessary
 n3 = size(list3, 1);
@@ -51,15 +48,43 @@ list3 = list3(keep, :);
 n3 = size(list3, 1);
 
 
-%%
+m_eff = zeros(Num_micrographs,1);
 
-tic;
-[M1, M2, M3] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
-fprintf('Moment computation on micrograph: %.2g [s]\n', toc());
+for i = 1:Num_micrographs
+    tic;
+    [Y_clean, m_eff(i)] = generate_clean_micrograph_2D(X, W, N, m);
+    Y_obs = Y_clean + sigma*randn(N, N);
+    fprintf('Gen  micrograph %d time: %.2g [s]\n', i,toc());
+    SNR = norm(Y_clean, 'fro')/norm(Y_obs-Y_clean, 'fro');
+    fprintf('SNR: %.2g\n', SNR);
+    fprintf('m_eff: %d\n', m_eff(i));
+    
+    %%
+    
+    tic;
+    [M1_micrograph, M2_micrograph, M3_micrograph] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
+    fprintf('Moment computation on micrograph: %.2g [s]\n', toc());
+    
+    if i == 1
+        M1 =  M1_micrograph;
+        M2 =  M2_micrograph;
+        M3 =  M3_micrograph;
+    else
+        M1 = M1 + M1_micrograph;
+        M2 = M2 + M2_micrograph;
+        M3 = M3 + M3_micrograph;
+    end
+end
+
+%  M1 = M1/Num_micrograph;
+%  M2 = M2/Num_micrograph;
+%  M3 = M3/Num_micrograph;
+
+m_eff = sum(m_eff);
 
 X0 = [];
 % X0 = X_zp; % cheat by giving true signal as initial guess
-[X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m_eff, list2, list3, []);
+[X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, round(N*sqrt(Num_micrographs)), L, m_eff, list2, list3, []);
 
 % Actually, BFGS seems to works nicely for this problem; keep it in mind.
 % problem.linesearch = @(in1, in2) 2;
@@ -67,6 +92,10 @@ X0 = [];
 
 % Align X_est to X_zp (zero padded ground truth) for display
 X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
-X_est = align_to_reference(X_est, X_zp);
+%X_est = align_to_reference(X_est, X_zp);
+X_est_aligned = align_by_energy_xcorr(X_est,L);
 
-imagesc([X_zp, X_est]); axis equal;
+err   = norm(X(:) -  X_est_aligned(:))/norm(X(:));
+%err   = norm(X_zp(:) -  X_est(:))/norm(X(:));
+fprintf('error = %.4g\n',err);
+figure(1); imagesc([X, X_est_aligned]); axis equal;
