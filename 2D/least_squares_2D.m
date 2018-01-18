@@ -56,10 +56,11 @@ function [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list
 
 %     [X_est, loss] = barzilaiborwein(problem, X0, opts); %#ok<ASGLU>
 
-    opts.maxiter = 500;
+    opts.maxiter = 1000;
 %     problem.linesearch = @(in1, in2) 2; % optimism in BFGS linesearch -- not sure this is a good idea
     [X_est, loss] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
     warning('off', 'manopt:getHessian:approx');
+    opts.maxiter = 1000;
     [X_est, loss] = trustregions(problem, X_est, opts); %#ok<ASGLU>
     warning('on', 'manopt:getHessian:approx');
     

@@ -5,7 +5,7 @@ clc;
 %% Defining the problem
 
 % Load a grayscale image of size LxL and scale between 0 and 1.
-L = 10;
+L = 15;
 W = 2*L-1;
 X = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
 X = imresize(X, [L, L]);
@@ -14,9 +14,9 @@ X = X - xmin;
 xmax = max(X(:));
 X = X / xmax;
 
-sigma = 0.1;
-m = 5000;
-N = 3000;
+sigma = 0.5;
+m = 25000;
+N = 10000;
 
 % if isempty(gcp('nocreate'))
 %     parpool(2, 'IdleTimeout', 240);
@@ -26,9 +26,9 @@ N = 3000;
 tic;
 [Y_clean, m_eff] = generate_clean_micrograph_2D(X, W, N, m);
 Y_obs = Y_clean + sigma*randn(N, N);
-fprintf('Gen data time: %.2g [s]\n', toc());
+fprintf('Gen data time: %.4g [s]\n', toc());
 SNR = norm(Y_clean, 'fro')/norm(Y_obs-Y_clean, 'fro');
-fprintf('SNR: %.2g\n', SNR);
+fprintf('SNR: %.4g\n', SNR);
 fprintf('m_eff: %d\n', m_eff);
 
 %% Pick which correlation coefficients de sample -- all for now
@@ -55,7 +55,7 @@ n3 = size(list3, 1);
 
 tic;
 [M1, M2, M3] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
-fprintf('Moment computation on micrograph: %.2g [s]\n', toc());
+fprintf('Moment computation on micrograph: %.4g [s]\n', toc());
 
 X0 = [];
 % X0 = X_zp; % cheat by giving true signal as initial guess
@@ -70,3 +70,4 @@ X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
 X_est = align_to_reference(X_est, X_zp);
 
 imagesc([X_zp, X_est]); axis equal;
+savefig('latest.fig');
