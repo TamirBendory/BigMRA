@@ -1,4 +1,4 @@
-function [list2, list3, TIMES] = list_distinct_moments_2D(W)
+function [list2, list3] = list_distinct_moments_2D(W)
 
     % Code limited to odd W for now.
     assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
