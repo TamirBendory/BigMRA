@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 function [list2, list3] = list_distinct_moments_2D(W,flag_remove_duplicate)
 %function [list2, list3, TIMES] = list_distinct_moments_2D(W,flag_remove_duplicate)
 % if flag_remove_duplicate is on - we remove dupliacte entries
+=======
+function [list2, list3] = list_distinct_moments_2D(W)
+>>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
 
 if nargin<2
     flag_remove_duplicate  = 1;

@@ -5,7 +5,11 @@ clc;
 %% Defining the problem
 
 % Load a grayscale image of size LxL and scale between 0 and 1.
+<<<<<<< HEAD
 L = 3;
+=======
+L = 15;
+>>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
 W = 2*L-1;
 X = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
 X = imresize(X, [L, L]);
@@ -15,16 +19,32 @@ xmax = max(X(:));
 X = X / xmax;
 %X = X - mean(X(:));
 
+<<<<<<< HEAD
 sigma = 1;
 m = 40000; % per micrograph
 Num_micrographs = 1000;
 N = 1000; % size of single micrograph
+=======
+sigma = 0.5;
+m = 25000;
+N = 10000;
+>>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
 
 if isempty(gcp('nocreate'))
     parpool(2, 'IdleTimeout', 480);
 end
 
 %% Generating data
+<<<<<<< HEAD
+=======
+tic;
+[Y_clean, m_eff] = generate_clean_micrograph_2D(X, W, N, m);
+Y_obs = Y_clean + sigma*randn(N, N);
+fprintf('Gen data time: %.4g [s]\n', toc());
+SNR = norm(Y_clean, 'fro')/norm(Y_obs-Y_clean, 'fro');
+fprintf('SNR: %.4g\n', SNR);
+fprintf('m_eff: %d\n', m_eff);
+>>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
 
 %% Pick which correlation coefficients de sample -- all for now
 assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
@@ -50,6 +70,7 @@ n3 = size(list3, 1);
 
 m_eff = zeros(Num_micrographs,1);
 
+<<<<<<< HEAD
 for i = 1:Num_micrographs
     tic;
     [Y_clean, m_eff(i)] = generate_clean_micrograph_2D(X, W, N, m);
@@ -81,6 +102,11 @@ end
 %  M3 = M3/Num_micrograph;
 
 m_eff = sum(m_eff);
+=======
+tic;
+[M1, M2, M3] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
+fprintf('Moment computation on micrograph: %.4g [s]\n', toc());
+>>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
 
 X0 = [];
 % X0 = X_zp; % cheat by giving true signal as initial guess
@@ -95,7 +121,12 @@ X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
 %X_est = align_to_reference(X_est, X_zp);
 X_est_aligned = align_by_energy_xcorr(X_est,L);
 
+<<<<<<< HEAD
 err   = norm(X(:) -  X_est_aligned(:))/norm(X(:));
 %err   = norm(X_zp(:) -  X_est(:))/norm(X(:));
 fprintf('error = %.4g\n',err);
 figure(1); imagesc([X, X_est_aligned]); axis equal;
+=======
+imagesc([X_zp, X_est]); axis equal;
+savefig('latest.fig');
+>>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
