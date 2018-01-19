@@ -1,4 +1,4 @@
-function [f, g] = least_squares_2D_cost_grad_new(X, params)
+function [f, g] = least_squares_2D_cost_grad_new(X, params, sample3)
 
     N = params.N; %#ok<NASGU>
     m = params.m;
@@ -11,6 +11,12 @@ function [f, g] = least_squares_2D_cost_grad_new(X, params)
     list3 = params.list3;
     bias2 = params.bias2;
     bias3 = params.bias3;
+    
+    % sample3 can be used to compute the cost and gradient only with
+    % respect to a subsample of the 3rd order moments in list3.
+    if ~exist('sample3', 'var') || isempty(sample3)
+        sample3 = 1 : size(list3, 1);
+    end
     
     % This L is as defined by the size of the optimization variable: it
     % need not be equal to the L as defined by the size of the true signal.
@@ -70,8 +76,11 @@ function [f, g] = least_squares_2D_cost_grad_new(X, params)
     
     
     % Third-order moments, forward model
-    n3 = size(list3, 1);
-    for k = 1 : n3
+    sample3 = sample3(:); % make sure it's a column vector
+    sn3 = size(sample3, 1);
+    for kk = 1 : sn3
+        
+        k = sample3(kk);
         
         shifts = list3(k, :);
         shift1 = shifts([1, 2]);
