@@ -45,10 +45,10 @@ list3 = data.list3;
 
 % Can subsample if necessary
 n3 = size(list3, 1);
-% % % % % nkeep = round(n3/W); % keep only nkeep elements
+nkeep = round(n3/W); % keep only nkeep elements
 % % % nkeep = 0;
 % nkeep = 10*W^2;
-nkeep = n3;
+% nkeep = n3;
 keep = randperm(n3, nkeep);
 list3 = list3(keep, :);
 n3 = size(list3, 1);

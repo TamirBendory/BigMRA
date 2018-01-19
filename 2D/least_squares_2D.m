@@ -43,11 +43,16 @@ function [X_est, problem, stats] = least_squares_2D(M1, M2, M3, W, sigma, N, L, 
 
     problem.M = manifold;
 % 	problem.costgrad = @(X) least_squares_2D_cost_grad(X, params);
-	problem.costgrad = @(X) least_squares_2D_cost_grad_new(X, params);
+% 	problem.costgrad = @(X) least_squares_2D_cost_grad_new(X, params);
+	problem.costgrad = @(X) least_squares_2D_cost_grad_new_parallel(X, params);
 % % %     checkgradient(problem); pause;
     
     
 %     keyboard;
+
+    if ~exists('X0', 'var')
+        X0 = [];
+    end
 
     opts = struct();
 %     opts.maxtime = 240;
@@ -56,13 +61,13 @@ function [X_est, problem, stats] = least_squares_2D(M1, M2, M3, W, sigma, N, L, 
 
 %     [X_est, loss] = barzilaiborwein(problem, X0, opts); %#ok<ASGLU>
 
-    opts.maxiter = 1000;
+%     opts.maxiter = 1000;
 %     problem.linesearch = @(in1, in2) 2; % optimism in BFGS linesearch -- not sure this is a good idea
-    [X_est, loss] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
+%     [X0, loss] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
     warning('off', 'manopt:getHessian:approx');
     opts.tolgradnorm = 1e-5;
     opts.maxiter = 1000;
-    [X_est, loss, stats] = trustregions(problem, X_est, opts); %#ok<ASGLU>
+    [X_est, loss, stats] = trustregions(problem, X0, opts); %#ok<ASGLU>
     warning('on', 'manopt:getHessian:approx');
     
 end
