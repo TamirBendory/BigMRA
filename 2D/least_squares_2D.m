@@ -1,6 +1,6 @@
-function [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list2, list3, X0)
+function [X_est, problem, stats] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list2, list3, X0)
 
-    manifold = euclideanfactory(W, W); % choose wisely if do LxL or WxW -- WxW seems necessary to avoid local opts.
+    manifold = euclideanfactory(W, W); % choose wisely if do LxL or WxW or something else -- WxW seems useful to avoid local opts.
     
     params.W = W;
     params.N = N;
@@ -42,7 +42,7 @@ function [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list
 % % % % %     problem = manoptAD(manifold, @least_squares_cost_2D, params);
 
     problem.M = manifold;
-% 	problem.costgrad = @(X) least_squares_2D_cost_grad(X, params);
+% % % 	problem.costgrad = @(X) least_squares_2D_cost_grad(X, params);
 	problem.costgrad = @(X) least_squares_2D_cost_grad_new(X, params);
 % % %     checkgradient(problem); pause;
     
@@ -52,16 +52,47 @@ function [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list
     opts = struct();
 %     opts.maxtime = 240;
 
-%     [X_est, loss] = conjugategradient(problem, X0, opts); %#ok<ASGLU>
+%     [X_est, loss, stats] = conjugategradient(problem, X0, opts); %#ok<ASGLU>
 
-%     [X_est, loss] = barzilaiborwein(problem, X0, opts); %#ok<ASGLU>
+%     [X_est, loss, stats] = barzilaiborwein(problem, X0, opts); %#ok<ASGLU>
 
     opts.maxiter = 1000;
 %     problem.linesearch = @(in1, in2) 2; % optimism in BFGS linesearch -- not sure this is a good idea
-    [X_est, loss] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
+    [X_est, loss, stats] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
     warning('off', 'manopt:getHessian:approx');
-    opts.maxiter = 1000;
-    [X_est, loss] = trustregions(problem, X_est, opts); %#ok<ASGLU>
+    opts.maxiter = 200;
+    [X_est, loss, stats] = trustregions(problem, X_est, opts); %#ok<ASGLU>
     warning('on', 'manopt:getHessian:approx');
+
+% % %     problem.partialgrad = @(X, sample3) partialgrad(X, params, sample3);
+% % %     
+% % %     problem.costgrad = @(X) least_squares_2D_cost_grad_new(X, params);
+% % %     
+% % %     problem.ncostterms = size(list3, 1);
+% % %     
+% % %     opts.batchsize = size(list2, 1);
+% % %     
+% % %     opts.maxiter = 100000;
+% % %     
+% % %     metrics.cost = @(problem, x) getCost(problem, x);
+% % %     metrics.gradnorm = @(problem, x) problem.M.norm(x, getGradient(problem, x));
+% % %     opts.statsfun = statsfunhelper(metrics);
+% % %     
+% % %     opts.checkperiod = 1000; % for debugging
+% % %     
+% % %     if isempty(X0)
+% % %         X0 = problem.M.rand();
+% % %     end
+% % %     opts.stepsize_init = 1/problem.M.norm(X0, getGradient(problem, X0)); % veeery careful here....
+% % %     
+% % %     [X_est, stats] = stochasticgradient(problem, X0, opts);
+% % %     disp(stats)
     
 end
+
+function G = partialgrad(X, params, sample3)
+
+    [~, G] = least_squares_2D_cost_grad_new(X, params, sample3);
+
+end
+
