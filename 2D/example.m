@@ -5,11 +5,11 @@ clc;
 %% Defining the problem
 
 % Load a grayscale image of size LxL and scale between 0 and 1.
-<<<<<<< HEAD
-L = 3;
-=======
-L = 15;
->>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
+% <<<<<<< HEAD
+L = 21;
+% =======
+% L = 15;
+% >>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
 W = 2*L-1;
 X = double(rgb2gray(imread('einstein_tongue_cropped.jpg')));
 X = imresize(X, [L, L]);
@@ -19,24 +19,17 @@ xmax = max(X(:));
 X = X / xmax;
 %X = X - mean(X(:));
 
-<<<<<<< HEAD
-sigma = 1;
-m = 40000; % per micrograph
-Num_micrographs = 1000;
-N = 1000; % size of single micrograph
-=======
-sigma = 0.5;
-m = 25000;
-N = 10000;
->>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
+%<<<<<<< HEAD
+sigma = .5;
+m = 200; % per micrograph
+Num_micrographs = 100;
+N = 1200; % size of single micrograph
 
-if isempty(gcp('nocreate'))
-    parpool(2, 'IdleTimeout', 480);
-end
+% if isempty(gcp('nocreate'))
+%     parpool(2, 'IdleTimeout', 480);
+% end
 
 %% Generating data
-<<<<<<< HEAD
-=======
 tic;
 [Y_clean, m_eff] = generate_clean_micrograph_2D(X, W, N, m);
 Y_obs = Y_clean + sigma*randn(N, N);
@@ -44,7 +37,6 @@ fprintf('Gen data time: %.4g [s]\n', toc());
 SNR = norm(Y_clean, 'fro')/norm(Y_obs-Y_clean, 'fro');
 fprintf('SNR: %.4g\n', SNR);
 fprintf('m_eff: %d\n', m_eff);
->>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
 
 %% Pick which correlation coefficients de sample -- all for now
 assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
@@ -62,7 +54,7 @@ assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
 
 % Can subsample if necessary
 n3 = size(list3, 1);
-nkeep = round(n3/W); % keep only nkeep elements
+nkeep = round(n3/(W^2)); % keep only nkeep elements
 keep = randperm(n3, nkeep);
 list3 = list3(keep, :);
 n3 = size(list3, 1);
@@ -70,7 +62,10 @@ n3 = size(list3, 1);
 
 m_eff = zeros(Num_micrographs,1);
 
-<<<<<<< HEAD
+M1 = 0;
+M2 = zeros(size(list2,1),1);
+M3 = zeros(size(list3,1),1);
+
 for i = 1:Num_micrographs
     tic;
     [Y_clean, m_eff(i)] = generate_clean_micrograph_2D(X, W, N, m);
@@ -86,15 +81,10 @@ for i = 1:Num_micrographs
     [M1_micrograph, M2_micrograph, M3_micrograph] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
     fprintf('Moment computation on micrograph: %.2g [s]\n', toc());
     
-    if i == 1
-        M1 =  M1_micrograph;
-        M2 =  M2_micrograph;
-        M3 =  M3_micrograph;
-    else
-        M1 = M1 + M1_micrograph;
-        M2 = M2 + M2_micrograph;
-        M3 = M3 + M3_micrograph;
-    end
+    M1 = M1 + M1_micrograph;
+    M2 = M2 + M2_micrograph;
+    M3 = M3 + M3_micrograph;
+    
 end
 
 %  M1 = M1/Num_micrograph;
@@ -102,13 +92,12 @@ end
 %  M3 = M3/Num_micrograph;
 
 m_eff = sum(m_eff);
-=======
-tic;
-[M1, M2, M3] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
-fprintf('Moment computation on micrograph: %.4g [s]\n', toc());
->>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
+%=======
+% tic;
+% [M1, M2, M3] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
+% fprintf('Moment computation on micrograph: %.4g [s]\n', toc());
 
-X0 = [];
+%X0 = [];
 % X0 = X_zp; % cheat by giving true signal as initial guess
 [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, round(N*sqrt(Num_micrographs)), L, m_eff, list2, list3, []);
 
@@ -121,12 +110,12 @@ X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
 %X_est = align_to_reference(X_est, X_zp);
 X_est_aligned = align_by_energy_xcorr(X_est,L);
 
-<<<<<<< HEAD
+%<<<<<<< HEAD
 err   = norm(X(:) -  X_est_aligned(:))/norm(X(:));
 %err   = norm(X_zp(:) -  X_est(:))/norm(X(:));
 fprintf('error = %.4g\n',err);
 figure(1); imagesc([X, X_est_aligned]); axis equal;
-=======
-imagesc([X_zp, X_est]); axis equal;
-savefig('latest.fig');
->>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
+%=======
+%imagesc([X_zp, X_est]); axis equal;
+%savefig('latest.fig');
+%>>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
