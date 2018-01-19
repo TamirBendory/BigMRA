@@ -14,9 +14,9 @@ X = X - xmin;
 xmax = max(X(:));
 X = X / xmax;
 
-sigma = 0.5;
-m = 25000;
-N = 10000;
+sigma = 0.0;
+m = 2;
+N = 100;
 
 % if isempty(gcp('nocreate'))
 %     parpool(2, 'IdleTimeout', 240);
@@ -45,7 +45,10 @@ list3 = data.list3;
 
 % Can subsample if necessary
 n3 = size(list3, 1);
-nkeep = round(n3/W); % keep only nkeep elements
+% % % % % nkeep = round(n3/W); % keep only nkeep elements
+% % % nkeep = 0;
+% nkeep = 10*W^2;
+nkeep = n3;
 keep = randperm(n3, nkeep);
 list3 = list3(keep, :);
 n3 = size(list3, 1);
@@ -57,17 +60,18 @@ tic;
 [M1, M2, M3] = moments_from_data_no_debias_2D(Y_obs, list2, list3);
 fprintf('Moment computation on micrograph: %.4g [s]\n', toc());
 
+%%
 X0 = [];
 % X0 = X_zp; % cheat by giving true signal as initial guess
-[X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m_eff, list2, list3, []);
+[X_est, problem, stats] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m_eff, list2, list3, X0);
 
 % Actually, BFGS seems to works nicely for this problem; keep it in mind.
 % problem.linesearch = @(in1, in2) 2;
 % X_est_2 = rlbfgs(problem);
 
-% Align X_est to X_zp (zero padded ground truth) for display
-X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
+%% Align X_est to X_zp (zero padded ground truth) for display
+X_zp = [X zeros(L, size(X_est, 2)-L) ; zeros(size(X_est, 1)-L, size(X_est, 2))];
 X_est = align_to_reference(X_est, X_zp);
 
-imagesc([X_zp, X_est]); axis equal;
+imagesc([X_zp, X_est]); axis equal; axis tight; colormap gray;
 savefig('latest.fig');
