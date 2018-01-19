@@ -1,6 +1,6 @@
-function [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list2, list3, X0)
+function [X_est, problem, stats] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list2, list3, X0)
 
-    manifold = euclideanfactory(W, W); % choose wisely if do LxL or WxW -- WxW seems necessary to avoid local opts.
+    manifold = euclideanfactory(W, W); % choose wisely if do LxL or WxW -- WxW seems useful to avoid local opts.
     
     params.W = W;
     params.N = N;
@@ -60,12 +60,9 @@ function [X_est, problem] = least_squares_2D(M1, M2, M3, W, sigma, N, L, m, list
 %     problem.linesearch = @(in1, in2) 2; % optimism in BFGS linesearch -- not sure this is a good idea
     [X_est, loss] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
     warning('off', 'manopt:getHessian:approx');
-<<<<<<< HEAD
-    options.tolgradnorm = 1e-5;
-=======
+    opts.tolgradnorm = 1e-5;
     opts.maxiter = 1000;
->>>>>>> 465debbc500803ffe1d3ce4e9add830d9f1f8595
-    [X_est, loss] = trustregions(problem, X_est, opts); %#ok<ASGLU>
+    [X_est, loss, stats] = trustregions(problem, X_est, opts); %#ok<ASGLU>
     warning('on', 'manopt:getHessian:approx');
     
 end
