@@ -8,7 +8,7 @@ function generate_list2_list3(Ws)
         W = Ws(k);
 
         fprintf('Working on W = %3d ...', W);
-        [list2, list3] = list_distinct_moments_2D(W);
+        [list2, list3] = list_distinct_moments_2D(W, true);
         save_lists(W, list2, list3);
         
         fprintf(' done.\n');
