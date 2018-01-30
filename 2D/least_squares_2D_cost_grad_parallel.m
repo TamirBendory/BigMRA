@@ -1,4 +1,4 @@
-function [f, g] = least_squares_2D_cost_grad_new_parallel(X, params, sample3)
+function [f, g] = least_squares_2D_cost_grad_parallel(X, params, sample3)
 
     N = params.N; %#ok<NASGU>
     m = params.m;
@@ -14,6 +14,7 @@ function [f, g] = least_squares_2D_cost_grad_new_parallel(X, params, sample3)
     
     % sample3 can be used to compute the cost and gradient only with
     % respect to a subsample of the 3rd order moments in list3.
+    % This is used for Manopt's stochasticgradient solver.
     if ~exist('sample3', 'var') || isempty(sample3)
         sample3 = 1 : size(list3, 1);
     end
@@ -56,7 +57,7 @@ function [f, g] = least_squares_2D_cost_grad_new_parallel(X, params, sample3)
         range1 = (1+max(vals1)) : (L+min(vals1));
         vals2 = [0, shift1(2)];
         range2 = (1+max(vals2)) : (L+min(vals2));
-        X1 = X(range1, range2); %#ok<PFBNS>
+        X1 = X(range1, range2);
         X2 = X(range1-shift1(1), range2-shift1(2));
         
         M2k = m*sum(X1(:) .* X2(:)) + bias2(k);
