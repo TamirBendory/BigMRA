@@ -1,4 +1,4 @@
-function x_out = align_by_energy_xcorr(x, L)
+function x_out = align_by_energy(x, L)
 % input: 
 %    x  -  an image (matrix) of size WxW, with W >= L
 %    L  -  desired output size
