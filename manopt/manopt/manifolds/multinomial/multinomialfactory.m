@@ -1,11 +1,12 @@
 function M = multinomialfactory(n, m)
 % Manifold of n-by-m column-stochastic matrices with positive entries.
 %
+% function M = multinomialfactory(n)
 % function M = multinomialfactory(n, m)
 %
 % The returned structure M is a Manopt manifold structure to optimize over
 % the set of n-by-m matrices with (strictly) positive entries and such that
-% the entries of each column sum to one.
+% the entries of each column sum to one. By default, m = 1.
 %
 % The metric imposed on the manifold is the Fisher metric such that 
 % the set of n-by-m column-stochastic matrices (aka the multinomial manifold)
@@ -22,18 +23,26 @@ function M = multinomialfactory(n, m)
 % Link to the paper: http://arxiv.org/abs/1504.01777.
 %
 % Please cite the Manopt paper as well as the research paper:
-%     @Techreport{sun2014multinomial,
-%       Title   = {Heterogeneous tensor decomposition for clustering via manifold optimization},
-%       Author  = {Sun, Y. and Gao, J. and Hong, X. and Mishra, B. and Yin, B.},
-%       Journal = {Arxiv preprint arXiv:1504.01777},
-%       Year    = {2014}
-%     }
+% @Article{sun2015multinomial,
+%   author  = {Y. Sun and J. Gao and X. Hong and B. Mishra and B. Yin},
+%   title   = {Heterogeneous Tensor Decomposition for Clustering via Manifold Optimization},
+%   journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+%   year    = {2016},
+%   volume  = {38},
+%   number  = {3},
+%   pages   = {476--489},
+%   doi     = {10.1109/TPAMI.2015.2465901}
+% }
 
 % This file is part of Manopt: www.manopt.org.
 % Original author: Bamdev Mishra, April 06, 2015.
 % Contributors:
 % Change log:
     
+    if ~exist('m', 'var') || isempty(m)
+        m = 1;
+    end
+
     M.name = @() sprintf('%dx%d column-stochastic matrices with positive entries', n, m);
     
     M.dim = @() (n-1)*m;

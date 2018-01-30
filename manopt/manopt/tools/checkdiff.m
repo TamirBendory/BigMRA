@@ -1,4 +1,4 @@
-function checkdiff(problem, x, d)
+function checkdiff(problem, x, d, force_gradient)
 % Checks the consistency of the cost function and directional derivatives.
 %
 % function checkdiff(problem)
@@ -14,21 +14,37 @@ function checkdiff(problem, x, d)
 %
 % See also: checkgradient checkhessian
 
+% If force_gradient = true (hidden parameter), then the function will call
+% getGradient and infer the directional derivative, rather than call
+% getDirectionalDerivative directly. This is used by checkgradient.
+
 % This file is part of Manopt: www.manopt.org.
 % Original author: Nicolas Boumal, Dec. 30, 2012.
 % Contributors: 
 % Change log: 
 %
+%   March 26, 2017 (JB):
+%       Detects if the approximated linear model is exact
+%       and provides the user with the corresponding feedback.
+% 
 %   April 3, 2015 (NB):
 %       Works with the new StoreDB class system.
 
+    if ~exist('force_gradient', 'var')
+        force_gradient = false;
+    end
         
     % Verify that the problem description is sufficient.
     if ~canGetCost(problem)
-        error('It seems no cost was provided.');  
+        error('It seems no cost was provided.');
     end
-    if ~canGetDirectionalDerivative(problem)
-        error('It seems no directional derivatives were provided.');    
+    if ~force_gradient && ~canGetDirectionalDerivative(problem)
+        error('It seems no directional derivatives were provided.');
+    end
+    if force_gradient && ~canGetGradient(problem)
+        % Would normally issue a warning, but this function should only be
+        % called with force_gradient on by checkgradient, which will
+        % already have issued a warning.
     end
         
     x_isprovided = exist('x', 'var') && ~isempty(x);
@@ -50,7 +66,13 @@ function checkdiff(problem, x, d)
     storedb = StoreDB();
     xkey = storedb.getNewKey();
     f0 = getCost(problem, x, storedb, xkey);
-    df0 = getDirectionalDerivative(problem, x, d, storedb, xkey);
+    
+    if ~force_gradient
+        df0 = getDirectionalDerivative(problem, x, d, storedb, xkey);
+    else
+        grad = getGradient(problem, x, storedb, xkey);
+        df0 = problem.M.inner(x, grad, d);
+    end
     
     % Compute the value of f at points on the geodesic (or approximation
     % of it) originating from x, along direction d, for stepsizes in a
@@ -73,8 +95,8 @@ function checkdiff(problem, x, d)
     % And plot it.
     loglog(h, err);
     title(sprintf(['Directional derivative check.\nThe slope of the '...
-                   'continuous line should match that of the dashed '...
-                   '(reference) line\nover at least a few orders of '...
+                   'continuous line should match that of the dashed\n'...
+                   '(reference) line over at least a few orders of '...
                    'magnitude for h.']));
     xlabel('h');
     ylabel('Approximation error');
@@ -83,19 +105,40 @@ function checkdiff(problem, x, d)
          'color', 'k', 'LineStyle', '--', ...
          'YLimInclude', 'off', 'XLimInclude', 'off');
     
-    
-    % In a numerically reasonable neighborhood, the error should decrease
-    % as the square of the stepsize, i.e., in loglog scale, the error
-    % should have a slope of 2.
-    window_len = 10;
-    [range, poly] = identify_linear_piece(log10(h), log10(err), window_len);
-    hold on;
-        loglog(h(range), 10.^polyval(poly, log10(h(range))), ...
-               'r-', 'LineWidth', 3);
+     
+    if ~all( err < 1e-12 )
+        % In a numerically reasonable neighborhood, the error should
+        % decrease as the square of the stepsize, i.e., in loglog scale,
+        % the error should have a slope of 2.
+        isModelExact = false;
+        window_len = 10;
+        [range, poly] = identify_linear_piece(log10(h), log10(err), window_len);
+    else
+        % The 1st order model is exact: all errors are (numerically) zero
+        % Fit line from all points, use log scale only in h.
+        isModelExact = true;
+        range = 1:numel(h);
+        poly = polyfit(log10(h), err, 1);
+        % Set mean error in log scale for plot.
+        poly(end) = log10(poly(end));
+        % Change title to something more descriptive for this special case.
+        title(sprintf(...
+              ['Directional derivative check.\n'...
+               'It seems the linear model is exact:\n'...
+               'Model error is numerically zero for all h.']));
+    end
+    hold all;
+    loglog(h(range), 10.^polyval(poly, log10(h(range))), 'LineWidth', 3);
     hold off;
     
-    fprintf('The slope should be 2. It appears to be: %g.\n', poly(1));
-    fprintf(['If it is far from 2, then directional derivatives ' ...
-             'might be erroneous.\n']);
+    if ~isModelExact
+        fprintf('The slope should be 2. It appears to be: %g.\n', poly(1));
+        fprintf(['If it is far from 2, then directional derivatives ' ...
+                 'might be erroneous.\n']);
+    else
+        fprintf(['The linear model appears to be exact ' ...
+                 '(within numerical precision),\n'...
+                 'hence the slope computation is irrelevant.\n']);
+    end
     
 end

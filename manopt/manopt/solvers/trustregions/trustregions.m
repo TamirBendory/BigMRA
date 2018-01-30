@@ -14,6 +14,9 @@ function [x, cost, info, options] = trustregions(problem, x, options)
 % Hessian based on the gradient will be computed. If a preconditioner for
 % the Hessian is provided, it will be used.
 %
+% If no gradient is provided, an approximation of the gradient is computed,
+% but this can be slow for manifolds of high dimension.
+%
 % For a description of the algorithm and theorems offering convergence
 % guarantees, see the references below. Documentation for this solver is
 % available online at:
@@ -30,9 +33,7 @@ function [x, cost, info, options] = trustregions(problem, x, options)
 % because this solver is not forced to be a descent method. In particular,
 % very close to convergence, it is sometimes preferable to accept very
 % slight increases in the cost value (on the order of the machine epsilon)
-% in the process of reaching fine convergence. In practice, this is not a
-% limiting factor, as normally one does not need fine enough convergence
-% that this becomes an issue.
+% in the process of reaching fine convergence.
 % 
 % The output 'info' is a struct-array which contains information about the
 % iterations:
@@ -169,7 +170,7 @@ function [x, cost, info, options] = trustregions(problem, x, options)
 %       caching features of Manopt are not used, this is irrelevant. If
 %       memory usage is an issue, you may try to lower this number.
 %       Profiling may then help to investigate if a performance hit was
-%       incured as a result.
+%       incurred as a result.
 %
 % Notice that statsfun is called with the point x that was reached last,
 % after the accept/reject decision. Hence: if the step was accepted, we get
@@ -290,6 +291,9 @@ function [x, cost, info, options] = trustregions(problem, x, options)
 %
 %   NB April 8, 2015:
 %       No Hessian warning if approximate Hessian explicitly available.
+%
+%   NB Nov. 1, 2016:
+%       Now uses approximate gradient via finite differences if need be.
 
 
 % Verify that the problem description is sufficient for the solver.
@@ -297,9 +301,15 @@ if ~canGetCost(problem)
     warning('manopt:getCost', ...
             'No cost provided. The algorithm will likely abort.');  
 end
-if ~canGetGradient(problem)
-    warning('manopt:getGradient', ...
-            'No gradient provided. The algorithm will likely abort.');
+if ~canGetGradient(problem) && ~canGetApproxGradient(problem)
+    % Note: we do not give a warning if an approximate gradient is
+    % explicitly given in the problem description, as in that case the user
+    % seems to be aware of the issue.
+    warning('manopt:getGradient:approx', ...
+           ['No gradient provided. Using an FD approximation instead (slow).\n' ...
+            'It may be necessary to increase options.tolgradnorm.\n' ...
+            'To disable this warning: warning(''off'', ''manopt:getGradient:approx'')']);
+    problem.approxgrad = approxgradientFD(problem);
 end
 if ~canGetHessian(problem) && ~canGetApproxHessian(problem)
     % Note: we do not give a warning if an approximate Hessian is
@@ -626,7 +636,7 @@ while true
         Delta = Delta/4;
         consecutive_TRplus = 0;
         consecutive_TRminus = consecutive_TRminus + 1;
-        if consecutive_TRminus >= 5 && options.verbosity >= 1
+        if consecutive_TRminus >= 5 && options.verbosity >= 2
             consecutive_TRminus = -inf;
             fprintf(' +++ Detected many consecutive TR- (radius decreases).\n');
             fprintf(' +++ Consider decreasing options.Delta_bar by an order of magnitude.\n');

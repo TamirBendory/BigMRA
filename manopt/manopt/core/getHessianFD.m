@@ -31,6 +31,10 @@ function hessfd = getHessianFD(problem, x, d, storedb, key)
 %
 %   April 3, 2015 (NB):
 %       Works with the new StoreDB class system.
+%
+%   Nov. 1, 2016 (NB):
+%       Removed exception in case of unavailable gradient, as getGradient
+%       now knows to fall back to an approximate gradient if need be.
 
     % Allow omission of the key, and even of storedb.
     if ~exist('key', 'var')
@@ -40,13 +44,6 @@ function hessfd = getHessianFD(problem, x, d, storedb, key)
         key = storedb.getNewKey();
     end
 
-    
-    if ~canGetGradient(problem)
-        up = MException('manopt:getHessianFD:nogradient', ...
-            'getHessianFD requires the gradient to be computable.');
-        throw(up);
-    end
-	
 	% Step size
     norm_d = problem.M.norm(x, d);
     
@@ -57,8 +54,10 @@ function hessfd = getHessianFD(problem, x, d, storedb, key)
     end
     
     % Parameter: how far do we look?
-    % (Use approxhessianFD explicitly to gain access to this parameter.)
-    epsilon = 1e-4;
+    % If you need to change this parameter, use approxhessianFD explicitly.
+    % A power of 2 is chosen so that scaling by epsilon does not incur any
+    % round-off error in IEEE arithmetic.
+    epsilon = 2^-14;
         
     c = epsilon/norm_d;
     

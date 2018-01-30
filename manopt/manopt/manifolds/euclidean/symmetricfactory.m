@@ -7,6 +7,7 @@ function M = symmetricfactory(n, k)
 % Returns M, a structure describing the Euclidean space of n-by-n symmetric
 % matrices equipped with the standard Frobenius distance and associated
 % trace inner product, as a manifold for Manopt.
+% 
 % By default, k = 1. If k > 1, points and vectors are stored in 3D matrices
 % X of size nxnxk such that each slice X(:, :, i), for i = 1:k, is
 % symmetric.
@@ -15,6 +16,11 @@ function M = symmetricfactory(n, k)
 % Original author: Nicolas Boumal, Jan. 22, 2014.
 % Contributors: 
 % Change log: 
+%
+%   Jan. 25, 2017 (NB):
+%       M.tangent = M.proj now, instead of being identity. This is notably
+%       necessary so that checkgradient will pick up on gradients that do
+%       not lie in the appropriate tangent space.
     
     if ~exist('k', 'var') || isempty(k)
         k = 1;
@@ -38,7 +44,7 @@ function M = symmetricfactory(n, k)
     
     M.ehess2rhess = @(x, eg, eh, d) M.proj(x, eh);
     
-    M.tangent = @(x, d) d;
+    M.tangent = M.proj;
     
     M.exp = @exp;
     function y = exp(x, d, t)

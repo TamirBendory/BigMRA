@@ -24,6 +24,13 @@ function M = complexcirclefactory(n)
 %
 %   April 13, 2015 (NB): Fixed logarithm.
 %
+%   Oct. 8, 2016 (NB)
+%       Code for exponential was simplified to only treat the zero vector
+%       as a particular case.
+%
+%   July 20, 2017 (NB)
+%       The distance function is now even more accurate. Improved logarithm
+%       accordingly.
     
     if ~exist('n', 'var')
         n = 1;
@@ -37,7 +44,7 @@ function M = complexcirclefactory(n)
     
     M.norm = @(x, v) norm(v);
     
-    M.dist = @(x, y) norm(acos(real(conj(x) .* y)));
+    M.dist = @(x, y) norm(real(2*asin(.5*abs(x - y))));
     
     M.typicaldist = @() pi*sqrt(n);
     
@@ -56,43 +63,44 @@ function M = complexcirclefactory(n)
     
     M.exp = @exponential;
     function y = exponential(z, v, t)
-        if nargin <= 2
-            t = 1.0;
+        
+        if nargin == 2
+            % t = 1;
+            tv = v;
+        else
+            tv = t*v;
         end
 
-        y = zeros(n, 1);        
-        tv = t*v;
+        y = zeros(n, 1);
 
         nrm_tv = abs(tv);
         
-        % We need to distinguish between very small steps and the others.
-        % For very small steps, we use a a limit version of the exponential
-        % (which actually coincides with the retraction), so as to not
-        % divide by very small numbers.
-        mask = nrm_tv > 4.5e-8;
+        % We need to be careful for zero steps.
+        mask = (nrm_tv > 0);
         y(mask) = z(mask).*cos(nrm_tv(mask)) + ...
                   tv(mask).*(sin(nrm_tv(mask))./nrm_tv(mask));
-        y(~mask) = z(~mask) + tv(~mask);
-        y(~mask) = y(~mask) ./ abs(y(~mask));
+        y(~mask) = z(~mask);
         
     end
     
     M.retr = @retraction;
     function y = retraction(z, v, t)
-        if nargin <= 2
-            t = 1.0;
+        if nargin == 2
+            % t = 1;
+            tv = v;
+        else
+            tv = t*v;
         end
-        y = z+t*v;
-        y = y ./ abs(y);
+        y = sign(z+tv);
     end
 
     M.log = @logarithm;
     function v = logarithm(x1, x2)
         v = M.proj(x1, x2 - x1);
-        di = real(acos(real(conj(x1) .* x2)));
+        di = real(2*asin(.5*abs(x1 - x2)));
         nv = abs(v);
         factors = di ./ nv;
-        factors(di <= 1e-6) = 1;
+        factors(di <= 1e-10) = 1;
 		v = v .* factors;
     end
     
@@ -100,8 +108,7 @@ function M = complexcirclefactory(n)
     
     M.rand = @random;
     function z = random()
-        z = randn(n, 1) + 1i*randn(n, 1);
-        z = z ./ abs(z);
+        z = sign(randn(n, 1) + 1i*randn(n, 1));
     end
     
     M.randvec = @randomvec;
@@ -119,8 +126,7 @@ function M = complexcirclefactory(n)
     
     M.pairmean = @pairmean;
     function z = pairmean(z1, z2)
-        z = z1+z2;
-        z = z ./ abs(z);
+        z = sign(z1+z2);
     end
 
     M.vec = @(x, u_mat) [real(u_mat) ; imag(u_mat)];

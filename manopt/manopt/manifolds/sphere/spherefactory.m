@@ -16,6 +16,22 @@ function M = spherefactory(n, m)
 % Original author: Nicolas Boumal, Dec. 30, 2012.
 % Contributors: 
 % Change log: 
+%
+%   Oct. 8, 2016 (NB)
+%       Code for exponential was simplified to only treat the zero vector
+%       as a particular case.
+%
+%   Oct. 22, 2016 (NB)
+%       Distance function dist now significantly more accurate for points
+%       within 1e-7 and less from each other.
+%
+%   July 20, 2017 (NB)
+%       Following conversations with Bruno Iannazzo and P.-A. Absil,
+%       the distance function is now even more accurate.
+%
+%   Sep. 7, 2017 (NB)
+%       New isometric vector transport available in M.isotransp,
+%       contributed by Changshuo Liu.
 
     
     if ~exist('m', 'var')
@@ -34,7 +50,27 @@ function M = spherefactory(n, m)
     
     M.norm = @(x, d) norm(d, 'fro');
     
-    M.dist = @(x, y) real(acos(x(:).'*y(:)));
+    M.dist = @dist;
+    function d = dist(x, y)
+        
+        % The following code is mathematically equivalent to the
+        % computation d = acos(x(:)'*y(:)) but is much more accurate when
+        % x and y are close.
+        
+        chordal_distance = norm(x - y, 'fro');
+        d = real(2*asin(.5*chordal_distance));
+        
+        % Note: for x and y almost antipodal, the accuracy is good but not
+        % as good as possible. One way to improve it is by using the
+        % following branching:
+        % % if chordal_distance > 1.9
+        % %     d = pi - dist(x, -y);
+        % % end
+        % It is rarely necessary to compute distance between
+        % almost-antipodal points with full accuracy in Manopt, hence we
+        % favor a simpler code.
+        
+    end
     
     M.typicaldist = @() pi;
     
@@ -78,6 +114,26 @@ function M = spherefactory(n, m)
     
     M.transp = @(x1, x2, d) M.proj(x2, d);
     
+    % Isometric vector transport of d from the tangent space at x1 to x2.
+    % This is actually a parallel vector transport, see §5 in
+    % http://epubs.siam.org/doi/pdf/10.1137/16M1069298
+    % "A Riemannian Gradient Sampling Algorithm for Nonsmooth Optimization
+    %  on Manifolds", by Hosseini and Uschmajew, SIOPT 2017
+    M.isotransp = @(x1, x2, d) isometricTransp(x1, x2, d);
+    function Td = isometricTransp(x1, x2, d)
+        v = logarithm(x1, x2);
+        dist_x1x2 = norm(v, 'fro');
+        if dist_x1x2 > 0
+            u = v / dist_x1x2;
+            utd = u(:)'*d(:);
+            Td = d + (cos(dist_x1x2)-1)*utd*u ...
+                    -  sin(dist_x1x2)   *utd*x1;
+        else
+            % x1 == x2, so the transport is identity
+            Td = d;
+        end
+    end
+    
     M.pairmean = @pairmean;
     function y = pairmean(x1, x2)
         y = x1+x2;
@@ -94,20 +150,21 @@ end
 function y = exponential(x, d, t)
 
     if nargin == 2
-        t = 1;
+        % t = 1
+        td = d;
+    else
+        td = t*d;
     end
-    
-    td = t*d;
     
     nrm_td = norm(td, 'fro');
     
-    if nrm_td > 4.5e-8
+    % Former versions of Manopt avoided the computation of sin(a)/a for
+    % small a, but further investigations suggest this computation is
+    % well-behaved numerically.
+    if nrm_td > 0
         y = x*cos(nrm_td) + td*(sin(nrm_td)/nrm_td);
     else
-        % If the step is too small to accurately evaluate sin(x)/x,
-        % then sin(x)/x is almost indistinguishable from 1.
-        y = x + td;
-        y = y / norm(y, 'fro');
+        y = x;
     end
 
 end
@@ -116,10 +173,13 @@ end
 function y = retraction(x, d, t)
 
     if nargin == 2
-        t = 1;
+        % t = 1;
+        td = d;
+    else
+        td = t*d;
     end
     
-    y = x + t*d;
+    y = x + td;
     y = y / norm(y, 'fro');
 
 end
@@ -128,7 +188,7 @@ end
 function x = random(n, m)
 
     x = randn(n, m);
-    x = x/norm(x, 'fro');
+    x = x / norm(x, 'fro');
 
 end
 

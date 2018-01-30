@@ -19,6 +19,13 @@ function grad = getGradient(problem, x, storedb, key)
 %
 %   April 3, 2015 (NB):
 %       Works with the new StoreDB class system.
+%
+%  June 28, 2016 (NB):
+%       Works with getPartialGradient.
+%
+%   Nov. 1, 2016 (NB):
+%       Added support for gradient from directional derivatives.
+%       Last resort is call to getApproxGradient instead of an exception.
 
     % Allow omission of the key, and even of storedb.
     if ~exist('key', 'var')
@@ -33,7 +40,7 @@ function grad = getGradient(problem, x, storedb, key)
     %% Compute the gradient using grad.
 	
         % Check whether this function wants to deal with storedb or not.
-        switch nargin(problem.cost)
+        switch nargin(problem.grad)
             case 1
                 grad = problem.grad(x);
             case 2
@@ -76,14 +83,27 @@ function grad = getGradient(problem, x, storedb, key)
         
         egrad = getEuclideanGradient(problem, x, storedb, key);
         grad = problem.M.egrad2rgrad(x, egrad);
+    
+    elseif canGetPartialGradient(problem)
+    %% Compute the gradient using a full partial gradient.
+        
+        d = problem.ncostterms;
+        grad = getPartialGradient(problem, x, 1:d, storedb, key);
+        
+    elseif canGetDirectionalDerivative(problem)
+    %% Compute gradient based on directional derivatives; expensive!
+    
+        B = tangentorthobasis(problem.M, x);
+        df = zeros(size(B));
+        for k = 1 : numel(B)
+            df(k) = getDirectionalDerivative(problem, x, B{k}, storedb, key);
+        end
+        grad = lincomb(problem.M, x, B, df);
 
     else
-    %% Abandon computing the gradient.
-    
-        up = MException('manopt:getGradient:fail', ...
-            ['The problem description is not explicit enough to ' ...
-             'compute the gradient of the cost.']);
-        throw(up);
+    %% Attempt the computation of an approximation of the gradient.
+        
+        grad = getApproxGradient(problem, x, storedb, key);
         
     end
     

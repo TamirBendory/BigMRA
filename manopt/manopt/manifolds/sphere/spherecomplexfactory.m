@@ -19,10 +19,20 @@ function M = spherecomplexfactory(n, m)
 %
 %   Sep. 4, 2014 (NB):
 %       Added ehess2rhess.
+%
 %   April 7, 2015 (NB):
 %       Added vec/mat pair (for use with hessianspectrum, for example).
+%
 %   April 13, 2015 (NB):
 %       Added logarithm
+%
+%   Oct. 8, 2016 (NB)
+%       Code for exponential was simplified to only treat the zero vector
+%       as a particular case.
+%
+%   Oct. 22, 2016 (NB)
+%       Distance function dist now significantly more accurate for points
+%       within 1e-7 and less from each other.
 
     
     if ~exist('m', 'var')
@@ -41,7 +51,7 @@ function M = spherecomplexfactory(n, m)
     
     M.norm = @(x, d) norm(d, 'fro');
     
-    M.dist = @(x, y) real(acos(real(x(:)'*y(:))));
+    M.dist = @(x, y) real(2*asin(.5*norm(x - y, 'fro')));
     
     M.typicaldist = @() pi;
     
@@ -102,20 +112,18 @@ end
 function y = exponential(x, d, t)
 
     if nargin == 2
-        t = 1;
+        % t = 1;
+        td = d;
+    else
+        td = t*d;
     end
-    
-    td = t*d;
     
     nrm_td = norm(td, 'fro');
     
-    if nrm_td > 4.5e-8
+    if nrm_td > 0
         y = x*cos(nrm_td) + td*(sin(nrm_td)/nrm_td);
     else
-        % If the step is too small to accurately evaluate sin(x)/x,
-        % then sin(x)/x is almost indistinguishable from 1.
-        y = x + td;
-        y = y / norm(y, 'fro');
+        y = x;
     end
 
 end

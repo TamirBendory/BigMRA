@@ -14,7 +14,8 @@ function [stepsize, newx, newkey, lsstats] = ...
 % structure, typically through the problem.linesearch function. If that
 % step does not fulfill the Armijo sufficient decrease criterion, that step
 % size is reduced geometrically until a satisfactory step size is obtained
-% or until a failure criterion triggers.
+% or until a failure criterion triggers. If the problem structure does not
+% provide an initial alpha, then alpha = 1 is tried first.
 % 
 % Below, the step is constructed as alpha*d, and the step size is the norm
 % of that vector, thus: stepsize = alpha*norm_d. The step is executed by
@@ -34,6 +35,15 @@ function [stepsize, newx, newkey, lsstats] = ...
 %
 %   April 8, 2015 (NB):
 %       Got rid of lsmem input/output.
+%
+%   July 20, 2017 (NB):
+%       Now using alpha = 1 by default.
+%
+%   Aug. 28, 2017 (NB):
+%       Adding two options: ls_backtrack and ls_force_decrease, both true
+%       by default. Setting them to false can disable parts of the line
+%       search that, respectively, execute an Armijo backtracking and
+%       reject a cost increasing step.
 
 
     % Allow omission of the key, and even of storedb.
@@ -49,6 +59,8 @@ function [stepsize, newx, newkey, lsstats] = ...
     default_options.ls_contraction_factor = .5;
     default_options.ls_suff_decr = 1e-4;
     default_options.ls_max_steps = 25;
+    default_options.ls_backtrack = true;
+    default_options.ls_force_decrease = true;
     
     if ~exist('options', 'var') || isempty(options)
         options = struct();
@@ -62,7 +74,11 @@ function [stepsize, newx, newkey, lsstats] = ...
     % Obtain an initial guess at alpha from the problem structure. It is
     % assumed that the present line-search is only called when the problem
     % structure provides enough information for the call here to work.
-    alpha = getLinesearch(problem, x, d, storedb, key);
+    if canGetLinesearch(problem)
+        alpha = getLinesearch(problem, x, d, storedb, key);
+    else
+        alpha = 1;
+    end
     
     % Make the chosen step and compute the cost there.
     newx = problem.M.retr(x, d, alpha);
@@ -71,7 +87,7 @@ function [stepsize, newx, newkey, lsstats] = ...
     cost_evaluations = 1;
     
     % Backtrack while the Armijo criterion is not satisfied
-    while newf > f0 + suff_decr*alpha*df0
+    while options.ls_backtrack && newf > f0 + suff_decr*alpha*df0
         
         % Reduce the step size,
         alpha = contraction_factor * alpha;
@@ -90,7 +106,7 @@ function [stepsize, newx, newkey, lsstats] = ...
     end
     
     % If we got here without obtaining a decrease, we reject the step.
-    if newf > f0
+    if options.ls_force_decrease && newf > f0
         alpha = 0;
         newx = x;
         newkey = key;

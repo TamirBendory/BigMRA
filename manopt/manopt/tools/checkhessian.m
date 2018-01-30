@@ -17,26 +17,35 @@ function checkhessian(problem, x, d)
 % 
 % Both x and d are optional and will be sampled at random if omitted.
 %
-% See also: checkdiff checkgradient
+% See also: checkdiff checkgradient checkretraction
 
 % This file is part of Manopt: www.manopt.org.
 % Original author: Nicolas Boumal, Dec. 30, 2012.
 % Contributors: 
 % Change log: 
 %
+%   March 26, 2017 (JB):
+%       Detects if the approximated quadratic model is exact
+%       and provides the user with the corresponding feedback.
+% 
 %   April 3, 2015 (NB):
 %       Works with the new StoreDB class system.
+%
+%   Nov. 1, 2016 (NB):
+%       Issues a call to getGradient rather than getDirectionalDerivative.
 
         
     % Verify that the problem description is sufficient.
     if ~canGetCost(problem)
-        error('It seems no cost was provided.');  
+        error('It seems no cost was provided.');
     end
     if ~canGetGradient(problem)
-        error('It seems no gradient provided.');    
+        warning('manopt:checkhessian:nograd', ...
+                'It seems no gradient was provided.');
     end
     if ~canGetHessian(problem)
-        error('It seems no Hessian was provided.');    
+        warning('manopt:checkhessian:nohess', ...
+                'It seems no Hessian was provided.');
     end
     
     x_isprovided = exist('x', 'var') && ~isempty(x);
@@ -62,7 +71,7 @@ function checkhessian(problem, x, d)
     storedb = StoreDB();
     xkey = storedb.getNewKey();
     f0 = getCost(problem, x, storedb, xkey);
-    df0 = getDirectionalDerivative(problem, x, d, storedb, xkey);
+    df0 = problem.M.inner(x, d, getGradient(problem, x, storedb, xkey));
     d2f0 = problem.M.inner(x, d, getHessian(problem, x, d, storedb, xkey));
     
     % Compute the value of f at points on the geodesic (or approximation
@@ -86,7 +95,7 @@ function checkhessian(problem, x, d)
     % And plot it.
     loglog(h, err);
     title(sprintf(['Hessian check.\nThe slope of the continuous line ' ...
-                   'should match that of the dashed (reference) line\n' ...
+                   'should match that of the dashed\n(reference) line ' ...
                    'over at least a few orders of magnitude for h.']));
     xlabel('h');
     ylabel('Approximation error');
@@ -95,22 +104,47 @@ function checkhessian(problem, x, d)
          'color', 'k', 'LineStyle', '--', ...
          'YLimInclude', 'off', 'XLimInclude', 'off');
     
-    % In a numerically reasonable neighborhood, the error should decrease
-    % as the cube of the stepsize, i.e., in loglog scale, the error
-    % should have a slope of 3.
-    window_len = 10;
-    [range, poly] = identify_linear_piece(log10(h), log10(err), window_len);
-    hold on;
-        loglog(h(range), 10.^polyval(poly, log10(h(range))), ...
-               'r-', 'LineWidth', 3);
+    
+    if ~all( err < 1e-12 )
+        % In a numerically reasonable neighborhood, the error should
+        % decrease as the cube of the stepsize, i.e., in loglog scale, the
+        % error should have a slope of 3.
+        isModelExact = false;
+        window_len = 10;
+        [range, poly] = identify_linear_piece(log10(h), log10(err), window_len);
+    else
+        % The 2nd order model is exact: all errors are (numerically) zero
+        % Fit line from all points, use log scale only in h.
+        isModelExact = true;
+        range = 1:numel(h);
+        poly = polyfit(log10(h), err, 1);
+        % Set mean error in log scale for plot
+        poly(end) = log10(poly(end));
+        % Change title to something more descriptive for this special case.
+        title(sprintf(...
+              ['Hessian check.\n'...
+               'It seems the quadratic model is exact:\n'...
+               'Model error is numerically zero for all h.']));
+    end
+    hold all;
+    loglog(h(range), 10.^polyval(poly, log10(h(range))), 'LineWidth', 3);
     hold off;
     
-    fprintf('The slope should be 3. It appears to be: %g.\n', poly(1));
-    fprintf(['If it is far from 3, then directional derivatives or ' ...
-             'the Hessian might be erroneous.\n']);
-    fprintf(['Note: if the exponential map is only approximate, and it '...
-             'is not a second-order approximation,\nthen it is normal ' ...
-             'for the slope test to fail. Check the factory for this.\n']);
+    if ~isModelExact
+        fprintf('The slope should be 3. It appears to be: %g.\n', poly(1));
+        fprintf(['If it is far from 3, then directional derivatives or ' ...
+                 'the Hessian might be erroneous.\n']);
+        fprintf(['Note: if the exponential map is only approximate, and it '...
+                 'is not a second-order approximation,\nthen it is normal ' ...
+                 'for the slope test to reach 2 instead of 3. Check the ' ...
+                 'factory for this.\n' ...
+                 'If tested at a critical point, then even for a first-order '...
+                 'retraction the slope test should yield 3.\n']);
+    else
+        fprintf(['The quadratic model appears to be exact ' ...
+                 '(within numerical precision),\n'...
+                 'hence the slope computation is irrelevant.\n']);
+    end
 
     
     %% Check that the Hessian at x along direction d is a tangent vector.
