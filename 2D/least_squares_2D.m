@@ -61,7 +61,7 @@ function [X_est, problem, stats] = least_squares_2D(M1, M2, M3, W, sigma, N, L, 
     opts.maxiter = 1000;
     
     warning('off', 'manopt:getHessian:approx');
-    [X_est, loss] = trustregions(problem, X_est, opts); %#ok<ASGLU>
+    [X_est, loss, stats] = trustregions(problem, X_est, opts); %#ok<ASGLU>
     warning('on', 'manopt:getHessian:approx');
 
 end
