@@ -4,14 +4,6 @@ function [M1, M2, M3] = moments_from_data_no_debias_2D(Y, list2, list3)
 % list3 has size n3 x 4
 % Each row of list2 and list3 contains integers (shifts)
 
-    % Initializations for AD
-%     k1 = 0;
-%     k2 = 0;
-%     l1 = 0;
-%     l2 = 0;
-%     shiftedY = zeros(size(Y));
-%     shiftedYY = zeros(size(Y));
-
     [N1, N2] = size(Y);
 
     M1 = sum(Y(:));
