@@ -18,11 +18,11 @@ X = X / xmax;
 sigma = .01;
 
 % Desired number of occurrences of the signal X in each micrograph
-m_want = 400;
+m_want = 3000;
 % Number of micrographs to generate
-n_micrographs = 2;
+n_micrographs = 1;
 % Each micrograph is square of size NxN
-N = 1000;
+N = 2000;
 
 %% Pick which correlation coefficients to sample
 
@@ -97,8 +97,8 @@ X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
 X_est = align_to_reference(X_est, X_zp);
 % X_est_aligned = align_by_energy(X_est,L);
 
-% err   = norm(X(:) -  X_est_aligned(:))/norm(X(:));
-err   = norm(X_zp(:) -  X_est(:))/norm(X(:));
+% err = norm(X(:) -  X_est_aligned(:))/norm(X(:));
+err = norm(X_zp(:) -  X_est(:))/norm(X(:));
 fprintf('error = %.4g\n',err);
 % figure(1); imagesc([X, X_est_aligned]); axis equal;
 figure(1);
