@@ -93,6 +93,6 @@ err = norm(x_zp(:) -  x_est(:))/norm(x(:));
 fprintf('error = %.4g\n',err);
 % figure(1); imagesc([X, X_est_aligned]); axis equal;
 figure(1);
-plot(1:L, x_zp, '.-', 1:L, x_est, 'o-');
+plot(1:W, x_zp, '.-', 1:W, x_est, 'o-');
 legend('Truth', 'Estimated');
 axis equal;
