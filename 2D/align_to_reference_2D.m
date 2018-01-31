@@ -1,4 +1,4 @@
-function X_aligned = align_to_reference(X, X_ref)
+function X_aligned = align_to_reference_2D(X, X_ref)
 
     C = ifft2(conj(fft2(X_ref)) .* fft2(X));
     [~, ind] = max(C(:));

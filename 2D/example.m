@@ -94,7 +94,7 @@ X0 = [];
 
 % Align X_est to X_zp (zero padded ground truth) for display
 X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
-X_est = align_to_reference(X_est, X_zp);
+X_est = align_to_reference_2D(X_est, X_zp);
 % X_est_aligned = align_by_energy(X_est,L);
 
 % err = norm(X(:) -  X_est_aligned(:))/norm(X(:));
