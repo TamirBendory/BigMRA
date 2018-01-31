@@ -36,8 +36,8 @@ function [X_est, problem, stats] = least_squares_2D(M1, M2, M3, W, sigma, N, L, 
         end
     end
     
-    params.bias2 = bias2;
-    params.bias3 = bias3;
+    params.bias2 = sparse(bias2);
+    params.bias3 = sparse(bias3);
 
     %% Setup Manopt problem
 
@@ -48,20 +48,20 @@ function [X_est, problem, stats] = least_squares_2D(M1, M2, M3, W, sigma, N, L, 
     problem.M = manifold;
     problem.costgrad = @(X) least_squares_2D_cost_grad_parallel(X, params);
 
-    if ~exists('X0', 'var')
+    if ~exist('X0', 'var')
         X0 = [];
     end
 
-    opts = struct();
-    opts.maxiter = 1000;
-
-    [X_est, loss] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
+%     opts = struct();
+%     opts.maxiter = 500;
+%     [X_est, loss] = rlbfgs(problem, X0, opts); %#ok<ASGLU>
+%     X0 = X_est;
     
+    opts = struct();
     opts.tolgradnorm = 1e-5;
     opts.maxiter = 1000;
-    
     warning('off', 'manopt:getHessian:approx');
-    [X_est, loss, stats] = trustregions(problem, X_est, opts); %#ok<ASGLU>
+    [X_est, loss, stats] = trustregions(problem, X0, opts); %#ok<ASGLU>
     warning('on', 'manopt:getHessian:approx');
 
 end
