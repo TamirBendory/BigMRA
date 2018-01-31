@@ -5,15 +5,15 @@ clc;
 %% Defining the problem
 
 % Pick a signal of length L and the size W of the separation window
-L = 4;
+L = 20;
 W = 2*L-1;
 x = rand(L, 1); % rand, not randn (to be discussed)
 
 % Pick a noise level
-sigma = .01;
+sigma = 1;
 
 % Desired number of occurrences of the signal x in each micrograph
-m_want = 3000;
+m_want = 10000;
 % Number of micrographs to generate
 n_micrographs = 1;
 % Each micrograph has length N
@@ -24,9 +24,10 @@ N = m_want*W*10;
 assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
 
 % Load lists of distinct moments of order 2 and 3
-list2 = (-(W-1)/2 : (W-1)/2)';
-[p, q] = meshgrid(list2);
-list3 = [p(:), q(:)];
+list2 = (0 : (W-1)/2)';
+range = (-(W-1)/2 : (W-1)/2)';
+[p, q] = meshgrid(range);
+list3 = [p(:), q(:)]; % there is redudance in here.
 
 % Can subsample if necessary:  keep only nkeep triple correlation coeffs.
 % n3 = size(list3, 1);
@@ -76,7 +77,7 @@ m_total = sum(m_eff);
 % TODO: think about the equivalent micrograph size when we have multiple
 % micrographs. This doesn't sound right to me. For sigma = 0, it's
 % irrelevant because N only intervenes in the bias computations.
-N_eff = N*sqrt(n_micrographs);
+N_eff = N*n_micrographs;
 
 x0 = [];
 [x_est, problem] = least_squares_1D(M1, M2, M3, W, sigma, N_eff, L, m_total, list2, list3, x0);
@@ -95,4 +96,3 @@ fprintf('error = %.4g\n',err);
 figure(1);
 plot(1:W, x_zp, '.-', 1:W, x_est, 'o-');
 legend('Truth', 'Estimated');
-axis equal;
