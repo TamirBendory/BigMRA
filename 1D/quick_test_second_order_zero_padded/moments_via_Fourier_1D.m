@@ -6,8 +6,8 @@
 % Pick a signal length and a true signal (the code works both for real and
 % complex signals.)
 L = 5;
-x = randn(L, 1);
-% x = randn(L, 1) + 1i*randn(L, 1);
+% x = randn(L, 1);
+x = randn(L, 1) + 1i*randn(L, 1);
 
 % Pick a zero-padding length; the only requirement is W >= 2L-1, and we
 % might as well take is as small as possible, so:
@@ -17,7 +17,7 @@ W = 2*L-1;
 Fxz = fft(x, W);
 
 % Power spectrum of the zero padded signal
-Pxz = Fxz .* conj(Fxz);
+Pxz = real(Fxz).^2 + imag(Fxz).^2; % Fxz .* conj(Fxz);
 
 % Inverse DFT of Pxz, and extract the L leading entries
 M2_Fourier = ifft(Pxz);
@@ -31,7 +31,7 @@ for s = 0 : (L-1)
     M2_direct(1+s) = sum(x(1+range1) .* conj(x(1+range2)));
 end
 
-fprintf('Error on 2nd moment: %g\n', norm(M2_direct - M2_Fourier));
+fprintf('Error on 2nd moment: %g\n', norm(M2_direct - M2_Fourier, 2)/norm(M2_direct, 2));
 
 % Now for third order moments via Fourier: take the usual bispectrum of the
 % zero padded signal
@@ -56,4 +56,4 @@ for s1 = 0 : (L-1)
     end
 end
 
-fprintf('Error on 3rd moment: %g\n', norm(M3_direct - M3_Fourier));
+fprintf('Error on 3rd moment: %g\n', norm(M3_direct - M3_Fourier, 'fro')/norm(M3_direct, 'fro'));
