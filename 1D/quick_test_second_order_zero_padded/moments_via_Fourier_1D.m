@@ -6,10 +6,10 @@ clc;
 % This script shows precise relationaships between the moments we compute
 % in BigMRA and monomials in Fourier domain for zero-padded signals.
 
-% Pick a micrograph length and a signal length, and a micrograph
+% Pick a micrograph length N and a signal length L, and a micrograph
 % (the code works both for real and complex data.)
-N = 50;
-L = 50;
+L = 100;
+N = 2*L-1; % N = 2L-1 is what we would see for the optimization part
 x = randn(N, 1); % + 1i*randn(N, 1);
 
 tic();
