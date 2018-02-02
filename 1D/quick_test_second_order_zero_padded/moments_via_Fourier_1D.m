@@ -17,10 +17,9 @@ tic();
 % Since we are only interested in autocorrelations with maximum shift
 % separation up to L-1, we only need to zero pad with L-1 elements. If we
 % actually did this, the micrograph would end up with length N+L-1.
-W = N+L-1;
-
-% Implicitly zero-pad the signal up to length W, then take its DFT
-Fxz = fft(x, W);
+% The following call to fft implicitly zero pads x up to length N+L-1, then
+% takes the DFT. The returned vector has length N+L-1.
+Fxz = fft(x, N+L-1);
 
 % Power spectrum of the zero padded signal
 Pxz = real(Fxz).^2 + imag(Fxz).^2; % Fxz .* conj(Fxz);
