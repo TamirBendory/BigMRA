@@ -26,12 +26,6 @@ function [f, g] = least_squares_1D_cost_grad_parallel(x, params, sample3)
     
     need_gradient = (nargout() >= 2);
     
-    f = 0;
-    
-    if need_gradient
-        g = zeros(L, 1);
-    end
-    
     % TODO: change with the weights from https://arxiv.org/abs/1710.02590
     w1 = 1;
     w2 = 1/W;
@@ -40,10 +34,10 @@ function [f, g] = least_squares_1D_cost_grad_parallel(x, params, sample3)
     % First-order moment, forward model
     M1 = m*sum(x(:));
     R1 = M1 - M1data;
-    f = f + .5*w1*R1^2/m;
+    f = .5*w1*R1^2/m;
     
     if need_gradient
-        g = g + w1*R1*ones(L, 1);
+        g = (w1*R1)*ones(L, 1);
     end
     
     
