@@ -80,7 +80,11 @@ m_total = sum(m_eff);
 N_eff = N*n_micrographs;
 
 x0 = [];
-[x_est, problem] = least_squares_1D(M1, M2, M3, W, sigma, N_eff, L, m_total, list2, list3, x0);
+
+%[x_est, problem] = least_squares_1D(M1, M2, M3, W, sigma, N_eff, L, m_total, list2, list3, x0);
+
+m0 = []; % truth: m_total
+[x_est, m_est, problem] = least_squares_1D_params(M1, M2, M3, W, sigma, N_eff, L, list2, list3, x0, m0);
 
 %% Display
 
