@@ -10,7 +10,7 @@ W = 2*L-1;
 x = rand(L, 1); % rand, not randn (to be discussed)
 
 % Pick a noise level
-sigma = .1;
+sigma = 0;
 
 % Desired number of occurrences of the signal x in each micrograph
 m_want = 100;
@@ -24,10 +24,16 @@ N = m_want*W*10;
 assert((W-1)/2 == round((W-1)/2), 'W assumed odd in this code.');
 
 % Load lists of distinct moments of order 2 and 3
-list2 = (0 : (W-1)/2)';
-range = (-(W-1)/2 : (W-1)/2)';
+%list2 = (0 : (W-1)/2)';
+list2 = (1 : (W-1)/2)';
+
+%range = (-(W-1)/2 : (W-1)/2)';
+% list 3 after removing all biased terms
+range = [(-(W-1)/2:-1),(1:(W-1)/2)]';
 [p, q] = meshgrid(range);
 list3 = [p(:), q(:)]; % there is redudance in here.
+ind3 = find(list3(:,1) ~= list3(:,2));
+list3 = list3(ind3,:);
 
 % Can subsample if necessary:  keep only nkeep triple correlation coeffs.
 % n3 = size(list3, 1);
@@ -83,7 +89,7 @@ x0 = [];
 
 %[x_est, problem] = least_squares_1D(M1, M2, M3, W, sigma, N_eff, L, m_total, list2, list3, x0);
 
-m0 = []; % truth: m_total
+m0 = m_total+20*randn(1); %[]; % truth: m_total
 [x_est, m_est, problem] = least_squares_1D_params(M1, M2, M3, W, sigma, N_eff, L, list2, list3, x0, m0);
 
 %% Display
