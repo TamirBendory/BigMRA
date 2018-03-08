@@ -1,5 +1,5 @@
 
-\documentclass[12pt,a4paper]{article} 
+\documentclass[english]{article}
 
 \pdfoutput=1
 
@@ -14,15 +14,16 @@
 %\usepackage{multirow}
 \usepackage{color}
 \usepackage{url}
+\usepackage{caption}
+\usepackage{subcaption}
 
 
 \newcommand{\TODO}[1]{{\color{red}{[#1]}}}
 
 \makeatletter
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
-%\numberwithin{equation}{section}
+\numberwithin{equation}{section}
 %\numberwithin{figure}{section}
 \theoremstyle{plain}
 \newtheorem{thm}{\protect\theoremname}[section]
@@ -34,6 +35,7 @@
 \newtheorem{lem}[thm]{\protect\lemmaname}
 
 \newtheorem*{lem*}{Lemma}
+
 \theoremstyle{remark}
 \newtheorem{rem}[thm]{\protect\remarkname}
 \theoremstyle{plain}
@@ -41,8 +43,9 @@
 \theoremstyle{plain}
 \newtheorem{proposition}[thm]{\protect\propositionname}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%\usepackage{slashbox}
 
-%\usepackage{babel}
+\usepackage{babel}
 \providecommand{\claimname}{Claim}
 \providecommand{\definitionname}{Definition}
 \providecommand{\lemmaname}{Lemma}
@@ -52,126 +55,134 @@
 \providecommand{\propositionname}{Proposition}
 
 
+\newcommand{\reals}{\mathbb{R}}
 \newcommand{\RL}{\mathbb{R}^L}
-\newcommand{\RN}{\mathbb{R}^N}
 \newcommand{\CL}{\mathbb{C}^L}
+\newcommand{\RN}{\mathbb{R}^L}
 \newcommand{\RNN}{\mathbb{R}^{N\times N}}
 \newcommand{\CNN}{\mathbb{C}^{N\times N}}
 \newcommand{\inner}[1]{\left\langle {#1} \right\rangle}
-\newcommand{\E}[1]{\mathbb{E}\left\{{#1} \right\}}
-\newcommand{\order}[1]{\mathcal{O}\left({#1} \right)}
-\newcommand{\xz}{x_{\textrm{zp}}}
-\newcommand{\DFT}[1]{\operatorname{DFT}\!\left( {#1} \right)}
 \newcommand{\hx}{\hat{x}} 
 
+\newcommand{\SNR}{\textsf{SNR} } 
 
 \begin{document}
 
-%\begin{frontmatter}
-
-
-\title{Small MRI is boring}
+\title{Estimation below the detection limit}
 
 
 \author{Tamir Bendory}
 \maketitle
 
-We consider the problem of estimating a signal $x\in\RL$ from one measurement $y\in\RN, \thinspace N\gg L,$ that contains many repetitions of this signal, at unknown locations, swallowed in noise. 
+\begin{abstract}
+	Here comes the abstract
+\end{abstract}
 
-Formally, our model read
+\section{Introduction}
+
+In this paper, we consider the problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown, random, locations in the data $y$. The data may also contain background information -- independent of the signals -- which is model as noise.
+For one-dimensional signals, the data can be thought of as a long time series and the signals as repetitive short events. For two-dimensional signals, the data is a big image that contains many smaller images.  
+The problem is then to estimate the signals $x_1,\ldots x_K$ from $y$. This
+model appears, in different noise levels, in many applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
+In Section~\ref{sec:model} we provide a precise mathematical formulation of the problem.
+
+
+If the noise level is negligible compared to the signal, the problem is easy.
+One can detect the signal occurrences in the data, and then estimate the signals using clustering and averaging. However, in the low signal--to--noise (\SNR) regime, detection of individual signal occurrences is impossible as discussed in Section~\ref{sec:model}. Nonetheless, in Section~\ref{sec:autocorrelation} we show that under a separation condition on the signals occurrences and that $K$ is not too large, it is possible to estimate the signals, in any \SNR level, up to any desired accuracy.
+This holds if each signals appears enough times in the data as will be explained next.
+
+This work is primely motivated by the challenging innovative technologies for single particle reconstruction, such as cryo-electron microscopy (cryo--EM) and X-ray Free--Electron Laser (XFEL). The acquired data in these technologies suffers from very high noise level. Figure~\ref{fig:example} provides an example for the problem for one signal (i.e., $K=1$). Figures~\ref{fig:data2D_clean},\ref{fig:data2D_noisy_02} and~\ref{fig:data2D_noisy_1} shows excerpt of data in different noise levels, and~\ref{fig:signal2D_clean} is the underlying signal. Figure~\ref{fig:signal2D_LS} shows the estimation of the signal using our method when $\sigma=1$. In Section~\ref{sec:numerics}, after describing the model and method and detail, we provide the all details on this experiments and show more experiments for $K>1$.
+In the last part of this manuscript, we will revisit the cryo--EM problem and draw connections with the estimation problem under consideration.
+
+\begin{figure}[ht!]
+    \advance\leftskip-4cm
+   \advance\rightskip-4cm
+
+%	\centering
+
+	\begin{subfigure}{.5\textwidth}
+		\centering
+	\includegraphics[scale=0.5]{data2D_clean}
+\caption{Excerpt of clean data}
+\label{fig:data2D_clean}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	\centering
+\includegraphics[scale=0.5]{data2D_noisy_02}
+\caption{Excerpt of noisy data with $\sigma=0.2$}
+\label{fig:data2D_noisy_02}
+	\end{subfigure}
+	\begin{subfigure}{.5\textwidth}
+	\centering
+\includegraphics[scale=0.5]{data2D_noisy_1}
+\caption{Excerpt of noisy data with $\sigma=1$}
+\label{fig:data2D_noisy_1}
+\end{subfigure}
+
+	\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[scale=0.5]{signal2D_clean}
+	\caption{Clean signal}
+	\label{fig:signal2D_clean}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[scale=0.5]{signal2D_LS}
+	\caption{Recovered signal using LS}
+	\label{fig:signal2D_LS}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[scale=0.5]{signal2D_RRR}
+	\caption{This one will be replaced}
+	\label{fig:signal2D_RRR}
+\end{subfigure}
+
+\caption{Example}
+\label{fig:example}
+\end{figure}
+
+In Section~\ref{sec:autocorrelation}, we elaborate on our method to
+estimate the signal in the low \SNR regime using autocorrelation analysis. In a nutshell,
+the method consists of two stages. First, we estimate a mix of the low order autocorrelations of the signals from the data. These quantities can
+be estimated to any desired accuracy if the signals appear enough times in the measurements, without the need to detect individual occurrences. Then, the signals are estimated from the mixed autocorrelations. Interestingly, alternative methods which are often employed in similar estimation problems, such as expectation-maximization (EM) or Monte-Carlo Markov Chain (MCMC), seems to be intractable for this problem. 
+
+
+\section{Model}  \label{sec:model}
+
+Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the measurement. For each $x_i$, let $s_i\in\{0,1\}^N$ be a binary signal, referred to as the \emph{support signal}. The non-zero values of $s_i$ indicates the locations of $x_i$ in $y$. If $s_i[n]=1$, then $y[n+j] = x_i[n+j]+\varepsilon[n+j]$ for $j=0,\ldots,L-1$. The further denote $s = \sum_{i=1}^Ks_i$ as the union of supports. 
+
+The support signals are generated by the following generative model. First, an index $i_1$ is drawn uniformly from $\{1,\ldots,N\}$. A second index $i_2$ is drawn uniformly from $\{1,\ldots,N\}$. If $\vert i_2-i_1\vert \geq L-1$,
+then we set $s[i_2]=1$, otherise we keep $s[i_2]=0$ and draw an index again. We proceed to add non-zero entries to $s$ while keeping the separation condition. This process is halted when the number of when support is full enough by some predefined criterion. Once the signal $s$ is determined, for each non-zero entries is drawn from $\{1,\ldots,K\}$ and associated with the chosen signal. We note that if the support is sparse enough, this generative model can be approximated by a simpler process that ignores the separation constraint and simply choose $m$ random location in uniform over $\{1,\ldots N\}$. The number of occurrences $m_i,\ldots,m_K$ is unknown to us. 
+
+The simplest way to present the forward model is a blind deconvolution problem between the support signals and the unknown signals
 \begin{equation}
-y[n] = \sum_{i=1}^K \xz [n-n_i] + \varepsilon[n], 
+y = \sum_{i=1}^K x_i\ast s_i + \varepsilon,\quad \varepsilon\sim\mathcal{N}(0,\sigma^2 I).
 \end{equation}
-where:
-\begin{itemize}
-	\item $y\in\RN$ is the noisy acquired data (measurement),
-	\item $\xz\in\RN$ is a zero-padded version of $x\in\RL, \thinspace L\ll N,
-	$ defined as $\xz  = [x, \underbrace{0,0,\ldots,0}_{N-L \text{ zeros}}]$,
-	\item $n_i,\quad i=1,\ldots,K,$ are the translations of $\xz$, 
-	\item  $\varepsilon$ is i.i.d.\ normal noise with mean zero and variance $\sigma^2$ .
-\end{itemize}
+We model the background information as i.i.d.\ Gaussian noise with zero mean and $\sigma^2$ variance. 
+The goal is to estimate $x1,\ldots,x_K$ from $y$.
 
-Note that both $x$ and the translations $n_i$ are unknown. Therefore, essentially, this is a blind deconvolution problem. Particularly, let $s\in\{0,1\}^N$ be the ``support" signal, which takes the value 1 at the locations $n_i$ are zero otherwise. 
-Then, 
-\begin{equation}
-y = \xz \ast s + \varepsilon,
-\end{equation}
-and the goal is then to estimate $x$ from $y$ although $s$ is unknown as well.
+Blind deconvolution is a longstanding problem, arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. Clearly, without additional information on the signal, blind deconvolution is ill-posed. In our case, the prior information is that $s$ is a binary, sparse, signal. 
+Other settings of blind deconvolution problems have been analyzed recently under different settings, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi2016guaranteed}
+where the focus is on the high \SNR regime.
 
-For small values of $\sigma$,  the problem is easy. In this case, one can identify $x$ in $y$ by simple detection algorithms (e.g., thresholding). Once several copies of  signal were detected and cropped from $y$, then one can  improve the SNR by averaging. We are interest in the more challenging regime of high noise level, in which the signal is completely swamped in the noise, and one cannot detect the signal's appearances. In this case, one need to use the prior information that the signal appears many times across the measurement.
- 
-To perform this blind deconvolution, we use the invariant approach proposed for multireference alignment in a previous paper. Let us  first introduce  notation. We crop the measurement $y\in\RN$ into a series of analysis windows: 
-\begin{equation}
-    y_i = y[(i-1)W + 1 : iW ]\in\mathbb{R}^W, \quad i=1,\ldots,N/W, 
-\end{equation}
-To ease notation, we assume that  $W$ divides $N$  so that there are exactly $N/W$ windows. We also assume that $\vert n_i - n_j\vert >W$ so that each window contains no more than one signal (in general, we can introduce overlapping windows. The code enables it, but it does not seem to improve performance.).
-For each one of the windows, we compute its first three translation-invariant features, namely, mean, power spectrum and bispectrum. We then hope that averaging over these features will produce a reliable estimation of the invariant features of the signal itself. 
-We recall that given accurate estimators of those features, we can estimate the signal itself reliably. Therefore, the question boils down to the accuracy of these feature estimations.
-
-Before moving ahead to the feature estimators, we need to estimate the norm of the signal. This is necessary since many analysis windows do not contain information on the signal, but pure noise. We will use the norm to scale the the signal's estimator.
-This can be done as follows. For short, we denote $x_K[n]=\sum_{i=1}^K \xz[n-n_i]$ and note that $\|x_K\|_2^2 = K\|x\|_2^2$. 
-Then,
-\begin{equation}
-\| y\|_2^2 =  \| x_K\|_2^2 + \|\varepsilon\|_2^2 + 2\varepsilon^Tx_K. 
-\end{equation}  
-As $N\to\infty$, we can estimate 
-\begin{equation}
-\begin{split}
-\E{\| y\|_2^2} &=  \| x_K\|_2^2 + \E{\|\varepsilon\|_2^2} + 2\E{\varepsilon^Tx_K} \\ 
-&= K\|x\|_2^2 + N\sigma^2. 
-\end{split}	 
-\end{equation}   
- And therefore, 
- \begin{equation}
- \|x\|_2^2 \approxeq \frac{\| y\|_2^2 - N\sigma^2}{K}. 
- \end{equation}
-
-Next, we analyze the feature estimation in the asymptotic regime of $N,\sigma,K\to\infty$ and fixed $L,W$. We introduce the ``sparsity factor" defined as $S = \frac{N}{WK}<\infty$, $WK$ is a measure for the ``active" windows. We also define  another zero padded signal $x_W  = [x, \underbrace{0,0,\ldots,0}_{N-W \text{ zeros}}]\in\mathbb{R}^W$.
-
- We want to estimate the features of this signal, and focus on the bispectrum for the sake of simplicity (the estimation of the power spectrum and mean obeys the same methodology). 
-In order to estimate the bispectrum we average over the bispectra of the windows, namely, (for the power spectrum, we need to do unbiasing. In addition, we can replace the mean by more robust estimator, like the median.)
-\begin{eqnarray}
-\hat{B}_{x_W} = \frac{W}{N}\sum_{i=1}^{N/W}B_{y_i}.
-\end{eqnarray}
-We split the sum into three groups of the windows:
-\begin{eqnarray}
-\hat{B}_{x_W} = B_\textrm{signal} + B_\textrm{clutter} + B_\textrm{noise}, 
-\end{eqnarray}
-where
-\begin{itemize}
-	\item $B_\textrm{noise}$ - sum of the bispectra of the segments that contain pure noise (no signal),
-	\item $B_\textrm{signal}$ - sum of the bispectra of the segments that contain a full signal (one appearance of $x$) and noise,
-	\item $B_\textrm{clutter}$ - sum of the bispectra of the segments that contain only part of $x$ and noise.
-\end{itemize}
-
-We first observe that $B_\textrm{noise}\to 0$ (note that this is the zero matrix). More precisely, the variance of the noise goes to zero at rate  $\order{\frac{W}{N}\left(1-\frac{1}{S}\right)\sigma^6}$. In addition, under the assumption that $n_i$ (if appear) are distributed uniformly in the window (we need to come up with precise statistical model; but it would be rather easy), there are (asymptotically) $K(1-L/W)$ windows with complete signals. Therefore,
- $B_\textrm{signal}\to \frac{KW(1-L/W)}{N}B_x$ at rate $\order{\frac{\sigma^6}{K(1-L/W)}}$. (Here we need to be a bit careful with the mean of the signal, or to assume it is zero.) Note that the scaling would be corrected at the last stage of the algorithm, by rescaling according to the estimated  norm.
- 
- The more interesting term is the ``clutter" --- the cropped signals. Since each such signal appears in two windows,
- we have $2KL/W$ clutter segments. Of course, the noise in this segments goes to zero
- at rate $\order{\frac{W\sigma^6}{2KL}}$. However, we have an additional error term arises from  the cropped signals. To analyze the effect of this term, let us assume that $N/\sigma^6$ is great enough so that $B_\textrm{noise}\to 0$. Then,
-\begin{equation}
-\begin{split}
-\left\| \hat{B}_{x_W} - B_\textrm{signal}\right\|_{\textrm{F}} \approxeq&  \left\|B_\textrm{clutter}\right\|_{\textrm{F}}
-= \left\|\frac{W}{N}\sum_{i\in\textrm{clutter}}B_{y_i}\right\|_{\textrm{F}}
-\\ \leq & 
-\frac{W}{N}\frac{2KL}{W}\left\|B_x\right\|_{\textrm{F}} = \frac{2L}{SW}
-\|B_x\|_{\textrm{F}}.
-\end{split}
-\end{equation}
-Therefore, for large sparsity term $S$ or large $W/L$, we get an accurate estimation of a scaled version of the signal's bispectrum. 
+If $x$ is known and $K=1$, then  $s$ can be estimated by linear program in high \SNR~\cite{de2012exact,duval2015exact,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low \SNR regime, estimating $s$ is impossible. To see that, suppose that for each non-zero value of $s$, an oracle provides you 
+a window that contains it. Namely, we get a series of windows, each one contains a signal at unknown location. The question is whether one can estimate the locations of the signals within the windows. Apparently, this cannot be done. For instance, the variance of any estimator is, at best, proportional to $\sigma^2$ and independent of the number of windows, even if $x$ is known~\cite{aguerrebere2016fundamental}.  Since this alignment problem is essentially easier then the problem under consideration, we conclude that detecting the non-zero values of $s$ is impossible in low \SNR. In our setup, $s$ is the \emph{latent} variable of the problem. Indeed, in many blind deconvolution applications the goal is merely to estimate one of the unknown signals. For instance, in image deblurring, both the blurring
+kernel and the high-resolution image are unknown, but the prime goal is only
+to sharpen the image.
+In the next section we show that if $M$ is large enough, then estimating the signals is possible, in any \SNR level and to any accuracy, although we cannot estimate their occurrences. 
 
 
-Few insights from the analysis: (need to check numerically)
-\begin{itemize}
-	\item Larger $S$ reduces the clutter error, however, increases the variance of the noise estimation.
-	\item Larger $W/L$ reduces the clutter error, however, increases the variance of the noise  of $B_\textrm{noise}$.
-	\item We must keep $W/L$ large enough to see enough full signals.    
-\end{itemize} 
-%\bibliographystyle{plain}
-%\bibliography{ref}
+
+\section{Autocorrelation analysis}   \label{sec:autocorrelation}
+
+
+
+\section{Numerical experiments}   \label{sec:numerics}
+
+
+\bibliographystyle{plain}
+\bibliography{ref}
 
 \end{document}
 
-
- 
