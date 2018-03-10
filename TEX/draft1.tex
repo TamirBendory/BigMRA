@@ -16,7 +16,7 @@
 \usepackage{url}
 \usepackage{caption}
 \usepackage{subcaption}
-
+\usepackage{mathtools} 
 
 \newcommand{\TODO}[1]{{\color{red}{[#1]}}}
 
@@ -64,7 +64,7 @@
 \newcommand{\inner}[1]{\left\langle {#1} \right\rangle}
 \newcommand{\hx}{\hat{x}} 
 
-\newcommand{\SNR}{\textsf{SNR} } 
+\newcommand{\SNR}{{\textsf{SNR}}} 
 
 \begin{document}
 
@@ -80,19 +80,27 @@
 
 \section{Introduction}
 
-In this paper, we consider the problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown, random, locations in the data $y$. The data may also contain background information -- independent of the signals -- which is model as noise.
+In this paper, we consider the problem of estimating a set of signals $x_1,\ldots,x_K$ which appear multiple times in unknown, random, locations in a data sequence $y$. The data may also contain background information -- independent of the signals -- which is modeled as noise.
 For one-dimensional signals, the data can be thought of as a long time series and the signals as repetitive short events. For two-dimensional signals, the data is a big image that contains many smaller images.  
 The problem is then to estimate the signals $x_1,\ldots x_K$ from $y$. This
 model appears, in different noise levels, in many applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
 In Section~\ref{sec:model} we provide a precise mathematical formulation of the problem.
 
+This work is primely motivated by the challenging $\SNR$ levels being manifested in  innovative technologies for single particle reconstruction, such as cryo-electron microscopy (cryo--EM) and X-ray Free--Electron Laser (XFEL). The acquired data in these technologies suffers from very high noise level.  In the last part of this manuscript, we will revisit the cryo--EM problem and draw connections with the estimation problem under consideration.
 
-If the noise level is negligible compared to the signal, the problem is easy.
-One can detect the signal occurrences in the data, and then estimate the signals using clustering and averaging. However, in the low signal--to--noise (\SNR) regime, detection of individual signal occurrences is impossible as discussed in Section~\ref{sec:model}. Nonetheless, in Section~\ref{sec:autocorrelation} we show that under a separation condition on the signals occurrences and that $K$ is not too large, it is possible to estimate the signals, in any \SNR level, up to any desired accuracy.
-This holds if each signals appears enough times in the data as will be explained next.
+If the noise level is negligible, estimating the signals is easy.
+One can detect the signal occurrences in the data sequence and then estimate the signals using clustering and averaging.
+Even in higher noise level regimes, clever methods based on template matching, such as those used in structural biology~\cite{heimowitz2018apple} and radar~\cite{gogineni2017passive}, may work.
+However, in the low signal--to--noise (\SNR) regime, detection of individual signal occurrences is impossible. In Figure~\ref{fig:example} we demonstrate an instance of the problem in different noise levels. Figure~\ref{fig:data2D_clean} shows a excerpt of a big image that contains many repetitions of $21\times 21$ small image. The small image is a downsampled version of TKTK, which is shown in Figure~\ref{fig:signal2D_clean}. In Figures~\ref{fig:data2D_noisy_02} and~\ref{fig:data2D_noisy_1} the same excerpt is shown with the addition of i.i.d.\ Gaussian noise with standard deviation of $0.2$ and $1$, respectively.  
 
-This work is primely motivated by the challenging innovative technologies for single particle reconstruction, such as cryo-electron microscopy (cryo--EM) and X-ray Free--Electron Laser (XFEL). The acquired data in these technologies suffers from very high noise level. Figure~\ref{fig:example} provides an example for the problem for one signal (i.e., $K=1$). Figures~\ref{fig:data2D_clean},\ref{fig:data2D_noisy_02} and~\ref{fig:data2D_noisy_1} shows excerpt of data in different noise levels, and~\ref{fig:signal2D_clean} is the underlying signal. Figure~\ref{fig:signal2D_LS} shows the estimation of the signal using our method when $\sigma=1$. In Section~\ref{sec:numerics}, after describing the model and method and detail, we provide the all details on this experiments and show more experiments for $K>1$.
-In the last part of this manuscript, we will revisit the cryo--EM problem and draw connections with the estimation problem under consideration.
+In this work we focus on the low $\SNR$ regime. To estimate the signal we use autocorrelation analysis of the data. 
+In a nutshell,
+the method consists of two stages. First, we estimate a mix of the low order autocorrelations of the signals from the data. These quantities can
+be estimated to any desired accuracy if the signals appear enough times in the measurements, without the need to detect individual occurrences. Then, the signals are estimated from the mixed autocorrelations.
+In Section~\ref{sec:autocorrelation}, we elaborate on our method  and show that if $K$ not too large, it is possible to estimate the signals, in any $\SNR$ level and to any desired accuracy.
+This holds if each signals appears enough times in the data and the signals are sufficiently spaced. 
+Interestingly, alternative methods which are often employed in similar estimation problems, such as expectation-maximization (EM) or Monte-Carlo Markov Chain (MCMC), seems to be intractable for this problem. In Figure~\ref{fig:signal2D_LS} we show an example for estimation of the signals where the data is contaminated with noise with standard deviation of $\sigma=1$ as presented in Figure~\ref{fig:data2D_noisy_1}. The normalized error between the signal and its estimation is TKTK. In Section~\ref{sec:numerics} we provide the details of this experiment and show additional experiments with $K>1$. 
+
 
 \begin{figure}[ht!]
     \advance\leftskip-4cm
@@ -142,12 +150,6 @@ In the last part of this manuscript, we will revisit the cryo--EM problem and dr
 \label{fig:example}
 \end{figure}
 
-In Section~\ref{sec:autocorrelation}, we elaborate on our method to
-estimate the signal in the low \SNR regime using autocorrelation analysis. In a nutshell,
-the method consists of two stages. First, we estimate a mix of the low order autocorrelations of the signals from the data. These quantities can
-be estimated to any desired accuracy if the signals appear enough times in the measurements, without the need to detect individual occurrences. Then, the signals are estimated from the mixed autocorrelations. Interestingly, alternative methods which are often employed in similar estimation problems, such as expectation-maximization (EM) or Monte-Carlo Markov Chain (MCMC), seems to be intractable for this problem. 
-
-
 \section{Model}  \label{sec:model}
 
 Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the measurement. For each $x_i$, let $s_i\in\{0,1\}^N$ be a binary signal, referred to as the \emph{support signal}. The non-zero values of $s_i$ indicates the locations of $x_i$ in $y$. If $s_i[n]=1$, then $y[n+j] = x_i[n+j]+\varepsilon[n+j]$ for $j=0,\ldots,L-1$. The further denote $s = \sum_{i=1}^Ks_i$ as the union of supports. 
@@ -170,19 +172,157 @@ If $x$ is known and $K=1$, then  $s$ can be estimated by linear program in high 
 a window that contains it. Namely, we get a series of windows, each one contains a signal at unknown location. The question is whether one can estimate the locations of the signals within the windows. Apparently, this cannot be done. For instance, the variance of any estimator is, at best, proportional to $\sigma^2$ and independent of the number of windows, even if $x$ is known~\cite{aguerrebere2016fundamental}.  Since this alignment problem is essentially easier then the problem under consideration, we conclude that detecting the non-zero values of $s$ is impossible in low \SNR. In our setup, $s$ is the \emph{latent} variable of the problem. Indeed, in many blind deconvolution applications the goal is merely to estimate one of the unknown signals. For instance, in image deblurring, both the blurring
 kernel and the high-resolution image are unknown, but the prime goal is only
 to sharpen the image.
-In the next section we show that if $M$ is large enough, then estimating the signals is possible, in any \SNR level and to any accuracy, although we cannot estimate their occurrences. 
+In the next section we show that if $M$ is large enough, then estimating the signals is possible, in any $\SNR$ level and to any accuracy, although we cannot estimate their occurrences. 
 
 
 
 \section{Autocorrelation analysis}   \label{sec:autocorrelation}
 
+Our method for estimating the signals relies on two pillars. 
+First, we use the autocorrelation functions of the data to estimate a mix (i.e., linear combination) of the signals autocorrelations. The mixed autocorrelation can be estimated to any accuracy, in any \SNR level, if $M$ is large enough. Then, we use least-squares (LS) estimator to estimate the signals from their mixed autocorrelation. 
 
+For the purpose of this paper, we need the first three (aperiodic) autocorrelation functions, defined as
+\begin{align} \label{eq:autocorrelations}
+a_y^1 &= \sum_{i=0}^{N-1} y[i], \nonumber\\
+a_y^2[\ell] &= \sum_{i=0}^{N-1-\ell} y[i]y[i+\ell], \nonumber\\
+a_y^3[\ell_1,\ell_2] &= \sum_{i=0}^{N-1-\max\{\ell_1,\ell_2\}} y[i]y[i+\ell_1]y[i+\ell_2]. 
+\end{align}
+Note that the autocorrelation functions are symmetric so that $a_y^2[\ell] = a_y^2[-\ell]$ and $a_y^3[\ell_1,\ell_2] = a_y^3[-\ell_1,-\ell_2]$.
+
+The analysis of the autocorrelations is conducted in the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty$. We define the ratios 
+\begin{equation}
+\gamma_i = \frac{M_i L}{N},
+\end{equation}
+and $\gamma = \sum_{i=1}^K\gamma_i$.
+Under the separation condition, we have $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
+If $s$ satisfies the separation condition, then the first $L$ entries of the data autocorrelations converge to a $\gamma$ scaled version of a mix of the signals autocorrelations:
+\begin{align}
+\lim_{N\to\infty} a_y^1 &= \sum_{i=1}^K\gamma_i a_{x_i}^1, \\
+\lim_{N\to\infty} a_y^2[\ell] &= \sum_{i=1}^K\gamma_i a_{x_i}^2[\ell] +\sigma^2\delta[\ell],\\
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &= \sum_{i=1}^K\gamma_i a_{x_i}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{i=1}^K\gamma_i a_{x_i}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]),
+\end{align}
+for $\ell,\ell_1,\ell_2=0,\ldots L-1$.
+These relations are proved in Appendix~\ref{sec:autocorrelation_computation}. The analysis is similar to~\cite{bendory2017bispectrum,boumal2017heterogeneous}, yet a special caution should be taken with the noise dependencies. 
+
+The third order autocorrelation defines the signals uniquely. For $K=1$, we have the following simple result:
+\begin{proposition}
+	Suppose that $x[0]$ and $x[L-1]$ are non-zeros. Then, the signal is determined uniquely from  $a_x^2$ and $a_x^3$.
+	\begin{proof}
+From the second-order autocorrelation, we ge
+\begin{equation*}
+a_x^2[L-1] = x[0]x[L-1]\neq 0.
+\end{equation*}
+Then, from the third-order autocorrelation we can compute $x[k]$ for all $k=0,\ldots L-1$ by
+\begin{eqnarray}
+a_x^3[k,L-1] = x[0]x[k]x[L-1].
+\end{eqnarray}
+	\end{proof}
+\end{proposition}
+ We note that the length of the signal can be easily derived from the autocorrelation of the signal if the separation condition is met. Therefore, the assumption that $L=1$ and $x[0]$ and $x[L-1]$ are non-zero makes sense.
+
+The heterogeneous case $K>1$ was explored for periodic autocorrelation functions. The aperiodic autocorrelations are the periodic autocorrelations of signals padded by zeros \TODO{we should be prudent here}. Therefore, the following results hold for our setup as well. In~\cite{bandeira2017estimation}. There, it was shown that 
+there is a finite list of solutions for $K$ generic signals when 
+\begin{itemize}
+	\item $K=2$ when $L>1$,
+	\item $K=3$ when $L>12$,
+	\item $K=4$ when $L>18$,
+	\item $5\leq K\leq 15$ when $L\geq 6K-5$.	
+\end{itemize}
+The authors conjecture that for $K>15$, $L\geq 6K-5$ is enough. Recently, Joe told use that he has proven that there is unique mapping in the same regime.  
+This also holds for arbitrary weights $\gamma_i$ which are rational fractions.
+
+If the noise level $\sigma^2$ is known, then for $K=1$, one can estimate $m$ from only the first two moments, namely, with estimation rate of $\sigma^4/N$.
+\begin{proposition}
+	Let $K=1$. Then, 
+	\begin{equation*}
+	\frac{M}{N} = \frac{(a^1_y)^2}{\sum_{j=0}^{L-1}a_y^2[j]-\sigma^2}.
+	\end{equation*}
+	\begin{proof}
+The relation is proved by plugging the definitions of the signal autocorrelations into the right-hand side of the equation~\eqref{eq:autocorrelations}. 	
+\end{proof}
+\end{proposition}
+
+If we assume that $s$ is sparse, then by ignoring the separation condition, one can describe the generative process of $s$ as a Bernoulli process with parameter $M/N$. Therefore, in low \SNR  one can estimate the parameter that control this statistical process, although cannot estimate individual entries.
+
+I DIDN'T SAY ANYTHING ABOUT ESTIMATION RATE
 
 \section{Numerical experiments}   \label{sec:numerics}
 
 
+
+\section{Conclusion} 
+Here we conclude the paper: cryo -- EM, structured background, without separation, heterogeneity
+In particular, in cryo--EM, multiple projections of a molecule (signal), taken
+from unknown viewing directions, are recorded on two-dimensional detector
+array. Current algorithms try to detect these projections in a low SNR regime
+and then use them for the reconstruction process. Since the
+Then, the reconstruction problem is to detect these projection, and then use
+them to estimat
+The data acquired in both technologies is composed of multiple projections
+of a molecule (the signal), taken from unknown viewing direction, and drawn in
+high noise level. The reconstitution problem is then to estimate the molecule
+from this data.
+
+
 \bibliographystyle{plain}
 \bibliography{ref}
+
+
+
+\appendix
+
+\section{Autocorrelation estimations} \label{sec:autocorrelation_computation}
+ 
+To analyze the asymptotic behavior of the data autocorrelation functions, we consider one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with the appropriates weights, see~\cite{boumal2017heterogeneous}. 
+
+Let us define
+\begin{equation}
+\gamma = \lim_{N\to\infty} \frac{M_NL}{N}<1.
+\end{equation}
+By assuming $M_N=\Omega(N)$, we also have $\gamma>0$.
+We start by considering the first autocorrelation of the data
+\begin{equation}
+a_y^1 = \sum_{i=0}^{N-1} y[i] = \frac{1}{N/L}\sum_{j=0}^{M_N-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}} \xrightarrow{a.s.}\gamma a_x^1,
+\end{equation}
+where the noise term converges to zero almost surely (a.s.) by the law of large numbers.
+
+We proceed with the second moment. Let us fix $\ell\in[0,\ldots,L-1]$. Then, we can compute, 
+\begin{equation}
+\begin{split}
+a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell] \\
+& \underbrace{\frac{1}{N}\sum_{j=1}^{M_N}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}},
+\end{split}
+\end{equation}
+where the cross terms between the signal and the noise vanish in the limit. 
+
+We treat the signal and noise terms separately. We first break the noise term into $M_N$ different sums, each contains one copy of the signal, and get
+\begin{equation}
+\frac{1}{N}\sum_{j=1}^{M_N}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] = \frac{M_NL}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] = \gamma a_x^2[\ell].
+\end{equation}
+Similarly, for $\ell\neq 0$, we can break the noise term into a sum of independent terms 
+\begin{equation}
+\frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
+\end{equation}
+Each term of $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, and therefore converge to zero almost surely as $N\to\infty$.
+If $\ell=0$, 
+\begin{equation}
+\frac{1}{N}\sum_{i=0}^{N-1} \varepsilon[i]^2 \xrightarrow{a.s.} \sigma^2.
+\end{equation}
+
+We are now moving to the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2$ and recall that 
+\begin{equation*}
+a_y^3[\ell_1,\ell_2] = \sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]. 
+\end{equation*}
+This sum can be broken into eight partial sums. The first contains only signal terms and converges to a $\gamma a_x^3$. Three other partial sums contains the product of two signal entries and one noise term. Since the noise is independent of the signal, then these terms go to zero almost surely.
+
+We next analyze the contribution of triple product of noise terms. For $\ell_1\neq 0$, this sum can be formulate as follows:
+\begin{equation*}
+\sum_{i=0}^{N-1-\ell_1} \varepsilon[i]\varepsilon[i+\ell_1]\varepsilon[i+\ell_2] = \frac{1}{\ell_1}\sum_{i=0}^{\ell_1-1}\frac{1}{N/\ell_1}\sum_{j=0}^{N\ell_1 -1 }\varepsilon[j\ell_1+i]\varepsilon[(j+1)\ell_1+i]\varepsilon[j\ell_1+i+\ell_2].
+\end{equation*}
+For each fixed $i$, we sum of over $N/\ell_1$ independent variables that goes to zero almost surely. This also holds for $\ell_1=\ell_2=0$. 
+
+To complete the analysis, we consider the terms including the product of two noise terms and one signal entry. Most of these terms converges to zero almost surely because of interdependency between the noise entries. For $\ell_1=0, \ell_2=0$ and $\ell_1=\ell_2$,  a simple computation shows that the sum converges to $\gamma\sigma^2a_x^1$.
+
 
 \end{document}
 
