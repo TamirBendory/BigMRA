@@ -5,19 +5,19 @@ clc;
 %% Pick parameters and generate signals
 
 % Pick K signals of length L and the size W of the separation window
-K = 1;
-L = 6;
+K = 3;
+L = 12;
 W = 2*L-1;
-X = rand(L, K);  % randn instead of rand here -- to be discussed
+X = randn(L, K);  % randn instead of rand here -- to be discussed
 
 % Pick a noise level
 sigma = 0;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = 100*ones(K, 1);
+m_want = 1000*ones(K, 1);
 
 % Length of micrograph
-n = sum(m_want)*W*10;
+n = sum(m_want)*W*20;
 
 
 %% Pick which correlation coefficients to sample
@@ -26,15 +26,15 @@ n = sum(m_want)*W*10;
 list2 = (0 : (L-1))';
 % list2 = (1 : (L-1))';  % this one ignores biased terms
 
+% Sampling strategy: see notes NB carnet 33
 list3 = zeros(0, 2);
 n3 = 0;
 for k1 = 0 : (L-1)
-    for k2 = 0 : (L-1)
-        if k1 + k2 >= L
-            continue;
+    for k2 = 0 : -1 : -(L-1)
+        if k1 - k2 <= L-1
+            n3 = n3 + 1;
+            list3(n3, :) = [k1, k2];
         end
-        n3 = n3 + 1;
-        list3(n3, :) = [k1, k2];
     end
 end
 
@@ -66,15 +66,44 @@ moments.list3 = list3;
 
 %% Optimization
 
-[X_est_W, gamma_est, problem, stats] = least_squares_1D_heterogeneous(moments, W, K, sigma);
+% Here we can choose the length of sought signals in optimization.
+% Should be no less than L; typically set to W.
+L_optim = 2*L;
 
-% Now, extract signals of length L out of the estimated signals of length W
+X0 = randn(L_optim, K);
+gamma0 = m_actual*L_optim/n; % give true gamma for now
+
+[X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma, X0, gamma0(:)); % check if the code fixes gamma to gamma0 or not
+
+% Now, should extract signals of length L out of the estimated signals of
+% length L_optim and reoptimize (ideally).
 
 
 %% Display
-plot(X_est_W);
-hold all;
-plot(X);
 
-gamma_est
-m_actual*W/n
+fprintf('Estimated densities:\n');
+disp(gamma_est');
+fprintf('True densities:\n');
+disp(m_actual*L_optim/n);
+
+X_extended = [X ; zeros(L_optim-L, K)];
+
+for k1 = 1 : K
+    for k2 = 1 : K
+        subplot(K, K, (k1-1)*K + k2);
+        
+        x1 = X_extended(:, k2);
+        x2 = X_est(:, k1);
+        x2 = align_to_reference_1D(x2, x1);
+        
+        plot(1:L_optim, x1, 1:L_optim, x2);
+        
+        if k1 == 1
+            title(sprintf('True signal %d\n(blue)', k2));
+        end
+        if k2 == 1
+            ylabel(sprintf('Estimated signal %d\n(orange)', k1));
+        end
+        
+    end
+end

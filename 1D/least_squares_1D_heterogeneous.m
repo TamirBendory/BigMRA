@@ -1,4 +1,4 @@
-function [X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(moments, L, K, sigma, X0, gamma0)
+function [X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma, X0, gamma0)
 
     M1 = moments.M1;        %% Make sure these are normalized by n (length of the micrograph)
     M2 = moments.M2;
@@ -54,19 +54,24 @@ function [X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(mom
 
     
     %% Setup Manopt problem
-    elements.X = euclideanfactory(L, K);
-    elements.gamma = euclideanfactory(K, 1);  %% TODO: try positive reals factory
+    elements.X = euclideanfactory(L_optim, K);
+    elements.gamma = positivefactory(K, 1);  %% TODO: try positive reals factory
+%     elements.gamma = constantfactory(gamma0);  %% TODO: try fixing gamma; requires gamma0
     manifold = productmanifold(elements);
     
     problem.M = manifold;
     
-    problem.costgrad = @(Z) least_squares_1D_cost_grad_heterogeneous(Z, params);
+    problem.costgrad = @costgrad;
+    function [f, G] = costgrad(Z)
+        [f, G] = least_squares_1D_cost_grad_heterogeneous(Z, params);
+        G = manifold.egrad2rgrad(Z, G);
+    end
     
     % checkgradient(problem); pause;
 
     %% Pick an initial guess if not provided
     if ~exist('X0', 'var')
-        X0 = randn(L, K);
+        X0 = randn(L_optim, K);
     end
     if ~exist('gamma0', 'var')
         gamma0 = 0.1 * (ones(K, 1) / K);
@@ -76,7 +81,7 @@ function [X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(mom
     
     %% Call an optimization algorithm
     opts = struct();
-    opts.tolgradnorm = 1e-8;
+    opts.tolgradnorm = 1e-12;
     opts.maxiter = 1000;
     
     warning('off', 'manopt:getHessian:approx');

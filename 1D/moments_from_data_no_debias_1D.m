@@ -2,7 +2,7 @@ function [M1, M2, M3] = moments_from_data_no_debias_1D(y, list2, list3)
 % y is a signal (a vector)
 % list2 has size n2 x 1
 % list3 has size n3 x 2
-% Each row of list2 and list3 contains integers (shifts)
+% Each row of list2 and list3 contains integers (shifts) -- can be negative
 
     y = y(:);
     N = size(y, 1);
