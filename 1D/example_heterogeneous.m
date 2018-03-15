@@ -5,7 +5,7 @@ clc;
 %% Pick parameters and generate signals
 
 % Pick K signals of length L and the size W of the separation window
-K = 3;
+K = 2;
 L = 12;
 W = 2*L-1;
 X = randn(L, K);  % randn instead of rand here -- to be discussed
@@ -36,6 +36,14 @@ for k1 = 0 : (L-1)
             list3(n3, :) = [k1, k2];
         end
     end
+end
+
+% Optionally, remove all moments that are affected by bias, so that it is
+% no longer necessary to know sigma.
+remove_biased_terms = false;
+if remove_biased_terms
+    list2(list2 == 0) = [];
+    list3(list3(:, 1) == 0 | list3(:, 2) == 0, :) = [];
 end
 
 %% Generate the micrograph

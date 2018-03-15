@@ -57,7 +57,7 @@ function [X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(mom
     elements.X = euclideanfactory(L_optim, K);
 %     elements.gamma = euclideanfactory(K, 1);  %% TODO: try unrestricted reals
     elements.gamma = positivefactory(K, 1);  %% TODO: try positive reals factory
-%     elements.gamma = constantfactory(gamma0);  %% TODO: try fixing gamma; requires gamma0; this is a new factory -- ask me for the code
+%     elements.gamma = constantfactory(gamma0);  %% TODO: try fixing gamma; requires gamma0
     manifold = productmanifold(elements);
     
     problem.M = manifold;
