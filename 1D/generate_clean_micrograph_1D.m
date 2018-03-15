@@ -1,8 +1,8 @@
 function [y, placed] = generate_clean_micrograph_1D(x, W, N, m)
 % Inputs:
 %   x: signal of size Lx1
-%   W: separation zone has size Wx1: any subvector of that size can only
-%      touch one signal occurence.
+%   W: separation zone has size Wx1: any contiguous subvector of that size
+%      can only touch one signal occurrence.
 %   N: micrograph has size Nx1
 %   m: the signal will appear m times in the micrograph, in random places,
 %      with separation specified by W. If it proves difficult to place m
