@@ -11,20 +11,19 @@ W = 2*L-1;
 X = randn(L, K);  % randn instead of rand here -- to be discussed
 
 % Pick a noise level
-sigma = .2;
+sigma = 2;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = 10000*ones(K, 1);
+m_want = 50000*ones(K, 1);
 
 % Length of micrograph
-n = sum(m_want)*W*20;
+n = sum(m_want)*W*10;
 
 
 %% Pick which correlation coefficients to sample
 
 % Load lists of distinct moments of order 2 and 3
 list2 = (0 : (L-1))';
-% list2 = (1 : (L-1))';  % this one ignores biased terms
 
 % Sampling strategy: see notes NB notebook 33
 list3 = zeros(0, 2);
@@ -72,6 +71,7 @@ moments.M3 = M3 / n;
 moments.list2 = list2;
 moments.list3 = list3;
 
+
 %% Optimization
 
 % Here we can choose the length of sought signals in optimization.
@@ -96,6 +96,9 @@ disp(m_actual'*L_optim/n);
 
 X_extended = [X ; zeros(L_optim-L, K)];
 
+figure(1);
+clf;
+
 for k1 = 1 : K
     for k2 = 1 : K
         subplot(K, K, (k1-1)*K + k2);
@@ -115,3 +118,5 @@ for k1 = 1 : K
         
     end
 end
+
+savefig(gcf, sprintf('example_heterogeneous_%s.fig', datestr(now(), 30)));
