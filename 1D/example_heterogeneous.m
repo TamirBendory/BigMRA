@@ -120,3 +120,80 @@ for k1 = 1 : K
 end
 
 savefig(gcf, sprintf('example_heterogeneous_%s.fig', datestr(now(), 30)));
+
+%% Try to extract dominant subsignal of length L in each estimated signal
+
+X_est_L = zeros(L, K);
+for k = 1 : K
+    for s = 0 : (L_optim - 1)
+        x = circshift(X_est(:, k), s);
+        x = x(1:L);
+        if norm(x) > norm(X_est_L(:, k))
+            X_est_L(:, k) = x;
+        end
+    end
+end
+
+figure(2);
+clf;
+
+for k1 = 1 : K
+    for k2 = 1 : K
+        subplot(K, K, (k1-1)*K + k2);
+        
+        x1 = X(:, k2);
+        x2 = X_est_L(:, k1);
+%         x2 = align_to_reference_1D(x2, x1);
+        
+        plot(1:L, x1, 1:L, x2);
+        
+        if k1 == 1
+            title(sprintf('True signal %d\n(blue)', k2));
+        end
+        if k2 == 1
+            ylabel(sprintf('Estimated signal %d\n(orange)', k1));
+        end
+        
+    end
+end
+
+savefig(gcf, sprintf('example_heterogeneous_short_%s.fig', datestr(now(), 30)));
+
+%% Reoptimize from the shortened estimator
+
+gamma0 = gamma_est*(L/L_optim);
+
+[X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(moments, L, K, sigma, X_est_L, gamma0(:)); % check if the code fixes gamma to gamma0 or not
+
+
+%% Redraw
+
+fprintf('Estimated densities:\n');
+disp(gamma_est');
+fprintf('True densities:\n');
+disp(m_actual'*L/n);
+
+figure(3);
+clf;
+
+for k1 = 1 : K
+    for k2 = 1 : K
+        subplot(K, K, (k1-1)*K + k2);
+        
+        x1 = X(:, k2);
+        x2 = X_est(:, k1);
+%         x2 = align_to_reference_1D(x2, x1);
+        
+        plot(1:L, x1, 1:L, x2);
+        
+        if k1 == 1
+            title(sprintf('True signal %d\n(blue)', k2));
+        end
+        if k2 == 1
+            ylabel(sprintf('Estimated signal %d\n(orange)', k1));
+        end
+        
+    end
+end
+
+savefig(gcf, sprintf('example_heterogeneous_reoptimized_%s.fig', datestr(now(), 30)));
