@@ -14,7 +14,7 @@ X = randn(L, K);  % randn instead of rand here -- to be discussed
 sigma = 2;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = [1e5 1e4];
+m_want = [1e5 3e4];
 
 % Length of micrograph
 n = sum(m_want)*W*10;
@@ -57,9 +57,6 @@ fprintf('   m_actual/m_want: ');
 fprintf(' %.2g', m_actual./m_want);
 fprintf('\n');
 
-% Total number of occurrences of signals in the micrograph
-m_total = sum(m_actual);
-
 %% Collect the moments
 tic;
 [M1, M2, M3] = moments_from_data_no_debias_1D(y_obs, list2, list3);
@@ -93,7 +90,7 @@ sigma_est = 0; % irrelevant if remove_biased_terms = true and if the weights int
 fprintf('Estimated densities:\n');
 disp(gamma_est');
 fprintf('True densities:\n');
-disp(m_actual'*L_optim/n);
+disp(m_actual*L_optim/n);
 
 X_extended = [X ; zeros(L_optim-L, K)];
 
@@ -172,7 +169,7 @@ gamma0 = gamma_est*(L/L_optim);
 fprintf('Estimated densities:\n');
 disp(gamma_est');
 fprintf('True densities:\n');
-disp(m_actual'*L/n);
+disp(m_actual*L/n);
 
 figure(3);
 clf;
