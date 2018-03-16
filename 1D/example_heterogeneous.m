@@ -164,7 +164,7 @@ savefig(gcf, sprintf('example_heterogeneous_short_%s.fig', datestr(now(), 30)));
 
 gamma0 = gamma_est*(L/L_optim);
 
-[X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(moments, L, K, sigma, X_est_L, gamma0(:)); % check if the code fixes gamma to gamma0 or not
+[X_est, gamma_est] = least_squares_1D_heterogeneous(moments, L, K, sigma_est, X_est_L, gamma0(:)); % check if the code fixes gamma to gamma0 or not
 
 
 %% Redraw
@@ -198,3 +198,14 @@ for k1 = 1 : K
 end
 
 savefig(gcf, sprintf('example_heterogeneous_reoptimized_%s.fig', datestr(now(), 30)));
+
+
+%%
+permutations = perms(1:K);
+for p = 1 : size(permutations, 1)
+    P = permutations(p, :);
+    fprintf('==\n');
+    fprintf('Relative error subsignals of length L: %g\n', norm(X-X_est_L(:, P), 'fro') / norm(X, 'fro'));
+    fprintf('Relative error after reoptimization:   %g\n', norm(X-X_est(:, P), 'fro') / norm(X, 'fro'));
+end
+fprintf('==\n');
