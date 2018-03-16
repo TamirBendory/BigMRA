@@ -92,7 +92,7 @@ gamma0 = m_actual*L_optim/n; % give true gamma for now
 fprintf('Estimated densities:\n');
 disp(gamma_est');
 fprintf('True densities:\n');
-disp(m_actual*L_optim/n);
+disp(m_actual'*L_optim/n);
 
 X_extended = [X ; zeros(L_optim-L, K)];
 
