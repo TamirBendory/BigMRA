@@ -63,7 +63,7 @@ m_total = sum(m_actual);
 %% Collect the moments
 tic;
 [M1, M2, M3] = moments_from_data_no_debias_1D(y_obs, list2, list3);
-fprintf('   Moment computation: %.2g [s]\n', toc());
+fprintf('   Moment computation: %.4g [s]\n', toc());
 
 moments.M1 = M1 / n;  %%%% !!!!! We normalize by n here; ideally, we should normalize by n in moments_from_data_no_debias_1D, but I'll only do the change when everything is under control
 moments.M2 = M2 / n;
