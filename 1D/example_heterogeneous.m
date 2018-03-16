@@ -14,7 +14,7 @@ X = randn(L, K);  % randn instead of rand here -- to be discussed
 sigma = 2;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = 50000*ones(K, 1);
+m_want = [1e5 1e4];
 
 % Length of micrograph
 n = sum(m_want)*W*10;
