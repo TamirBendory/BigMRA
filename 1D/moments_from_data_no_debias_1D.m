@@ -27,13 +27,18 @@ function [M1, M2, M3] = moments_from_data_no_debias_1D(y, list2, list3)
     
     n3 = size(list3, 1);
     M3 = zeros(n3, 1);
-    for k = 1 : n3
+    parfor k = 1 : n3  % parfor here and no loop inside seems to be fastest on latte (not on laptop; should try GPU code)
         
         shifts = list3(k, :);
         shift1 = shifts(1);
         shift2 = shifts(2);
-
         vals1 = [0, shift1, shift2];
+
+%         M3(k) = 0;
+%         for q = (1+max(vals1)) : (n+min(vals1))
+%             M3(k) = M3(k) + y(q)*y(q-shift1)*y(q-shift2);
+%         end
+        
         range1 = (1+max(vals1)) : (n+min(vals1));
         
         y1 = y(range1);
