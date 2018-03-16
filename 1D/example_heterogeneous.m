@@ -78,10 +78,11 @@ moments.list3 = list3;
 % Should be no less than L; typically set to W.
 L_optim = 2*L-1;
 
-X0 = randn(L_optim, K);
-gamma0 = m_actual*L_optim/n; % give true gamma for now
+% X0 = randn(L_optim, K);
+% gamma0 = m_actual*L_optim/n; % give true gamma for now
+sigma_est = 0; % irrelevant if remove_biased_terms = true and if the weights internally do not depend on sigma
 
-[X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma, X0, gamma0(:)); % check if the code fixes gamma to gamma0 or not
+[X_est, gamma_est] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma_est); %, X0, gamma0(:)); % check if the code fixes gamma to gamma0 or not
 
 % Now, should extract signals of length L out of the estimated signals of
 % length L_optim and reoptimize (ideally).
