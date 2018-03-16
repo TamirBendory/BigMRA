@@ -83,5 +83,6 @@ function [y, m_actual] = generate_clean_micrograph_1D_heterogeneous(X, W, n, m)
         y(locations(iter) + rangeL) = X(:, signal_placement(iter));
     end
     m_actual = hist(signal_placement, 1:K);
+    m_actual = reshape(m_actual, size(m));
 
 end

@@ -5,8 +5,8 @@ clc;
 %% Pick parameters and generate signals
 
 % Pick K signals of length L and the size W of the separation window
-K = 2;
-L = 12;
+K = 4;
+L = 30;
 W = 2*L-1;
 X = randn(L, K);  % randn instead of rand here -- to be discussed
 
