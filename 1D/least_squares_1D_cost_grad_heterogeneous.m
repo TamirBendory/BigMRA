@@ -31,8 +31,8 @@ function [f, G] = least_squares_1D_cost_grad_heterogeneous(Z, params, sample3)
     
     % TODO: change with the weights from https://arxiv.org/abs/1710.02590
     w1 = 1;
-    w2 = 1/L_optim;
-    w3 = 1/(L_optim^2);
+    w2 = 1/numel(list2);
+    w3 = 1/numel(list3);
     
     % First-order moment, forward model
     mean_X = sum(X, 1)'/L_optim;
