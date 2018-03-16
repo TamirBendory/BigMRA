@@ -5,13 +5,13 @@ clc;
 %% Pick parameters and generate signals
 
 % Pick K signals of length L and the size W of the separation window
-K = 4;
+K = 2;
 L = 30;
 W = 2*L-1;
 X = randn(L, K);  % randn instead of rand here -- to be discussed
 
 % Pick a noise level
-sigma = 0;
+sigma = .2;
 
 % Desired number of occurrences of each signal X(:, k)
 m_want = 1000*ones(K, 1);
@@ -26,7 +26,7 @@ n = sum(m_want)*W*20;
 list2 = (0 : (L-1))';
 % list2 = (1 : (L-1))';  % this one ignores biased terms
 
-% Sampling strategy: see notes NB carnet 33
+% Sampling strategy: see notes NB notebook 33
 list3 = zeros(0, 2);
 n3 = 0;
 for k1 = 0 : (L-1)
@@ -40,7 +40,7 @@ end
 
 % Optionally, remove all moments that are affected by bias, so that it is
 % no longer necessary to know sigma.
-remove_biased_terms = false;
+remove_biased_terms = true;
 if remove_biased_terms
     list2(list2 == 0) = [];
     list3(list3(:, 1) == 0 | list3(:, 2) == 0, :) = [];
@@ -76,7 +76,7 @@ moments.list3 = list3;
 
 % Here we can choose the length of sought signals in optimization.
 % Should be no less than L; typically set to W.
-L_optim = 2*L;
+L_optim = 2*L-1;
 
 X0 = randn(L_optim, K);
 gamma0 = m_actual*L_optim/n; % give true gamma for now
