@@ -1,0 +1,165 @@
+\begin{thebibliography}{10}
+
+\bibitem{aspire}
+\url{http://spr.math.princeton.edu}.
+
+\bibitem{abed1997blind}
+Karim Abed-Meraim, Wanzhi Qiu, and Yingbo Hua.
+\newblock Blind system identification.
+\newblock {\em Proceedings of the IEEE}, 85(8):1310--1322, 1997.
+
+\bibitem{aguerrebere2016fundamental}
+Cecilia Aguerrebere, Mauricio Delbracio, Alberto Bartesaghi, and Guillermo
+  Sapiro.
+\newblock Fundamental limits in multi-image alignment.
+\newblock {\em IEEE Transactions on Signal Processing}, 64(21):5707--5722,
+  2016.
+
+\bibitem{ahmed2014blind}
+Ali Ahmed, Benjamin Recht, and Justin Romberg.
+\newblock Blind deconvolution using convex programming.
+\newblock {\em IEEE Transactions on Information Theory}, 60(3):1711--1732,
+  2014.
+
+\bibitem{ayers1988iterative}
+GR~Ayers and J~Christopher Dainty.
+\newblock Iterative blind deconvolution method and its applications.
+\newblock {\em Optics letters}, 13(7):547--549, 1988.
+
+\bibitem{bandeira2017estimation}
+Afonso~S Bandeira, Ben Blum-Smith, Amelia Perry, Jonathan Weed, and Alexander~S
+  Wein.
+\newblock Estimation under group actions: recovering orbits from invariants.
+\newblock {\em arXiv preprint arXiv:1712.10163}, 2017.
+
+\bibitem{beinert2015ambiguities}
+Robert Beinert and Gerlind Plonka.
+\newblock Ambiguities in one-dimensional discrete phase retrieval from fourier
+  magnitudes.
+\newblock {\em Journal of Fourier Analysis and Applications}, 21(6):1169--1198,
+  2015.
+
+\bibitem{bendory2017robust}
+Tamir Bendory.
+\newblock Robust recovery of positive stream of pulses.
+\newblock {\em IEEE Transactions on Signal Processing}, 65(8):2114--2122, 2017.
+
+\bibitem{bendory2017fourier}
+Tamir Bendory, Robert Beinert, and Yonina~C Eldar.
+\newblock Fourier phase retrieval: Uniqueness and algorithms.
+\newblock In {\em Compressed Sensing and its Applications}, pages 55--91.
+  Springer, 2017.
+
+\bibitem{bendory2017bispectrum}
+Tamir Bendory, Nicolas Boumal, Chao Ma, Zhizhen Zhao, and Amit Singer.
+\newblock Bispectrum inversion with application to multireference alignment.
+\newblock {\em arXiv preprint arXiv:1705.00641}, 2017.
+
+\bibitem{bendory2016robust}
+Tamir Bendory, Shai Dekel, and Arie Feuer.
+\newblock Robust recovery of stream of pulses using convex optimization.
+\newblock {\em Journal of Mathematical Analysis and Applications},
+  442(2):511--536, 2016.
+
+\bibitem{bernstein2017deconvolution}
+Brett Bernstein and Carlos Fernandez-Granda.
+\newblock Deconvolution of point sources: A sampling theorem and robustness
+  guarantees.
+\newblock {\em arXiv preprint arXiv:1707.00808}, 2017.
+
+\bibitem{boumal2017heterogeneous}
+Nicolas Boumal, Tamir Bendory, Roy~R Lederman, and Amit Singer.
+\newblock Heterogeneous multireference alignment: a single pass approach.
+\newblock {\em arXiv preprint arXiv:1710.02590}, 2017.
+
+\bibitem{chi2016guaranteed}
+Yuejie Chi.
+\newblock Guaranteed blind sparse spikes deconvolution via lifting and convex
+  optimization.
+\newblock {\em IEEE Journal of Selected Topics in Signal Processing},
+  10(4):782--794, 2016.
+
+\bibitem{de2012exact}
+Yohann De~Castro and Fabrice Gamboa.
+\newblock Exact reconstruction using beurling minimal extrapolation.
+\newblock {\em Journal of Mathematical Analysis and applications},
+  395(1):336--354, 2012.
+
+\bibitem{duval2015exact}
+Vincent Duval and Gabriel Peyr{\'e}.
+\newblock Exact support recovery for sparse spikes deconvolution.
+\newblock {\em Foundations of Computational Mathematics}, 15(5):1315--1355,
+  2015.
+
+\bibitem{gogineni2017passive}
+Sandeep Gogineni, Pawan Setlur, Muralidhar Rangaswamy, and Raj~Rao Nadakuditi.
+\newblock Passive radar detection with noisy reference channel using principal
+  subspace similarity.
+\newblock {\em IEEE Transactions on Aerospace and Electronic Systems}, 2017.
+
+\bibitem{hayes1982reconstruction}
+MHMH Hayes.
+\newblock The reconstruction of a multidimensional sequence from the phase or
+  magnitude of its fourier transform.
+\newblock {\em IEEE Transactions on Acoustics, Speech, and Signal Processing},
+  30(2):140--154, 1982.
+
+\bibitem{hayes1982reducible}
+Monson~H Hayes and James~H McClellan.
+\newblock Reducible polynomials in more than one variable.
+\newblock {\em Proceedings of the IEEE}, 70(2):197--198, 1982.
+
+\bibitem{heimowitz2018apple}
+Ayelet Heimowitz, Amit Singer, et~al.
+\newblock Apple picker: Automatic particle picking, a low-effort cryo-em
+  framework.
+\newblock {\em arXiv preprint arXiv:1802.00469}, 2018.
+
+\bibitem{jefferies1993restoration}
+Stuart~M Jefferies and Julian~C Christou.
+\newblock Restoration of astronomical images by iterative blind deconvolution.
+\newblock {\em The Astrophysical Journal}, 415:862, 1993.
+
+\bibitem{lewicki1998review}
+Michael~S Lewicki.
+\newblock A review of methods for spike sorting: the detection and
+  classification of neural action potentials.
+\newblock {\em Network: Computation in Neural Systems}, 9(4):R53--R78, 1998.
+
+\bibitem{li2016rapid}
+Xiaodong Li, Shuyang Ling, Thomas Strohmer, and Ke~Wei.
+\newblock Rapid, robust, and reliable blind deconvolution via nonconvex
+  optimization.
+\newblock {\em arXiv preprint arXiv:1606.04933}, 2016.
+
+\bibitem{li2016identifiability}
+Yanjun Li, Kiryung Lee, and Yoram Bresler.
+\newblock Identifiability in blind deconvolution with subspace or sparsity
+  constraints.
+\newblock {\em IEEE Transactions on Information Theory}, 62(7):4266--4275,
+  2016.
+
+\bibitem{ling2015self}
+Shuyang Ling and Thomas Strohmer.
+\newblock Self-calibration and biconvex compressive sensing.
+\newblock {\em Inverse Problems}, 31(11):115002, 2015.
+
+\bibitem{ling2017blind}
+Shuyang Ling and Thomas Strohmer.
+\newblock Blind deconvolution meets blind demixing: Algorithms and performance
+  bounds.
+\newblock {\em IEEE Transactions on Information Theory}, 2017.
+
+\bibitem{ljung1998system}
+Lennart Ljung.
+\newblock System identification.
+\newblock In {\em Signal analysis and prediction}, pages 163--173. Springer,
+  1998.
+
+\bibitem{shalvi1990new}
+Ofir Shalvi and Ehud Weinstein.
+\newblock New criteria for blind deconvolution of nonminimum phase systems
+  (channels).
+\newblock {\em IEEE Transactions on information theory}, 36(2):312--321, 1990.
+
+\end{thebibliography}

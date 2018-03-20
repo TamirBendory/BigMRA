@@ -58,12 +58,12 @@
 \newcommand{\reals}{\mathbb{R}}
 \newcommand{\RL}{\mathbb{R}^L}
 \newcommand{\CL}{\mathbb{C}^L}
-\newcommand{\RN}{\mathbb{R}^L}
+\newcommand{\RN}{\mathbb{R}^N}
 \newcommand{\RNN}{\mathbb{R}^{N\times N}}
 \newcommand{\CNN}{\mathbb{C}^{N\times N}}
 \newcommand{\inner}[1]{\left\langle {#1} \right\rangle}
 \newcommand{\hx}{\hat{x}} 
-
+\newcommand{\one}{\mathbf{1}} 
 \newcommand{\SNR}{{\textsf{SNR}}} 
 
 \begin{document}
@@ -80,109 +80,122 @@
 
 \section{Introduction}
 
-In this paper, we consider the problem of estimating a set of signals $x_1,\ldots,x_K$ which appear multiple times in unknown, random, locations in a data sequence $y$. The data may also contain background information -- independent of the signals -- which is modeled as noise.
-For one-dimensional signals, the data can be thought of as a long time series and the signals as repetitive short events. For two-dimensional signals, the data is a big image that contains many smaller images.  
+In this paper, we consider the problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown, random, locations in a data sequence $y$. The data may also contain background information -- independent of the signals -- which is modeled as noise.
+For one-dimensional signals, the data can be thought of as a long time series and the signals as repetitive short events. For two-dimensional signals, $y$ presents a big image, containing many smaller images.  
 The problem is then to estimate the signals $x_1,\ldots x_K$ from $y$. This
 model appears, in different noise levels, in many applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
-In Section~\ref{sec:model} we provide a precise mathematical formulation of the problem.
+In Section~\ref{sec:model} we provide a precise mathematical formulation of the model and the estimation problem.
 
-If the noise level is negligible, estimating the signals is easy.
-One can detect the signal occurrences in the data sequence and then estimate the signals using clustering and averaging.
-Even in higher noise level regimes, clever methods based on template matching, such as those used in structural biology~\cite{heimowitz2018apple} and radar~\cite{gogineni2017passive}, may work.
-However, in the low signal--to--noise (\SNR) regime, detection of individual signal occurrences is impossible as clarified in Section~\ref{sec:model}. In Figure~\ref{fig:example} we demonstrate an instance of the problem in different noise levels. Figure~\ref{fig:data2D_clean} shows a excerpt of a big image that contains many repetitions of $21\times 21$ small image. The small image is a downsampled version of TKTK, which is shown in Figure~\ref{fig:signal2D_clean}. In Figures~\ref{fig:data2D_noisy_02} and~\ref{fig:data2D_noisy_1} the same excerpt is shown with the addition of i.i.d.\ Gaussian noise with standard deviations of $0.2$ and $1$, respectively.  
+If the noise level is negligible, estimating the signals is easy. 
+In this scenario, standard detection and clustering algorithms can produce multiple copies of each signal that can be then averaged. 
+Even in higher noise level regimes, clever methods based on template matching, such as those used in structural biology~\cite{heimowitz2018apple} and radar~\cite{gogineni2017passive}, may work. \TODO{Do we want to add another 1D example to demonstare the problem, similarly to Figure 1.1 in the bispectrum paper?}
+However, in the low signal--to--noise (\SNR) regime, detection of individual signal occurrences is impossible as explained in Section~\ref{sec:model}. Figure~\ref{fig:example} illustrates the problem in different noise levels and one underlying signal ($K=1$). 
+Figure~\ref{fig:signal2D_clean} shows a $21\times 21$ image, which is a downsampled version of a projection of TKTK, taken from \textsf{ASPIRE} package~\cite{aspire} \TODO{The image is taken from the example folder}. 
+Figure~\ref{fig:data2D_clean} shows a excerpt of a big image (the data image) that contains many repetitions of the projection. In Figures~\ref{fig:data2D_noisy_02} and~\ref{fig:data2D_noisy_1}, the same excerpt is shown with the addition of i.i.d.\ Gaussian noise with standard deviations of $\sigma=0.2$ and $\sigma=1$, respectively.  Figures~\ref{fig:signal2D_LS} and~\ref{fig:signal2D_LS_inter} show estimates of the projection from noisy data with $\sigma=1$. These examples demonstrate that our method can work even if the data may seem as a pure noise. In Section~\ref{sec:numerics} we provide the details of this experiment and show more corroborating experiments. 
 
-In this work we focus on the low $\SNR$ regime. To estimate the signal we use autocorrelation analysis of the data. 
-In a nutshell,
-the method consists of two stages. First, we estimate a mix of the low order autocorrelations of the signals from the data. These quantities can
-be estimated to any desired accuracy if the signals appear enough times in the measurements, without the need to detect individual occurrences. Then, the signals are estimated from the mixed autocorrelations.
-In Section~\ref{sec:autocorrelation}, we elaborate on our method  and show that if $K$ not too large, it is possible to estimate the signals, in any $\SNR$ level and to any desired accuracy.
-This holds if each signals appears enough times in the data and the signals are sufficiently spaced. 
-Interestingly, alternative methods which are often employed in similar estimation problems, such as expectation-maximization (EM) or Monte-Carlo Markov Chain (MCMC), seems to be intractable for this problem. In Figure~\ref{fig:signal2D_LS} we show an example for estimation of the signals where the data is contaminated with noise with standard deviation of $\sigma=1$ as presented in Figure~\ref{fig:data2D_noisy_1}. The normalized error between the signal and its estimation is TKTK. In Section~\ref{sec:numerics} we provide the details of this experiment and show additional experiments with $K>1$. 
+In this work we focus on the low $\SNR$ regime. In order to estimate the signal, we use autocorrelation analysis of the data. 
+In a nutshell, the method consists of two stages. First, we estimate a mix of the low--order autocorrelation functions of the signals from the data. These quantities can be estimated, to any desired accuracy, if the signals appear enough times in the measurement, without the need to detect individual occurrences. Then, the signals are estimated from the mixed autocorrelations using a non-convex least-squares.
+In Section~\ref{sec:autocorrelation}, we elaborate on the technique and prove some of its properties.
+Interestingly, expectation-maximization (EM) --  a popular framework for similar estimation problems, such as Gaussian mixture models and multireference alignment -- is intractable for this problem. Even if the number of signal occurrence $M$ is known and $K=1$, at each iteration 
+EM needs to assign probabilities to each possible combination of  $M$ copies of the current signal estimation in the measurement.
 
 
-\begin{figure}[ht!]
-    \advance\leftskip-4cm
-   \advance\rightskip-4cm
+
+\begin{figure}
+
+\advance\leftskip-2cm
+\advance\rightskip -2cm
 
 %	\centering
-
-	\begin{subfigure}{.5\textwidth}
-		\centering
-	\includegraphics[scale=0.5]{data2D_clean}
-\caption{Excerpt of clean data}
+\begin{subfigure}{.6\textwidth}
+	\centering
+	\includegraphics[scale=0.6]{data2D_clean}
+	\vspace*{-20pt}
+\caption{}
 \label{fig:data2D_clean}
 	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
+	\begin{subfigure}{.6\textwidth}
 	\centering
-\includegraphics[scale=0.5]{data2D_noisy_02}
-\caption{Excerpt of noisy data with $\sigma=0.2$}
-\label{fig:data2D_noisy_02}
-	\end{subfigure}
-	\begin{subfigure}{.5\textwidth}
-	\centering
-\includegraphics[scale=0.5]{data2D_noisy_1}
-\caption{Excerpt of noisy data with $\sigma=1$}
-\label{fig:data2D_noisy_1}
-\end{subfigure}
-
-	\begin{subfigure}{.5\textwidth}
-	\centering
-	\includegraphics[scale=0.5]{signal2D_clean}
-	\caption{Clean signal}
+	\includegraphics[scale=0.6]{signal2D_clean}
+	\vspace*{-20pt}
+	\caption{}
 	\label{fig:signal2D_clean}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+
+
+	\begin{subfigure}{.6\textwidth}
 	\centering
-	\includegraphics[scale=0.5]{signal2D_LS_all_images}
-	\caption{710K micrographs, $M=561Mega$, error  = $0.05062$}
+	\includegraphics[scale=0.6]{data2D_noisy_02}
+	\vspace*{-20pt}
+	\caption{}
+	\label{fig:data2D_noisy_02}
+\end{subfigure}
+\begin{subfigure}{.6\textwidth}
+	\centering
+	\includegraphics[scale=0.6]{signal2D_LS_all_images}
+	\vspace*{-20pt}
+	\caption{}
 	\label{fig:signal2D_LS}
 \end{subfigure}
-\begin{subfigure}{.5\textwidth}
+
+
+\begin{subfigure}{.6\textwidth}
+\centering
+\includegraphics[scale=0.6]{data2D_noisy_1}
+\vspace*{-20pt}
+\caption{}
+\label{fig:data2D_noisy_1}
+\end{subfigure}
+\begin{subfigure}{.6\textwidth}
 	\centering
-	\includegraphics[scale=0.5]{signal2D_LS_exp1}
-	\caption{Recovery with 140K micrographs and $M = 110Mega$, error = ? }
-	\label{fig:signal2D_RRR}
+	\includegraphics[scale=0.6]{signal2D_LS_intermediate}
+%	\vspace*{-20pt}
+	\caption{}
+	\label{fig:signal2D_LS_inter}
 \end{subfigure}
 
-\caption{Example}
+\caption{Figure (a) shows an excerpt of 2D data with multiple signal occurrences and no noise. Each small image is the $21\times 21$ image shown in Figure (b). Figures (c) and (e) show the same data, now contaminated with i.i.d.\ Gaussian noise with $\sigma=0.2$ and $\sigma=1$, respectively. Figures (d) and (f) show estimates of the image (b) from data with noise level $\sigma=1$ (as in Figure (e)). The signal appeared $M = 561\times 10^6$ and $M = 110\times 10^6$ times and the normalized recovery error is  $0.078$ and $0.135$, respectively.}
+%	we used $71\times10^4$
+% (d) 710K micrographs, $M=561Mega$, error  =  (e)The same data as in Figure~\ref{fig:signal2D_clean} contaminated with i.i.d./ Gaussian noise with $\sigma=0.2$ (f) Recovery with 140K micrographs and $M = 110Mega$, error = 0.135}
 \label{fig:example}
 \end{figure}
 
 
 
-This work is primely motivated by  innovative technologies for single particle reconstruction, such as cryo-electron microscopy (cryo--EM) and X-ray Free--Electron Laser (XFEL). The acquired data in these modalities is contaminated with high noise levels. Therefore, any molecule reconstruction algorithm must take  the challenging $\SNR$ level into account.  In the last part of this manuscript, we will revisit the cryo--EM problem and draw connections with the estimation problem under consideration.
+This work is primely motivated by cryo-electron microscopy (cryo--EM), which is an innovative  single particle reconstruction technology. The acquired data in a cryo-EM experiment is contaminated with high noise levels. Therefore, any molecule reconstruction algorithm must take  the challenging $\SNR$ level into account.  In the last part of this manuscript, we draw connections with the estimation problem under consideration and the cryo--EM problem.
 
 
 \section{Model}  \label{sec:model}
 
-Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the data. For each $x_i$, we associate a binary signal  $s_i\in\{0,1\}^N$, referred to as the \emph{support signal} and let $s = \sum_{i=1}^Ks_i$. The non-zero values of $s_i$ indicates the locations of $x_i$ in $y$. If $s_i[n]=1$, then $y[n+j] = x_i[n+j]+\varepsilon[n+j]$ for $j=0,\ldots,L-1$.
-We denote the cardinality of $s_i$ by $M_i$  and $M = \sum_{i=1}^{K}M_i$. We do not assume the knowledge of $M_i$'s, neither of $M$.
+Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the data. For each $x_i$, we associate a binary signal  $s_i\in\{0,1\}^N$, referred to as the \emph{support signal} and let $s = \sum_{i=1}^Ks_i$. The nonzero values of $s_i$ indicates the locations of $x_i$ in $y$. If $s_i[n]=1$, then $y[n+j] = x_i[n+j]+\varepsilon[n+j]$ for $j=0,\ldots,L-1$.
+We denote the cardinality of $s_i$ by $M_i$  and $M = \sum_{i=1}^{K}M_i$. Neither the $M_i$'s nor $M$ is assumed to be known.
 
 
 The support signals are generated by the following generative model. The signal $s$ is initialized with zeros.
 First, an index $i_1$ is drawn uniformly from $\{1,\ldots,N\}$ and we set $s[i_1]=1$. A second index $i_2$ is then drawn uniformly from $\{1,\ldots,N\}$. If $\vert i_2-i_1\vert \geq L$,
-then we set $s[i_2]=1$, otherwise we keep $s[i_2]=0$ and draw a new index  from uniform distribution. We then proceed adding  non-zero entries to $s$,  while keeping the separation condition until some halting criterion is obtained. Ultimately, each  non-zero value of $s$ is associated with one of the $s_i$'s uniformly over  $\{1,\ldots,K\}$. We note that if the support is sparse enough, this generative model can be approximated by a simple Bernoulli process which takes the values of one and zero with probabilities  $M/N$ and $1-M/N$, respectively.
+then we set $s[i_2]=1$, otherwise we keep $s[i_2]=0$ and draw a new index  from uniform distribution. We then proceed adding  nonzero entries to $s$,  while keeping $L$  entries separation until some halting criterion is obtained. 
+We note that if the support is sparse enough, this generative model can be approximated by a simple Bernoulli process which takes the values of one and zero with probabilities  $M/N$ and $1-M/N$, respectively.
+Once $s$ is determined, each one of its nonzero entries is associated with one of the $s_i$'s. 
+In particular, for each $s[k]\neq 0$ we set $s_i[k] = 1$ and $s_j[k] = 0$ for $i\neq j$, where $i$ is drawn form an unknown probability over  $\{1,\ldots,K\}$. 
 
-The simplest way to present the forward model is a mix of blind deconvolution problems between the support signals and the unknown signals
+The simplest way to present the forward model is a mix of blind deconvolution problems between the support signals and the target signals
 \begin{equation}
 y = \sum_{i=1}^K x_i\ast s_i + \varepsilon,\quad \varepsilon\sim\mathcal{N}(0,\sigma^2 I).
 \end{equation}
 We model the background information as i.i.d.\ Gaussian noise with zero mean and $\sigma^2$ variance. 
 The goal is to estimate $x_1,\ldots,x_K$ from $y$.
 
-Blind deconvolution is a longstanding problem, arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. Clearly, without additional information on the signal, blind deconvolution is ill-posed. In our case, the prior information is that $s$ is a binary, sparse, signal. 
+Blind deconvolution is a longstanding problem, arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. Clearly, the problem is ill-posed without additional information. In our case, the prior information is that $s$ is a binary, sparse, signal. 
 Other settings of blind deconvolution problems have been analyzed recently under different settings, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi2016guaranteed}
 where the focus is on high $\SNR$ regimes.
 
 
-
-In our setup, the support signals $s_1,\ldots,s_K$ are the \emph{latent} variables of the problem. Indeed, in many blind deconvolution applications the goal is merely to estimate one of the unknown signals. For instance, in image deblurring, both the blurring
+An important feature of the problem under consideration is that while both $x_i$'s and $s_i$'s are unknown, the goal is merely to estimate the $x_i$'s. The  $s_i$'s  are referred to as \emph{nuisance  variables}. Indeed, in many blind deconvolution applications the goal is merely to estimate one of the unknown signals. For instance, in image deblurring, both the blurring
 kernel and the high-resolution image are unknown, but the prime goal is only
 to sharpen the image.
-If $x$ is known and $K=1$, then  $s$ can be estimated by linear programming  in the high $\SNR$ regime~\cite{de2012exact,duval2015exact,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating $s$ is impossible. To see that, suppose that an oracle provides us $M$ windows of length $W>L$, each contain one occurrence of $x$. Put it differently, we get a series of windows, each one contains a signal at unknown location.
-Estimating the first entry of the signals within each  window is an essentially easier problem the detecting the support of $s$ since the windows are given to us by the oracle. Apparently, this problem, called alignment or synchronization, is impossible in the low $\SNR$ regime.
-For instance, the variance of any estimator is, at best, proportional to $\sigma^2$ and independent of the number of windows, even if $x$ is known~\cite{aguerrebere2016fundamental}. Therefore, we conclude that that detecting the non-zero values of $s$ is impossible in low \SNR. 
-
+If $x$ is known and $K=1$, then  $s$ can be estimated by linear programming  in the high $\SNR$ regime~\cite{de2012exact,duval2015exact,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating $s$ is impossible. To see that, suppose that an oracle provides us $M$ windows of length $W>L$, each contains one copy of $x$. Put it differently, we get a series of windows, each one contains a signal at unknown location. 
+Estimating the first entry of the signal within each  window is an easier problem than detecting the support of $s$. However, even this problem -- called alignment or synchronization -- is impossible in the low $\SNR$ regime.
+For instance, the variance of any estimator is, at best, proportional to $\sigma^2$ and independent of the number of windows, even if $x$ is known~\cite{aguerrebere2016fundamental}. Therefore, we conclude that that detecting the nonzero values of $s$ is impossible in low \SNR. 
 In the next section we show that if $M$ is large enough, then estimating the signals is possible, in any $\SNR$ level and to any accuracy, although we cannot detect their occurrences in $y$. 
 
 
@@ -216,7 +229,7 @@ A one-dimensional signal is determined uniquely by its third-order auto-correlat
 \end{proposition}
 We note that the length of the signal can be easily derived from the second-order autocorrelation of the signal. Therefore, the assumption that $z[0]$ and $z[L-1]$ is met in practice. We also note that for one-dimensional signals, the second-order autocorrelation does not determined the signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}. This is not the case for dimensions greater than one, in which almost all signals are determined uniquely from their aperiodic autocorrelations, up to sign (phase in the complex case) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible,bendory2017fourier}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However,  in order to determine the reflection symmetry ($Z_2$ symmetry), one needs to use the third moment.
 
-The heterogeneous case $K>1$ was explored for periodic autocorrelation functions. The aperiodic autocorrelations are the periodic autocorrelations of signals padded by zeros. Therefore, the following results hold for our setup as well  \TODO{we should be prudent here to make sure that this set does not ``fall'' in the zero measure}. In~\cite{bandeira2017estimation}, it was shown that a mix of $K$ third-order autocorrelations determine  a finite list of $K$ generic signals when 
+The heterogeneous case $K>1$ was explored for periodic autocorrelation functions. The aperiodic autocorrelations are the periodic autocorrelations of signals padded by zeros. Therefore, the following results hold for our setup as well  \TODO{This part is wrong -- Email correspondence with Alex}. In~\cite{bandeira2017estimation}, it was shown that a mix of $K$ third-order autocorrelations determine  a finite list of $K$ generic signals when 
 \begin{itemize}
 	\item $K=2$ when $L>1$,
 	\item $K=3$ when $L>12$,
@@ -246,7 +259,7 @@ These relations are proved in Appendix~\ref{sec:autocorrelation_computation}. Th
 
 
 If the noise level $\sigma^2$ is known, then for $K=1$, one can estimate $M$ from only the first two moments, namely, with estimation rate of $\sigma^4/N$.
-\begin{proposition}
+\begin{proposition} \label{prop:gamma}
 	Let $K=1$. Then, 
 	\begin{equation*}
 	\frac{M}{N} = \frac{(a^1_y)^2}{\sum_{j=0}^{L-1}a_y^2[j]-\sigma^2}.
@@ -256,6 +269,13 @@ The relation is proved by plugging the definitions of the signal autocorrelation
 \end{proof}
 \end{proposition}
 
+
+\begin{proposition} \label{prop:gamma_sigma}
+	It is possible to estimate $M$ and $\sigma$ from the third moment.
+	\begin{proof}
+		See Appendix~\ref{sec:proof_prop_gamma_sigma}.
+	\end{proof}
+\end{proposition}
 If we assume that $s$ is sparse, then by ignoring the separation condition, one can describe the generative process of $s$ as a Bernoulli process with parameter $M/N$. Therefore, in low \SNR  one can estimate the parameter that control this statistical process, although cannot estimate individual entries.
 
 Estimating $\sigma$ and $M$? 
@@ -263,7 +283,12 @@ Estimating $\sigma$ and $M$?
 
 \section{Numerical experiments}   \label{sec:numerics}
 
+\subsection{One-dimensional experiments}
 
+
+\subsection{Two-dimensional experiments}
+
+Solving RRR, and then 200 LS iteration on window of size $W$ and 500 iterations on window of size $L$.
 
 \section{Conclusion} 
 Here we conclude the paper: cryo -- EM, structured background, without separation, heterogeneity
@@ -278,6 +303,7 @@ of a molecule (the signal), taken from unknown viewing direction, and drawn in
 high noise level. The reconstitution problem is then to estimate the molecule
 from this data.
 
+A word on the sample complexity
 
 \bibliographystyle{plain}
 \bibliography{ref}
@@ -338,6 +364,85 @@ For each fixed $i$, we sum of over $N/\ell_1$ independent variables that goes to
 
 To complete the analysis, we consider the three terms composed of the product of two noise terms and one signal entry. Most of these terms converges to zero almost surely because of interdependency between the noise entries. For $\ell_1=0, \ell_2=0$ and $\ell_1=\ell_2$,  a simple computation shows that the sum converges to $\gamma\sigma^2a_x^1$.
 
+
+
+\section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
+
+We aim to prove that one can estimate both $\sigma$ and $M$ from the observed third moment. We will construct two independent quadratic equations of $M$ which do not depend on $\sigma$. This will let us estimate $M$. Given $M$, we will estimate $\sigma$.
+
+To ease notation, let $\beta=M/N$. Recall that $a_y^1 = \beta(\one^Tx)$ and  
+ and $a_y^2[0] = \beta(\|x\|^2+\sigma^2)$, where $\one\in\RL$ stands for vector of ones. Taking the product:
+\begin{equation}\label{eq:E1}
+\begin{split}
+E_1 &:= (\beta(\one^Tx))(\beta(\|x\|^2+\sigma^2)) \\
+& = \sigma^2a_y^1 + \beta^2\tau,
+ \end{split}
+\end{equation}
+where $\tau := L\left(\sum_{j=1}^{L-1}(a_x^3[j,0]+a_x^3[0,j] )+\sum_{j=0}^{L-1}a_x^3[0,0]\right)$. Next, we can estimate from $a_y^3$
+\begin{equation} \label{eq:E2}
+E_2:= \beta \tau + 3L\sigma^2a_y^1.
+\end{equation}
+Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get
+\begin{equation}
+E_2\beta -3L\sigma^2a_y^1 = E_1-\sigma^2a_y^1.
+\end{equation}
+Now, recalling from Proposition~\ref{prop:gamma}
+\begin{equation} \label{eq:sigma2}
+\sigma^2 = a_y^2 - (a^1_y)^2/\beta, 
+\end{equation} 
+where we use $a_y^2:=\sum_{j=0}^{L-1}a_y^2[j]$.
+Rearranging the equations, we then get the quadratic equation
+\begin{equation} \label{eq:quad1}
+\mathcal{A}\beta^2 + \mathcal{B}\beta + \mathcal{C} = 0,
+\end{equation}
+where 
+\begin{align*}
+\mathcal{A} &= E_2, \\ 
+\mathcal{B} &= -(E_1 + (3L-1)a_y^1a_y^2), \\
+\mathcal{C} &= (3L-1)(a_y^1)^3.
+\end{align*}
+
+We are now proceeding to derive the second quadratic equation. We notice that \begin{equation} \label{eq:E3}
+E_3  = (a_y^1)^3 = \beta^3 \upsilon,
+\end{equation}
+where \TODO{to check} $$\upsilon = a_x^3[0,0] + 3\sum_{i=1}^{L-1}a_x^3[i,i] + 3\sum_{i=1}^{L-1}(a_x^3[i,0]+a_x^3[0,i]) + 6\sum_{1\leq i \leq j\leq L-1}a_x^3[i,j].$$
+On the other hand, from $a_y^3$ we can directly estimate
+\begin{equation} \label{eq:E4}
+E_4 = \beta\upsilon + 9L\sigma^2a_x^1.
+\end{equation}
+Now, by multiplying both sides by $\beta^2$ and using~\eqref{eq:E3}, we get 
+\begin{equation} \label{eq:E4}
+\beta^2E_4 =  E_3  + 9L\sigma^2a_x^1.
+\end{equation}
+Plugging~\eqref{eq:sigma2} and rearranging the equation, we get a second quadratic equation independent of $\sigma$:
+\begin{equation} \label{eq:quad2}
+\mathcal{D}\beta^2 + \mathcal{E}\beta + \mathcal{F} = 0,
+\end{equation}
+where
+\begin{align*}
+\mathcal{D} &= E_4 - 9La_x^1a_y^2, \\ 
+\mathcal{E} &= 9La_x^1(a_y^1)^2, \\
+\mathcal{F} &= -(a_y^1)^3.
+\end{align*}
+
+To complete the proof, we need to show that the two quadratic equations~\eqref{eq:quad1} and~\eqref{eq:quad2} are independent. To this end, it is enough to show that the ratio between the coefficients is not the same. 
+using~\eqref{eq:E1}, we have 
+\begin{equation*}
+\frac{\mathcal{B}}{\mathcal{C}} = \frac{-(E_1 + (3L-1)a_y^1a_y^2)}{(3L-1)(a_y^1)^3} = -\frac{a_y^2[0]}{(3L-1)(a_y^1)^2} - \frac{a_y^2}{(a_y^1)^2}.
+\end{equation*}
+In addition, 
+\begin{equation*}
+\frac{\mathcal{E}}{\mathcal{F}} = -\frac{9La_x^1}{a_y^1}. 
+\end{equation*}
+Now, suppose that the quadratics are dependent. Then, $\frac{\mathcal{B}}{\mathcal{C}} =\frac{\mathcal{E}}{\mathcal{F}} $, or, 	
+\begin{equation*}
+\frac{a_y^2[0]}{(3L-1)(a_y^1)^2} + \frac{a_y^2}{(a_y^1)^2} = \frac{9La_x^1}{a_y^1}. 
+\end{equation*}
+Rearranging the equation, we get 
+\begin{equation*}
+ a_y^2[0] + (3L-1)(a_y^1)^2 - 9La_x^1a_y^1=0.
+\end{equation*}	
+For generic $x$,  this polynomial equation is not satisfied. Therefore,  the equations are independent. 
 
 \end{document}
 
