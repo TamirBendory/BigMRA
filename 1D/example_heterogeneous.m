@@ -5,16 +5,19 @@ clc;
 %% Pick parameters and generate signals
 
 % Pick K signals of length L and the size W of the separation window
-K = 2;
-L = 30;
+K = 3;
+L = 21;
 W = 2*L-1;
 X = randn(L, K);  % randn instead of rand here -- to be discussed
+X(:, 1) = [ones(ceil(L/2), 1) ; -ones(floor(L/2), 1)];
+X(:, 2) = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
+X(:, 3) = randn(L, 1);
 
 % Pick a noise level
-sigma = 2;
+sigma = 3;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = [1e5 3e4];
+m_want = [3e6 2e6 1e6];
 
 % Length of micrograph
 n = sum(m_want)*W*10;
@@ -59,7 +62,9 @@ fprintf('\n');
 
 %% Collect the moments
 tic;
-[M1, M2, M3] = moments_from_data_no_debias_1D(y_obs, list2, list3);
+% [M1, M2, M3] = moments_from_data_no_debias_1D(y_obs, list2, list3);
+batch_size = 1e8;
+[M1, M2, M3] = moments_from_data_no_debias_1D_batch(y_obs, list2, list3, batch_size);
 fprintf('   Moment computation: %.4g [s]\n', toc());
 
 moments.M1 = M1 / n;  %%%% !!!!! We normalize by n here; ideally, we should normalize by n in moments_from_data_no_debias_1D, but I'll only do the change when everything is under control
@@ -80,9 +85,6 @@ L_optim = 2*L-1;
 sigma_est = 0; % irrelevant if remove_biased_terms = true and if the weights internally do not depend on sigma
 
 [X_est, gamma_est] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma_est); %, X0, gamma0(:)); % check if the code fixes gamma to gamma0 or not
-
-% Now, should extract signals of length L out of the estimated signals of
-% length L_optim and reoptimize (ideally).
 
 
 %% Display
@@ -117,7 +119,7 @@ for k1 = 1 : K
     end
 end
 
-savefig(gcf, sprintf('example_heterogeneous_%s.fig', datestr(now(), 30)));
+savefig(gcf, sprintf('example_heterogeneous_%s_n_%d.fig', datestr(now(), 30), n));
 
 %% Try to extract dominant subsignal of length L in each estimated signal
 
@@ -155,7 +157,7 @@ for k1 = 1 : K
     end
 end
 
-savefig(gcf, sprintf('example_heterogeneous_short_%s.fig', datestr(now(), 30)));
+savefig(gcf, sprintf('example_heterogeneous_short_%s_n_%d.fig', datestr(now(), 30), n));
 
 %% Reoptimize from the shortened estimator
 
@@ -194,7 +196,7 @@ for k1 = 1 : K
     end
 end
 
-savefig(gcf, sprintf('example_heterogeneous_reoptimized_%s.fig', datestr(now(), 30)));
+savefig(gcf, sprintf('example_heterogeneous_reoptimized_%s_n_%d.fig', datestr(now(), 30), n));
 
 
 %%
