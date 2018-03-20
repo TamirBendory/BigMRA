@@ -10,8 +10,8 @@ n3 = size(list3, 1);
 gpu_flag = (gpuDeviceCount>0);
 
 if gpu_flag > 0
-    M2 = zeros(n2, 1,'gpuArray');
-    M3 = zeros(n3, 1,'gpuArray');
+    M2 = zeros(n2, 1, 'gpuArray');
+    M3 = zeros(n3, 1, 'gpuArray');
 else
     M2 = zeros(n2, 1);
     M3 = zeros(n3, 1);
