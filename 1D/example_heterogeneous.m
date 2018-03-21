@@ -150,7 +150,7 @@ for k1 = 1 : K
         x2 = X_est_L(:, k1);
 %         x2 = align_to_reference_1D(x2, x1);
         
-        plot(1:L, x1, 1:L, x2);
+        plot(0:(L-1), x1, 0:(L-1), x2);
         
         if k1 == 1
             title(sprintf('True signal %d\n(blue)', k2));
