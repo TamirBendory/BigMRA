@@ -17,11 +17,12 @@ X(:, 3) = randn(L, 1);
 sigma = 3;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = [3e7 2e7 1e7];
+m_want = [3e6 2e6 1e6];
 
 % Length of micrograph
 n = sum(m_want)*W*10;
 
+fprintf('Micrograph length: %g\n\n\n', n);
 
 %% Pick which correlation coefficients to sample
 
@@ -111,7 +112,7 @@ for k1 = 1 : K
         x2 = X_est(:, k1);
         x2 = align_to_reference_1D(x2, x1);
         
-        plot(1:L_optim, x1, 1:L_optim, x2);
+        plot(0:(L_optim-1), x1, 0:(L_optim-1), x2);
         
         if k1 == 1
             title(sprintf('True signal %d\n(blue)', k2));
@@ -188,7 +189,7 @@ for k1 = 1 : K
         x2 = X_est(:, k1);
 %         x2 = align_to_reference_1D(x2, x1);
         
-        plot(1:L, x1, 1:L, x2);
+        plot(0:(L-1), x1, 0:(L-1), x2);
         
         if k1 == 1
             title(sprintf('True signal %d\n(blue)', k2));
