@@ -94,10 +94,10 @@ Figure~\ref{fig:signal2D_clean} shows a $21\times 21$ image, which is a downsamp
 Figure~\ref{fig:data2D_clean} shows a excerpt of a big image (the data image) that contains many repetitions of the projection. In Figures~\ref{fig:data2D_noisy_02} and~\ref{fig:data2D_noisy_1}, the same excerpt is shown with the addition of i.i.d.\ Gaussian noise with standard deviations of $\sigma=0.2$ and $\sigma=1$, respectively.  Figures~\ref{fig:signal2D_LS} and~\ref{fig:signal2D_LS_inter} show estimates of the projection from noisy data with $\sigma=1$. These examples demonstrate that our method can work even if the data may seem as a pure noise. In Section~\ref{sec:numerics} we provide the details of this experiment and show more corroborating experiments. 
 
 In this work we focus on the low $\SNR$ regime. In order to estimate the signal, we use autocorrelation analysis of the data. 
-In a nutshell, the method consists of two stages. First, we estimate a mix of the low--order autocorrelation functions of the signals from the data. These quantities can be estimated, to any desired accuracy, if the signals appear enough times in the measurement, without the need to detect individual occurrences. Then, the signals are estimated from the mixed autocorrelations using a non-convex least-squares.
+In a nutshell, the method consists of two stages. First, we estimate a mix of the low--order autocorrelation functions of the signals from the data. These quantities can be estimated, to any desired accuracy, if the signals appear enough times in the measurement, without the need to detect individual occurrences. Then, the signals are estimated from the mixed autocorrelations using a non-convex least-squares (LS).
 In Section~\ref{sec:autocorrelation}, we elaborate on the technique and prove some of its properties.
-Interestingly, expectation-maximization (EM) --  a popular framework for similar estimation problems, such as Gaussian mixture models and multireference alignment -- is intractable for this problem. Even if the number of signal occurrence $M$ is known and $K=1$, at each iteration 
-EM needs to assign probabilities to each possible combination of  $M$ copies of the current signal estimation in the measurement.
+Interestingly, expectation-maximization (EM) --  a popular framework for similar estimation problems, such as Gaussian mixture models and multireference alignment -- is intractable for this problem. Even if the number of signal occurrences $M$ is known and $K=1$, at each iteration 
+EM needs to assign probabilities to each possible combination of  $M$ copies of the current signal estimation in the measurement, which is of order of $O(N^M)$.
 
 
 
@@ -202,108 +202,146 @@ In the next section we show that if $M$ is large enough, then estimating the sig
 
 \section{Autocorrelation analysis}   \label{sec:autocorrelation}
 
-Our method for estimating the signals relies on two pillars. 
-First, we use the autocorrelation functions of the data to estimate a mix (i.e., linear combination) of the $K$ signals autocorrelations. The mixed autocorrelation can be estimated to any accuracy, in any $\SNR$ level, if $M$ is large enough and the separation condition on the support is held. Then, we use least-squares (LS) estimator to estimate the signals from their mixed autocorrelation. From pedagogical reasons, we start with the second stage of recovering signals from their autocorrelations. In this section we mainly discuss the uniqueness of the mapping from the autocorrelation to the signals. Concrete algorithms will be discussed in the next section.
+Our method for estimating the signals is a two-stages procedure. 
+First, we use the autocorrelation functions of the data to estimate a mix (i.e., linear combination) of the $K$ signal's autocorrelations. The mixed autocorrelation can be estimated to any accuracy, in any $\SNR$ level, if $M$ is large enough and the separation condition on the support is met. Then, we  use a nonconvex LS  to estimate the signals from their mixed autocorrelation. 
+The precise recovery procedure we are using, based on nonconvex optimization, will be elaborated in the next section.
 
-For the purpose of this paper, we need the first three (aperiodic) autocorrelation functions of a signal $z\in\mathbb{R}^W$, defined as
+
+\subsection{Aperiodic autocorrelation functions} \label{sec:aperiodic_ac}
+
+For the purpose of this paper, we need the first three (aperiodic) autocorrelation functions. The first-order autocorelation is the mean of the signals. For  
+$z\in\RL$ and $k\geq 2$, the higher order autocorrelations are defined by
+\begin{equation*}
+a_z^k[\ell_1,\ldots,\ell_{k-1}] =  \sum_{i=0}^{L-1-\max\{\ell_1,\ldots,\ell_{k-1}\}} z[i]z[i+\ell_1]\ldots z[i+\ell_{k-1}].
+\end{equation*}
+Explicitly, the first three autocorrelations are
 \begin{align} \label{eq:autocorrelations}
-a_z^1 &= \sum_{i=0}^{W-1} z[i], \nonumber\\
-a_z^2[\ell] &= \sum_{i=0}^{W-1-\ell} z[i]z[i+\ell], \nonumber\\
-a_z^3[\ell_1,\ell_2] &= \sum_{i=0}^{W-1-\max\{\ell_1,\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. 
+a_z^1 &= \sum_{i=0}^{L-1} z[i], \nonumber\\
+a_z^2[\ell] &= \sum_{i=0}^{L-1-\ell} z[i]z[i+\ell], \nonumber\\
+a_z^3[\ell_1,\ell_2] &= \sum_{i=0}^{L-1-\max\{\ell_1,\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. 
 \end{align}
 Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and $a_z^3[\ell_1,\ell_2] = a_z^3[-\ell_1,-\ell_2]$. 
+Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), the they are equivalent to the autocorrelation functions.
 
 A one-dimensional signal is determined uniquely by its third-order auto-correlation:
-\begin{proposition}
-	Suppose that $z[0]$ and $z[L-1]$ are non-zeros. Then, a signal $z\in\mathbb{R}^W$ is determined uniquely from  $a_z^2$ and $a_z^3$.
+\begin{proposition} \label{prop:uniqueness}
+	Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzeros. Then, $z$  is determined uniquely from  $a_z^2$ and $a_z^3$.
 	\begin{proof}
 		From the second-order autocorrelation, we ge
 		\begin{equation*}
 		a_z^2[L-1] = z[0]z[L-1]\neq 0.
 		\end{equation*}
-		Then, from the third-order autocorrelation we can compute $z[k]$ for all $k=0,\ldots L-1$ by
+		Then, for all $k=0,\ldots L-1$,  we can compute $z[k]$  from the third-order autocorrelation
 		\begin{eqnarray}
 		a_z^3[k,L-1] = z[0]z[k]z[L-1].
 		\end{eqnarray}
 	\end{proof}
 \end{proposition}
-We note that the length of the signal can be easily derived from the second-order autocorrelation of the signal. Therefore, the assumption that $z[0]$ and $z[L-1]$ is met in practice. We also note that for one-dimensional signals, the second-order autocorrelation does not determined the signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}. This is not the case for dimensions greater than one, in which almost all signals are determined uniquely from their aperiodic autocorrelations, up to sign (phase in the complex case) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible,bendory2017fourier}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However,  in order to determine the reflection symmetry ($Z_2$ symmetry), one needs to use the third moment.
+\noindent This result can be extended to any dimension.
+We note that the length of the signal can be easily derived from the length of the second-order autocorrelation of the signal. Therefore, the assumption that $z[0]$ and $z[L-1]$ are nonvanishing is met in practice. We also note that for one-dimensional signals, the second-order autocorrelation does not determined the signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}. For dimensions greater than one, almost all signals are determined uniquely from their aperiodic autocorrelations, up to sign (phase in the complex case) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However,  in order to determine the reflection symmetry, one needs to use additional information, such as higher-order statistics.
 
-The heterogeneous case $K>1$ was explored for periodic autocorrelation functions. The aperiodic autocorrelations are the periodic autocorrelations of signals padded by zeros. Therefore, the following results hold for our setup as well  \TODO{This part is wrong -- Email correspondence with Alex}. In~\cite{bandeira2017estimation}, it was shown that a mix of $K$ third-order autocorrelations determine  a finite list of $K$ generic signals when 
-\begin{itemize}
-	\item $K=2$ when $L>1$,
-	\item $K=3$ when $L>12$,
-	\item $K=4$ when $L>18$,
-	\item $5\leq K\leq 15$ when $L\geq 6K-5$.	
-\end{itemize}
-The authors conjecture that for $K>15$, $L\geq 6K-5$ is enough. Recently, Joe told use that he has proven that there is unique mapping in the same regime.  
-This also holds for arbitrary weights $\gamma_i$ which are rational fractions.
+High-order autocorrelations have been used for a variety of tasks in signals processing, bla bla. In particular, \TODO{Here we should refer to Gianakis's paper}
 
-\TODO{Where we should refer to Gianakis's paper?}
 
-We are moving forward to discuss the second question of how to estimate the autocorrelation of the signals from the data. 
-The analysis is conducted in the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty$. We define the ratios 
+
+The uniqueness for $K>1$ was explored  for the related case of  periodic autocorrelation functions. Recall that the $k$th periodic autocorrelation of $z\in\mathbb{R}^L$ is given by
+\begin{equation*}
+b_z^k[\ell_1,\ldots,\ell_{k-1}] =  \sum_{i=0}^{W-1} z[i]z[(i+\ell_1)\mod L]\ldots z[(i+\ell_{k-1})\mod L].
+\end{equation*}
+If $z[n]=0$ for $n=L/2,\ldots L-1$, then  $b_z^k[\ell_1,\ldots,\ell_{k-1}] = a_z^k[\ell_1,\ldots,\ell_{k-1}]$. 
+In~\cite{bandeira2017estimation}, it was shown that a mix of $K$ third-order periodic autocorrelations determine  a finite list of $K$ generic signals if $L/6\gtrsim K$. Empirical evidences hints that this finite list includes only group symmetries~\cite{boumal2017heterogeneous}.
+
+\subsection{Estimating autocorrelations from the data} \label{sec:estimating_ac}
+
+In order to estimate the mixed autocorrelation of the $K$ signals, we first compute the first $L$ entries of the data's autocorrelations. For the purpose of the analysis, we consider  the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty$. We define the ratio of the measurement occupied by each one of the signal by
 \begin{equation}
 \gamma_i = \frac{M_i L}{N},
 \end{equation}
-and $\gamma = \sum_{i=1}^K\gamma_i$.
-Under the separation condition, we have $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
-The main insight is that if $s$ satisfies the separation condition, then the first $L$ entries of the data autocorrelations converge to a $\gamma$ scaled version of a mix of the signals autocorrelations:
-\begin{align}
-\lim_{N\to\infty} a_y^1 &= \sum_{i=1}^K\gamma_i a_{x_i}^1, \\
+and $\gamma = \sum_{i=1}^K\gamma_i$. 
+Under the spacing constraint, we have $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
+
+The main pillar of this work is the following simple observation.
+If the support $s$ satisfies the spacing constraint of $L$ entries, then the first $L$ entries of the data autocorrelations converge to a mix of scaled versions of the signals autocorrelations:
+\begin{align} \label{eq:data_ac}
+\lim_{N\to\infty} a_y^1 &= \sum_{i=1}^K\gamma_i a_{x_i}^1, \nonumber\\
 \lim_{N\to\infty} a_y^2[\ell] &= \sum_{i=1}^K\gamma_i a_{x_i}^2[\ell] +\sigma^2\delta[\ell],\\
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &= \sum_{i=1}^K\gamma_i a_{x_i}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{i=1}^K\gamma_i a_{x_i}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]),
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &= \sum_{i=1}^K\gamma_i a_{x_i}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{i=1}^K\gamma_i a_{x_i}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
 \end{align}
-for $\ell,\ell_1,\ell_2=0,\ldots L-1$.
-These relations are proved in Appendix~\ref{sec:autocorrelation_computation}. The analysis is similar to~\cite{bendory2017bispectrum,boumal2017heterogeneous}, yet a special caution should be taken with the noise dependencies. This means that given $M_1,\ldots,M_K$ and $\sigma^2$ and $K$ does not exceed the limit for uniqueness, the one can estimate the signals from the third-order autocorrelation of the data. In other words, the signals can be estimated in asymptotic estimation rate of $\sigma^6/N$.
+for $\ell,\ell_1,\ell_2=0,\ldots L-1$, and where $\delta$ denotes the Kronecker delta function. 
+These relations are proven in Appendix~\ref{sec:autocorrelation_computation}. The analysis is similar to~\cite{bendory2017bispectrum,boumal2017heterogeneous}, yet a particular caution should be taken with the statistical dependencies of the noise entries. 
+The relations~\eqref{eq:data_ac} imply that for $K=1$ and given $M$ and $\sigma$, one can estimate the signal for any noise level if $M$ is large enough. Next, we show that for $K=1$,  $M$ and $\sigma$ are also uniquely determined from the autocorrelations. 
+
+An interesting consequence of our analysis is that, at least for $K=1$, the third autocorrelation of the data suffices to determine the signal. 
+The minimal order of data statistics that we use to get an accurate estimation of a signal is important to understand, in the asymptotic $\SNR$ regime, the sample complexity of the problem.
+In methods which are based on detection and averaging, the number of signals occurrences  scales like $\sigma^2$. Taking the $k$th order autocorrelation function amplifies the variance of the noise by a factor of $k$. Therefore, the required number signal occurrences should scale like $\sigma^{2k}$  to retain some constant estimation error. Accordingly, in our  method, $M$ scales like $\sigma^6$. In Section~\ref{sec:numerics}, we show empirically the third-order autocorrelation suffices also for a mixture of $K>1$ signals without prior knowledge of the $M_i$'s and $\sigma$. 
 
 
-If the noise level $\sigma^2$ is known, then for $K=1$, one can estimate $M$ from only the first two moments, namely, with estimation rate of $\sigma^4/N$.
+%This means that given $M_1,\ldots,M_K$ and $\sigma^2$ and $K$ does not exceed the limit for uniqueness, the one can estimate the signals from the third-order autocorrelation of the data. In other words, the signals can be estimated in asymptotic estimation rate of $\sigma^6/N$.
+
+
+If the noise level $\sigma^2$ is known and  $K=1$, one can estimate $M/N$ from only the first two moments.
 \begin{proposition} \label{prop:gamma}
-	Let $K=1$. Then, 
+	Let $K=1$, $N\to\infty$ and $\sigma$ fixed. Then, 
 	\begin{equation*}
-	\frac{M}{N} = \frac{(a^1_y)^2}{\sum_{j=0}^{L-1}a_y^2[j]-\sigma^2}.
+	\frac{M}{N} = \frac{1}{L}\frac{(a^1_y)^2}{\sum_{j=0}^{L-1}a_y^2[j]-\sigma^2}.
 	\end{equation*}
 	\begin{proof}
-The relation is proved by plugging the definitions of the signal autocorrelations into the right-hand side of the equation~\eqref{eq:autocorrelations}. 	
+The proof follows plugging the explicit expressions of~\eqref{eq:data_ac} into the right hand side of the equality.
 \end{proof}
 \end{proposition}
 
-
+If we use third-order autocorrelation information, then it possible to estimate both $M/N$ and $\sigma$ simultaneously. In contrast to Proposition~\ref{prop:gamma}, this result does not come with explicit formula.
 \begin{proposition} \label{prop:gamma_sigma}
-	It is possible to estimate $M$ and $\sigma$ from the third moment.
+	Let $K=1$, $N\to\infty$ and $\sigma$ fixed. Then, $a_y^1,a_y^2$ and  $a_y^3$ determine $M/N$ and $\sigma$ uniquely for generic signal. If $\frac{M}{N}\geq\frac{1}{4(L-1)}$, then it holds for any nonzero $x$. 
 	\begin{proof}
 		See Appendix~\ref{sec:proof_prop_gamma_sigma}.
 	\end{proof}
 \end{proposition}
-If we assume that $s$ is sparse, then by ignoring the separation condition, one can describe the generative process of $s$ as a Bernoulli process with parameter $M/N$. Therefore, in low \SNR  one can estimate the parameter that control this statistical process, although cannot estimate individual entries.
 
-Estimating $\sigma$ and $M$? 
+From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can directly deduces the following.
+\begin{corollary}
+	For $K=1$, $N\to\infty$ and fixed $\sigma$, a generic signal obeying $x[0],x[L-1]\neq 0$, the ratio $M/N$ and $\sigma$ can be recovered from the first three autocorrelation functions. If  $\frac{M}{N}\geq\frac{1}{4(L-1)}$, then it holds for any nonzero $x$.
+\end{corollary}
 
 
 \section{Numerical experiments}   \label{sec:numerics}
 
 \subsection{One-dimensional experiments}
 
+Here will come the 1D experiment with heterogeneity
 
 \subsection{Two-dimensional experiments}
 
-Solving RRR, and then 200 LS iteration on window of size $W$ and 500 iterations on window of size $L$.
+In this section, we provide the details of the 2D experiment shown in Figure~\ref{fig:example}. In the experiment, we generated a sequence of $767\times 10^3$ 2D images (``micrograph") of size $2000\times 2000$. Each micrograph had around $\sim 900$ signal occurrences (depends on the stopping criterion that we need to explain) and in total $M = 561\times 10^6$. The noise level was $\sigma=1$.  
 
+To accelerate the experiment, we estimated only the first two autocorrelations of the signal. As mentioned in Section~\ref{sec:estimating_ac}, this data determines a 2D signal uniquely, up to possible reflection symmetry. 
+In this experiment, we chose the correct reflection manually. To estimate the signal we used the Relax-Reflect-Reflect (RRR) algorithm, which is a known phase retrieval algorithm. Recall that the second-order autocorrelation is equivalent to the power spectrum of the signal.
+Starting form random initialization of size $(2L-1)\times(2L-1)$, its $k$th  iteration take the form of 
+ \begin{equation*}
+ x_k = x_{k-1} + \beta(P_2(2P_1(x_{k-1}) -x_{k-1}) - P_1(x_{k-1}), 
+  \end{equation*}
+ where $P_1$ is a projection that keeps the values of the  $L\times L$ entries in the upper-left corner and zeros out all other entries, $P_2$ is a projection that keeps the Fourier phase of $x_{k-1}$ and impose the correct Fourier magnitudes, and we set $\beta = 0.5$. The solution of the RRR scheme was used to initialized a LS estimation on the first two moments with signals of length $(2L-1)\times(2L-1)$ for the 200 iterations. Finally, we chose the $L\times L$ upper left corner and refined it using LS with 500 iterations. 
+ 
 \section{Conclusion} 
-Here we conclude the paper: cryo -- EM, structured background, without separation, heterogeneity
-In particular, in cryo--EM, multiple projections of a molecule (signal), taken
-from unknown viewing directions, are recorded on two-dimensional detector
-array. Current algorithms try to detect these projections in a low SNR regime
-and then use them for the reconstruction process. Since the
-Then, the reconstruction problem is to detect these projection, and then use
-them to estimat
-The data acquired in both technologies is composed of multiple projections
-of a molecule (the signal), taken from unknown viewing direction, and drawn in
-high noise level. The reconstitution problem is then to estimate the molecule
-from this data.
+Here we conclude the paper. Points to mention;
+\begin{itemize}
+\item cryo -- EM
+\item  structured background 
+\item   without separation   	
+\item  sample complexity
+\end{itemize}
+	
+%In particular, in cryo--EM, multiple projections of a molecule (signal), taken
+%from unknown viewing directions, are recorded on two-dimensional detector
+%array. Current algorithms try to detect these projections in a low SNR regime
+%and then use them for the reconstruction process. Since the
+%Then, the reconstruction problem is to detect these projection, and then use
+%them to estimat
+%The data acquired in both technologies is composed of multiple projections
+%of a molecule (the signal), taken from unknown viewing direction, and drawn in
+%high noise level. The reconstitution problem is then to estimate the molecule
+%from this data.
 
-A word on the sample complexity
 
 \bibliographystyle{plain}
 \bibliography{ref}
@@ -314,20 +352,20 @@ A word on the sample complexity
 
 \section{Autocorrelation estimations} \label{sec:autocorrelation_computation}
  
-To analyze the asymptotic behavior of the data autocorrelation functions, we consider one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with the appropriates weights, see~\cite{boumal2017heterogeneous}. 
+To analyze the asymptotic behavior of the data autocorrelation functions, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with the appropriates weights, see~\cite{boumal2017heterogeneous}. 
 
 Let us define
 \begin{equation}
 \gamma = \lim_{N\to\infty} \frac{M_NL}{N}<1.
 \end{equation}
-By assuming $M_N=\Omega(N)$, we also have $\gamma>0$.
+With a bit abuse of notation, $M_N$ means that $M$ is a function of $N$. Indeed, by assuming $M_N=\Omega(N)$, we deduce $\gamma>0$.
 We start by considering the first autocorrelation of the data
 \begin{equation}
 a_y^1 = \sum_{i=0}^{N-1} y[i] = \frac{1}{N/L}\sum_{j=0}^{M_N-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}} \xrightarrow{a.s.}\gamma a_x^1,
 \end{equation}
 where the noise term converges to zero almost surely (a.s.) by the law of large numbers.
 
-We proceed with the second moment for fixed $\ell\in[0,\ldots,L-1]$. Then, we can compute, 
+We proceed with the second autocorrelation for fixed $\ell\in[0,\ldots,L-1]$. We can compute:
 \begin{equation}
 \begin{split}
 a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell] \\
@@ -340,11 +378,11 @@ We treat the signal and noise terms separately. We first break the signal term i
 \begin{equation} \label{eq:2nd_moment_signal_term}
 \frac{1}{N}\sum_{j=1}^{M_N}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] = \frac{M_NL}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] = \gamma a_x^2[\ell].
 \end{equation}
-Similarly, for $\ell\neq 0$, we can break the noise term into a sum of independent terms 
+Similarly, for $\ell\neq 0$, we can break the noise term into a sum of independent terms  \TODO{to recheck indicies}
 \begin{equation}
 \frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
 \end{equation}
-Each term of $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, and therefore converge to zero almost surely as $N\to\infty$.
+Each term of $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, and thus converges to zero almost surely as $N\to\infty$.
 If $\ell=0$, 
 \begin{equation}
 \frac{1}{N}\sum_{i=0}^{N-1} \varepsilon[i]^2 \xrightarrow{a.s.} \sigma^2.
@@ -354,95 +392,116 @@ We are now moving to the third-order autocorrelation. Let us fix $\ell_1\geq\ell
 \begin{equation*}
 a_y^3[\ell_1,\ell_2] = \sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]. 
 \end{equation*}
-Writing explicitly in terms of signal and noise, this sum can be broken into eight partial sums. The first contains only signal terms and converges to $\gamma a_x^3$ from the same reasons as~\eqref{eq:2nd_moment_signal_term}. Three other partial sums contain the product of two signal entries and one noise term. Since the noise is independent of the signal, then these terms go to zero almost surely.
+Writing explicitly in terms of signal and noise, the sum can be broken into eight partial quantities. The first contains only signal terms (does not see noise) and converges to $\gamma a_x^3$ from the same reasons as~\eqref{eq:2nd_moment_signal_term}. Three other partial sums contain the product of two signal entries and one noise term. Since the noise is independent of the signal and has zero mean, these terms go to zero almost surely.
 
-We next analyze the contribution of triple product of noise terms. For $\ell_1\neq 0$, this sum can be formulate as follows:
+We next analyze the contribution of the term composed of triple products of noise terms. For $\ell_1\neq 0$, this sum can be formulate as follows:
 \begin{equation*}
 \sum_{i=0}^{N-1-\ell_1} \varepsilon[i]\varepsilon[i+\ell_1]\varepsilon[i+\ell_2] = \frac{1}{\ell_1}\sum_{i=0}^{\ell_1-1}\frac{1}{N/\ell_1}\sum_{j=0}^{N/\ell_1 -1 }\varepsilon[j\ell_1+i]\varepsilon[(j+1)\ell_1+i]\varepsilon[j\ell_1+i+\ell_2].
 \end{equation*}
-For each fixed $i$, we sum of over $N/\ell_1$ independent variables that goes to zero almost surely. For $\ell_1=\ell_2=0$, we get a some of $N$ independent variables, each is a triple product of Gaussian variables with zero mean. Therefore, it is also converges to zero. 
+For each fixed $i$, we sum of over $N/\ell_1$ independent variables that goes to zero almost surely. For $\ell_1=\ell_2=0$, we get a some of $N$ independent variables, each one is a triple product of Gaussian variables with zero mean and therefore has zero expectation. 
 
-To complete the analysis, we consider the three terms composed of the product of two noise terms and one signal entry. Most of these terms converges to zero almost surely because of interdependency between the noise entries. For $\ell_1=0, \ell_2=0$ and $\ell_1=\ell_2$,  a simple computation shows that the sum converges to $\gamma\sigma^2a_x^1$.
+To complete the analysis, we consider the three terms composed of the product of two noise terms and one signal entry. Most of these terms converge to zero almost surely because of interdependency between the noise entries. For $\ell_1=0, \ell_2=0$ and $\ell_1=\ell_2$,  a simple computation shows that the sum converges to $\gamma\sigma^2a_x^1$; c.f.~\cite{boumal2017heterogeneous}.
 
 
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
-We aim to prove that one can estimate both $\sigma$ and $M$ from the observed third moment. We will construct two independent quadratic equations of $M$ which do not depend on $\sigma$. This will let us estimate $M$. Given $M$, we will estimate $\sigma$.
+We aim to prove that one can estimate both $\sigma$ and $\beta = M/N$ from the observed first three moments.
+Using observed (measured) quantities, we construct two quadratic equations of $\beta$, independent of $\sigma$.
+Then, we show that these equations are independent and therefore $M$ is uniquely defined. 
+Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
+Throughout the proof, it is important to distinguish between observed and unobserved values. 
+to this end, we denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$ and $F_i$ for functions of the signal's autocorrelations. 
 
-To ease notation, let $\beta=M/N$. Recall that $a_y^1 = \beta(\one^Tx)$ and  
- and $a_y^2[0] = \beta(\|x\|^2+\sigma^2)$, where $\one\in\RL$ stands for vector of ones. Taking the product:
+
+Recall that $a_y^1 = \beta(\one^Tx)$ and  
+and $a_y^2[0] = \beta(\|x\|^2+\sigma^2)$, where $\one\in\RL$ stands for vector of ones. Taking the product:
 \begin{equation}\label{eq:E1}
 \begin{split}
 E_1 &:= (\beta(\one^Tx))(\beta(\|x\|^2+\sigma^2)) \\
-& = \sigma^2a_y^1 + \beta^2\tau,
+& = \sigma^2a_y^1 + \beta^2F_1,
  \end{split}
 \end{equation}
-where $\tau := L\left(\sum_{j=1}^{L-1}(a_x^3[j,0]+a_x^3[0,j] )+\sum_{j=0}^{L-1}a_x^3[0,0]\right)$. Next, we can estimate from $a_y^3$
+where $F_1 := L\left(a_x^3[0,0] + 2\sum_{j=1}^{L-1}(a_x^3[j,j]\right)$. 
+The terms of $F_1$ can be also estimated from $a_y^3$ with bias:
 \begin{equation} \label{eq:E2}
-E_2:= \beta \tau + 3L\sigma^2a_y^1.
+E_2:= \beta F_1 + (2L+1)\sigma^2a_y^1.
 \end{equation}
 Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get
-\begin{equation}
-E_2\beta -3L\sigma^2a_y^1 = E_1-\sigma^2a_y^1.
+\begin{equation} \label{eq:E12}
+E_2\beta -(2L+1)\sigma^2\beta a_y^1 = E_1-\sigma^2a_y^1.
 \end{equation}
-Now, recalling from Proposition~\ref{prop:gamma}
+Let $a_y^2:=\sum_{j=0}^{L-1}a_y^2[j]$ and recall from Proposition~\ref{prop:gamma}
 \begin{equation} \label{eq:sigma2}
-\sigma^2 = a_y^2 - (a^1_y)^2/\beta, 
+\sigma^2 = a_y^2 - (a^1_y)^2/\beta. 
 \end{equation} 
-where we use $a_y^2:=\sum_{j=0}^{L-1}a_y^2[j]$.
-Rearranging the equations, we then get the quadratic equation
+Plugging into~\eqref{eq:E12} and rearranging we get 
 \begin{equation} \label{eq:quad1}
 \mathcal{A}\beta^2 + \mathcal{B}\beta + \mathcal{C} = 0,
 \end{equation}
 where 
 \begin{align*}
-\mathcal{A} &= E_2, \\ 
-\mathcal{B} &= -(E_1 + (3L-1)a_y^1a_y^2), \\
-\mathcal{C} &= (3L-1)(a_y^1)^3.
+\mathcal{A} &= E_2 - (2L+1)a_y^1a_y^2, \\ 
+\mathcal{B} &= -E_1 + (2L+1)(a_y^1)^3 + a_y^1a_y^2  , \\
+\mathcal{C} &= -(a_y^1)^3.
 \end{align*}
+Importantly, these coefficients are are observable quantities. 
 
-We are now proceeding to derive the second quadratic equation. We notice that \begin{equation} \label{eq:E3}
-E_3  = (a_y^1)^3 = \beta^3 \upsilon,
+We are now proceeding to derive the second quadratic equation. We notice that 
+\begin{equation} \label{eq:E3}
+E_3  = (a_y^1)^3 = \beta^3 (\one ^Tx)^3   = \beta^3 F_2,
 \end{equation}
-where \TODO{to check} $$\upsilon = a_x^3[0,0] + 3\sum_{i=1}^{L-1}a_x^3[i,i] + 3\sum_{i=1}^{L-1}(a_x^3[i,0]+a_x^3[0,i]) + 6\sum_{1\leq i \leq j\leq L-1}a_x^3[i,j].$$
-On the other hand, from $a_y^3$ we can directly estimate
+where \TODO{to verify}
+\begin{equation*}
+F_2 =  a_x^3[0,0] + 3\sum_{i=1}^{L-1}a_x^3[i,i] + 3\sum_{i=1}^{L-1}a_x^3[0,i] + 6\sum_{1\leq i < j\leq L-1}a_x^3[i,j].
+\end{equation*}
+On the other hand, from $a_y^3$ we can directly estimate $F_2$ up to scale and bias
 \begin{equation} \label{eq:E4}
-E_4 = \beta\upsilon + 9L\sigma^2a_x^1.
+E_4 = \beta F_2 + (6L-3)\sigma^2a_y^1.
 \end{equation}
-Now, by multiplying both sides by $\beta^2$ and using~\eqref{eq:E3}, we get 
-\begin{equation} \label{eq:E4}
-\beta^2E_4 =  E_3  + 9L\sigma^2a_x^1.
-\end{equation}
-Plugging~\eqref{eq:sigma2} and rearranging the equation, we get a second quadratic equation independent of $\sigma$:
+Taking the ratio:
+\begin{equation*} 
+\frac{E_4}{E_3} = \frac{1}{\beta^2} + \frac{(6L-3)\sigma^2a_y^1}{E_3}, 
+\end{equation*}
+we conclude:
+\begin{equation*}
+\sigma^2 = \frac{E_4}{a_y^1(6L-3)}  - \frac{E_3}{\beta^2a_y^1(6L-3)}.
+\end{equation*}
+Using~\eqref{eq:sigma2} and rearranging we get the second quadratic:
 \begin{equation} \label{eq:quad2}
 \mathcal{D}\beta^2 + \mathcal{E}\beta + \mathcal{F} = 0,
 \end{equation}
 where
 \begin{align*}
-\mathcal{D} &= E_4 - 9La_x^1a_y^2, \\ 
-\mathcal{E} &= 9La_x^1(a_y^1)^2, \\
-\mathcal{F} &= -(a_y^1)^3.
+\mathcal{D} &= a_y^2 - \frac{E_4}{a_y^1(6L-3)}, \\ 
+\mathcal{E} &= -(a_y^1)^2, \\
+\mathcal{F} &= \frac{E_3}{a_y^1(6L-3)}.
 \end{align*}
 
 To complete the proof, we need to show that the two quadratic equations~\eqref{eq:quad1} and~\eqref{eq:quad2} are independent. To this end, it is enough to show that the ratio between the coefficients is not the same. 
-using~\eqref{eq:E1}, we have 
+From~\eqref{eq:quad1} and~\eqref{eq:E1}, we have 
 \begin{equation*}
-\frac{\mathcal{B}}{\mathcal{C}} = \frac{-(E_1 + (3L-1)a_y^1a_y^2)}{(3L-1)(a_y^1)^3} = -\frac{a_y^2[0]}{(3L-1)(a_y^1)^2} - \frac{a_y^2}{(a_y^1)^2}.
+\frac{\mathcal{B}}{\mathcal{C}} = \frac{-E_1 + (2L+1)(a_y^1)^3 + a_y^1a_y^2}{-(a_y^1)^3} = \frac{a_y^2[0] - (2L+1)(a_y^1)^2 - a_y^2}{(a_y^1)^2}.
 \end{equation*}
-In addition, 
+In addition, using~\eqref{eq:E3}
 \begin{equation*}
-\frac{\mathcal{E}}{\mathcal{F}} = -\frac{9La_x^1}{a_y^1}. 
+\frac{\mathcal{E}}{\mathcal{F}} = -\frac{(6L-3)(a_y^1)^3}{E3} = 3 - 6L . 
 \end{equation*}
+
 Now, suppose that the quadratics are dependent. Then, $\frac{\mathcal{B}}{\mathcal{C}} =\frac{\mathcal{E}}{\mathcal{F}} $, or, 	
 \begin{equation*}
-\frac{a_y^2[0]}{(3L-1)(a_y^1)^2} + \frac{a_y^2}{(a_y^1)^2} = \frac{9La_x^1}{a_y^1}. 
+a_y^2[0] - (2L+1)(a_y^1)^2 - a_y^2 = (a_y^1)^2(3-6L)
 \end{equation*}
-Rearranging the equation, we get 
-\begin{equation*}
- a_y^2[0] + (3L-1)(a_y^1)^2 - 9La_x^1a_y^1=0.
-\end{equation*}	
+Rearranging the equation and writing in terms of $x$ we get 
+\begin{equation} \label{eq:cond}
+4(L-1)\beta (a_x^1)^2  - \sum_{i=1}^{L-1} a_x^2[i] = 0.
+\end{equation}	
 For generic $x$,  this polynomial equation is not satisfied. Therefore,  the equations are independent. 
+More than that, for any nonzero $x$, $(a_x^1)^2 >\sum_{i=1}^{L-1} a_x^2[i]$. Therefore, if $4(L-1)\beta \geq 1$, or,
+\begin{equation*}
+\beta \geq \frac{1}{4(L-1)},
+\end{equation*}
+the condition~\eqref{eq:cond} cannot be satisfied for any signal. 
 
 \end{document}
 
