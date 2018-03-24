@@ -17,11 +17,12 @@ X(:, 3) = randn(L, 1);
 sigma = 3;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = [3e7 2e7 1e7];
+m_want = [3e6 2e6 1e6];
 
 % Length of micrograph
 n = sum(m_want)*W*10;
 
+fprintf('Micrograph length: %g\n\n\n', n);
 
 %% Pick which correlation coefficients to sample
 
@@ -50,10 +51,11 @@ end
 
 %% Generate the micrograph
 
-tic;
+T = tic();
 [y_clean, m_actual] = generate_clean_micrograph_1D_heterogeneous(X, W, n, m_want);
 y_obs = y_clean + sigma*randn(n, 1);
-fprintf('Time to generate micrograph: %.2g [s]\n', toc());
+time_to_generate_micrograph = toc(T);
+fprintf('Time to generate micrograph: %.2g [s]\n', time_to_generate_micrograph);
 SNR = norm(y_clean, 'fro')/norm(y_obs-y_clean, 'fro');
 fprintf('   SNR: %.2g\n', SNR);
 fprintf('   m_actual/m_want: ');
@@ -61,11 +63,12 @@ fprintf(' %.2g', m_actual./m_want);
 fprintf('\n');
 
 %% Collect the moments
-tic;
+T = tic();
 % [M1, M2, M3] = moments_from_data_no_debias_1D(y_obs, list2, list3);
 batch_size = 1e8;
 [M1, M2, M3] = moments_from_data_no_debias_1D_batch(y_obs, list2, list3, batch_size);
-fprintf('   Moment computation: %.4g [s]\n', toc());
+time_to_compute_moments = toc(T);
+fprintf('   Moment computation: %.4g [s]\n', time_to_compute_moments);
 
 moments.M1 = M1 / n;  %%%% !!!!! We normalize by n here; ideally, we should normalize by n in moments_from_data_no_debias_1D, but I'll only do the change when everything is under control
 moments.M2 = M2 / n;
@@ -73,6 +76,8 @@ moments.M3 = M3 / n;
 moments.list2 = list2;
 moments.list3 = list3;
 
+clear y_clean y_obs;
+save(sprintf('data_example_heterogeneous_%s_n_%d.mat', datestr(now(), 30), n));
 
 %% Optimization
 
@@ -84,7 +89,7 @@ L_optim = 2*L-1;
 % gamma0 = m_actual*L_optim/n; % give true gamma for now
 sigma_est = 0; % irrelevant if remove_biased_terms = true and if the weights internally do not depend on sigma
 
-[X_est, gamma_est] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma_est); %, X0, gamma0(:)); % check if the code fixes gamma to gamma0 or not
+[X_est, gamma_est, problem1, stats1] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma_est); %, X0, gamma0(:)); % check if the code fixes gamma to gamma0 or not
 
 
 %% Display
@@ -107,7 +112,7 @@ for k1 = 1 : K
         x2 = X_est(:, k1);
         x2 = align_to_reference_1D(x2, x1);
         
-        plot(1:L_optim, x1, 1:L_optim, x2);
+        plot(0:(L_optim-1), x1, 0:(L_optim-1), x2);
         
         if k1 == 1
             title(sprintf('True signal %d\n(blue)', k2));
@@ -145,7 +150,7 @@ for k1 = 1 : K
         x2 = X_est_L(:, k1);
 %         x2 = align_to_reference_1D(x2, x1);
         
-        plot(1:L, x1, 1:L, x2);
+        plot(0:(L-1), x1, 0:(L-1), x2);
         
         if k1 == 1
             title(sprintf('True signal %d\n(blue)', k2));
@@ -163,7 +168,7 @@ savefig(gcf, sprintf('example_heterogeneous_short_%s_n_%d.fig', datestr(now(), 3
 
 gamma0 = gamma_est*(L/L_optim);
 
-[X_est, gamma_est] = least_squares_1D_heterogeneous(moments, L, K, sigma_est, X_est_L, gamma0(:)); % check if the code fixes gamma to gamma0 or not
+[X_est, gamma_est, problem2, stats2] = least_squares_1D_heterogeneous(moments, L, K, sigma_est, X_est_L, gamma0(:)); % check if the code fixes gamma to gamma0 or not
 
 
 %% Redraw
@@ -184,7 +189,7 @@ for k1 = 1 : K
         x2 = X_est(:, k1);
 %         x2 = align_to_reference_1D(x2, x1);
         
-        plot(1:L, x1, 1:L, x2);
+        plot(0:(L-1), x1, 0:(L-1), x2);
         
         if k1 == 1
             title(sprintf('True signal %d\n(blue)', k2));
@@ -208,3 +213,5 @@ for p = 1 : size(permutations, 1)
     fprintf('Relative error after reoptimization:   %g\n', norm(X-X_est(:, P), 'fro') / norm(X, 'fro'));
 end
 fprintf('==\n');
+
+save(sprintf('data_after_optim_example_heterogeneous_%s_n_%d.mat', datestr(now(), 30), n));
