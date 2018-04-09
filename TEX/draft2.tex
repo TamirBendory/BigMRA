@@ -364,22 +364,23 @@ Cryo--EM is an innovative technology for reconstructing the 3D structure of macr
 of many molecules, previously regarded as insurmountable, are now being
 obtained to near-atomic resolution; see for instance~\cite{kuhlbrandt2014resolution,bartesaghi20152}. This technological advancement was recognized by the 2017 Nobel Prize in Chemistry~\cite{nobel}. 
 
-In a cryo--EM experiment, the biological samples of the (ideally) same molecule are rapidly frozen in a thin layer of vitreous ice. Within the ice, the molecules are randomly oriented and positioned. Then,  the microscope produces a 2D tomographic projection image, called a \emph{micrograph}, of the multiple samples embedded in the ice. Importantly, the micrograph is dominated by noise due to the small electron doses that
+In a cryo--EM experiment, multiple biological samples of the (ideally) same molecule are rapidly frozen in a thin layer of vitreous ice. Within the ice, the molecules are randomly oriented and positioned. Then,  the microscope produces a 2D tomographic projection image, called a \emph{micrograph}, of the multiple samples embedded in the ice. Importantly, the micrograph is dominated by noise due to the small electron doses that
 can be applied to the specimen without causing radiation damage.
 
-The cryo--EM problem is to estimate the structure of the molecule from the micrograph (or several micrographs). 
- All current methods in the field split the reconstruction procedure to several subroutines. The first step in all methods is the so called particle picking, detecting the 2D tomographic projections of the samples from the noisy micrograph. The output of ideal particle picker is a series of 2D images, each contains one centered tomographic projection associated with unknown 3D orientation. These series of images 
+The cryo--EM problem is to estimate the structure of the molecule from the micrograph (or, typically, several micrographs). 
+All contemporary methods in the field split the reconstruction procedure to several subroutines. 
+The first step in the pipeline is the so called particle picking, in which one aims to detect the 2D tomographic projections of the samples from the noisy micrograph. The output of ideal particle picker is a series of 2D images, each contains one centered tomographic projection associated with unknown 3D orientation. This series of images 
  is then used by a variety of algorithms to reconstruct the structure. 
-However, due to the high noise level, the performance of the particle pickers  is not ideal. For instance, the projections in the 2D images are typically not centered, increasing dramatically the number of parameters involved in the estimation problem. In addition, the information of particles that are too close to each other is usually neglected. Hence, valuable information that can be used is omitted. 
+However, due to the high noise level, the performance of particle pickers  is not ideal. For instance, the projections in the 2D images are typically not centered, increasing dramatically the number of parameters involved in the estimation problem. In addition, the information from particles that are too close to each other is usually neglected. Hence, valuable information that can be used is omitted. 
 
 The model considered in this paper can be interpreted as a preliminary step towards investigation of the possibility to \emph{estimate the molecule's structure directly from the micrograph}. 
-In our model, the noisy data is the analog of the micrograph. The $K$ sought signals correspond to $K$ different molecule's projections, taken from different orientations in $SO(3)$. In tomography, if enough projections are estimated, then one can estimate the whole structure (up to some $K$-dependent resolution).
-The position of individual projections are the nuisuance varialbles in the cryo--EM problem, in analogy to the individual signal's locations in our setup.   
-
-Clearly, applying the autocorrelation method to the cryo--EM problem raises interesting challenges that are far beyond the scope of this paper. 
-For instance, the numerical experiments of Section~\ref{sec:numerics} indicate that we need a huge number of observations to get accurate estimate. Can we accelerate the estimation rate so we can apply this method with smaller amount of data? In addition, since the size of a micrograph is quite large (typically around $4000\times 4000$ pixels), computing the third-order autocorrelations may be  expensive if not implemented carefully by parallelizing the computations.
-Also, the model should incorporate minimal spacing between the samples on the micrograph.
-
+In our model, the noisy data $y$ is the analog of the micrograph. The $K$ sought signals correspond to $K$ different molecule's projections, each taken from  different unknown viewing direction. %In tomography, if enough projections are estimated, then one can estimate the whole structure (up to some $K$-dependent resolution).
+The position of individual projections are the nuisance variables of the cryo--EM problem (as well as the viewing directions), in analogy to individual signal's locations in our setup.
+That being said, the cryo--EM data is far more complicated that the simplified model of this paper. In a future research, we hope to bridge this gap.
+ 
+%For instance, the numerical experiments of Section~\ref{sec:numerics} indicate that we need a huge number of observations to obtain an accurate estimate. Can we accelerate the estimation rate? How to include nearby molecule to extract all information in the micrograph?
+%In addition, since the size of a micrograph is quite large (typically around $4000\times 4000$ pixels), computing the third-order autocorrelations may be  expensive if not implemented carefully by parallelizing the computations.
+%
 
 \bibliographystyle{plain}
 \bibliography{ref}
