@@ -201,25 +201,27 @@ In this section we elaborate on the autocorrelation functions and their estimati
 \subsection{Aperiodic autocorrelation functions} \label{sec:aperiodic_ac}
 
 For the purpose of this paper, we need the first three (aperiodic) autocorrelation functions. The first-order autocorelation is the mean of the signals. For  
-$z\in\RL$ and $k\geq 2$, the higher order autocorrelations are defined by
-\begin{equation} \label{eq:ac_general}
-a_z^k[\ell_1,\ldots,\ell_{k-1}] =  \sum_{i=0}^{L-1-\max\{\ell_1,\ldots,\ell_{k-1}\}} z[i]z[i+\ell_1]\ldots z[i+\ell_{k-1}].
-\end{equation}
+$z\in\RL$ and $k\geq 2$, the autocorrelation of order $k$ is defined for any integer shifts $\ell_1, \ldots, \ell_{k-1}$ by
+\begin{align}
+	a_z^k[\ell_1,\ldots,\ell_{k-1}]  & = \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\ldots z[i+\ell_{k-1}],
+	\label{eq:ac_general}
+\end{align}
+where indexing of $z$ out of the bounds $0, \ldots, L-1$ is zero-padded, as usual.
 Explicitly, the first three autocorrelations are
-\begin{align} \label{eq:autocorrelations}
-a_z^1 &= \sum_{i=0}^{L-1} z[i], \nonumber\\
-a_z^2[\ell] &= \sum_{i=0}^{L-1-\ell} z[i]z[i+\ell], \nonumber\\
-a_z^3[\ell_1,\ell_2] &= \sum_{i=0}^{L-1-\max\{\ell_1,\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. 
+\begin{align} 
+	a_z^1 & = \sum_{i=0}^{L-1} z[i], \nonumber\\
+	a_z^2[\ell] & = \sum_{i = \max\{0, -\ell\}}^{L-1 + \min\{0, -\ell\}} z[i]z[i+\ell], \nonumber\\
+	a_z^3[\ell_1,\ell_2] & = \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{L-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. \label{eq:ac_special}
 \end{align}
 Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and $a_z^3[\ell_1,\ell_2] = a_z^3[-\ell_1,-\ell_2]$. \TODO{We also have $a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]$ -- is that intended? Do we really have symmetry with the negative signs? I think we have $(\ell_1, \ell_2) \sim (-\ell_1, \ell_2-\ell_1)$; to be checked, but I don't think this is correct;}
 Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), then they are equivalent to the autocorrelation functions.
 
 A one-dimensional signal is determined uniquely and stably by its third-order auto-correlation as proven in the following simple proposition.
 \begin{proposition} \label{prop:uniqueness}
-	Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzeros. Then:
+	Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then:
 	\begin{itemize}
 		\item \textbf{Uniqueness:} 	 $z$  is determined uniquely from  $a_z^2$ and $a_z^3$.
-        \item \textbf{Finite sensitivity:} 	Suppose that  $a_z^3[k,L-1]$ can be estimated up to  perturbation $\upsilon$ and let $\hat{z}[k]$ be an estimator of $z[k]$. If $\vert z[0]z[L-1]\vert \geq \delta>0$, then $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\delta}$. 
+        \item \textbf{Finite sensitivity:} 	Suppose that  $a_z^3[k,L-1]$ can be estimated up to  perturbation $\upsilon$ and let $\hat{z}[k]$ be an estimator of $z[k]$. If $\vert z[0]z[L-1]\vert \geq \delta>0$, then $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\delta}$. \TODO{That statement is incomplete: you mean there exists an estimator that guarantees this. (Since the estimator is very simple, we may want to show it explicitly in the proposition statement, and comment afterwards that of course this is still fairly sensitive, and we can do better.)}
 	\end{itemize}
 	\begin{proof}
 		By assumption $a_z^2[L-1] = z[0]z[L-1]\neq 0$.
@@ -242,6 +244,7 @@ Finally, while Proposition~\ref{prop:uniqueness} shows only finite sensitivity, 
 
 Considering the third-order autocorrelation is also a necessary condition to determine a signal from its autocorrelations. Indeed, the second-order autocorrelation of a one-dimensional signal does not determine a signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}. On the other hand, for dimensions greater than one, almost all signals are determined uniquely, up to sign (phase in the complex case) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However,  in order to determine the reflection symmetry, one needs to use additional information.
 
+\TODO{I would remove most if this paragraph; we can have a similar discussion but for our case (after having discussing which moments we keep); make the statement, and finish with a one-sentence reference to the MRA paper.}
 The invertibility of the autocorrelations for $K>1$ was explored  for the related case of  periodic autocorrelation functions. Recall that the  periodic autocorrelations are defined similarly to~\eqref{eq:ac_general}, with two differences: the sum goes to $L-1$ and all indices should be taken modulo $L$.
 If $z[n]=0$ for $n=L/2,\ldots L-1$ (``zero-padded''), then the periodic and aperiodic autocorrelation coincide.
 In~\cite{bandeira2017estimation}, it was shown that a mix of $K$ third-order periodic autocorrelations determine  a finite list of $K$ generic signals if $L/6\gtrsim K$. Empirical evidences hints that this finite list includes only group symmetries, at least as long as $K\leq\sqrt{L}$~\cite{boumal2017heterogeneous}. 
@@ -303,16 +306,16 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
  
 \subsection{Estimating autocorrelations from the data with multiple signals $K>1$} \label{sec:estimating_ac}
 
-When $K>1$, it is impossible to estimate the autocorrelation of each signal directly from the data. However similarly to~\eqref{eq:data_ac_k1}, one can estimate the mixture of the autocorrelations. 
+When $K>1$, it is impossible \TODO{That's not true: we can do our procedure, which gives estimate of the signals, and moments of that are estimates of the moments of the individual signals. Whether one calls this 'direct' or not is subjective. I'd remove that sentence.)} to estimate the autocorrelation of each signal directly from the data. However similarly to~\eqref{eq:data_ac_k1}, one can estimate the mixture of the autocorrelations. 
 As before, we consider  the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty$, while preserving fixed ratios
-\begin{equation}
-\gamma_i = \frac{M_i L}{N}, \quad \gamma = \sum_{i=1}^K\gamma_i.
-\end{equation}
+\begin{align}
+	\gamma_k = \frac{M_k L}{N}, \quad \gamma = \sum_{k=1}^K\gamma_k.
+\end{align}
 If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then:
 \begin{align}
-\lim_{N\to\infty} a_y^1 &= \sum_{i=1}^K\gamma_i a_{x_i}^1, \nonumber\\
-\lim_{N\to\infty} a_y^2[\ell] &= \sum_{i=1}^K\gamma_i a_{x_i}^2[\ell] +\sigma^2\delta[\ell],  \label{eq:data_ac}\\
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &= \sum_{i=1}^K\gamma_i a_{x_i}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{i=1}^K\gamma_i a_{x_i}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
+\lim_{N\to\infty} a_y^1 & = \sum_{k=1}^K\gamma_k a_{x_k}^1, \nonumber\\
+\lim_{N\to\infty} a_y^2[\ell] & = \sum_{k=1}^K\gamma_k a_{x_k}^2[\ell] +\sigma^2\delta[\ell],  \label{eq:data_ac}\\
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \sum_{k=1}^K\gamma_k a_{x_k}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{k=1}^K\gamma_k a_{x_k}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
 \end{align}
 This relation is proven in  Appendix~\ref{sec:autocorrelation_computation}.
 
@@ -335,11 +338,18 @@ is about 1/12.
 %Given the scaling of the target signals (whose median absolute value for the entries is at or below one),
 This is enough noise to make cross-correlations of $y$ even with the true signals display peaks at random locations, uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
 
-Given the observation $y$, we proceed to compute the moments. The first-order moment is straightforward. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose \TODO{Do we want to include a figure to explain why that is?}, and we exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements---there are $\frac{(L-1)(L-2)}{2}$ such moments. As a result, it is unnecessary to estimate $\sigma$. There are
+Given the observation $y$, we proceed to compute the moments. The first-order moment is straightforward. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose \TODO{Do we want to include a figure to explain why that is?}, and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements---there are $\frac{(L-1)(L-2)}{2}$ remaining moments. As a result, it is unnecessary to estimate $\sigma$. We have
 \begin{align*}
 	1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
 \end{align*}
-moments in total. In practice, these are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data.
+moments in total. In practice, these are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
+
+Having computed the moments of interest, we now estimate signals $x_1, \ldots, x_K$ and coefficients $\gamma_1, \ldots, \gamma_K$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear least-squares problem:
+\begin{multline}
+	\min_{\substack{\hat x_1, \ldots, \hat x_K \in \reals^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2.
+	\label{eq:optim1D}
+\end{multline}
+where $W \geq L$ is the length of the sought signals and \TODO{explain $w_i$'s}. Setting $W = L$ (as is a priori desired) is problematic as the above optimization problems appears to have numerous poor local optimizers. Since we can only initialize randomly at first, this approach would often fail in practice. Alternatively, we first run the optimization with $W = 2L-1$. This problem appears to have fewer poor local optima, perhaps as a result of the additional degrees of freedom which allow for more escape directions. As we would hope to find that these estimated signals are supported on $L$ contiguous entries, we extract from each one a subsignal of length $L$ (with cyclic indexing) that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this is reliable for a wide range of experimental parameters.
 
 
 \subsection{Two-dimensional experiments} 
