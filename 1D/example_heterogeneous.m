@@ -47,6 +47,14 @@ remove_biased_terms = true;
 if remove_biased_terms
     list2(list2 == 0) = [];
     list3(list3(:, 1) == 0 | list3(:, 2) == 0, :) = [];
+    %%%
+    %%%
+    %%%
+    %%%     FORGOT TO REMOVE SOME BIASED ELEMENTS -- need to be very
+    %%%     careful and run again.
+    %%%
+    %%%
+    %%%
 end
 
 %% Generate the micrograph
