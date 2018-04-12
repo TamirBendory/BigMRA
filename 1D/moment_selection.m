@@ -27,13 +27,13 @@ function [list2, list3] = moment_selection(L, biased_string)
         case 'exclude biased'
             % Remove biased terms from the lists
             
-            biased_2 = (list2 == 0);
-            list2(biased_2) = [];
+            biased2 = (list2 == 0);
+            list2(biased2) = [];
 
-            biased_3 = list3(:, 1) == 0 | ...
-                       list3(:, 2) == 0 | ...
-                       list3(:, 1) == list3(:, 2);
-            list3(biased_3, :) = [];
+            biased3 = list3(:, 1) == 0 | ...
+                      list3(:, 2) == 0 | ...
+                      list3(:, 1) == list3(:, 2);
+            list3(biased3, :) = [];
             
         otherwise
             error('Specify the flag: include biased or exclude biased');
