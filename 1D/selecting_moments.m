@@ -77,3 +77,15 @@ end
 % 
 % numel(uniquetol(M3, 1e-8))
 % numel(M3)
+
+
+% A direct way to generate the moments we want (excluding biased terms)
+good_list_3 = zeros((L-1)*(L-2)/2, 2);
+k = 0;
+for l1 = 2 : L-1
+    for l2 = 1 : (l1-1)
+        k = k+1;
+        good_list_3(k, :) = [l1, l2];
+    end
+end
+
