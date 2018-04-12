@@ -263,9 +263,9 @@ Under the spacing constraint~\eqref{eq:spacing}, we have $\gamma\leq\frac{L}{2L-
 The main pillar of this work is the following simple observation.
 If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then the first $L$ entries of the data autocorrelations converge 
 to a scaled, biased, version of the signal's autocorrelation:
-\begin{align} \label{eq:data_ac_k1}
+\begin{align}
 \lim_{N\to\infty} a_y^1 &= \gamma a_{x}^1, \nonumber\\
-\lim_{N\to\infty} a_y^2[\ell] &= \gamma a_{x}^2[\ell] +\sigma^2\delta[\ell],\\
+\lim_{N\to\infty} a_y^2[\ell] &= \gamma a_{x}^2[\ell] +\sigma^2\delta[\ell], \label{eq:data_ac_k1} \\
 \lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &= \gamma a_{x}^3[\ell_1,\ell_2] + \sigma^2\gamma a_{x}^1(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
 \end{align}
 for $\ell,\ell_1,\ell_2=0,\ldots L-1$, and where $\delta$ denotes the Kronecker delta function. 
@@ -309,9 +309,9 @@ As before, we consider  the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty
 \gamma_i = \frac{M_i L}{N}, \quad \gamma = \sum_{i=1}^K\gamma_i.
 \end{equation}
 If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then:
-\begin{align} \label{eq:data_ac}
+\begin{align}
 \lim_{N\to\infty} a_y^1 &= \sum_{i=1}^K\gamma_i a_{x_i}^1, \nonumber\\
-\lim_{N\to\infty} a_y^2[\ell] &= \sum_{i=1}^K\gamma_i a_{x_i}^2[\ell] +\sigma^2\delta[\ell],\\
+\lim_{N\to\infty} a_y^2[\ell] &= \sum_{i=1}^K\gamma_i a_{x_i}^2[\ell] +\sigma^2\delta[\ell],  \label{eq:data_ac}\\
 \lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &= \sum_{i=1}^K\gamma_i a_{x_i}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{i=1}^K\gamma_i a_{x_i}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
 \end{align}
 This relation is proven in  Appendix~\ref{sec:autocorrelation_computation}.
@@ -323,15 +323,15 @@ In methods which are based on detection and averaging, the number of signals occ
 
 \section{Numerical experiments}   \label{sec:numerics}
 
-\TODO{Here we should say that we can afford to work only with non-biased terms}
+%\TODO{Here we should say that we can afford to work only with non-biased terms}
 
 
 \subsection{One-dimensional experiments}
 
 
-For the 1D experiment, we fix $K = 3$ signals of length $L = 21$, as depicted in Figure~\TODO{ref}. Following the data model described in Section~\TODO{ref}, we generate an observation $y$ of length $24.6 \cdot 10^9$. Each of the three signals appears, respectively (and approximately) $30 \cdot 10^6$, $20 \cdot 10^6$ and $10 \cdot 10^6$ times in $y$, such that at least $L-1$ zeros separate two occurrences of any signals. This is done by randomly selecting $60 \cdot 10^6$ placements in $y$ with an accept/reject rule based on the separation constraint. For each placement, one of the three signals is picked proportionally to the desired number of occurrences of each. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. Given the scaling of the target signals (whose median absolute value for the entries is at or below one), this is enough noise to make cross-correlations of $y$ even with the true signals display peaks at random locations, uninformative of the actual locations of the signal occurrences.
+For the 1D experiment, we fix $K = 3$ signals of length $L = 21$, as depicted in Figure~\TODO{ref}. Following the data model described in Section~\TODO{ref}, we generate an observation $y$ of length $24.6 \cdot 10^9$. Each of the three signals appears, respectively (and approximately) $30 \cdot 10^6$, $20 \cdot 10^6$ and $10 \cdot 10^6$ times in $y$, such that at least $L-1$ zeros separate two occurrences of any signals. This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far. For each placement, one of the three signals is picked at random proportionally to the desired number of occurrences of each. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. Given the scaling of the target signals (whose median absolute value for the entries is at or below one), this is enough noise to make cross-correlations of $y$ even with the true signals display peaks at random locations, uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
 
-
+Given the observation $y$, we proceed to compute the moments. The first-order moment is straightforward. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, we include $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_1 + \ell_2 \leq L_1$ and such that neither $\ell_1, \ell_2$ and $\ell_1 - \ell_2$ are all nonzero. This also avoids introducing biased elements, thus making it unnecessary to estimate $\sigma$. In practice, the moments are computed on batches of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Each batch is handled on a GPU, as GPUs are particularly well suited for simple instructions on large vectors of data.
 
 
 \subsection{Two-dimensional experiments} 
