@@ -6,7 +6,7 @@ clc;
 figure(1);
 clf;
 
-L = 11;
+L = 7;
 range = -(L-1) : (L-1);
 [ell2, ell1] = ndgrid(range);
 
@@ -18,10 +18,11 @@ M = M & (ell1 ~= 0);
 M = M & (ell2 ~= 0);
 M = M & (ell1 ~= ell2);
 
-% Reject symmetry ell1 == ell2
+% Reject symmetry (ell1, ell2) ~ (ell2, ell1)
 M = M & (ell1 >= ell2);
 
 % Identify further symmetries (seems there are none: see printed list at command prompt)
+%{
 for a = 1:(2*L-1)
     for b = (2*L-1)
         l1 = ell1(a, b);
@@ -35,15 +36,18 @@ for a = 1:(2*L-1)
         end
     end
 end
+%}
 
 imagesc(range, range, M);
-xlabel('ell_1');
-ylabel('ell_2');
 axis equal; axis tight;
 colormap gray;
+set(gca, 'YDir', 'normal');
+xlabel('ell_1');
+ylabel('ell_2');
 title('Bright pixels are good shifts');
 
-% Are these unique?
+
+% Are these unique? No:
 
 z = randn(L, 1);
 list2 = (1:(L-1))';
@@ -59,12 +63,6 @@ for k1 = 1 : (2*L-1)
 end
 [M1, M2, M3] = moments_from_data_no_debias_1D(z, list2, list3);
 
-numel(uniquetol(M2, 1e-8))
-numel(M2)
-
-numel(uniquetol(M3, 1e-8))
-numel(M3)
-
 % Write in the picture which moments are the same (they get the same number)
 hold all;
 [A, B, C] = uniquetol(M3, 1e-8);
@@ -73,4 +71,9 @@ for k = 1 : length(C)
     text(ll(1), ll(2), num2str(C(k)));
 end
 
-set(gca, 'YDir', 'normal')
+
+% numel(uniquetol(M2, 1e-8))
+% numel(M2)
+% 
+% numel(uniquetol(M3, 1e-8))
+% numel(M3)
