@@ -54,7 +54,12 @@ if remove_biased_terms
     %%%     elements. It seems ok considering k1 >= 0 and k2 <= 0, so the
     %%%     only way they would be equal is if they are equal to 0, which
     %%%     we already removed; but it seems weird. Need to straightend out
-    %%%     paper and code in sign conventions.
+    %%%     paper and code in sign conventions. See notes April 12, 2018:
+    %
+    %         it's ok, we removed the correct biases, but unsure about one
+    %         last thing: we shift -, the paper shifts +; I want to
+    %         consolidate that.
+    % 
     %%%
     %%%
     %%%

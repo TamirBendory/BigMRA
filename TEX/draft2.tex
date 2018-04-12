@@ -211,7 +211,7 @@ a_z^1 &= \sum_{i=0}^{L-1} z[i], \nonumber\\
 a_z^2[\ell] &= \sum_{i=0}^{L-1-\ell} z[i]z[i+\ell], \nonumber\\
 a_z^3[\ell_1,\ell_2] &= \sum_{i=0}^{L-1-\max\{\ell_1,\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. 
 \end{align}
-Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and $a_z^3[\ell_1,\ell_2] = a_z^3[-\ell_1,-\ell_2]$. 
+Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and $a_z^3[\ell_1,\ell_2] = a_z^3[-\ell_1,-\ell_2]$. \TODO{We also have $a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]$ -- is that intended? Do we really have symmetry with the negative signs? I think we have $(\ell_1, \ell_2) \sim (-\ell_1, \ell_2-\ell_1)$}
 Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), then they are equivalent to the autocorrelation functions.
 
 A one-dimensional signal is determined uniquely and stably by its third-order auto-correlation as proven in the following simple proposition.
@@ -264,9 +264,9 @@ The main pillar of this work is the following simple observation.
 If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then the first $L$ entries of the data autocorrelations converge 
 to a scaled, biased, version of the signal's autocorrelation:
 \begin{align}
-\lim_{N\to\infty} a_y^1 &= \gamma a_{x}^1, \nonumber\\
-\lim_{N\to\infty} a_y^2[\ell] &= \gamma a_{x}^2[\ell] +\sigma^2\delta[\ell], \label{eq:data_ac_k1} \\
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &= \gamma a_{x}^3[\ell_1,\ell_2] + \sigma^2\gamma a_{x}^1(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
+\lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1, \nonumber\\
+\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] +\sigma^2\delta[\ell], \label{eq:data_ac_k1} \\
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] + \sigma^2\gamma a_{x}^1 \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), \nonumber
 \end{align}
 for $\ell,\ell_1,\ell_2=0,\ldots L-1$, and where $\delta$ denotes the Kronecker delta function. 
 These relations are proven in Appendix~\ref{sec:autocorrelation_computation}. The analysis is similar to~\cite{bendory2017bispectrum,boumal2017heterogeneous}, yet a particular caution should be taken with the statistical dependencies of the noise entries. 
