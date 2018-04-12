@@ -318,7 +318,7 @@ This relation is proven in  Appendix~\ref{sec:autocorrelation_computation}.
 
 The minimal order of data statistics used to get an accurate estimation of a signal is important to understand, in the asymptotic $\SNR$ regime, the sample complexity of the problem.
 In methods which are based on detection and averaging, the number of signals occurrences  must scale like $\sigma^2$. Taking the $d$th order autocorrelation function amplifies the variance of the noise by a factor of $d$. Therefore, the required number signal occurrences should scale like $\sigma^{2d}$  to retain some constant estimation error. Accordingly, in our  method, $M$ must scale like $\sigma^6$. In Section~\ref{sec:numerics}, we show empirically the third-order autocorrelation suffices also for a mixture of $K>1$ signals without prior knowledge of the $M_i$'s and $\sigma$.  \TODO{question mark on the entire paragraph}
-
+\TODO{We could move here the paragraphs from 1D XP about which moments we compute, to argue that we can expect to recover at most up to $K = L/2$ signals.}
 
 
 \section{Numerical experiments}   \label{sec:numerics}
@@ -335,7 +335,11 @@ is about 1/12.
 %Given the scaling of the target signals (whose median absolute value for the entries is at or below one),
 This is enough noise to make cross-correlations of $y$ even with the true signals display peaks at random locations, uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
 
-Given the observation $y$, we proceed to compute the moments. The first-order moment is straightforward. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose \TODO{Do we want to include a figure to explain why that is?}, and we exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements. As a result, it is unnecessary to estimate $\sigma$. In practice, the moments are computed on batches of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Batches are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data.
+Given the observation $y$, we proceed to compute the moments. The first-order moment is straightforward. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose \TODO{Do we want to include a figure to explain why that is?}, and we exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements---there are $\frac{(L-1)(L-2)}{2}$ such moments. As a result, it is unnecessary to estimate $\sigma$. There are
+\begin{align*}
+	1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
+\end{align*}
+moments in total. In practice, these are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data.
 
 
 \subsection{Two-dimensional experiments} 
