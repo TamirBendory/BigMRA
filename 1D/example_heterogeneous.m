@@ -14,10 +14,10 @@ X(:, 2) = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
 X(:, 3) = randn(L, 1);
 
 % Pick a noise level
-sigma = 3;
+sigma = .0;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = [3e6 2e6 1e6];
+m_want = [3e6 2e6 1e6] / 1e3;
 
 % Length of micrograph
 n = sum(m_want)*W*10;
@@ -26,44 +26,7 @@ fprintf('Micrograph length: %g\n\n\n', n);
 
 %% Pick which correlation coefficients to sample
 
-% Load lists of distinct moments of order 2 and 3
-list2 = (0 : (L-1))';
-
-% Sampling strategy: see notes NB notebook 33, and April 12, 2018, Notebook 35
-list3 = zeros(0, 2);
-n3 = 0;
-for k1 = 0 : (L-1)
-    for k2 = 0 : -1 : -(L-1)
-        if k1 - k2 <= L-1
-            n3 = n3 + 1;
-            list3(n3, :) = [k1, k2];
-        end
-    end
-end
-
-% Optionally, remove all moments that are affected by bias, so that it is
-% no longer necessary to know sigma.
-remove_biased_terms = true;
-if remove_biased_terms
-    list2(list2 == 0) = [];
-    list3(list3(:, 1) == 0 | list3(:, 2) == 0, :) = [];
-    %%%
-    %%%
-    %%%
-    %%%     This is probably fine, but triple check we removed all biased
-    %%%     elements. It seems ok considering k1 >= 0 and k2 <= 0, so the
-    %%%     only way they would be equal is if they are equal to 0, which
-    %%%     we already removed; but it seems weird. Need to straightend out
-    %%%     paper and code in sign conventions. See notes April 12, 2018:
-    %
-    %         it's ok, we removed the correct biases, but unsure about one
-    %         last thing: we shift -, the paper shifts +; I want to
-    %         consolidate that.
-    % 
-    %%%
-    %%%
-    %%%
-end
+[list2, list3] = moment_selection(L, 'include biased');
 
 %% Generate the micrograph
 
@@ -86,7 +49,7 @@ batch_size = 1e8;
 time_to_compute_moments = toc(T);
 fprintf('   Moment computation: %.4g [s]\n', time_to_compute_moments);
 
-moments.M1 = M1 / n;  %%%% !!!!! We normalize by n here; ideally, we should normalize by n in moments_from_data_no_debias_1D, but I'll only do the change when everything is under control
+moments.M1 = M1 / n;  %%%% !!!!! We normalize by n here
 moments.M2 = M2 / n;
 moments.M3 = M3 / n;
 moments.list2 = list2;
@@ -103,7 +66,7 @@ L_optim = 2*L-1;
 
 % X0 = randn(L_optim, K);
 % gamma0 = m_actual*L_optim/n; % give true gamma for now
-sigma_est = 0; % irrelevant if remove_biased_terms = true and if the weights internally do not depend on sigma
+sigma_est = sigma; % irrelevant if biased terms are excluded and if the weights internally do not depend on sigma
 
 [X_est, gamma_est, problem1, stats1] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma_est); %, X0, gamma0(:)); % check if the code fixes gamma to gamma0 or not
 
