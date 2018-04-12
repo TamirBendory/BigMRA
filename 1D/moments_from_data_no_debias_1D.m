@@ -27,15 +27,15 @@ function [M1, M2, M3] = moments_from_data_no_debias_1D(y, list2, list3)
     for k = 1 : n2
         
         shift1 = list2(k);
-        vals1 = [0, shift1];
+        vals1 = [0, -shift1];
         
 %         M2(k) = 0;
 %         for q = (1+max(vals1)) : (n+min(vals1))
-%             M2(k) = M2(k) + y(q)*y(q-shift1);
+%             M2(k) = M2(k) + y(q)*y(q+shift1);
 %         end
         
         range1 = (1+max(vals1)) : (n+min(vals1));
-        M2(k) = sum(y(range1) .* y(range1-shift1));
+        M2(k) = sum(y(range1) .* y(range1+shift1));
         
     end
     
@@ -44,15 +44,15 @@ function [M1, M2, M3] = moments_from_data_no_debias_1D(y, list2, list3)
         shifts = list3(k, :);
         shift1 = shifts(1);
         shift2 = shifts(2);
-        vals1 = [0, shift1, shift2];
+        vals1 = [0, -shift1, -shift2];
 
 %         M3(k) = 0;
 %         for q = (1+max(vals1)) : (n+min(vals1))
-%             M3(k) = M3(k) + y(q)*y(q-shift1)*y(q-shift2);
+%             M3(k) = M3(k) + y(q)*y(q+shift1)*y(q+shift2);
 %         end
         
         range1 = (1+max(vals1)) : (n+min(vals1));
-        M3(k) = sum(y(range1) .* y(range1-shift1) .* y(range1-shift2));
+        M3(k) = sum(y(range1) .* y(range1+shift1) .* y(range1+shift2));
         
     end
     
