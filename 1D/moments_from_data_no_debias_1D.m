@@ -12,6 +12,8 @@ function [M1, M2, M3] = moments_from_data_no_debias_1D(y, list2, list3)
     
     n2 = size(list2, 1);
     n3 = size(list3, 1);
+    assert(size(list2, 2) == 1, 'list2 must have size n2 x 1.');
+    assert(size(list3, 2) == 2, 'list3 must have size n3 x 2.');
     
     if gpuFlag
         y = gpuArray(y);

@@ -7,7 +7,7 @@ function [list2, list3] = moment_selection(L, biased_string)
 % 'include biased' or 'exclude biased'. It has to be specified.
 
     % All useful and distinct moments of order 2
-    list2 = 0 : (L-1);
+    list2 = (0 : (L-1))';
 
     % All useful and distinct moments of order 3
     list3 = zeros(L*(L+1)/2, 2);
