@@ -7,7 +7,7 @@ function [M1, M2, M3] = moments_from_data_no_debias_1D_batch(y, list2, list3, ba
 % at most, then agregated. This is not exact because of missing information
 % at the junction points, but is negligible if batch_size is on the order
 % of millions or more. This helps to compute on GPUs which have limited
-% memory. It is exact if batch_size >= numel(y)
+% memory. It is exact if batch_size >= numel(y).
 % This code assumes moments_from_data_no_debias_1D returns un-normalized
 % moments (not divided by the length of y) and does the same.
 

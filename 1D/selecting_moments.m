@@ -79,7 +79,7 @@ end
 % numel(M3)
 
 
-% A direct way to generate the moments we want (excluding biased terms)
+% A direct way to generate the moments we want, excluding biased terms.
 good_list_3 = zeros((L-1)*(L-2)/2, 2);
 k = 0;
 for l1 = 2 : L-1
@@ -89,3 +89,22 @@ for l1 = 2 : L-1
     end
 end
 
+
+% A direct way to generate the moments we want, including biased terms.
+extra_good_list_3 = zeros(L*(L+1)/2, 2);
+k = 0;
+for l1 = 0 : L-1
+    for l2 = 0 : l1
+        k = k+1;
+        extra_good_list_3(k, :) = [l1, l2];
+    end
+end
+
+% This removes the biased terms from above, yielding exactly the same as
+% good_list_3
+biased_elements = extra_good_list_3(:, 1) == 0 | ...
+                  extra_good_list_3(:, 2) == 0 | ...
+                  extra_good_list_3(:, 1) == extra_good_list_3(:, 2);
+extra_good_list_3(biased_elements, :) = [];
+% Now the two lists are the same
+norm(extra_good_list_3 - good_list_3)

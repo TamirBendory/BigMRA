@@ -29,7 +29,7 @@ fprintf('Micrograph length: %g\n\n\n', n);
 % Load lists of distinct moments of order 2 and 3
 list2 = (0 : (L-1))';
 
-% Sampling strategy: see notes NB notebook 33
+% Sampling strategy: see notes NB notebook 33, and April 12, 2018, Notebook 35
 list3 = zeros(0, 2);
 n3 = 0;
 for k1 = 0 : (L-1)
