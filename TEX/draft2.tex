@@ -328,7 +328,11 @@ In methods which are based on detection and averaging, the number of signals occ
 
 \subsection{One-dimensional experiments}
 
-Here will come the 1D experiment with heterogeneity
+
+For the 1D experiment, we fix $K = 3$ signals of length $L = 21$, as depicted in Figure~\TODO{ref}. Following the data model described in Section~\TODO{ref}, we generate an observation $y$ of length $24.6 \cdot 10^9$. Each of the three signals appears, respectively (and approximately) $30 \cdot 10^6$, $20 \cdot 10^6$ and $10 \cdot 10^6$ times in $y$, such that at least $L-1$ zeros separate two occurrences of any signals. This is done by randomly selecting $60 \cdot 10^6$ placements in $y$ with an accept/reject rule based on the separation constraint. For each placement, one of the three signals is picked proportionally to the desired number of occurrences of each. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. Given the scaling of the target signals (whose median absolute value for the entries is at or below one), this is enough noise to make cross-correlations of $y$ even with the true signals display peaks at random locations, uninformative of the actual locations of the signal occurrences.
+
+
+
 
 \subsection{Two-dimensional experiments} 
 
