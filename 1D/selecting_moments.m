@@ -72,3 +72,5 @@ for k = 1 : length(C)
     ll = list3(k, :);
     text(ll(1), ll(2), num2str(C(k)));
 end
+
+set(gca, 'YDir', 'normal')
