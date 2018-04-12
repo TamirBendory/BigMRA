@@ -14,7 +14,7 @@ X(:, 2) = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
 X(:, 3) = randn(L, 1);
 
 % Pick a noise level
-sigma = .0;
+sigma = .1;
 
 % Desired number of occurrences of each signal X(:, k)
 m_want = [3e6 2e6 1e6] / 1e3;
@@ -26,7 +26,7 @@ fprintf('Micrograph length: %g\n\n\n', n);
 
 %% Pick which correlation coefficients to sample
 
-[list2, list3] = moment_selection(L, 'include biased');
+[list2, list3] = moment_selection(L, 'exclude biased');
 
 %% Generate the micrograph
 
@@ -127,7 +127,6 @@ for k1 = 1 : K
         
         x1 = X(:, k2);
         x2 = X_est_L(:, k1);
-%         x2 = align_to_reference_1D(x2, x1);
         
         plot(0:(L-1), x1, 0:(L-1), x2);
         
@@ -166,7 +165,6 @@ for k1 = 1 : K
         
         x1 = X(:, k2);
         x2 = X_est(:, k1);
-%         x2 = align_to_reference_1D(x2, x1);
         
         plot(0:(L-1), x1, 0:(L-1), x2);
         
