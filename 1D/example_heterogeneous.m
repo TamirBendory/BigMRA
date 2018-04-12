@@ -50,8 +50,11 @@ if remove_biased_terms
     %%%
     %%%
     %%%
-    %%%     FORGOT TO REMOVE SOME BIASED ELEMENTS -- need to be very
-    %%%     careful and run again.
+    %%%     This is probably fine, but triple check we removed all biased
+    %%%     elements. It seems ok considering k1 >= 0 and k2 <= 0, so the
+    %%%     only way they would be equal is if they are equal to 0, which
+    %%%     we already removed; but it seems weird. Need to straightend out
+    %%%     paper and code in sign conventions.
     %%%
     %%%
     %%%
