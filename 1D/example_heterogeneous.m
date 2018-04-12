@@ -14,10 +14,10 @@ X(:, 2) = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
 X(:, 3) = randn(L, 1);
 
 % Pick a noise level
-sigma = .1;
+sigma = 3;
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = [3e6 2e6 1e6] / 1e3;
+m_want = [3e6 2e6 1e6];
 
 % Length of micrograph
 n = sum(m_want)*W*10;
