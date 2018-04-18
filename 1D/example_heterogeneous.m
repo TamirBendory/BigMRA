@@ -8,7 +8,7 @@ clc;
 K = 3;
 L = 21;
 W = 2*L-1;
-X = randn(L, K);  % randn instead of rand here -- to be discussed
+X = zeros(L, K);
 X(:, 1) = [ones(ceil(L/2), 1) ; -ones(floor(L/2), 1)];
 X(:, 2) = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
 X(:, 3) = randn(L, 1);
@@ -107,16 +107,17 @@ savefig(gcf, sprintf('example_heterogeneous_%s_n_%d.fig', datestr(now(), 30), n)
 
 %% Try to extract dominant subsignal of length L in each estimated signal
 
-X_est_L = zeros(L, K);
-for k = 1 : K
-    for s = 0 : (L_optim - 1)
-        x = circshift(X_est(:, k), s);
-        x = x(1:L);
-        if norm(x) > norm(X_est_L(:, k))
-            X_est_L(:, k) = x;
-        end
-    end
-end
+% X_est_L = zeros(L, K);
+% for k = 1 : K
+%     for s = 0 : (L_optim - 1)
+%         x = circshift(X_est(:, k), s);
+%         x = x(1:L);
+%         if norm(x) > norm(X_est_L(:, k))
+%             X_est_L(:, k) = x;
+%         end
+%     end
+% end
+X_est_L = extract_roi(X_est, L);
 
 figure(2);
 clf;
