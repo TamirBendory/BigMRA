@@ -1,4 +1,4 @@
-function [X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma, X0, gamma0)
+function [X_est, gamma_est, problem, stats, loss] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma, X0, gamma0)
 
     M1 = moments.M1;        %% Make sure these are normalized by n (length of the micrograph)
     M2 = moments.M2;
@@ -88,7 +88,7 @@ function [X_est, gamma_est, problem, stats] = least_squares_1D_heterogeneous(mom
     opts.maxiter = 1000;
     
     warning('off', 'manopt:getHessian:approx');
-    [Z, loss, stats] = trustregions(problem, Z0, opts); %#ok<ASGLU>
+    [Z, loss, stats] = trustregions(problem, Z0, opts);
     warning('on', 'manopt:getHessian:approx');
     
     X_est = Z.X;
