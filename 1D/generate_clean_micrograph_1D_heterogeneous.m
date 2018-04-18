@@ -15,7 +15,7 @@ function [y, m_actual] = generate_clean_micrograph_1D_heterogeneous(X, W, n, m)
 
     % Since we attempt placement at random, we need the end-result to be
     % quite sparse to have decent chances of finding sum(m) spots.
-    if n < 10*sum(m)*W
+    if n < 5*sum(m)*W
         warning('BigMRA:gendata1D', ...
                 'It may be difficult to get this many repetitions...');
     end
