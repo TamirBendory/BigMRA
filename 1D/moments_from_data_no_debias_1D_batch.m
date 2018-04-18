@@ -14,7 +14,7 @@ function [M1, M2, M3] = moments_from_data_no_debias_1D_batch(y, list2, list3, ba
     y = y(:);
     n = size(y, 1);
     N = ceil(n / batch_size);
-    q = linspace(1, n+1, N+1);
+    q = round(linspace(1, n+1, N+1));
     
     n2 = size(list2, 1);
     n3 = size(list3, 1);
