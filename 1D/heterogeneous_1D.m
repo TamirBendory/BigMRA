@@ -1,14 +1,14 @@
-function [X2, gamma2, X1, gamma1, X1_L] = heterogeneous_1D(moments, K, L, L_optim, sigma_est, X0, gamma0)
+function [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, K, L, L_optim, sigma_est, X0, gamma0)
 % Estimate K signals of length L from moments, with an intermediate
 % optimization through signals of length L_optim.
 %
-% [X2, gamma2, X1, gamma1, X1_L] = heterogeneous_1D(moments, K, L, ...
-%                                           L_optim, sigma_est, X0, gamma0)
+% [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, ...
+%                                     K, L, L_optim, sigma_est, X0, gamma0)
 %
 %
 % Inputs:
 %
-% moments is a structure with fields list2, list3, M1, M2, M3 (see examples.)
+% moments: a structure with fields list2, list3, M1, M2, M3 (see examples.)
 %
 % K >= 1, L >= 1, L_optim >= L integers.
 %
@@ -61,7 +61,7 @@ function [X2, gamma2, X1, gamma1, X1_L] = heterogeneous_1D(moments, K, L, L_opti
     gamma2_0 = gamma1*(L/L_optim);
 
     % Second optimization round.
-    [X2, gamma2] = least_squares_1D_heterogeneous(moments, ...
+    [X2, gamma2, ~, ~, cost_X2] = least_squares_1D_heterogeneous(moments, ...
                                        L, K, sigma_est, X1_L, gamma2_0(:));
 
 end
