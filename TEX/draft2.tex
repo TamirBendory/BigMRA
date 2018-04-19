@@ -331,6 +331,22 @@ In methods which are based on detection and averaging, the number of signals occ
 
 \subsection{One-dimensional experiments}
 
+\TODO{Revise to explain $K = 1$ experiment first, then explain $K = 3$.}
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.7\linewidth]{XP_1D_homogeneous/progressive_n10000000000_107521}
+	\caption{\TODO{...}}
+	\label{fig:1Dhomosignals}
+\end{figure}
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.7\linewidth]{XP_1D_homogeneous/progressive_RMSE_n10000000000_107521}
+	\caption{\TODO{...}}
+	\label{fig:1DhomoRMSE}
+\end{figure}
+
 
 For the 1D experiment, we fix $K = 3$ signals of length $L = 21$, as depicted in Figure~\TODO{ref}. Following the data model described in Section~\TODO{ref}, we generate an observation $y$ of length $24.6 \cdot 10^9$. Each of the three signals appears, respectively (and approximately) $300 \cdot 10^6$, $200 \cdot 10^6$ and $100 \cdot 10^6$ times in $y$, such that at least $L-1$ zeros separate two occurrences of any signals. This is done by randomly selecting $600 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far. For each placement, one of the three signals is picked at random proportionally to the desired number of occurrences of each. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The SNR of $y$
 % sqrt((m_want*sum(X.^2)')/(sigma^2*n))
