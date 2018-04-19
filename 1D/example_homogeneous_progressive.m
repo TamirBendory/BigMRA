@@ -141,7 +141,7 @@ ylabel('RMSE');
 set(gca, 'FontSize', 14);
 grid on;
 
-figname2 = sprintf('progressive_RMSE_n%d_%d.fig', n, ID);
+figname2 = sprintf('progressive_RMSE_n%d_%d', n, ID);
 savefig(2, [figname2, '.fig']);
 pdf_print_code(2, [figname2 '.pdf'], 14);
 
