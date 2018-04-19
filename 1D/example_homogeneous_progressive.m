@@ -7,13 +7,17 @@ clc;
 % Pick one signal of length L and the size W of the separation window.
 L = 21;
 W = 2*L-1;
-X = randn(L, 1);
+% X = randn(L, 1);
+X = zeros(L, 1);
+X(1:7) = 1;
+X(8:11) = -1;
+X(12:L) = .5;
 
 % Pick a noise level.
-sigma = 2;
+sigma = 3;
 
 % Desired length of micrograph.
-n = 1e9;
+n = 1e10;
 
 % Desired number of occurrences of the signal.
 m_want = floor(n/(5*W));
@@ -34,7 +38,7 @@ SNR = norm(y_clean, 'fro')/norm(y_obs-y_clean, 'fro');
 %% The grand experiment starts here
 
 % Select sizes of sub-micrographs to consider.
-ns = unique(round(logspace(4, log10(n), 9)));
+ns = unique(round(logspace(5, log10(n), 9)));
 
 % How many times do we optimize from a different random initial guess?
 n_init_optim = 3;
@@ -95,25 +99,52 @@ figure(1);
 for iter = 1 : length(ns)
     result = results(iter);
     subplot(3, 3, iter);
-    title(sprintf('n = %d', nn));
     T = 0:(L-1);
-    plot(T, X, T, result.X1_L, T, result.X2);
-%     hleg = legend(sprintf('Ground truth (%.2g)', result.gamma), ...
-%                   sprintf('First estimate (%.2g)', result.gamma1*L/L_optim), ...
-%                   sprintf('Final estimate (%.2g)', result.gamma2));
+    plot(T, result.X1_L, T, result.X2, T, X);
+    title(sprintf('n = %d', ns(iter)));
+    
+    % Hack cosmetics for specific experience
+%     if ns(iter) < 2e6
+%         ylim([-5, 5]);
+%     else
+        ylim([-2, 2]);
+        set(gca, 'YTick', [-2, 0, 2]);
+        set(gca, 'XTick', [0, 10, 20]);
+        set(gca, 'FontSize', 14);
+%     end
+    
+%     hleg = legend(sprintf('First estimate (%.2g)', result.gamma1*L/L_optim), ...
+%                   sprintf('Final estimate (%.2g)', result.gamma2), ...
+%                   sprintf('Ground truth (%.2g)', result.gamma));
 %     set(hleg, 'Location', 'northoutside');
 %     set(hleg, 'Orientation', 'horizontal');
 end
 
-savefig(gcf, sprintf('progressive_n%d_%d.fig', n, ID));
+set(gcf, 'Color', 'w');
+
+figname1 = sprintf('progressive_n%d_%d', n, ID);
+savefig(1, [figname1, '.fig']);
+pdf_print_code(1, [figname1 '.pdf'], 14);
 
 %%
 figure(2);
 
 loglog(ns, [results.RMSE1], '.-', ns, [results.RMSE2], '.-');
-hleg = legend('First estimate', 'Final estimate');
-set(hleg, 'Location', 'northoutside');
-set(hleg, 'Orientation', 'horizontal');
-title('Root mean squared error');
+hleg = legend('Long estimate', 'Final estimate');
+set(hleg, 'Location', 'northeast');
+set(hleg, 'Orientation', 'vertical');
+set(hleg, 'Box', 'off');
+title('Root mean squared error on signal estimation');
+set(gcf, 'Color', 'w');
+xlabel('Observation length n');
+ylabel('RMSE');
+set(gca, 'FontSize', 14);
+grid on;
 
-savefig(gcf, sprintf('progressive_RMSE_n%d_%d.fig', n, ID));
+figname2 = sprintf('progressive_RMSE_n%d_%d.fig', n, ID);
+savefig(2, [figname2, '.fig']);
+pdf_print_code(2, [figname2 '.pdf'], 14);
+
+P = polyfit(log10(ns), log10([results.RMSE2]), 1);
+fprintf('Slope: %g\n', P(1));
+
