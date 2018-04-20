@@ -50,12 +50,21 @@ function [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, K, 
     end
     
     % First optimization round.
-    [X1, gamma1] = least_squares_1D_heterogeneous(moments, ...
+    [X1, gamma1, problem] = least_squares_1D_heterogeneous(moments, ...
                                      L_optim, K, sigma_est, X0, gamma0(:));
 
-    % Extract dominant subsignals of length L (with cyclic indexing) in
+    % Extract best subsignals of length L (with cyclic indexing) in
     % each estimated signal.
-    X1_L = extract_roi(X1, L);
+    if K > 1
+        X1_L = extract_roi(X1, L);
+    else
+        % Different strategy for K = 1
+        % Loss function (getCost on this problem expects an input of length
+        % L_long, but we test signals of length L_short, so we zero-pad.)
+        lossfun = @(x) getCost(problem, ...
+           struct('gamma', gamma1, 'X', [x ; zeros(L_optim - L, 1)]));
+        X1_L = extract_roi_loss(X1, L, lossfun);
+    end
     
     % Scale estimated densities now that signal length changed.
     gamma2_0 = gamma1*(L/L_optim);
