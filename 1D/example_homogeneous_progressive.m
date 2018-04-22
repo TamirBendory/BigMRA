@@ -8,10 +8,11 @@ clc;
 L = 21;
 W = 2*L-1;
 % X = randn(L, 1);
-X = zeros(L, 1);
-X(1:7) = 1;
-X(8:11) = -1;
-X(12:L) = .5;
+% X = zeros(L, 1);
+% X(1:7) = 1;
+% X(8:11) = -1;
+% X(12:L) = .5;
+X = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
 
 % Pick a noise level.
 sigma = 3;
