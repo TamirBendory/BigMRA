@@ -80,45 +80,49 @@
 
 \section{Introduction}
 
-In this paper, we consider the problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown  locations in a data sequence $y$\TODO{This is the most important sentence of the paper, we need to polish it up}. The data may also contain background information---independent of the signals---modeled as noise.
+In this paper, we consider the problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown  locations in a data sequence $y$\TODO{This is the most important sentence of the paper, we need to polish it up}. The data may also contain background information---independent of the signals---which we model as noise.
+A precise mathematical formulation of the model and the estimation problem is provided in Section~\ref{sec:model}.
 For one-dimensional signals, the data sequence can be thought of as a 
 long time series and the $K$ signals as repeated short events.  
 This model appears in many applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
-In the last part of this manuscript, we also propose to interpreted this estimation problem as a toy model for the problem of single particle reconstruction using cryo-electron microscopy (cryo--EM). A precise mathematical formulation of the model and the estimation problem is provided in Section~\ref{sec:model}.
+In the last part of this paper, we also propose to interpreted this estimation problem as a toy model for the task of single particle reconstruction using cryo-electron microscopy (cryo--EM). 
 
-Figure~\ref{fig:XC_example} shows a simple example of data sequences with  one signal ($K=1$) that appears twice.
-The upper row presents the data without noise, in the left panel, and its cross-correlation with the signal itself in the right panel. The cross-correlation exhibits two peaks corresponding to the signal's locations in the data. 
+Figure~\ref{fig:XC_example} shows a simple example of data sequences with  one signal ($K=1$).
+The upper row presents the data without noise, in the left panel, and its cross-correlation with the signal itself in the right panel. The cross-correlation exhibits two peaks, corresponding to the two signal's locations in the data. 
 %Even if we add a small amount of noise and considering more than one signal ($K>1$), estimating the signals remains a painless task. 
 %In this scenario, standard detection and clustering algorithms can locate and cluster the copies of the signals that can be then averaged within each class.  
-In  the middle row, the same data is shown, now contaminated with i.i.d.\ Gaussian noise with zero mean and standard deviation of $\sigma=0.7$. 
-While it is harder to observe the signal occurrences in the left panel, the cross-correlation still produces fairly adequate estimates of the signal's locations. In practice one usually does not possess a precise template of the signal to be recovered, however, clever methods based on template matching, such as those used in structural biology~\cite{heimowitz2018apple} and radar~\cite{gogineni2017passive}, may work.
+In  the middle row, the same data is shown, now contaminated with i.i.d.\ Gaussian noise with zero mean and standard deviation of $\sigma=0.5$. 
+While it is harder to identify the signal occurrences in the left panel, the cross-correlation still produces fairly adequate estimates. In practice one usually does not possess a precise template of the signal to be recovered, however, clever methods based on template matching, such as those used in structural biology~\cite{heimowitz2018apple} and radar~\cite{gogineni2017passive}, may work.
 The bottom panels show the same data swamped in  
 i.i.d.\ Gaussian noise with standard deviation  $\sigma=3$. In this  low signal--to--noise (\SNR) regime, 
 detection of individual signal occurrences is impossible, 
 even if the true signal is known. 
-This phenomenon---explained in more detail in Section~\ref{sec:model}--raises the question: 
-\medskip 
-\\
-\emph{Can we estimate the signals accurately without detecting their individual occurrences? }
- \\
+This phenomenon---explained in more detail in Section~\ref{sec:model}--raises the following fundamental question: 
+%\medskip 
+%\\
+\begin{center}
+\emph{Can we estimate the signals accurately without detecting their individual occurrences? }  %\\
+\end{center}
 
-In this work, we provide a positive answer to this question. For one signal ($K=1$), we prove that in the asymptotic regime in which the signal appears
-infinitely many times in the data, and under a spacing condition, one can estimate the signal \emph{to any desired accuracy in any $\SNR$ level}. We show empirically that the same holds true for multiple signals if $K$ is not too large. \TODO{Do we want a sentence like: Based on  recent results on the multireference alignment problem, we conjecture that it remains true as long as $K \lesssim L/6$. ?}
+In this work, we provide a positive answer to this question. For a single signal ($K=1$), we prove that in the asymptotic regime in which the signal appears
+infinitely many times, and under a spacing condition, one can estimate the signal \emph{to any desired accuracy in any $\SNR$ level}. We show empirically that the same holds true for multiple signals if $K$ is not too large. \TODO{Do we want a sentence like: Based on  recent results on the multireference alignment problem, we conjecture that it remains true as long as $K \lesssim L/6$. ? I am not sure it is necessary.}
 
 Our framework is based on autocorrelation analysis.
-In a nutshell, the method consists of two stages. First, we estimate a mixture (linear combination) of the low--order autocorrelation functions of the signals from the data. These quantities can be estimated, to any desired accuracy, if individual occurrences are separated by at least $L-1$ entries and  each signal appears ample number of times \TODO{?} in the data. There is no need to detect individual occurrences. 
-Furthermore, we do not assume the knowledge of the number of signal occurrences $M$ and the noise level.
+In a nutshell, the method consists of two stages. First, we estimate a mixture (i.e., linear combination) of the low--order autocorrelation functions of the signals from the data. These quantities can be estimated, to any desired accuracy, if individual occurrences are separated by at least $L-1$ entries and  each signal appears sufficiently many times in the data. There is no need to detect individual occurrences. 
+Furthermore, we do not assume the knowledge of the number of signal occurrences $M$ or the noise level.
 In the second stage, the signals are estimated from the mixed autocorrelations using a nonconvex least-squares (LS).
-Section~\ref{sec:autocorrelation} elaborates on the technique and proves some of its properties, while Section~\ref{sec:numerics} provides numerical demonstrations.
+Section~\ref{sec:autocorrelation} elaborates on the technique and proves some of its properties, while Section~\ref{sec:numerics} shows numerical demonstrations and discusses computational aspects.
 
-Interestingly, expectation-maximization (EM)---a popular framework for similar estimation problems, such as Gaussian mixture models and multireference alignment---is intractable for this problem, even if the number of signal occurrences $M$ is known and $K=1$.
-In particular, in each iteration, EM assigns probabilities to all possible combinations of positioning the current signal estimate in $M$ locations on $\mathbb{Z}_N$, resulting in $O(N^M)$ possibilities (even when excluding forbidden combinations due to the spacing constraint).
+Interestingly, expectation-maximization (EM)---a popular algorithm for similar estimation problems, such as Gaussian mixture models and multireference alignment---is intractable for this problem. This is true even if  $K=1$ and the number of signal occurrences $M$ is known.
+In particular, in each iteration, EM assigns a probability to any feasible combination of positioning the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$.
+In total, even when excluding forbidden combinations due to the spacing constraint, there are $O(N^M)$ such combinations. \TODO{cumbersome}
 
 
 \begin{figure}
 		\centering
 		\includegraphics[scale=0.5]{XC_example}
-		\caption{ The upper left panel shows a data sequence of length $N=80$ with one rectangular signal of length $L=11$ that appears twice. In the second and third rows of the left column, a Gaussian noise with mean zero and standard deviation $\sigma=0.5$ and $\sigma=3$ was added, respectively. The panels in the right column present the cross-correlation of the data with the true rectangular signal. Note to the different scales in different panels. }
+		\caption{ The upper left panel shows a data sequence (measurement) of length $N=80$ with one rectangular signal of length $L=11$ that appears twice. The upper right panel shows the cross-correlation of the data with the true rectangular signal.  
+		The second and third rows present the data sequence with additive Gaussian noise with mean zero and standard deviation $\sigma=0.5$ and $\sigma=3$, respectively, and its cross-correlation with the signal. Note to the different scales in different panels. Importantly, in the low $\SNR$ regime the cross-correlation does not provide information on the locations of the signal in the data.}
     	\label{fig:XC_example}
 \end{figure}
 
@@ -329,7 +333,7 @@ In methods which are based on detection and averaging, the number of signals occ
 %\TODO{Here we should say that we can afford to work only with non-biased terms}
 
 
-\subsection{One-dimensional experiments}
+%\subsection{One-dimensional experiments}
 
 \TODO{Revise to explain $K = 1$ experiment first, then explain $K = 3$.}
 
@@ -371,10 +375,8 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 \TODO{Should we do variable projection for the gammas, that is, exploit the fact the problem is a regular least squares in the gammas (up to the positivity constraints) to substitute the explicit optimum for them? Not sure it's worth the effort. -- Ok, it's probably not a good idea, because even with fixed gammas to the correct value, optimization takes a while.}
 \TODO{Do we still need to stress at this point that the optimization part has complexity independent of length of observation? Should be pretty clear at this point already.}
 
-\subsection{Two-dimensional experiments} 
-
-
-?? 
+%\subsection{Two-dimensional experiments} 
+%?? 
 
 %
 %In this section, we provide the details of the 2D experiment shown in Figure~\ref{fig:example}. In the experiment, we generated a sequence of $767\times 10^3$ 2D images (``micrograph") of size $2000\times 2000$. Each micrograph had around $\sim 900$ signal occurrences (depends on the stopping criterion that we need to explain) and in total $M = 561\times 10^6$. The noise level was $\sigma=1$.  
