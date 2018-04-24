@@ -71,7 +71,7 @@
 \title{Estimation below the detection limit}
 
 
-\author{Tamir Bendory}
+\author{Tamir Bendory, Nicolas Boumal, William Leeb and Amit Singer}
 \maketitle
 
 \begin{abstract}
@@ -136,35 +136,36 @@ In total, even when excluding forbidden combinations due to the spacing constrai
 \section{Model and related literature}  \label{sec:model}
 
 Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the data. 
-A plain way to present the forward model is as a mixture of blind deconvolution problems between binary signals and the target signals
+The forward model can be posed as a mixture of \emph{blind deconvolution} problems between binary signals and the target signals $x_i$:
 \begin{equation} \label{eq:model}
 y = \sum_{i=1}^K x_i\ast s_i + \varepsilon,\quad \varepsilon\sim\mathcal{N}(0,\sigma^2 I).
 \end{equation}
 %We model the background information as i.i.d.\ Gaussian noise with zero mean and $\sigma^2$ variance. 
-Each  $s_i\in\{0,1\}^N$ is associated with the position of the occurrences of the corresponding $x_i$. Let $\mathcal{S}_i$ denotes the set of  the nonzero
- values of $x_i$ and assume that the all $\mathcal{S}_i$'s are disjoint. The union of supports is denoted by $s = \sum_{i=1}^Ks_i$ and similarly $\mathcal{S} = \cup \mathcal{S}_i$. 
-The cardinality of the sets are denoted by $\vert \mathcal{S}_i\vert = M_i$ and $\vert \mathcal{S}\vert :=M =  \sum_{i=1}^{K}M_i$.  Neither the $M_i$'s nor $M$ are assumed to be known. 
+The nonzero values of each  $s_i\in\{0,1\}^N$ determine the position of the occurrences of the corresponding $x_i$. 
+We denote the set of these nonzero values by 
+ $\mathcal{S}_i$ and its cardinality by $\vert \mathcal{S}_i\vert = M_i$. 
+By assuming that all $\mathcal{S}_i$'s are disjoint,  we let $s = \sum_{i=1}^Ks_i$, $\mathcal{S} = \bigcup_{i=1}^{K} \mathcal{S}_i$ and  $\vert \mathcal{S}\vert :=M =  \sum_{i=1}^{K}M_i$.  Neither the $M_i$'s nor $M$ are assumed to be known. 
 
-In order to estimate the mixture of signals autocorrelations, we assume that the support of $s$ is not clustered. In particular, 
+In order to estimate the mixture of autocorrelations, we assume that the support of $s$ is not clustered. In particular,
 \begin{equation} \label{eq:spacing}
 \text{For all }  i,j\in\mathcal{S}, \, i\neq j,  \quad  \vert i-j \vert\geq L-1.  
 \end{equation}
-The goal of the problme is to estimate $x_1,\ldots,x_K$ from $y$.
+The goal of the problem is to estimate $x_1,\ldots,x_K$ from $y$.
 
 Blind deconvolution is a longstanding problem, arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 To make the problem well-posed, we must  assume some prior knowledge or  structure. 
-In our case, the prior information is that $s$ is a binary signal that satisfies~\eqref{eq:spacing}. 
+In our case, the prior information is that $s$ is a binary signal that satisfies the separation constraint~\eqref{eq:spacing}. 
 Other settings of blind deconvolution problems have been analyzed recently, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi2016guaranteed}
 where the focus is on high $\SNR$ regimes.
 
 
-An important feature of the problem under consideration is that while both $x_i$'s and $s_i$'s are unknown, the goal is merely to estimate the $x_i$'s. The  $s_i$'s  are referred to as \emph{nuisance  variables}. Indeed, in many blind deconvolution applications the sole purpose is to estimate one of the unknown signals. For instance, in image deblurring, both the blurring
+An important feature of the problem under consideration is that while both $x_i$'s and $s_i$'s are unknown, the goal is merely to estimate the $x_i$'s. The  $s_i$'s  are referred to as \emph{nuisance  variables}. Indeed, in many blind deconvolution applications the sole purpose is to recover one of the unknown signals. For instance, in image deblurring, both the blurring
 kernel and the high-resolution image are unknown, but the primary goal is only
 to sharpen the image.
 
-If $x$ is known and $K=1$, then a sparse signal can be estimated by linear programming  in the high $\SNR$ regime, e.g.,~\cite{de2012exact,duval2015exact,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating $s$ is impossible. To see that, suppose that an oracle provides us $M$ windows of length $W>L$, each contains one copy of $x$. That is to say, we get a series of windows, each one contains a signal at unknown location. 
+If $x$ is known and $K=1$, then a sparse signal can be estimated by linear programming  in the high $\SNR$ regime, e.g.,~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see that, suppose that an oracle provides us $M$ windows of length $W>L$, each contains one copy of $x$. That is to say, we get a series of windows of length $W$, each one contains a signal at an unknown location. 
 Estimating the position of the known signal within each  window is an easier problem than detecting the support of $s$. 
-However, even this problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Therefore, we conclude that detecting the nonzero values of $s$ is impossible in low $\SNR$. As aforementioned, this work focuses on this regime and examines under what conditions we can estimate the signals themselves, despite the impossibility of detecting their individual occurrences.
+Nevertheless, even this problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Therefore, we conclude that detecting the nonzero values of $s$ is impossible in low $\SNR$. As aforementioned, this work focuses on this regime and examines under what conditions we can estimate the signals, despite the impossibility of detecting their individual occurrences.
 
 For $K=1$, our problem can be also interpreted as a special case of the system identification problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
 \begin{eqnarray}
@@ -172,27 +173,25 @@ y = x\ast w + \varepsilon,
 \end{eqnarray} 
 where $x$ is the unknown signal (``system''), $w$ is an unknown, random, input sequence and $\varepsilon$ is an additive noise.   
 %The problem has also been studied in the case of a known input $w$~\cite{pillonetto2010new,dinuzzo2015kernels,bottegal2016robust}. 
-The goal of this problem is to estimate $x$ (identify the system). The question of identifiability of $x$ under
+The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under
 this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}.
 In the special case where $w\in\{0,1\}^N$, satisfying the spacing requirement~\eqref{eq:spacing}, we obtain our
 model in the  case of a single signal ($K = 1$).
 
 Likelihood-based methods seek to maximize the likelihood function for $x$,
 given the observed signal $y$. Solving this optimization exactly is typically
-intractable, and so heuristic methods are used instead. One proposed heuristic
- is to use Markov Chain Monte Carlo (MCMC); in special
+intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC); in special
 cases, including the case where $w$ is binary, EM has been used~\cite{cappe1999simulation}.
 The EM method is based upon a certain ``forward-backward'' procedure
-used in hidden Markov models, described in~\cite{rabiner1989tutorial}. \TODO{We need to explain}
-Other problems solve for parameterized models of $x$; for instance, see~\cite{andrieu2001bayesian}. 
-That same paper also considers multiple distinct signals $x$, as in our heterogeneity framework ($K>1$). Their proposed
-solution is an MCMC algorithm designed for their specific parametrized problem.
+used in hidden Markov models~\cite{rabiner1989tutorial}. \TODO{need further explanation, is it an approximation?}.
+Another paper considers parameterized models for multiple distinct signals, as in our heterogeneity framework ($K>1$)~\cite{andrieu2001bayesian}.
+Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem.
 
 Because likelihood methods are computationally expensive, methods based
-on recovery from moments and cumulants, which are akin to our method, have
+on recovery from moments, which are akin to our method, have
 also been previously used for system identification. The question of identifiability
 of $x$ from third-order statistics with non-Gaussian $w$ was considered in~\cite{lii1982deconvolution}. \TODO{how is it different from bispectrum inversion?}
-Methods using the third- and fourth-order cumulants are described in~\cite{giannakis1989identification,tugnait1984identification}.
+Methods based on the third- and fourth-order moments are described in~\cite{giannakis1989identification,tugnait1984identification}.
 
 
 \section{Autocorrelation analysis}   \label{sec:autocorrelation}
