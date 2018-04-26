@@ -397,30 +397,31 @@ In this paper, we considered the problem of estimating a set of signals from the
 Our technique  is based on computing the third-order autocorrelation function of the data with asymptotic estimation rate proportional to $\sigma^6/M$ \TODO{TB: it's not clear to me yet whether we discuss the estimation rate in the paper}. Based on related results in multireference alignment~\cite{abbe2018estimation}, we believe that it is the optimal estimation rate, however, this is yet to be proven.
 
 Our results rely on two core assumptions that are not necessarily met by applications. 
-First, we modeled the background information as i.i.d.\ additive noise. In practice, the background information may be structured or depend on the signal. Then, the question is  under what conditions  
-one can still estimate the signals and separate them from the background information in the low $\SNR$ regime? 
+First, we modeled the background information as i.i.d.\ additive noise. In practice, the background information may be structured or depend on the signal. It raises the question  under what conditions on the background structure and statistics  
+one can still estimate the signals in the low $\SNR$ regime.
 
-In addition, we assumed that the signal occurrences are all separated by $L-1$ entries, see~\eqref{eq:spacing}. If the signals are not separated, one can introduce a new variable $p$ that represents the distribution of the spacing between signal occurrences. The first entry $p[1]$ will represent the probability that two consecutive signals are separated by only one entry, $p[2]$ the probability for spacing of two entries and so on. Using this auxiliary variable $p$, one can write explicitly the relation between the autocorrelation functions of the data and those of the signal in a similar way to~\eqref{eq:data_ac}. This raises the question under what conditions on $p$ and the signals, one can estimate the signals from the data?
+In addition, we assumed that the signal occurrences are all separated by $L-1$ entries, see~\eqref{eq:spacing}. If the signals are not separated, one can introduce a new variable $p$ that represents the distribution of the spacing between signal occurrences. The first entry $p[1]$ will represent the probability that two consecutive signals are separated by only one entry, $p[2]$ the probability for spacing of two entries and so on. Using this auxiliary variable $p$, one can write explicitly the relation between the autocorrelation functions of the data and those of the signal in a similar way to~\eqref{eq:data_ac}. 
+An interesting question is  under what conditions on $p$ and the signals, one can estimate the signals from the data.
 
 
 \section{Connection with the cryo--EM problem}	
 
 Cryo--EM is an innovative technology for reconstructing the 3D structure of macromolecules. In recent years, structures
 of many molecules, previously regarded as insurmountable, are now being
-obtained to near-atomic resolution; see for instance~\cite{kuhlbrandt2014resolution,bartesaghi20152}. This technological advancement was recognized by the 2017 Nobel Prize in Chemistry~\cite{nobel}. 
+reconstructed to near-atomic resolution; see for instance~\cite{kuhlbrandt2014resolution,bartesaghi20152}. This technological advancement was recognized by the 2017 Nobel Prize in Chemistry~\cite{nobel}. 
 
 In a cryo--EM experiment, multiple biological samples of the (ideally) same molecule are rapidly frozen in a thin layer of vitreous ice. Within the ice, the molecules are randomly oriented and positioned. Then,  the microscope produces a 2D tomographic projection image, called a \emph{micrograph}, of the multiple samples embedded in the ice. Importantly, the micrograph is dominated by noise due to the small electron doses that
 can be applied to the specimen without causing radiation damage.
 
 The cryo--EM problem is to estimate the structure of the molecule from the micrograph (or, typically, several micrographs). 
 All contemporary methods in the field split the reconstruction procedure to several subroutines. 
-The first step in the pipeline is the so called particle picking, in which one aims to detect the 2D tomographic projections of the samples from the noisy micrograph. The output of ideal particle picker is a series of 2D images, each contains one centered tomographic projection associated with unknown 3D orientation. This series of images 
- is then used by a variety of algorithms to reconstruct the structure. 
-However, due to the high noise level, the performance of particle pickers  is not ideal. For instance, the projections in the 2D images are typically not centered, increasing dramatically the number of parameters involved in the estimation problem. In addition, the information from particles that are too close to each other is usually neglected. Hence, valuable information that can be used is omitted. 
+The first step in the pipeline is the so-called particle picking, in which one aims to detect the 2D tomographic projections of the samples from the noisy micrograph. The output of ideal particle picker is a series of 2D images, each contains one centered tomographic projection associated with an unknown 3D orientation. This series of images 
+ is then used to estimate the structure. 
+However, due to the high noise level, the performance of particle pickers  is not ideal. For instance, the projections in the 2D images are typically not centered, increasing dramatically the number of parameters involved in the estimation problem. In addition, the information from particles that are too close to each other is usually neglected. Hence, valuable information that can be harnessed is omitted. 
 
-The model considered in this paper can be interpreted as a preliminary step towards investigation of the possibility to \emph{estimate the molecule's structure directly from the micrograph}. 
-In our model, the noisy data $y$ is the analog of the micrograph. The $K$ sought signals correspond to $K$ different molecule's projections, each taken from  different unknown viewing direction. %In tomography, if enough projections are estimated, then one can estimate the whole structure (up to some $K$-dependent resolution).
-The position of individual projections are the nuisance variables of the cryo--EM problem (as well as the viewing directions), in analogy to individual signal's locations in our setup.
+The model considered in this paper can be interpreted as a preliminary step towards investigation of the possibility to \emph{estimate the molecule's structure directly from the micrograph}, that is, by skipping the particle picking step. 
+In our model, the noisy data $y$ is the analog of the micrograph. The $K$ sought signals correspond to $K$ different molecule's projections, each taken from  a different, unknown, viewing direction. %In tomography, if enough projections are estimated, then one can estimate the whole structure (up to some $K$-dependent resolution).
+The position of individual projections are  nuisance variables of the cryo--EM problem, in analogy to individual signal's locations in our setup.
 That being said, the cryo--EM data is far more complicated that the simplified model of this paper. In a future research, we hope to bridge this gap.
  
 %For instance, the numerical experiments of Section~\ref{sec:numerics} indicate that we need a huge number of observations to obtain an accurate estimate. Can we accelerate the estimation rate? How to include nearby molecule to extract all information in the micrograph?
