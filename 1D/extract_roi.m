@@ -4,9 +4,9 @@ function X_short = extract_roi(X_long, L_short)
 % function X_short = extract_roi(X_long, L_short)
 %
 % Given K signals of length L_long as the columns of a matrix X_long,
-% extracts from each signal a contiguous subsignal (with cyclic indexing)
-% of length L_short with largest 2-norm (the region of interest), and
-% returns these as the columns of X_short.
+% extracts from each signal a contiguous subsignal of length L_short with
+% largest 2-norm (the region of interest), and returns these as the columns
+% of X_short.
 
     [L_long, K] = size(X_long);
     
@@ -14,9 +14,8 @@ function X_short = extract_roi(X_long, L_short)
 
     X_short = zeros(L_short, K);
     for k = 1 : K
-        for s = 0 : (L_long - 1)
-            x = circshift(X_long(:, k), s);
-            x = x(1:L_short);
+        for s = 0 : (L_long - L_short)
+            x = X_long(s+(1:L_short), k);
             if norm(x) > norm(X_short(:, k))
                 X_short(:, k) = x;
             end
