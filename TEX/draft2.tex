@@ -183,22 +183,22 @@ given the observed signal $y$. Solving this optimization exactly is typically
 intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC); in special
 cases, including the case where $w$ is binary, EM has been used~\cite{cappe1999simulation}.
 The EM method is based upon a certain ``forward-backward'' procedure
-used in hidden Markov models~\cite{rabiner1989tutorial}. \TODO{need further explanation, is it an approximation?}.
+used in hidden Markov models~\cite{rabiner1989tutorial}. 
+However, the complexity of this procedure is still nonlinear in $N$, and therefore its usage is limited for big data sets.   
 Another paper considers parameterized models for multiple distinct signals, as in our heterogeneity framework ($K>1$)~\cite{andrieu2001bayesian}.
 Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem.
 
 Because likelihood methods are computationally expensive, methods based
 on recovery from moments, which are akin to our method, have
-also been previously used for system identification. The question of identifiability
-of $x$ from third-order statistics with non-Gaussian $w$ was considered in~\cite{lii1982deconvolution}. \TODO{how is it different from bispectrum inversion?}
-Methods based on the third- and fourth-order moments are described in~\cite{giannakis1989identification,tugnait1984identification}.
+also been previously used for system identification. 
+Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
 
 \section{Autocorrelation analysis}   \label{sec:autocorrelation}
 
-Our method for estimating the signals is a two-stage technique. 
+Our method for estimating the signals is composed of two stages. 
 First, we use the autocorrelation functions of the data to estimate a mixture (i.e., linear combination) of the $K$ signal's autocorrelations. The mixed autocorrelation can be estimated to any accuracy, in any $\SNR$ level, if $M$ is large enough and the spacing condition~\eqref{eq:spacing} is met. Then, we  use a nonconvex LS  to estimate the signals from their mixed autocorrelations. 
-In this section we elaborate on the autocorrelation functions and their estimations, while the precise recovery procedure, based on nonconvex optimization, will be discussed in detail in the next section.
+In this section, we elaborate on the autocorrelation functions and their estimations, while the precise recovery procedure, based on nonconvex optimization, will be discussed in detail in the next section.
 
 
 \subsection{Aperiodic autocorrelation functions} \label{sec:aperiodic_ac}
@@ -216,15 +216,16 @@ Explicitly, the first three autocorrelations are
 	a_z^2[\ell] & = \sum_{i = \max\{0, -\ell\}}^{L-1 + \min\{0, -\ell\}} z[i]z[i+\ell], \nonumber\\
 	a_z^3[\ell_1,\ell_2] & = \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{L-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. \label{eq:ac_special}
 \end{align}
-Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and $a_z^3[\ell_1,\ell_2] = a_z^3[-\ell_1,-\ell_2]$. \TODO{We also have $a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]$ -- is that intended? Do we really have symmetry with the negative signs? I think we have $(\ell_1, \ell_2) \sim (-\ell_1, \ell_2-\ell_1)$; to be checked, but I don't think this is correct;}
+Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].$$
 Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), then they are equivalent to the autocorrelation functions.
 
-A one-dimensional signal is determined uniquely and stably by its third-order auto-correlation as proven in the following simple proposition.
+A one-dimensional signal is determined uniquely and stably by its third-order autocorrelation as proven in the following simple proposition.
 \begin{proposition} \label{prop:uniqueness}
 	Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then:
 	\begin{itemize}
 		\item \textbf{Uniqueness:} 	 $z$  is determined uniquely from  $a_z^2$ and $a_z^3$.
-        \item \textbf{Finite sensitivity:} 	Suppose that  $a_z^3[k,L-1]$ can be estimated up to  perturbation $\upsilon$ and let $\hat{z}[k]$ be an estimator of $z[k]$. If $\vert z[0]z[L-1]\vert \geq \delta>0$, then $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\delta}$. \TODO{That statement is incomplete: you mean there exists an estimator that guarantees this. (Since the estimator is very simple, we may want to show it explicitly in the proposition statement, and comment afterwards that of course this is still fairly sensitive, and we can do better.)}
+        \item \textbf{Finite sensitivity:} 	Suppose we can only measure $\tilde{a_z^3}[k,L-1] = a_z^3[k,L-1]+\upsilon$ and that $\vert z[0]z[L-1]\vert \geq \delta>0$.
+         Then,  $\hat{z}[k] =\frac{\tilde{a_z^3}[k,L-1]}{a_z^2[L-1]} $ satisfies $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\delta}$. 
 	\end{itemize}
 	\begin{proof}
 		By assumption $a_z^2[L-1] = z[0]z[L-1]\neq 0$.
@@ -232,22 +233,23 @@ A one-dimensional signal is determined uniquely and stably by its third-order au
 		\begin{equation*}
 		a_z^3[k,L-1] = z[0]z[k]z[L-1].
 		\end{equation*}
-		If we measure $\tilde{a_z^3}[k,L-1] = a_z^3[k,L-1]+\upsilon$, then 
+		In addition, 
 		\begin{equation*}
 		\hat{z}[k] = \frac{\tilde{a_z^3}[k,L-1]}{a_z^2[L-1]} = z[k]+\frac{\upsilon}{a_z^2[L-1]} \quad \Rightarrow \quad \vert \hat{z}[k] - {z}[k]\vert \leq \frac{\vert\upsilon\vert}{\delta}.
 		\end{equation*} 
 	\end{proof}
 \end{proposition}
 
-A few remarks are in order. First, this result carries through to signals of any dimension.
-Second, if the spacing condition~\eqref{eq:spacing} holds, then the length of the signal can be determined from the autocorrelations and 
-therefore the assumption that the first and last entries are nonzero is met. In particular, if~\eqref{eq:spacing} holds for some spacing $W>L$, then $a_z^2[i]=0$ for all $i>L-1$.
-Third, computing the $d$th autocorrelation amplifies the variance of the noise by a factor $d$ asymptotically. Therefore, if we can estimate $a_z^3$ up to small perturbation, it implies that we can estimate $a_z^2$ accurately as the proposition assumes. 
-Finally, while Proposition~\ref{prop:uniqueness} shows only finite sensitivity, in practice LS estimator is robust to additive noise; see Section~\ref{sec:numerics}. This is compatible with results in related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous}.
+A few remarks are in order. 
+First, the second result of Proposition~\ref{prop:uniqueness} shows that there exists a very simple estimator that has finite sensitivity. In the next section, we propose an estimator based on nonconvex LS that shows empirical robustness to additive noise, in accordance with related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous}. 
+Second, these results carry through to signals of any dimension.
+Third, if the spacing condition~\eqref{eq:spacing} holds, then the length of the signal can be determined from the autocorrelations and 
+therefore the assumption that the first and last entries are nonzero is met. In particular, if~\eqref{eq:spacing} holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
+Finally, computing the $d$th autocorrelation amplifies the variance of the noise by a factor $d$ in the low $\SNR$ regime. Therefore, if we can estimate $a_z^3$ up to small perturbation, it implies that we can estimate $a_z^2$ accurately as the proposition assumes. 
 
-Considering the third-order autocorrelation is also a necessary condition to determine a signal from its autocorrelations. Indeed, the second-order autocorrelation of a one-dimensional signal does not determine a signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}. On the other hand, for dimensions greater than one, almost all signals are determined uniquely, up to sign (phase in the complex case) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However,  in order to determine the reflection symmetry, one needs to use additional information.
+Considering the third-order autocorrelation is also a necessary condition to determine a signal from its autocorrelations. Indeed, the second-order autocorrelation of a one-dimensional signal does not determine a signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}. On the other hand, for dimensions greater than one, almost all signals are determined uniquely, up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However,  in order to determine the reflection symmetry, one needs to use additional information.
 
-\TODO{I would remove most if this paragraph; we can have a similar discussion but for our case (after having discussing which moments we keep); make the statement, and finish with a one-sentence reference to the MRA paper.}
+\TODO{NB: I would remove most if this paragraph; we can have a similar discussion but for our case (after having discussing which moments we keep); make the statement, and finish with a one-sentence reference to the MRA paper. TB: I didn't touch it yet. We may want to put the degrees-of-freedom calculations from Section 4 here}
 The invertibility of the autocorrelations for $K>1$ was explored  for the related case of  periodic autocorrelation functions. Recall that the  periodic autocorrelations are defined similarly to~\eqref{eq:ac_general}, with two differences: the sum goes to $L-1$ and all indices should be taken modulo $L$.
 If $z[n]=0$ for $n=L/2,\ldots L-1$ (``zero-padded''), then the periodic and aperiodic autocorrelation coincide.
 In~\cite{bandeira2017estimation}, it was shown that a mix of $K$ third-order periodic autocorrelations determine  a finite list of $K$ generic signals if $L/6\gtrsim K$. Empirical evidences hints that this finite list includes only group symmetries, at least as long as $K\leq\sqrt{L}$~\cite{boumal2017heterogeneous}. 
@@ -256,7 +258,7 @@ In~\cite{bandeira2017estimation}, it was shown that a mix of $K$ third-order per
 \subsection{Estimating autocorrelations from the data with a single signal $K=1$} \label{sec:estimating_ac_k1}
 
 We first consider the problem of estimating the autocorrelations of a single signal from the data. 
-All the main concepts carry through for $K>1$ as will be shown in the next section.  
+The main principles carry through for $K>1$ as will be shown in the next section.  
 
 In order to estimate the autocorrelations of the signal, we first compute the first $L$ entries of the data's autocorrelations. 
 For the purpose of the analysis, we consider  the asymptotic regime where $M,N\to\infty$, while preserving fixed ratio. 
@@ -267,7 +269,7 @@ Specifically, we define the ratio of the measurement occupied by  the signal as
 Under the spacing constraint~\eqref{eq:spacing}, we have $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
 The main pillar of this work is the following simple observation.
-If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then the first $L$ entries of the data autocorrelations converge 
+If the support signal $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then the first $L$ entries of the data autocorrelations converge 
 to a scaled, biased, version of the signal's autocorrelation:
 \begin{align}
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1, \nonumber\\
@@ -291,13 +293,13 @@ The proof follows from plugging the explicit expressions of~\eqref{eq:data_ac_k1
 
 If we use third-order autocorrelation information, then it is possible to estimate both the ratio $M/N$ and $\sigma$ simultaneously.
 \begin{proposition} \label{prop:gamma_sigma}
-	Let $K=1$, $N\to\infty$ and $\sigma$ fixed. Then, $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $M/N$ and $\sigma$ uniquely for generic signals. If $\frac{M}{N}\geq\frac{1}{4(L-1)}$, then it holds for any signal with nonzero mean. 
+	Let $K=1$, $N\to\infty$ and $\sigma$ fixed. Then, $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $M/N$ and $\sigma$ uniquely for a generic signal $x$. If $\frac{M}{N}\geq\frac{1}{4(L-1)}$, then it holds for any signal with nonzero mean. 
 	\begin{proof}
 		See Appendix~\ref{sec:proof_prop_gamma_sigma}.
 	\end{proof}
 \end{proposition}
 
-From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can directly deduce the following.
+From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can directly deduce the following:
 \begin{corollary}
 	Let $K=1$, $N\to\infty$ and $\sigma$ is fixed. Then, the signal, the ratio $M/N$ and $\sigma$ can be recovered from the first three autocorrelation functions if:
 	\begin{itemize}
@@ -309,12 +311,11 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
  
 \subsection{Estimating autocorrelations from the data with multiple signals $K>1$} \label{sec:estimating_ac}
 
-When $K>1$, it is impossible \TODO{That's not true: we can do our procedure, which gives estimate of the signals, and moments of that are estimates of the moments of the individual signals. Whether one calls this 'direct' or not is subjective. I'd remove that sentence.)} to estimate the autocorrelation of each signal directly from the data. However similarly to~\eqref{eq:data_ac_k1}, one can estimate the mixture of the autocorrelations. 
 As before, we consider  the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty$, while preserving fixed ratios
 \begin{align}
 	\gamma_k = \frac{M_k L}{N}, \quad \gamma = \sum_{k=1}^K\gamma_k.
 \end{align}
-If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then:
+If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then one can estimate the mixture of the $K$ signals'  autocorrelations, similarly to~\eqref{eq:data_ac_k1}: 
 \begin{align}
 \lim_{N\to\infty} a_y^1 & = \sum_{k=1}^K\gamma_k a_{x_k}^1, \nonumber\\
 \lim_{N\to\infty} a_y^2[\ell] & = \sum_{k=1}^K\gamma_k a_{x_k}^2[\ell] +\sigma^2\delta[\ell],  \label{eq:data_ac}\\
@@ -324,7 +325,7 @@ This relation is proven in  Appendix~\ref{sec:autocorrelation_computation}.
 
 The minimal order of data statistics used to get an accurate estimation of a signal is important to understand, in the asymptotic $\SNR$ regime, the sample complexity of the problem.
 In methods which are based on detection and averaging, the number of signals occurrences  must scale like $\sigma^2$. Taking the $d$th order autocorrelation function amplifies the variance of the noise by a factor of $d$. Therefore, the required number signal occurrences should scale like $\sigma^{2d}$  to retain some constant estimation error. Accordingly, in our  method, $M$ must scale like $\sigma^6$. In Section~\ref{sec:numerics}, we show empirically the third-order autocorrelation suffices also for a mixture of $K>1$ signals without prior knowledge of the $M_i$'s and $\sigma$.  \TODO{question mark on the entire paragraph}
-\TODO{We could move here the paragraphs from 1D XP about which moments we compute, to argue that we can expect to recover at most up to $K = L/2$ signals.}
+\TODO{NB: We could move here the paragraphs from 1D XP about which moments we compute, to argue that we can expect to recover at most up to $K = L/2$ signals.} \TODO{TB: I didn't touch for now.}
 
 
 \section{Numerical experiments}   \label{sec:numerics}
@@ -357,7 +358,7 @@ is about 1/12.
 %Given the scaling of the target signals (whose median absolute value for the entries is at or below one),
 This is enough noise to make cross-correlations of $y$ even with the true signals display peaks at random locations, uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
 
-Given the observation $y$, we proceed to compute the moments. The first-order moment is straightforward. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose \TODO{Do we want to include a figure to explain why that is?}, and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements---there are $\frac{(L-1)(L-2)}{2}$ remaining moments. As a result, it is unnecessary to estimate $\sigma$. We have
+Given the observation $y$, we proceed to compute the moments. The first-order moment is straightforward. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose \TODO{Do we want to include a figure to explain why that is?}, and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements---there are $\frac{(L-1)(L-2)}{2}$ remaining moments. As a result, it is unnecessary to estimate $\sigma$. We have \TODO{TB: We may want to put this calculation is the last paragraph of Section 3.1 }
 \begin{align*}
 	1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
 \end{align*}
