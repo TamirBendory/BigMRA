@@ -375,6 +375,7 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 \TODO{Should we do variable projection for the gammas, that is, exploit the fact the problem is a regular least squares in the gammas (up to the positivity constraints) to substitute the explicit optimum for them? Not sure it's worth the effort. -- Ok, it's probably not a good idea, because even with fixed gammas to the correct value, optimization takes a while.}
 \TODO{Do we still need to stress at this point that the optimization part has complexity independent of length of observation? Should be pretty clear at this point already.}
 
+\TODO{TB: 2D experiment?}
 %\subsection{Two-dimensional experiments} 
 %?? 
 
@@ -392,15 +393,14 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 
 \section{Open questions}
 
-In this paper, we considered the problem of estimating a set of signals from their multiple occurrences in unknown locations in the data.  We focused on  low $\SNR$ environments in which detection is impossible. 
-Our technique  is based on computing the third-order autocorrelation function of the data with asymptotic estimation rate proportional to $\sigma^6/M$. Based on related results in multireference alignment~\cite{abbe2018estimation}, we believe that it is the optimal estimation rate, however, this is yet to be proven.
+In this paper, we considered the problem of estimating a set of signals from their multiple occurrences in unknown locations in the data.  We focused on  low $\SNR$ environments in which detection of individual occurrences is impossible. 
+Our technique  is based on computing the third-order autocorrelation function of the data with asymptotic estimation rate proportional to $\sigma^6/M$ \TODO{TB: it's not clear to me yet whether we discuss the estimation rate in the paper}. Based on related results in multireference alignment~\cite{abbe2018estimation}, we believe that it is the optimal estimation rate, however, this is yet to be proven.
 
-Our results rely on two main assumptions that are not necessarily met by applications. 
-First, we modeled the background information as i.i.d.\ additive noise. In practice,
-the background information may be structured, and even signal-dependent. Then, the question is  under what conditions  
+Our results rely on two core assumptions that are not necessarily met by applications. 
+First, we modeled the background information as i.i.d.\ additive noise. In practice, the background information may be structured or depend on the signal. Then, the question is  under what conditions  
 one can still estimate the signals and separate them from the background information in the low $\SNR$ regime? 
 
-In addition, we assumed that the signal occurrences are all separated by $L-1$ entries, see~\eqref{eq:spacing}. If the signals are not separated, one can introduce a new variable $p$ that represents the distribution of the spacing between signal occurrences. The first entry $p[1]$ will represent the probability that two consecutive signals are separated by only one entry, $p[2]$ the probability for spacing of two entries and so on. Using this new variable $p$, one can write explicitly the relation between the autocorrelation functions of the data and those of the signal in a similar way to~\eqref{eq:data_ac}. Under what conditions on $p$ and the signals one can still estimate the signals from the data?
+In addition, we assumed that the signal occurrences are all separated by $L-1$ entries, see~\eqref{eq:spacing}. If the signals are not separated, one can introduce a new variable $p$ that represents the distribution of the spacing between signal occurrences. The first entry $p[1]$ will represent the probability that two consecutive signals are separated by only one entry, $p[2]$ the probability for spacing of two entries and so on. Using this auxiliary variable $p$, one can write explicitly the relation between the autocorrelation functions of the data and those of the signal in a similar way to~\eqref{eq:data_ac}. This raises the question under what conditions on $p$ and the signals, one can estimate the signals from the data?
 
 
 \section{Connection with the cryo--EM problem}	
