@@ -56,7 +56,9 @@ moments.list2 = list2;
 moments.list3 = list3;
 
 clear y_clean y_obs;
-save(sprintf('data_example_heterogeneous_%s_n_%d.mat', datestr(now(), 30), n));
+ID = randi(1000000);
+filename_data = sprintf('data_example_heterogeneous_n_%d_%d', n, ID);
+save([filename_data, '.mat']);
 
 %% Optimization
 
@@ -65,21 +67,54 @@ sigma_est = 0; % irrelevant if biased terms are excluded and if the weights inte
 
 [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, K, L, L_optim, sigma_est);
 
+save([filename_data, '.mat']);
+
 %%
+best_error = inf;
+best_P = [];
 permutations = perms(1:K);
 for p = 1 : size(permutations, 1)
     P = permutations(p, :);
-    fprintf('==\n');
-    fprintf('Relative error subsignals of length L: %g\n', norm(X-X1_L(:, P), 'fro') / norm(X, 'fro'));
-    fprintf('Relative error after reoptimization:   %g\n', norm(X-X2(:, P), 'fro') / norm(X, 'fro'));
+    relative_error = norm(X-X2(:, P), 'fro') / norm(X, 'fro');
+    if relative_error < best_error
+        best_error = relative_error;
+        best_P = P;
+    end
 end
+P = best_P;
+
+fprintf('==\n');
+fprintf('Relative error subsignals of length L: %g\n', norm(X-X1_L(:, P), 'fro') / norm(X, 'fro'));
+fprintf('Relative error after reoptimization:   %g\n', norm(X-X2(:, P), 'fro') / norm(X, 'fro'));
+fprintf('Individual relative errors: ');
+fprintf('%g / ', sqrt(sum((X-X2(:, P)).^2, 1)) ./ sqrt(sum(X.^2, 1)));
+fprintf('\b\b\n');
 fprintf('==\n');
 
 % TODO: pick best P and apply it below
 
-fprintf('Estimated densities:\n');
-disp(gamma2');
 fprintf('Estimated densities (before re optimization):\n');
-disp(gamma1' * (L/L_optim));
+disp(gamma1(P)' * (L/L_optim));
+fprintf('Estimated densities:\n');
+disp(gamma2(P)');
 fprintf('True densities:\n');
 disp(m_actual*L/n);
+
+%% Requires P as defined above
+
+figure(1);
+T = 0:(L-1);
+for k = 1 : K
+    subplot(1, K, k);
+    handles = plot(T, X1_L(:, P(k)), T, X2(:, P(k)), T, X(:, k));
+    set(handles(3), 'LineWidth', 1);
+    ylim([-2.5, 2.5]);
+    title(sprintf('%.2g / %.2g / %.2g', gamma1(P(k)) * (L/L_optim), gamma2(P(k)), m_actual(k)*L/n));
+    set(gca, 'YTick', [-2, 0, 2]);
+    set(gca, 'XTick', [0, 10, 20]);
+    set(gca, 'FontSize', 14);
+end
+set(gcf, 'Color', 'w');
+figname1 = [filename_data '_fig1'];
+savefig(1, [figname1, '.fig']);
+pdf_print_code(1, [figname1 '.pdf'], 14);
