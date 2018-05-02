@@ -10,7 +10,7 @@ function X_short = extract_roi(X_long, L_short)
 
     [L_long, K] = size(X_long);
     
-    assert(L_Long >= L_short, 'Can only extract a shorter region.');
+    assert(L_long >= L_short, 'Can only extract a shorter region.');
 
     X_short = zeros(L_short, K);
     for k = 1 : K

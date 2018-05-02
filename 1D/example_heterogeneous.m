@@ -60,136 +60,26 @@ save(sprintf('data_example_heterogeneous_%s_n_%d.mat', datestr(now(), 30), n));
 
 %% Optimization
 
-% Here we can choose the length of sought signals in optimization.
-% Should be no less than L; typically set to W.
 L_optim = 2*L-1;
+sigma_est = 0; % irrelevant if biased terms are excluded and if the weights internally do not depend on sigma
 
-% X0 = randn(L_optim, K);
-% gamma0 = m_actual*L_optim/n; % give true gamma for now
-sigma_est = sigma; % irrelevant if biased terms are excluded and if the weights internally do not depend on sigma
-
-[X_est, gamma_est, problem1, stats1] = least_squares_1D_heterogeneous(moments, L_optim, K, sigma_est); %, X0, gamma0(:)); % check if the code fixes gamma to gamma0 or not
-
-
-%% Display
-
-fprintf('Estimated densities:\n');
-disp(gamma_est');
-fprintf('True densities:\n');
-disp(m_actual*L_optim/n);
-
-X_extended = [X ; zeros(L_optim-L, K)];
-
-figure(1);
-clf;
-
-for k1 = 1 : K
-    for k2 = 1 : K
-        subplot(K, K, (k1-1)*K + k2);
-        
-        x1 = X_extended(:, k2);
-        x2 = X_est(:, k1);
-        x2 = align_to_reference_1D(x2, x1);
-        
-        plot(0:(L_optim-1), x1, 0:(L_optim-1), x2);
-        
-        if k1 == 1
-            title(sprintf('True signal %d\n(blue)', k2));
-        end
-        if k2 == 1
-            ylabel(sprintf('Estimated signal %d\n(orange)', k1));
-        end
-        
-    end
-end
-
-savefig(gcf, sprintf('example_heterogeneous_%s_n_%d.fig', datestr(now(), 30), n));
-
-%% Try to extract dominant subsignal of length L in each estimated signal
-
-% X_est_L = zeros(L, K);
-% for k = 1 : K
-%     for s = 0 : (L_optim - 1)
-%         x = circshift(X_est(:, k), s);
-%         x = x(1:L);
-%         if norm(x) > norm(X_est_L(:, k))
-%             X_est_L(:, k) = x;
-%         end
-%     end
-% end
-X_est_L = extract_roi(X_est, L);
-
-figure(2);
-clf;
-
-for k1 = 1 : K
-    for k2 = 1 : K
-        subplot(K, K, (k1-1)*K + k2);
-        
-        x1 = X(:, k2);
-        x2 = X_est_L(:, k1);
-        
-        plot(0:(L-1), x1, 0:(L-1), x2);
-        
-        if k1 == 1
-            title(sprintf('True signal %d\n(blue)', k2));
-        end
-        if k2 == 1
-            ylabel(sprintf('Estimated signal %d\n(orange)', k1));
-        end
-        
-    end
-end
-
-savefig(gcf, sprintf('example_heterogeneous_short_%s_n_%d.fig', datestr(now(), 30), n));
-
-%% Reoptimize from the shortened estimator
-
-gamma0 = gamma_est*(L/L_optim);
-
-[X_est, gamma_est, problem2, stats2] = least_squares_1D_heterogeneous(moments, L, K, sigma_est, X_est_L, gamma0(:)); % check if the code fixes gamma to gamma0 or not
-
-
-%% Redraw
-
-fprintf('Estimated densities:\n');
-disp(gamma_est');
-fprintf('True densities:\n');
-disp(m_actual*L/n);
-
-figure(3);
-clf;
-
-for k1 = 1 : K
-    for k2 = 1 : K
-        subplot(K, K, (k1-1)*K + k2);
-        
-        x1 = X(:, k2);
-        x2 = X_est(:, k1);
-        
-        plot(0:(L-1), x1, 0:(L-1), x2);
-        
-        if k1 == 1
-            title(sprintf('True signal %d\n(blue)', k2));
-        end
-        if k2 == 1
-            ylabel(sprintf('Estimated signal %d\n(orange)', k1));
-        end
-        
-    end
-end
-
-savefig(gcf, sprintf('example_heterogeneous_reoptimized_%s_n_%d.fig', datestr(now(), 30), n));
-
+[X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, K, L, L_optim, sigma_est);
 
 %%
 permutations = perms(1:K);
 for p = 1 : size(permutations, 1)
     P = permutations(p, :);
     fprintf('==\n');
-    fprintf('Relative error subsignals of length L: %g\n', norm(X-X_est_L(:, P), 'fro') / norm(X, 'fro'));
-    fprintf('Relative error after reoptimization:   %g\n', norm(X-X_est(:, P), 'fro') / norm(X, 'fro'));
+    fprintf('Relative error subsignals of length L: %g\n', norm(X-X1_L(:, P), 'fro') / norm(X, 'fro'));
+    fprintf('Relative error after reoptimization:   %g\n', norm(X-X2(:, P), 'fro') / norm(X, 'fro'));
 end
 fprintf('==\n');
 
-save(sprintf('data_after_optim_example_heterogeneous_%s_n_%d.mat', datestr(now(), 30), n));
+% TODO: pick best P and apply it below
+
+fprintf('Estimated densities:\n');
+disp(gamma2');
+fprintf('Estimated densities (before re optimization):\n');
+disp(gamma1' * (L/L_optim));
+fprintf('True densities:\n');
+disp(m_actual*L/n);
