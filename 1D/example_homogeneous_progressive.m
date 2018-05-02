@@ -31,8 +31,10 @@ fprintf('Micrograph length: %g\n\n\n', n);
 
 %% Generate the micrograph
 
+T = tic();
 [y_clean, m_actual] = generate_clean_micrograph_1D_heterogeneous(X, W, n, m_want);
 y_obs = y_clean + sigma*randn(n, 1);
+time_generate_micrograph = toc(T);
 gamma = m_actual*L/n;
 SNR = norm(y_clean, 'fro')/norm(y_obs-y_clean, 'fro');
 
@@ -45,17 +47,22 @@ ns = unique(round(logspace(5, log10(n), 9)));
 n_init_optim = 3;
 
 for iter = 1 : length(ns)
+    
+    result = struct();
 
     % Collect the moments for the first bit of the micrograph.
     nn = ns(iter);
+    T = tic();
     [M1, M2, M3] = moments_from_data_no_debias_1D_batch( ...
-                                           y_obs(1:nn), list2, list3, 1e8);
+                                           y_obs(1:nn), list2, list3, 1e8);    
 	%! We normalize by nn here.
     moments.M1 = M1 / nn;
     moments.M2 = M2 / nn;
     moments.M3 = M3 / nn;
     moments.list2 = list2;
     moments.list3 = list3;
+    
+    result.time_to_compute_moments = toc(T);
 
     % Parameters and initializations for optimization:
     % empty inputs mean default values are picked.
@@ -66,11 +73,15 @@ for iter = 1 : length(ns)
     
     % Run the optimization from different random initializations n_repeat
     % times, and keep the best result according to the cost value of X2.
-    result = struct();
     result.cost_X2 = inf;
+    time_to_optimize = zeros(n_init_optim, 1);
+    costs = zeros(n_init_optim, 1);
     for repeat = 1 : n_init_optim
+        T = tic();
         [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D( ...
                             moments, 1, L, L_optim, sigma_est, X0, gamma0);
+        time_to_optimize(repeat) = toc(T);
+        costs(repeat) = cost_X2;
         if cost_X2 < result.cost_X2
             result.X1 = X1;
             result.X1_L = X1_L;
@@ -82,7 +93,9 @@ for iter = 1 : length(ns)
             result.cost_X2 = cost_X2;
         end
     end
-
+    result.costs = costs;
+    result.time_to_optimize = time_to_optimize;
+    
     % Save in a structure array.
     results(iter) = result; %#ok<SAGROW>
     
