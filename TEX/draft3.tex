@@ -81,7 +81,7 @@
 \section{Introduction}
 
 Single particle reconstruction (SPR) using cryo--electron microscopy (cryo--EM) is an innovative technology for reconstructing the 3-D structure of macromolecules. In recent years, structures
-of many molecules, previously regarded as insurmountable, are now being reconstructed to near-atomic resolution; see for instance~\cite{kuhlbrandt2014resolution,bartesaghi20152}. This technological advancement was recognized by the 2017 Nobel Prize in Chemistry~\cite{nobel}. 
+of many molecules, previously regarded as insurmountable, are now being reconstructed to near-atomic resolution; see for instance~\cite{kuhlbrandt2014resolution,bartesaghi20152,smith2014beyond}. This technological advancement was recognized by the 2017 Nobel Prize in Chemistry~\cite{nobel}. 
 
 In a cryo--EM experiment, multiple biological samples of the (ideally) same molecule are rapidly frozen in a thin layer of vitreous ice. Within the ice, the molecules are randomly oriented and positioned. Then, the microscope produces a 2D tomographic projection image, called a \emph{micrograph}, of the multiple samples embedded in the ice. The micrograph is dominated by noise due to the small electron doses that
 can be applied to the specimen without causing radiation damage.
@@ -89,14 +89,14 @@ The cryo--EM problem is to estimate the structure of the molecule from the micro
 
 \paragraph{Particle picking.}
 All contemporary methods in the field split the reconstruction procedure to several subroutines. 
-The first step in the pipeline is the so-called \emph{particle picking}, in which one aims to detect the 2D tomographic projections of the samples from the noisy micrograph. The output of ideal particle picker is a series of 2D images, each contains one centered tomographic projection associated with an unknown 3D orientation. This series of images 
+The first step in the pipeline is the so-called \emph{particle picking}, in which one aims to detect the 2D tomographic projections of the samples from the noisy micrograph. The output of ideal particle picker is a series of 2D images, each containing one centered tomographic projection associated with an unknown viewing direction and an in-plane rotation. This series of images 
 is then used to estimate the structure.
 
 Many automatic and semi-automatic methods for particle picking have been proposed, based on edge detection, template matching and deep learning; see for instance~\cite{harauz1989automatic,ogura2004automatic,zhu2016deep,frank1983automatic,scheres2015semi,heimowitz2018apple}. 
 However, most of these procedures are prone to \emph{model bias}. For instance, in the popular framework of RELION~\cite{scheres2015semi}, the user manually marks hundreds of spots on the micrograph, believed to contain projections. 
-Therefore, the algorithm performance depends on the user prior assumption about the particle's structure; the same holds true for deep learning based approaches which require constructing labeled set of data.
-Other methods use disks or difference of Gaussians as templates~\cite{langlois2014automated,voss2009dog}.
-Nowadays, it also still popular to pick particles manually. This method, while exploits the researcher's experience, is both tedious and subject to model bias.
+Therefore, the algorithm's performance depends on the prior assumptions of the users about the particle's structure; the same holds true for deep learning based approaches which require constructing labeled sets of data.
+Other methods use disks or differences of Gaussians as templates~\cite{langlois2014automated,voss2009dog}.
+Nowadays, it also still popular to pick particles manually. This method, while it exploits the researcher's experience, is both tedious and subject to model bias.
 
 The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
 In this experiment, the image of Einstein is correlated with multiple images of pure noise. The noisy images are then aligned to Einstein's image using cross-correlation and  averaged. 
@@ -106,20 +106,21 @@ Einstein, rather than to pure noise.
 In the context of cryo--EM, this example demonstrates how our prior assumptions about the particle may influence the reconstructed structure.
 
 Besides the model bias, particle pickers have several limitations due to the high noise level, in particular for small particles and in low contrast. 
-As a result, the projections in the 2D images are typically not centered, increasing dramatically the number of parameters involved in the reconstruction algorithm. In addition, the information from particles that are too close to each other is usually neglected. Hence, valuable information that can be harnessed is omitted. 
+As a result, the projections in the 2D images are typically not centered; including the correct centers as parameters dramatically increases the complexity of reconstruction algorithms.
+%In addition, the information from particles that are too close to each other is usually neglected. Hence, valuable information that can be harnessed is omitted. 
 
-\paragraph{Simplified model for SPR} In this paper, we present a preliminary study that aims showing that estimating a particle 
-directly from the micrograph might be possible. 
+\paragraph{Simplified model for SPR} In this paper, we present a preliminary study that aims to show that estimating a particle 
+directly from the micrograph, without identifying the location of individual particle images in the micrograph, might be possible. 
 
-In particular, we consider the problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown  locations in a noisy data sequence $y$. Here, $y$ plays the role of the micrograph and the $K$ signals can be thought of as $K$ different viewing directions of the particle that appear multiple times in the micrograph. 
+In particular, we consider the toy problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown  locations in a noisy data sequence $y$. Here, $y$ plays the role of the micrograph and the $K$ signals can be thought of as $K$ different viewing directions of the particle, each of which  appears multiple times in the micrograph. 
 A precise mathematical formulation of the model and the estimation problem is provided in Section~\ref{sec:methods}.
-To be clear, we do not consider here many prominent features of SPR experiment and do not aim to reconstruct any 3-D structure. We also mention by passing that this model appears in different scientific fields, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
+To be clear, we do not consider here many prominent features of real SPR experiments and do not aim to reconstruct any 3-D structure; instead, we solve a simpler problem that we believe captures key elements of the true SPR problem. We also mention in passing that similar models emerge in different scientific fields, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
 
 Figure~\ref{fig:micro_example} shows a simple example of our problem with  one signal ($K=1$). 
 Each panel demonstrates an image of size $250\times 250$, containing 4 occurrences of an Einstein image of size $50\times 50$. 
-The left panel shows the data without noise. In the middle panel, an i.i.d.\ Gaussian noise with standard deviation $\sigma=0.5$  was added, however,  Einstein is still easily identified. In this scenario, even for $K>1$, it is likely that standard detection and clustering algorithms can locate and cluster the copies of the signals that can be then averaged within each class.  In the right panel, we show the same data swamped in  
+The left panel shows the data without noise. In the middle panel,  i.i.d.\ Gaussian noise with standard deviation $\sigma=0.5$  was added, however,  Einstein is still easily identified. In this scenario it is likely that standard detection algorithms can locate the copies of the signal within the micrograph. In the right panel, we show the same data swamped in  
 i.i.d.\ Gaussian noise with standard deviation  $\sigma=3$.
-As a matter of fact, it can be shown that in  low signal--to--noise (\SNR) regime, 
+Clearly, identifying the locations of Einstein in this micrograph is much more challenging. In fact, it can be shown that in the low signal--to--noise (\SNR) regime, 
 detection  of individual image occurrences is impossible---even if the true image is known---and therefore particle picking is impossible.  This phenomenon is explained in detail in Section~\ref{sec:related_literature}.
 
 \begin{figure}[h!]
@@ -144,10 +145,11 @@ detection  of individual image occurrences is impossible---even if the true imag
 
 
 \paragraph{Autocorrelation analysis.}
-In order to recover the signal from the data, we use autocorrelation analysis.
-In a nutshell, the method consists of two stages. First, we estimate a mixture (i.e., linear combination) of the low--order autocorrelation functions of the signals from the data. These quantities can be estimated, to any desired accuracy, if individual occurrences are separated by the size of the signal and  each signal appears sufficiently many times in the data. There is no need to detect individual occurrences, knowing the number of signal occurrences $M$ or the noise level.
-In the second stage, the signals are estimated from the mixed autocorrelations using a nonconvex least-squares (LS) or phase retrieval algorithms; see Section~\ref{sec:methods}.
-This method requires only one pass over the data and can recover the signals in any $\SNR$ level, if the signals appear enough times in the data. As a side note, we mention that expectation-maximization---a popular framework in SPR---is intractable for this problem (see Appendix~\ref{sec:theory}  for more details). 
+We now return to the general problem of estimating $x_1,\dots,x_K$ from the noisy observation $y$.
+In order to recover the signals $x_1,\dots,x_K$ from the data, we use autocorrelation analysis.
+In a nutshell, the method consists of two stages. First, we estimate a mixture (i.e., linear combination) of the low--order autocorrelation functions of the signals from the data. These quantities can be estimated, to any desired accuracy, if individual occurrences are separated by the maximum signal size and each signal appears sufficiently many times in the data. There is no need to detect individual occurrences.
+In the second stage, the signals are estimated from the mixed autocorrelations using a a nonconvex least-squares (LS) algorithm or a phase retrieval algorithm; see Section~\ref{sec:methods}.
+This method requires only one pass over the data and can recover the signals in any $\SNR$, if the signals appear enough times in the data. As a side note, we mention that expectation-maximization---a popular framework in SPR---is intractable for this problem (see Appendix~\ref{sec:theory}  for more details). 
 
 \section{Results}
 
