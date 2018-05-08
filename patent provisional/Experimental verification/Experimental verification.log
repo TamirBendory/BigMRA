@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.5)  7 MAY 2018 17:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.5)  8 MAY 2018 11:45
 entering extended mode
 **"./Experimental verification.tex"
 ("Experimental verification.tex"
@@ -304,7 +304,11 @@ ef")
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
-)) ("Experimental verification.aux")
+)) ("Experimental verification.aux"
+
+LaTeX Warning: Label `fig:error_per_micro' multiply defined.
+
+)
 \openout1 = `"Experimental verification.aux"'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 69.
@@ -466,58 +470,89 @@ Package pdftex.def Info: micrograph_Einstein_example_s3.pdf  used on input line
 {C:/Users/Tamir/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./micrograp
 h_Einstein_example_clean.pdf> <./micrograph_Einstein_example_s05.pdf> <./microg
 raph_Einstein_example_s3.pdf>] [2]
-<Einstein_100.pdf, id=41, 259.97125pt x 260.975pt>
+<Einstein_100.pdf, id=42, 259.97125pt x 260.975pt>
 File: Einstein_100.pdf Graphic file (type pdf)
 <use Einstein_100.pdf>
-Package pdftex.def Info: Einstein_100.pdf  used on input line 174.
+Package pdftex.def Info: Einstein_100.pdf  used on input line 182.
 (pdftex.def)             Requested size: 103.98665pt x 104.38815pt.
-<Einstein_1e3.pdf, id=42, 259.97125pt x 260.975pt>
+<Einstein_1e3.pdf, id=43, 259.97125pt x 260.975pt>
 File: Einstein_1e3.pdf Graphic file (type pdf)
 <use Einstein_1e3.pdf>
-Package pdftex.def Info: Einstein_1e3.pdf  used on input line 179.
+Package pdftex.def Info: Einstein_1e3.pdf  used on input line 187.
 (pdftex.def)             Requested size: 103.98665pt x 104.38815pt.
-<Einstein_1e4.pdf, id=43, 259.97125pt x 260.975pt>
+<Einstein_1e4.pdf, id=44, 259.97125pt x 260.975pt>
 File: Einstein_1e4.pdf Graphic file (type pdf)
 <use Einstein_1e4.pdf>
-Package pdftex.def Info: Einstein_1e4.pdf  used on input line 184.
+Package pdftex.def Info: Einstein_1e4.pdf  used on input line 192.
 (pdftex.def)             Requested size: 103.98665pt x 104.38815pt.
- ("Experimental verification.bbl" [3 <./Einstein_100.pdf> <./Einstein_1e3.pdf> 
-<./Einstein_1e4.pdf>]) [4]
-("Experimental verification.aux") ) 
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<err_rrr_per_micrograph.pdf, id=45, 421.575pt x 316.18124pt>
+File: err_rrr_per_micrograph.pdf Graphic file (type pdf)
+<use err_rrr_per_micrograph.pdf>
+Package pdftex.def Info: err_rrr_per_micrograph.pdf  used on input line 203.
+(pdftex.def)             Requested size: 252.94695pt x 189.7102pt.
+
+Overfull \hbox (32.52322pt too wide) in paragraph at lines 203--204
+ [][] 
+ []
+
+<err_PS_per_micrograph.pdf, id=46, 421.575pt x 316.18124pt>
+File: err_PS_per_micrograph.pdf Graphic file (type pdf)
+<use err_PS_per_micrograph.pdf>
+Package pdftex.def Info: err_PS_per_micrograph.pdf  used on input line 208.
+(pdftex.def)             Requested size: 252.94695pt x 189.7102pt.
+
+Overfull \hbox (32.52322pt too wide) in paragraph at lines 208--209
+ [][] 
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+("Experimental verification.bbl" [3]) [4 <./Einstein_100.pdf> <./Einstein_1e3.p
+df> <./Einstein_1e4.pdf> <./err_rrr_per_micrograph.pdf> <./err_PS_per_micrograp
+h.pdf>] ("Experimental verification.aux")
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 5598 strings out of 493303
- 85472 string characters out of 3129785
- 159426 words of memory out of 3000000
- 9024 multiletter control sequences out of 15000+200000
- 18384 words of font info for 55 fonts, out of 3000000 for 9000
+ 5615 strings out of 493303
+ 86049 string characters out of 3129785
+ 160489 words of memory out of 3000000
+ 9037 multiletter control sequences out of 15000+200000
+ 19914 words of font info for 57 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,9n,39p,579b,526s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fo
-nts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk> <C:\Users\Tamir\AppData\Local\MiK
-TeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\Tamir\AppData
-\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk> <C:\Users\Tam
-ir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:
-\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss10
-95.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi
-600\ecrm1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknap
-pen\ec\dpi600\ecrm1200.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\lj
-four\jknappen\ec\dpi600\ecrm1728.pk><C:/Users/Tamir/AppData/Local/Programs/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Tamir/AppData/Local/
-Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Tamir/A
-ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/U
-sers/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmm
-i8.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/ams
-fonts/cm/cmr10.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmr6.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Tamir/AppData/Local/Programs
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/Tamir/AppData/Loc
-al/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Tami
-r/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C
-:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/sym
-bols/msbm10.pfb>
-Output written on "Experimental verification.pdf" (4 pages, 1413479 bytes).
+ <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
+ecbx1440.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\
+ec\dpi600\ecrm0800.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour
+\jknappen\ec\dpi600\ecti1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts
+\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX
+\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Tamir\AppData\Lo
+cal\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1095.pk> <C:\Users\Tamir\
+AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.pk> <C:\Us
+ers\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.
+pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
+\ecrm1728.pk><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmex10.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Tamir/AppData/Local/Programs/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Tamir/AppData/Loca
+l/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Tamir/
+AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/
+Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
+r6.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/ams
+fonts/cm/cmr7.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmr8.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Tamir/AppData/Local/Program
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Tamir/AppData/L
+ocal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on "Experimental verification.pdf" (4 pages, 1425076 bytes).
 PDF statistics:
- 309 PDF objects out of 1000 (max. 8388607)
+ 320 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
