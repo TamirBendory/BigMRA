@@ -1,0 +1,836 @@
+\documentclass{article}
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage{url} 
+\usepackage[authoryear]{natbib}
+%%%\usepackage{babel}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{color}
+\usepackage{framed}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+%%%\usepackage{custom_tex}
+\usepackage{grffile}
+\usepackage{multirow}
+\usepackage{xcolor}
+%\usepackage{setspace}
+\usepackage{comment}
+\usepackage{xr}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{definition}[thm]{Definition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{example}[thm]{Example}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\theoremstyle{thm}
+\newtheorem{conj}{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}
+
+
+\renewcommand{\AA}{\mathcal{A}}
+\newcommand{\BB}{\mathcal{B}}
+\newcommand{\CC}{\mathcal{C}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\EE}{\mathcal{E}}
+\newcommand{\FF}{\mathcal{F}}
+
+
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GCD}{\mathbf{GCD}}
+\newcommand{\XX}{\mathcal{X}}
+\newcommand{\SUM}{\text{sum}}
+\newcommand{\1}{\mathbf{1}}
+
+\newcommand{\mean}[2]{\frac{1}{#1}\sum_{#2=1}^{#1}}
+
+
+%
+%
+%
+%
+
+\begin{document}
+\title{Notes on Big MRA}
+\author{William Leeb}
+\date{}
+\maketitle
+
+\section{Setup}
+
+We have the following model. $x$ is a signal of length $L$. For large $n$, we observe the vector $Y \in \mathbb{R}^n$, which is of the form 
+%
+\begin{align}
+%
+    Y = G \ast x + N
+%
+\end{align}
+%
+where $G$ is a sum of diracs at locations at least $2L$ apart, and $N$ is a vector of $n$ iid Gaussians. The goal is to recover $x$.
+
+We will assume that the first and last copies of $x$ are at least $L$ places removed from the boundaries of the interval $[1,n + L]$ (if not we can just zero-pad the interval). We will also denote by $I_1,\dots,I_J$ the $J$ subintervals containing the signal; and take $I_j = [a_j,b_j]$. When we take the limit $n \to \infty$, we'll let $J = J_n$ grow with $n$, as is natural. We will see that we require $J_n = \Omega(n)$ in order for the limits to not vanish (and obviously $J_n = O(n)$ too).
+
+For the moments computation, I'm not just computing the expected value. I'm actually showing convergence almost surely as $n \to \infty$. I probably made a mistake in the final formulas since I haven't check them carefully yet; the main point I want to record right now is how to get the bookkeeping correct for dealing with the noise terms, namely, we need to break the averages into averages of averages, each with iid terms.
+
+%
+%
+%
+
+\section{First moment}
+
+We have:
+%
+\begin{align}
+%
+    M_1 = \frac{1}{n} \sum_{i=1}^n Y_i
+        = \frac{1}{n/L} \sum_{j=1}^{J_n} \frac{1}{L}\sum_{i=1}^L x_i
+            + \frac{1}{n} \sum_{i=1}^n N_i
+    \to \gamma \cdot \bar{x},
+%
+\end{align}
+%
+where the limit is almost surely (we've used the strong law of large numbers), where $\gamma = \lim_{n\to\infty} J_n L / n$ is the fraction of the observations containing the signal.
+
+
+
+%
+%
+%
+
+\section{Second moment}
+
+We fix a value $\Delta$ between $0$ and $L-1$. We will compute the second moment:
+%
+\begin{align}
+%
+    M_2(\Delta) = 
+        \lim_{n \to \infty} \frac{1}{n} \sum_{i=1}^{n-\Delta} Y_i Y_{i+\Delta}.
+%
+\end{align}
+
+
+%
+%
+%
+
+\subsection{Clean signal without noise}
+
+First, if there is no noise, and under the wide spacing assumption, we can break the sum into $J_n$ different sums, one for each copy of $x$ embedded in the signal:
+%
+\begin{align}
+%
+    M_2(\Delta) 
+        &= \frac{1}{n} \sum_{j=1}^{J_n} \sum_{i=a_j}^{b_j-\Delta} Y_i Y_{i+\Delta}
+        = \frac{1}{n} \sum_{j=1}^{J_n} \sum_{i=1}^{L-\Delta} x_i x_{i+\Delta}
+    \nonumber \\
+    &= \frac{J_n L}{n} \frac{1}{L} \sum_{i=1}^{L-\Delta} x_i x_{i+\Delta}
+        \to \gamma \cdot R_2(\Delta),
+%
+\end{align}
+%
+where here we have defined $R_2(\Delta)$ as element $\Delta$ of the autocorrelation of $x$. 
+%
+%
+%
+
+\subsection{Pure noise without signal}
+
+Here, $Y_i = N_i$. We first fix $\Delta$ between $1$ and $L-1$. Break up the sum into $\Delta$ terms as follows:
+%
+\begin{align}
+%
+    M_2(\Delta) &=\frac{1}{n} \sum_{i=1}^n N_i  N_{i+\Delta}
+        \nonumber \\
+    &= \frac{1}{\Delta} \sum_{m=0}^{\Delta-1} \frac{1}{n/\Delta}\sum_{j=1}^{n/\Delta} 
+        N_{j+(j-1)\Delta + m} N_{j + j\Delta + m}.
+%
+\end{align}
+%
+Each term
+%
+\begin{math}
+    \frac{1}{n/\Delta}\sum_{j=1}^{n/\Delta} 
+        N_{j\Delta + m} N_{(j + 1)\Delta + m}
+\end{math}
+%
+is an average of $n / \Delta$ iid terms with expectation zero, and so converges to 0 a.s.\ as $n \to \infty$. (Of course, it's not exactly $n / \Delta$ terms; there will be finitely many terms unaccounted for this way, but these are negligible).
+
+If $\Delta = 0$, then the computation is even easier:
+%
+\begin{align}
+%
+    M_2(\Delta) = \frac{1}{n} \sum_{i=1}^n N_i^2 
+        \operatorname*{\longrightarrow}^{a.s.} \sigma^2.
+%
+\end{align}
+
+So $M_2(\Delta) = \sigma^2$ if $\Delta = 0$, and 0 otherwise.
+
+%%%So the second moment matrix of pure noise converges a.s.\ as $n \to \infty$ to $\sigma^2 I_L$.
+
+
+%
+%
+%
+
+\subsection{Signal plus noise}
+
+We will denote by $\XX = x \ast G$, so $Y = \XX + N$. Then the second moment of the signal plus noise is:
+%
+\begin{align}
+%
+    M_2(\Delta,Y) = M_2(\Delta,\XX) + M_2(\Delta,N) 
+        + \frac{1}{n}\sum_{i=1}^{n-\Delta} \XX_i N_{i+\Delta}
+        + \frac{1}{n}\sum_{i=1}^{n-\Delta} \XX_{i+\Delta} N_i.
+%
+\end{align}
+%
+The law of large numbers says the cross terms vanish as $n \to \infty$. So the limit is simply:
+%
+\begin{align}
+%
+    M_2(\Delta,Y) = 
+    \begin{cases}
+        \gamma \cdot R_2(\Delta), &\text{ if } \Delta > 0; \\
+        \gamma \cdot R_2(\Delta) + \sigma^2, &\text{ if } \Delta = 0.
+    \end{cases}
+%
+\end{align}
+
+%
+%
+%
+
+\section{Third moments}
+
+The same idea lets us compute the third moments. We fix two indices $\Delta_1 < \Delta_2$, and define:
+%
+\begin{align}
+%
+    M_3(\Delta_1,\Delta_2) = \sum_{i=1}^{n-\Delta_2} Y_i Y_{i+\Delta_1} Y_{i+\Delta_2}.
+%
+\end{align}
+
+
+%
+%
+%
+
+\subsection{Pure noise, no signal}
+
+Again, the idea is to break up the big average over $n$ terms into a sum of $\Delta_2$ averages, each of $\approx n / \Delta_2$ independent terms. We write:
+%
+\begin{align}
+%
+    & M_3(\Delta_1,\Delta_2)  \nonumber \\
+    & = \frac{1}{\Delta_2}\sum_{m=0}^{\Delta_2-1}
+        \frac{1}{(n/\Delta_2)}\sum_{j=1}^{n/\Delta_2} 
+            N_{j+(j-1)\Delta_2+m} N_{j+\Delta_1 + (j-1)\Delta_2 + m} N_{j+j\Delta_2 + m}.
+%
+\end{align}
+%
+Each of the $\Delta_2$ terms indexed by $m$ converges is an average of $n/\Delta_2$ independent terms with mean zero, and so converges a.s.\ to zero as $n \to \infty$.
+
+
+%
+%
+%
+
+\subsection{Clean signal, no noise}
+
+Again, this is just like the second moment case. Write:
+%
+\begin{align}
+%
+    M_3(\Delta_1,\Delta_2) 
+        &= \frac{1}{n} \sum_{j=1}^{J_n} \sum_{i=a_j}^{b_j-\Delta_2} 
+            Y_i Y_{i+\Delta_1} Y_{i+\Delta_2}
+        = \frac{1}{n} \sum_{j=1}^{J_n} \sum_{i=1}^{L-\Delta_2} 
+            x_i x_{i+\Delta_1} x_{i+\Delta_2}
+    \nonumber \\
+    &= \frac{J_n L}{n} \frac{1}{L} \sum_{i=1}^{L-\Delta} x_i x_{i+\Delta_1} x_{i+\Delta_2}
+        \to \gamma \cdot R_3(\Delta_1,\Delta_2),
+%
+\end{align}
+%
+where here we have defined $R_3(\Delta_1,\Delta_2)$ as element $(\Delta_1,\Delta_2)$ of the third moment of $x$.
+
+
+%
+%
+%
+
+\subsection{Signal plus noise}
+
+We have:
+%
+\begin{align}
+%
+    M_3(\Delta_1,\Delta_2,Y) = M_3(\Delta_1,\Delta_2,\XX) + M_3(\Delta_1,\Delta_2,N)
+        + \text{cross terms}.
+%
+\end{align}
+%
+If $0 < \Delta_1 < \Delta_2$, then all of the cross terms can be shown to go to zero by the same kind of argument we've used several times before.
+
+If $\Delta_1 = \Delta_2 = \Delta > 0$, there is a surviving cross-term, namely:
+%
+\begin{align}
+%
+    \frac{1}{n} \sum_{i=1}^{n-\Delta} \XX_i N_{i+\Delta}^2
+    = \frac{1}{(n/L)} \sum_{j=1}^{J_n} \frac{1}{L} \sum_{i=a_j}^{b_j} \XX_i N_{i+\Delta}^2.
+%
+\end{align}
+%
+Each of $S_j \equiv \frac{1}{L} \sum_{i=a_j}^{b_j} \XX_i N_{i+\Delta}^2 \sim \frac{1}{L} \sum_{i=1}^{L} x_i \ep_i^2$, where $\ep_i \sim N(0,\sigma^2)$; and they are independent random variables with mean $\E[S_j] = \sigma^2 \cdot \bar{x}$. So by the law of large numbers,
+%
+\begin{align}
+%
+    \frac{1}{(n/L)} \sum_{j=1}^{J_n} \frac{1}{L} \sum_{i=a_j}^{b_j} \XX_i N_{i+\Delta}^2
+    \to \gamma \cdot \sigma^2 \cdot \bar{x}.
+%
+\end{align}
+
+Similarly, if $\Delta_2 > \Delta_1 = 0$, then there is a surviving cross-term which converges to $\gamma \cdot \sigma^2 \cdot \bar{x}$ as well. Finally, if $\Delta_1 = \Delta_2 = 0$, then the cross-term converges to $3 \cdot \gamma  \cdot \sigma^2 \cdot \bar{x}$. So in summary, for all $0 \le \Delta_1 \le \Delta_2 \le L-1$, we have:
+%
+\begin{align}
+%
+    M_3(\Delta_1,\Delta_2,Y) = 
+    \begin{cases}
+        \gamma \cdot R_3(\Delta_1,\Delta_2), &\text{ if } 0 < \Delta_1 < \Delta_2; \\
+        \gamma \cdot R_3(\Delta_1,\Delta_2) + \gamma \cdot \sigma^2 \cdot \bar{x},
+                &\text{ if } \Delta_2 > \Delta_1 = 0 \text{ or } \Delta_1 = \Delta_2 > 0; \\
+        \gamma \cdot R_3(0,0) + 3\cdot \gamma \cdot \sigma^2 \cdot \bar{x}
+                &\text{ if } \Delta_1 = \Delta_2 = 0.
+    \end{cases}
+%
+\end{align}
+
+%
+
+
+%
+%
+%
+
+
+\section{Attempt at EM}
+
+Let's derive the EM algorithm, where we treat the locations $a_j$ as random latent variables. A simple model is that the $a_j$ are chosen independently and uniformly at random (though take note that this permits overlaps of the signal copies).
+
+We will denote by $G=\sum_{j=1}^J \delta_{a_j}$ the random vector of signal locations. We'll assume the number of signals $J$ is known. The generative model is:
+%
+\begin{align}
+%
+    p(Y , G | x)
+    = \frac{\exp\{-\| Y - G \ast x \|^2 / (2\sigma^2)\}}{(2\pi\sigma^2)^{n/2}} 
+        \cdot {n \choose J}^{-1}.
+%
+\end{align}
+
+The log-likelihood is then (up to an additive constant):
+%
+\begin{align}
+%
+    \LL(x; Y, G) \propto - \|Y - G\ast x\|^2.
+%
+\end{align}
+
+The probability distribution of $G$, given $Y$ and $x$, is:
+%
+\begin{align}
+%
+    p(G | Y, x) = \frac{ p(Y , G | x) }{ p(Y | x) }
+    \propto \exp\{-\| Y - G \ast x \|^2 / (2\sigma^2)\}.
+%
+\end{align}
+
+If $x^{(t)}$ is a guess for $x$ on the $t^{th}$ iterate of EM, then we define the weights:
+%
+\begin{align}
+%
+    w_t(G) = p(G | Y,x^{(t)}) = \exp\{-\| Y - G \ast x^{(t)} \|^2 / (2\sigma^2)\},
+%
+\end{align}
+%
+and the $Q$-function:
+%
+\begin{align}
+%
+    Q(x|x^{(t)}) 
+    &= \E_{G|Y,x^{(t)}} \left[ \LL(x^{(t)};Y,G) \right]
+        \nonumber \\
+    &\propto - \sum_{G} \|Y - G\ast x\|^2 \cdot w_t(G).
+%
+\end{align}
+%
+The EM algorithm defines the next guess of $x$ to be:
+%
+\begin{align}
+%
+    x^{(t+1)} = \operatorname*{\arg\max}_x Q(x|x^{(t)})
+        = \operatorname*{\arg\min}_x \sum_{G} \|Y - G\ast x\|^2 \cdot w_t(G).
+%
+\end{align}
+
+But finding this minimum is hard, since the sum is over all ${n}\choose{J}$ possible values of $G$; if $J \sim n$, as we expect is necessary to have any chance of recovery (this was suggested by the moments method), the number of terms will grow super-exponentially with $n$.
+
+%
+%
+%
+
+\section{Estimating $\gamma$, using $\sigma$ and the moments}
+
+Using the moments calculation, we will derive an equation relating $\gamma$ and $\sigma$. If $\sigma$ were known (and $\1^\top x \ne 0$), this permits us to then estimate the unscaled moments of $x$, which in turn lets us fit $x$ to its moments.
+
+It will be notationally simpler to instead estimate $\beta \equiv \gamma \cdot L = J / n$. Also, we'll define the unnormalized moments of $x$ by $T_i = L \cdot R_i$, for $i=2,3$. From the first moment we estimate $\beta \cdot (\1^\top x)$, and hence also its square:
+%
+\begin{align}
+%
+    A \equiv (\beta \cdot \1^\top x)^2 
+    &= \beta^2  \left( \sum_{i=1}^L x_i^2 + 2 \sum_{i=1}^L \sum_{j=i+1}^{L} x_i x_j \right)
+        \nonumber \\
+    &= \beta^2 \left( T_2(0) 
+            + 2 \sum_{i=1}^{L} \sum_{\Delta=1}^{L-i} x_i x_{i+\Delta}\right)
+        \nonumber \\
+    &= \beta^2 \left( T_2(0) + 2 \sum_{i=1}^L \sum_{\Delta=1}^{L-1}x_i x_{i+\Delta} 
+        \1_{(\Delta \le L-i)} \right)
+        \nonumber \\
+    &= \beta^2 \left( T_2(0) + 2 \sum_{\Delta=1}^{L-1} \sum_{i=1}^{L-\Delta}x_i x_{i+\Delta} 
+        \right)
+        \nonumber \\
+    &= \beta^2 \left( T_2(0) + 2 \sum_{\Delta=1}^{L-1} T_2(\Delta) \right).
+%
+\end{align}
+
+On the other hand, from the second moment we can estimate $\beta \cdot T_2(\Delta)$ for all $1 \le \Delta \le L-1$, and $\beta\cdot T_2(0) + \sigma^2$, and consequently $B \equiv \beta \cdot (T_2(0) + 2 \sum_{\Delta=1}^L T_2(\Delta)) + \sigma^2$. Taking the ratio, we obtain the equation:
+%
+\begin{align}
+%
+    \frac{1}{\beta} + \frac{\sigma^2}{A} = \frac{B}{A}.
+%
+\end{align}
+
+If we knew $\sigma$, we can solve for $\beta$:
+%
+\begin{align}
+%
+    \beta = \frac{A}{B - \sigma^2}.
+%
+\end{align}
+
+(Of course, this only works if $B \ne \sigma^2$, or equivalently if $\1^\top x \ne 0$.)
+
+%
+%
+%
+%
+
+\section{A pair of quadratics satisfied by $\beta$}
+
+It turns out that $\beta$ satisfies two independent quadratic equations, defined in terms of the observed third-order moments. The coefficients of these quadratics depend only on the observed moments, not on $\sigma$; so we can estimate $\beta$ (and hence $\gamma$) consistently, even without knowing the noise level. We can then estimate $\sigma$, and from them, recover the moments of $x$, which in turn lets us solve for $x$.
+
+Of course, for finite $n$ and large $\sigma$ the formulas for $\beta$ and $\sigma$ will be noisy. Consequently, I suggest instead adding them as variables to the non-linear least squares problem; that is, solve for all of $x$, $\beta$ and $\nu \equiv \sigma^2$ by fitting their moments to the observed moments via least-squares.
+
+%
+%
+%
+%
+
+\subsection{The first quadratic equation}
+
+The previous section gives the equation:
+%
+\begin{align}
+%
+    \beta = \frac{A}{B - \sigma^2}.
+%
+\end{align}
+%
+
+Now we move up to third-order moments. From the first-order moments, we can estimate $\beta \cdot \1^\top x$; and from the second-order moments we can estimate $\beta \cdot \|x\|^2 + \sigma^2$. Taking the product, we have:
+%
+\begin{align}
+%
+    C &\equiv (\beta \cdot \1^\top x) \cdot (\beta \cdot \|x\|^2 + \sigma^2)
+        \nonumber \\
+    &= \beta^2 \left( T_3(0,0) + \sum_{\Delta=1}^{L-1}T_3(0,\Delta) 
+        + \sum_{\Delta=1}^{L-1}T_3(\Delta,\Delta) \right)
+        + \sigma^2 \cdot (\beta \cdot \1^\top x)
+        \nonumber \\
+    &= \beta^2 \cdot \omega + \sigma^2 \cdot E,
+%
+\end{align}
+%
+where 
+%
+\begin{math}
+%
+    \omega = T_3(0,0) + \sum_{\Delta=1}^{L-1}T_3(0,\Delta) 
+        + \sum_{\Delta=1}^{L-1}T_3(\Delta,\Delta),
+%
+\end{math}
+%
+and
+%
+\begin{align}
+%
+    E = \beta \cdot \1^\top x.
+%
+\end{align}
+
+
+
+From the observed third-order terms themselves, we can estimate:
+%
+\begin{align}
+%
+    D \equiv \beta\cdot \omega + (2L+1)\cdot\sigma^2\cdot (\beta \cdot \1^\top x)
+    = \beta\cdot \omega + \sigma^2\cdot F,
+%
+\end{align}
+%
+where
+%
+\begin{align}
+%
+    F = (2L+1)\cdot(\beta \cdot \1^\top x).
+%
+\end{align}
+
+
+Consequently:
+%
+\begin{align}
+%
+    D\cdot \beta - \sigma^2 \cdot \beta  \cdot F
+    = \beta^2 \cdot w = C - \sigma^2 \cdot E.
+%
+\end{align}
+%
+Using $\sigma^2 = B - A/\beta$ and rearranging, we get:
+%
+\begin{align}
+%
+    (D - BF) \cdot \beta^2  + (AF + BE - C) \cdot \beta   - AE 
+    \equiv \AA \beta^2  + \BB \beta  + \CC = 0.
+%
+\end{align}
+
+We can simplify the expressions a little bit. First, we observe that:
+%
+\begin{align}
+%
+    \CC = -AE = -(\beta \cdot \1^\top x)^3 = -E^3 \equiv -G.
+%
+\end{align}
+
+Second, we can simplify $\BB$:
+%
+\begin{align}
+%
+    \BB = AF + BE - C = (2L+1) \cdot G + 2E \beta \sum_{\Delta=1}^{L-1} T_2(\Delta).
+%
+\end{align}
+
+%
+%
+%
+%
+
+\subsection{The second quadratic equation}
+
+It is a straightforward computation to show that:
+%
+\begin{align}
+%
+    \phi &\equiv \left( \sum_{i=1}^L x_i \right)^3 
+        \nonumber \\
+    &= T_3(0,0) + 3\sum_{\Delta=1}^L T_3(\Delta,\Delta)
+        + 3 \sum_{\Delta=1}^L T_3(0,\Delta) 
+        + 6 \sum_{1 \le \Delta_1 < \Delta_1 \le L-1} T_3(\Delta_1,\Delta_2).
+%
+\end{align}
+
+The quantity $E = \beta \cdot \1^\top x$ is observed, and hence so is $G \equiv E^3 = \beta^3 \cdot \phi$. On the other hand, from the observed third moments we can directly estimate:
+%
+\begin{align}
+%
+    H &\equiv M_3(0,0) + 3\sum_{\Delta=1}^L M_3(\Delta,\Delta)
+        + 3 \sum_{\Delta=1}^L M_3(0,\Delta) 
+        + 6 \sum_{1 \le \Delta_1 < \Delta_1 \le L-1} M_3(\Delta_1,\Delta_2)
+        \nonumber \\
+    &= \beta \cdot \phi +  (6L - 3) \cdot E \cdot \sigma^2 
+    = \beta \cdot \phi +  O \cdot \sigma^2 ,
+%
+\end{align}
+%
+where the quantity
+%
+\begin{align}
+%
+    O = (6L - 3) \cdot E = (6L - 3) \cdot \beta \cdot \1^\top x
+%
+\end{align}
+%
+is also observed. Taking the ratio of $G$ and $H$, we get:
+%
+\begin{align}
+%
+    \frac{H}{G} = \frac{\beta \cdot \phi +  O \cdot \sigma^2 }{G}
+    = \frac{\beta \cdot \phi}{\beta^3 \cdot \phi} + \frac{O \cdot \sigma^2}{G}
+    = \frac{1}{\beta^2} + \frac{O}{G} \cdot \sigma^2,
+%
+\end{align}
+%
+and solving for $\sigma^2$ in terms of $\beta$, we get:
+%
+\begin{align}
+%
+    \sigma^2 = \frac{H}{O} - \frac{G}{O} \cdot \frac{1}{\beta^2}.
+%
+\end{align}
+
+On the other hand, we already know:
+%
+\begin{align}
+%
+    \sigma^2 = B - \frac{A}{\beta}.
+%
+\end{align}
+
+Combining these two equations, we arrive at the quadratic:
+%
+\begin{align}
+%
+    (B-H/O) \cdot \beta^2 - A \cdot \beta + (G / O) 
+    \equiv \DD \beta^2 + \EE \beta + \FF = 0.
+%
+\end{align}
+
+
+
+\subsection{Independence of the quadratics}
+
+We can show that for generic $x$, the two quadratics are independent; and in fact, for all sufficiently large $\beta$, they are independent for any $x$ (not just generic). By ``generic'' I mean on a set with complement of Lebesgue measure 0.
+
+To see this, it's enough to show that the ratio of coefficients is not the same. We have:
+%
+\begin{align}
+%
+    \frac{\BB}{\CC} = -(2L + 1) - \frac{2\beta \sum_{\Delta \ge 1}T_2(\Delta)}{E^2}
+%
+\end{align}
+%
+and
+%
+\begin{align}
+%
+    \frac{\EE}{\FF} = - (6L - 3).
+%
+\end{align}
+
+Suppose the quadratics are dependent. Then $\BB / \CC = \EE / \FF$, or
+%
+\begin{align}
+%
+    2L + 1 + \frac{2\beta \sum_{\Delta \ge 1}T_2(\Delta)}{E^2} = 6L  - 3
+%
+\end{align}
+%
+or equivalently
+%
+\begin{align}
+%
+    4(L-1)\beta^2(\1^\top x)^2 
+    &=  4(L-1)E^2 
+        \nonumber \\
+    &= 2 \beta \sum_{\Delta\ge1}T_2(\Delta) 
+        \nonumber \\
+    &= \beta ( (\1^\top x)^2 - \|x\|^2 ) .
+%
+\end{align}
+
+Rearranging we get:
+%
+\begin{align}
+%
+    (4(L-1)\beta - 1)(\1^\top x)^2 + \|x\|^2 = 0.
+%
+\end{align}
+%
+This describes a quadratic which has measure zero. But we can actually say something more. Since $(\1^\top x)^2 \le L \|x\|^2$, we must have:
+%
+\begin{align}
+%
+    1 - 4(L-1)\beta = \frac{\|x\|^2}{(\1^\top x)^2} \ge \frac{1}{L}
+%
+\end{align}
+%
+i.e.
+%
+\begin{align}
+%
+    (L-1)(1 - 4L\beta) = L -1 - 4(L-1)L \beta \ge 0
+%
+\end{align}
+%
+so that we need $\beta \le 1 / (4L)$. In other words, if $\beta \ge 1 / (4L)$, then the quadratics are independent.
+
+
+%
+%
+%
+%
+
+\section{Relation to system identification}
+
+Our problem can be interpreted as a special case of the problem of ``system identification'' in the field of signal processing. In this class of problems, we observe a length $n$ signal $Y$ given by:
+%
+\begin{align}
+%
+    Y = x \ast W + \ep,
+%
+\end{align}
+%
+where $x$ is an unknown linear filter of length $L$; $W$ is an unknown random ``input'' sequence; and $\ep$ is random additive noise. The goal of this problem is to estimate the ``system'' vector $x$. Specializing to the case where $W$ is a random sequence of spikes satisfying the spacing requirement we obtain our model in the $K=1$ case of a single vector.
+
+Likelihood-based methods seek to maximize the likelihood function for $x$, given the observed signal $Y$. Solving this optimization exactly is typically not tractable, and so heuristic methods are used instead. One proposed heuristic for computing the maximization is to Markov Chain Monte Carlo; in special cases, including the case where $W$ is binary, expectation-maximization has been used \cite{cappe1999simulation}. The EM method is based upon a certain ``forward-backward'' procedure described in \cite{rabiner1989tutorial}.
+
+Methods based on recovery from moments and cumulants, which are akin to our method, have also been used previously for system identification. The question of identifiablity of $x$ from moments for non-Gaussian $W$ was considered in \cite{lii1982deconvolution}; it was shown that under certain conditions on $W$, third-order statistics yield asymptotically consistent estimators. Another method based on third-order cumulants is described in \cite{giannakis1989id}. Other problems dealing with specific parameterized models of $x$ have also been considered, for instance in \cite{andrieu2001bayesian}.
+
+The problem of system identification should be distinguished from blind deconvolution. In the latter problem, the goal is to identify input signal $W$, rather than the filter $x$. TKTK 
+
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{refs_bmra}
+
+
+\end{document}
+
+%
+%
+%
+%
+
+
+\section{Relation to other work on blind deconvolution}
+
+Blind deconvolution is a fundamental and well-studied problem in signal processing. Generally, models of the following form are considered:
+%
+\begin{align}
+%
+    Y = h \ast X  + \sigma N,
+%
+\end{align}
+%
+where $h$ is a fixed, non-random filter vector of length $L$, say; and $X$ is a length $n$ random vector; and $N$ is a random noise vector. Often, $X$'s entries are assumed to be iid.
+
+Many previous works are focused on recovering the vector $X$ from the observed vector $Y$. A standard method in the $\sigma = 0$ regime involves solving for the unknowns $h$ and $Y$ by maximizing a third or fourth order cumulant of $Y$ \cite{cadzow1996blind}.
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{refs_bmra}
+
+
+
+\end{document}
+
+
+\subsection{Second moment of signal plus noise}
+
+
+
+Break the sum $\sum_{i=1}^n Y[i + k-1] Y[i + l - 1]$ into three terms: where $i + k-1$ and $i+l-1$ are disjoint from all intervals $I_j$ -- we will denote this set $\I$; where both $i + k - 1$ and $i + l -1$ lie entirely inside one of the $I_j$; and the rest, where exactly one of $i+k-1$ and $i+l-1$ lie in an interval $I_j$. So we have:
+%
+\begin{align}
+%
+    & \sum_{i=1}^n Y[i+k-1] Y[i+l-1]    \nonumber \\
+    =& \left(\sum_{i \in \I}  
+        + \sum_{j=1}^J \sum_{i=a_j - l + 1}^{a_j - k} 
+        + \sum_{j=1}^J \sum_{i=b_j - l + 2}^{b_j - k+1} 
+        + \sum_{j=1}^J \sum_{i=a_j-k+1}^{b_j-l+1}
+      \right)  Y[i+k-1] Y[i+l-1]
+%
+\end{align}
+
+We will use that $Y[a_j + m] = x[m+1] + \ep[a_j+m]$, $m=0,\dots,L-1$. For the second term, the inner sum is
+%
+\begin{align}
+%
+    &\sum_{i=a_j - l + 1}^{a_j - k} Y[i+k-1] Y[i+l-1]
+        \nonumber \\
+%
+    =&\sum_{i=1}^{\Delta} Y[a_j -\Delta + i-1] Y[a_j + i-1]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta}\ep[a_j -\Delta + i-1] (x[i] + \ep[a_j + i-1])
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta}\ep[a_j -\Delta + i-1] x[i]
+        + \sum_{i=1}^{\Delta}\ep[a_j -\Delta + i-1] \ep[a_j + i-1]
+%
+\end{align}
+%
+
+We also use that $Y[b_j - m] = x[L-m] + \ep[b_j-m]$, $m=0,\dots,L-1$. For the third term, the inner sum is
+%
+\begin{align}
+%
+    & \sum_{i=b_j - l + 2}^{b_j - k+1} Y[i+k-1] Y[i+l-1]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta} Y[i+b_j-\Delta] Y[i+b_j]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta} (x[L-\Delta+i]+\ep[i+b_j-\Delta]) \ep[i+b_j]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta} x[L-\Delta+i] \ep[i+b_j]
+        + \sum_{i=1}^{\Delta} \ep[i+b_j-\Delta] \ep[i+b_j]
+\end{align}
+%
+
+The inner sum of the fourth term is:
+%
+\begin{align}
+%
+    &\sum_{i=a_j-k+1}^{b_j-l+1} Y[i+k-1] Y[i+l-1]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{L - \Delta} Y[i+a_j-1] Y[i+a_j + \Delta - 1]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{L - \Delta} (x[i]+\ep[i+a_j-1])(x[i+\Delta] +\ep[i+a_j + \Delta - 1])
+        \nonumber \\
+%
+    =& \sum_{i=1}^{L - \Delta} x[i] x[i+\Delta]
+        + \sum_{i=1}^{L - \Delta} x[i]\ep[i+a_j + \Delta - 1]
+        \nonumber \\
+        &+ \sum_{i=1}^{L - \Delta} \ep[i+a_j-1] x[i+\Delta] 
+        + \sum_{i=1}^{L - \Delta} \ep[i+a_j-1]\ep[i+a_j + \Delta - 1])
+%
+\end{align}
+
+
+%
+%
+%
+
+
+
+\end{document}

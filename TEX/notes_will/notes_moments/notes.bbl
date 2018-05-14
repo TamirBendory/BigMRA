@@ -1,0 +1,67 @@
+\begin{thebibliography}{10}
+
+\bibitem{andrieu2001bayesian}
+Christophe Andrieu, \'{E}ric Barat, and Arnaud Doucet.
+\newblock Bayesian deconvolution of noisy filtered point processes.
+\newblock {\em {IEEE} Transactions on Signal Processing}, 49(1):134--146, 2001.
+
+\bibitem{benveniste1980}
+Albert Benveniste, Maurice Goursat, and Gabriel Ruget.
+\newblock Robust identification of a nonminimum phase system: Blind adjustment
+  of a linear equalizer in data communications.
+\newblock {\em {IEEE} Transactions on Automatic Control}, 25(3):385--399, 1980.
+
+\bibitem{bottegal2016robust}
+Giulio Bottegal, Aleksandr~Y. Aravkin, H\o{a}kan Hjalmarsson, and Gianluigi
+  Pillonetto.
+\newblock Robust em kernel-based methods for linear system identification.
+\newblock {\em Automatica}, 67:114--126, 2016.
+
+\bibitem{cappe1999simulation}
+Olivier Capp\'{e}, Arnaud Doucet, Marc Lavielle, and Eric Moulines.
+\newblock Simulation-based methods for blind maximum-likelihood filter
+  identification.
+\newblock {\em Signal Processing}, 73(1-2):3--25, 1999.
+
+\bibitem{dinuzzo2015kernels}
+Francesco Dinuzzo.
+\newblock Kernels for linear time invariant system identification.
+\newblock {\em {SIAM} Journal on Control and Optimization}, 53(5):3299--3317,
+  2015.
+
+\bibitem{giannakis1989id}
+Georgios~B. Giannakis and Jerry~M. Mendel.
+\newblock Identification of nonminimum phase systems using higher order
+  statistics.
+\newblock {\em {IEEE} Transactions on Signal Processing}, 37(3):360--377, 1989.
+
+\bibitem{kormylo1983id}
+John~J. Kormylo and Jerry~M. Mendel.
+\newblock Identifiability of nonminimum phase linear stochastic systems.
+\newblock {\em {IEEE} Transactions on Automatic Control}, 28(12):1081--1090,
+  1983.
+
+\bibitem{lii1982deconvolution}
+K.S. Lii and M.~Rosenblatt.
+\newblock Deconvolution and esitmation of transfer function phase and
+  coefficients for nongaussian linear processes.
+\newblock {\em The Annals of Statistics}, 10(4):1195--1208, 1982.
+
+\bibitem{pillonetto2010new}
+Gianluigi Pillonetto and Giuseppe~De Nicolao.
+\newblock A new kernel-based approach for linear system identification.
+\newblock {\em Automatica}, 46(1):81--93, 2010.
+
+\bibitem{rabiner1989tutorial}
+Lawrence~R. Rabiner.
+\newblock A tutorial on hidden markov models and selected applications in
+  speech recognition.
+\newblock {\em Proceedings of the {IEEE}}, 77(2):257--286, 1989.
+
+\bibitem{tugnait1984id}
+Jitendra~K. Tugnait.
+\newblock Identification of nonminimum phase linear stochastic systems.
+\newblock In {\em Proceedings of the 23rd Conference on Decision and Control},
+  pages 342--347, 1984.
+
+\end{thebibliography}

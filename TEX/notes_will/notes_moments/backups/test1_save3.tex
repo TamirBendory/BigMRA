@@ -1,0 +1,125 @@
+\documentclass{article}
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage{url} 
+\usepackage[authoryear]{natbib}
+%%%\usepackage{babel}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{color}
+\usepackage{framed}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+%%%\usepackage{custom_tex}
+\usepackage{grffile}
+\usepackage{multirow}
+\usepackage{xcolor}
+%\usepackage{setspace}
+\usepackage{comment}
+\usepackage{xr}
+%\externaldocument{sharp_PCA_AoS_supp}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{definition}[thm]{Definition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{example}[thm]{Example}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\theoremstyle{thm}
+\newtheorem{conj}{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}
+
+
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GCD}{\mathbf{GCD}}
+
+
+%
+%
+%
+%
+\begin{document}
+
+\section{Setup}
+
+We have the following model. $x$ is a signal of length $L$. For large $n$, we observe the vector $Y \in \mathbb{R}^n$, which is of the form 
+%
+\begin{align}
+%
+    Y = x \ast g + \ep
+%
+\end{align}
+%
+where $g$ is a sum of diracs at locations at least $L$ apart, and $\ep$ is a vector of $n$ iid Gaussians. The question is, can we recover $x$? 
+
+The approach Tamir proposed was the following. We look at all length $L$ subvectors of $Y$ (with consecutive elements). Compute the mean, power spectrum, and bispectrum for each, and average. This should hopefully converge in the large $n$ limit to some function of $x$. Then attempt to invert this function, perhaps by least squares.
+
+One of Tamir's concerns is that the noise terms are not independent between overlapping windows. I'll show that at least for the first and second moments, things are okay as long as there are $\Omega(n)$ copies of $x$ buried in $Y$. The bispectrum is probably fine too but I haven't written it out yet.
+
+
+We will assume that the first and last copies of $x$ is at least $L$ places removed from the boundaries of the interval $[1,n + L]$ (if not we can just zero-pad the interval). We will also denote by $I_1,\dots,I_J$ the $J$ subintervals containing the signal; and take $I_j = [a_j,b_j]$. When we take the limit $n \to \infty$, we'll let $J = J_n$ grow with $n$, as is natural. We will see that we require $J_n = \Omega(n)$ in order for the limits to not vanish.
+
+Note that I'm not just computing the expected value. I'm actually showing convergence almost surely as $n \to \infty$.
+
+
+
+\section{First moment}
+
+We'll compute the limiting vector of the sample average of all the windows. We fix an index $\ell$ between $1$ and $L$. Then the sample average of the $\ell^{th}$ entry is:
+%
+\begin{align}
+%
+    \frac{1}{n} \sum_{i=1}^n Y_{i+\ell} &=
+    \frac{1}{n}  \left( \sum_{i \notin I_j \forall j} \ep_i 
+                  + \sum_{j=1}^J \sum_{k=1}^L (x[k] + \ep_{a_j + k-1} ) \right) 
+    \nonumber \\
+%
+                &= \frac{1}{n}\sum_{i=1}^{n} \ep_i 
+                  + \frac{J \cdot L}{n} \left(\frac{1}{L} \sum_{k=1}^L x[k]\right) 
+    \nonumber \\
+                &= \frac{1}{n}\sum_{i=1}^{n-L+1} \ep_i 
+                  + \frac{J \cdot L}{n} \bar{x}       \nonumber \\
+%
+                &\operatorname*{\longrightarrow}^{a.s.}  \gamma  \cdot \bar{x}
+%
+\end{align}
+%
+where $\gamma = \lim_{n\to\infty} J_n L / n$; $\gamma$ is the fraction of the observations occupied by the signal. The limit of the $\ell^{th}$ entry of the mean does not depend on the index $\ell$, and is the same limit as if there were no noise at all, i.e.\ the noise completely averages out.
+
+Actually, what Tamir meant when he said first moment was the average of the windows' averages (a scalar), not the average window (a vector). But this also converges a.s.\ to $\gamma \cdot \bar{x}$, by simply exchanging limits and finite sums, as follows. The sample mean of the window starting at index $i$ is just $\frac{1}{L} \sum_{k=0}^{L-1} Y_{i+k}$. Averaging these over all $n$ windows and taking the limit as $n \to \infty$ we get:
+%
+\begin{align}
+%
+    \lim_{n\to\infty} \frac{1}{n} \sum_{i=1}^n \frac{1}{L} \sum_{k=0}^{L-1} Y_{i+k}
+    =  \frac{1}{L} \sum_{k=0}^{L-1} \lim_{n\to\infty} \frac{1}{n} \sum_{i=1}^n Y_{i+k}
+    = \gamma \cdot \bar{x}.
+%
+\end{align}
+
+
+
+
+
+
+
+\section{Second moment}
+
+\subsection{Pure noise}
+
+
+
+\subsection{Signal plus noise}
+
+
+
+
+
+
+
+\end{document}

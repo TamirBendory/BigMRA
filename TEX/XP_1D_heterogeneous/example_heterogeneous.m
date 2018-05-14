@@ -102,6 +102,7 @@ disp(m_actual*L/n);
 
 %% Requires P as defined above
 
+if 0
 figure(1);
 T = 0:(L-1);
 for k = 1 : K
@@ -118,3 +119,25 @@ set(gcf, 'Color', 'w');
 figname1 = [filename_data '_fig1'];
 savefig(1, [figname1, '.fig']);
 pdf_print_code(1, [figname1 '.pdf'], 14);
+end
+
+% Tamir's edits
+
+figure(1);
+T = 0:(L-1);
+for k = 1 : K
+    subplot(1, K, k);
+    handles = plot(T, X2(:, P(k)), T, X(:, k),'linewidth',1.2);
+    %set(handles(3), 'LineWidth', 1);
+    ylim([-2.5, 2.5]);
+    %title(sprintf('%.4g / %.4g / %.4g', gamma1(P(k)) * (L/L_optim), gamma2(P(k)), m_actual(k)*L/n));
+    %set(gca, 'YTick', [-2, 0, 2]);
+    set(gca, 'XTick', [0, 10, 20]);
+    set(gca, 'FontSize', 12);
+    axis square tight 
+end
+set(gcf, 'Color', 'w');
+%figname1 = [filename_data '_fig1'];
+%savefig(1, [figname1, '.fig']);
+%pdf_print_code(1, [figname1 '.pdf'], 14);
+pdf_print_code(gcf,'hetero_example.pdf', 12);

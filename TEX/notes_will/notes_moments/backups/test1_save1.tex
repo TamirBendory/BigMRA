@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage{url} 
+\usepackage[authoryear]{natbib}
+%%%\usepackage{babel}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{color}
+\usepackage{framed}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+%%%\usepackage{custom_tex}
+\usepackage{grffile}
+\usepackage{multirow}
+\usepackage{xcolor}
+%\usepackage{setspace}
+\usepackage{comment}
+\usepackage{xr}
+%\externaldocument{sharp_PCA_AoS_supp}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{definition}[thm]{Definition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{example}[thm]{Example}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\theoremstyle{thm}
+\newtheorem{conj}{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}
+
+
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GCD}{\mathbf{GCD}}
+
+
+%
+%
+%
+%
+\begin{document}
+
+\section{Setup}
+
+We have the following model. $x$ is a signal of length $L$. For large $n$, we observe the vector $Y \in \mathbb{R}^n$, which is of the form 
+%
+\begin{align}
+%
+    Y = x \ast g + \ep
+%
+\end{align}
+%
+where $g$ is a sum of diracs at locations at least $L$ apart, and $\ep$ is a vector of $n$ iid Gaussians. The question is, can we recover $x$? 
+
+The approach Tamir proposed was the following. Look at all length $L$ (or bigger, but we'll stick with length $L$ for now) subvectors of $Y$ (with consecutive elements). Compute the mean, power spectrum, and bispectrum for each, and average. This should hopefully converge in the large $n$ limit to some function of $x$. Then attempt to invert this function, perhaps by least squares.
+
+One of Tamir's concerns is that the noise terms are not independent between overlapping windows. I'll show that at least for the first and second moments, things are okay as long as there are $\Omega(n)$ copies of $x$ buried in $Y$. The bispectrum is probably fine too but I haven't written it out yet.
+
+Note that I'm not just computing the expected value. I'm actually showing convergence almost surely as $n \to \infty$.
+
+
+\section{First moment}
+
+We'll compute the limiting vector of the average of all the windows. Fix an index $\ell$ between $1$ and $L$. Then 
+
+\section{Second moment}
+
+\subsection{Pure noise}
+
+
+
+\subsection{Signal plus noise}
+
+
+
+
+Assume that the first and last copies of $x$ is at least $L$ places removed from the boundaries of the interval $[1,n]$ (if not we can just zero-pad the interval).
+
+
+
+\end{document}

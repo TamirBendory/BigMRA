@@ -1,0 +1,1043 @@
+@article{cadzow1996blind,
+  title={Blind deconvolution via cumulant extrema},
+  author={Cadzow, James A.},
+  journal={{IEEE} Signal Processing Magazine},
+  volume={13},
+  number={3},
+  pages={24-42},
+  year={1996},
+  publisher={IEEE}
+}
+
+
+
+@article{dvornek2015subspaceem,
+  title={Subspace{EM}: A fast maximum-a-posteriori algorithm for cryo-{EM} single particle reconstruction},
+  author={Dvornek, Nicha C and Sigworth, Fred J and Tagare, Hemant D},
+  journal={Journal of structural biology},
+  volume={190},
+  number={2},
+  pages={200--214},
+  year={2015},
+  publisher={Elsevier}
+}
+@article{frank1987tilt,
+	title={Three-dimensional reconstruction from a single-exposure, random conical tilt series applied to the 50{S} ribosomal subunit of {E}scherichia coli},
+	author={Radermacher, M. and Wagenknecht, T. and Verschoor, A. and Frank, J.},
+	journal={Journal of Microscopy},
+	volume={146},
+	number={2},
+	pages={113-136},
+	year={1987}
+}
+@article{vershynin2010intro,
+	title={Introduction to the non-asymptotic analysis of random matrices},
+	author={Vershynin, Roman},
+	journal={arXiv preprint arXiv:1011.3027},
+	year={2010}
+}
+@article{yu2015useful,
+	title={A useful variant of the {D}avis-{K}ahan theorem for statisticians},
+	author={Yu, Yi and Samworth, Richard J.},
+	journal={Biometrika},
+	volume={102},
+	number={2},
+	pages={315-323},
+	year={2015}
+}
+@book{hastie2009elements,
+  title={The Elements of Statistical Learning},
+  author={Hastie, Trevor and Tibshirani, Robert and Friedman, Jerome},
+  year={2009},
+  publisher={Springer},
+  edition={2nd}
+}
+@inproceedings{abbe2017sample,
+	author={E. Abbe and J. M. Pereira and A. Singer}, 
+	booktitle={2017 IEEE International Symposium on Information Theory (ISIT)}, 
+	title={Sample complexity of the {Boolean} multireference alignment problem}, 
+	year={2017}, 
+	pages={1316-1320},
+	month={June}
+}
+@article{anandkumar2014tensor,
+	title={Tensor decompositions for learning latent variable models.},
+	author={Anandkumar, Animashree and Ge, Rong and Hsu, Daniel J and Kakade, Sham M and Telgarsky, Matus},
+	journal={Journal of Machine Learning Research},
+	volume={15},
+	number={1},
+	pages={2773--2832},
+	year={2014}
+}
+@book{AMS08,
+  title={Optimization algorithms on matrix manifolds},
+  author={Absil, P-A and Mahony, Robert and Sepulchre, Rodolphe},
+  year={2009},
+  publisher={Princeton University Press}
+}
+@article{aguerrebere2016fundamental,
+  title={Fundamental limits in multi-image alignment},
+  author={Aguerrebere, Cecilia and Delbracio, Mauricio and Bartesaghi, Alberto and Sapiro, Guillermo},
+  journal={IEEE Transactions on Signal Processing},
+  volume={64},
+  number={21},
+  pages={5707--5722},
+  year={2016},
+  publisher={IEEE}
+}
+@article{swami1990linear,
+	title={Linear modeling of multidimensional non-Gaussian processes using cumulants},
+	author={Swami, A and Giannakis, GB and Mendel, JM},
+	journal={Multidimensional Systems and Signal Processing},
+	volume={1},
+	number={1},
+	pages={11--37},
+	year={1990},
+	publisher={Springer}
+}
+@article{alshebeili1990phase,
+  title={A phase reconstruction algorithm from bispectrum(seismic reflection data)},
+  author={Alshebeili, S and Cetin, AE},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  volume={28},
+  number={2},
+  pages={166--170},
+  year={1990}
+}
+@Article{bandeira2014tightness,
+	author="Bandeira, Afonso S.
+	and Boumal, Nicolas
+	and Singer, Amit",
+	title="Tightness of the maximum likelihood semidefinite relaxation for angular synchronization",
+	journal="Mathematical Programming",
+	year="2017",
+	volume="163",
+	number="1",
+	pages="145--167"
+}
+@inproceedings{bandeira2014multireference,
+  title={Multireference alignment using semidefinite programming},
+  author={Bandeira, Afonso S and Charikar, Moses and Singer, Amit and Zhu, Andy},
+  booktitle={Proceedings of the 5th conference on Innovations in theoretical computer science},
+  pages={459--470},
+  year={2014},
+  organization={ACM}
+}
+@inproceedings{bandeira2016low,
+	title={On the low-rank approach for semidefinite programs arising in synchronization and community detection},
+	author={Bandeira, Afonso S and Boumal, Nicolas and Voroninski, Vladislav},
+	booktitle={Conference on Learning Theory},
+	pages={361--382},
+	year={2016}
+}
+@article{bandeira2017optimal,
+	title={Optimal rates of estimation for multi-reference alignment},
+	author={Bandeira, A. and Rigollet, P. and Weed, J.},
+	journal={arXiv preprint arXiv:1702.08546},
+	year={2017}
+}
+@article{bandeira2015non,
+	title={Non-unique games over compact groups and orientation estimation in cryo-em},
+	author={Bandeira, Afonso S and Chen, Yutong and Singer, Amit},
+	journal={arXiv preprint arXiv:1505.03840},
+	year={2015}
+}
+@article{bartesaghi20152,
+	title={2.2 {{\AA}} resolution cryo-{EM} structure of $\beta$-galactosidase in complex with a cell-permeant inhibitor},
+	author={Bartesaghi, Alberto and Merk, Alan and Banerjee, Soojay and Matthies, Doreen and Wu, Xiongwu and Milne, Jacqueline LS and Subramaniam, Sriram},
+	journal={Science},
+	volume={348},
+	number={6239},
+	pages={1147--1151},
+	year={2015},
+	publisher={American Association for the Advancement of Science}
+}
+@article{bartolo2004non,
+  title={Non-Gaussianity from inflation: theory and observations},
+  author={Bartolo, Nicola and Komatsu, Eiichiro and Matarrese, Sabino and Riotto, Antonio},
+  journal={Physics Reports},
+  volume={402},
+  number={3},
+  pages={103--266},
+  year={2004},
+  publisher={Elsevier}
+}
+@article{beinert2015ambiguities,
+  title={Ambiguities in one-dimensional discrete phase retrieval from Fourier magnitudes},
+  author={Beinert, Robert and Plonka, Gerlind},
+  journal={Journal of Fourier Analysis and Applications},
+  volume={21},
+  number={6},
+  pages={1169--1198},
+  year={2015},
+  publisher={Springer}
+}
+@article{beinert2016enforcing,
+  title={Enforcing uniqueness in one-dimensional phase retrieval by additional signal information in time domain},
+  author={Beinert, Robert and Plonka, Gerlind},
+  journal={arXiv preprint arXiv:1604.04493},
+  year={2016}
+}
+@article{benaych2012singular,
+	title={The singular values and vectors of low rank perturbations of large rectangular random matrices},
+	author={Benaych-Georges, Florent and Nadakuditi, Raj Rao},
+	journal={Journal of Multivariate Analysis},
+	volume={111},
+	pages={120--135},
+	year={2012},
+	publisher={Elsevier}
+}
+@article{bendory2017fourier,
+	title={Fourier Phase Retrieval: Uniqueness and Algorithms},
+	author={Bendory, Tamir and Beinert, Robert and Eldar, Yonina C},
+	journal={arXiv preprint arXiv:1705.09590},
+	year={2017}
+
+
+
+@ARTICLE{bendory2017bispectrum, 
+author={T. Bendory and N. Boumal and C. Ma and Z. Zhao and A. Singer}, 
+journal={IEEE Transactions on Signal Processing}, 
+title={Bispectrum Inversion With Application to Multireference Alignment}, 
+year={2018}, 
+volume={66}, 
+number={4}, 
+pages={1037-1050}, 
+month={Feb},}}
+
+@article{bendory2017on,
+  title={On the uniqueness of {FROG} methods},
+  author={Bendory, Tamir  and Sidorenko, Pavel and Eldar, Yonina C},
+  journal={arXiv preprint arXiv:1701.02831 },
+  year={2017}
+}
+@article{bendory2016non,
+  title={Non-convex phase retrieval from {STFT} measurements},
+  author={Bendory, Tamir and Eldar, Yonina C},
+  journal={arXiv preprint arXiv:1607.08218},
+  year={2016}
+}
+@article{boumal2017heterogeneous,
+	title={Heterogeneous multireference alignment: a single pass approach},
+	author={Boumal, Nicolas and Bendory, Tamir and Lederman, Roy R and Singer, Amit},
+	journal={arXiv preprint arXiv:1710.02590},
+	year={2017}
+}
+@article{boumal2016nonconvex,
+  title={Nonconvex phase synchronization},
+  author={Boumal, Nicolas},
+  journal={SIAM Journal on Optimization},
+  volume={26},
+  number={4},
+  pages={2355--2377},
+  year={2016},
+  publisher={SIAM}
+}
+@article{boumal2016globalrates,
+  title={Global rates of convergence for nonconvex optimization on manifolds},
+  author={Boumal, Nicolas and Absil, P-A and Cartis, Coralia},
+  journal={arXiv preprint arXiv:1605.08101},
+  year={2016}
+}
+@book{boyd2004convex,
+  title={Convex optimization},
+  author={Boyd, Stephen and Vandenberghe, Lieven},
+  year={2004},
+  publisher={Cambridge university press}
+}
+@article{brockett1988bispectral,
+  title={Bispectral-based tests for the detection of Gaussianity and linearity in time series},
+  author={Brockett, Patrick L and Hinich, Melvin J and Patterson, Douglas},
+  journal={Journal of the American Statistical Association},
+  volume={83},
+  number={403},
+  pages={657--664},
+  year={1988},
+  publisher={Taylor \& Francis Group}
+}
+@article{candes2015phase,
+  title={Phase retrieval via matrix completion},
+  author={Candes, Emmanuel J and Eldar, Yonina C and Strohmer, Thomas and Voroninski, Vladislav},
+  journal={SIAM review},
+  volume={57},
+  number={2},
+  pages={225--251},
+  year={2015},
+  publisher={SIAM}
+}
+@article{candes2015wirtinger,
+  title={Phase retrieval via Wirtinger flow: Theory and algorithms},
+  author={Candes, Emmanuel J and Li, Xiaodong and Soltanolkotabi, Mahdi},
+  journal={IEEE Transactions on Information Theory},
+  volume={61},
+  number={4},
+  pages={1985--2007},
+  year={2015},
+  publisher={IEEE}
+}
+@article{chang1991blur,
+  title={Blur identification using the bispectrum},
+  author={Chang, Michael M and Tekalp, A Murat and Erdem, A Tanju},
+  journal={IEEE transactions on signal processing},
+  volume={39},
+  number={10},
+  pages={2323--2325},
+  year={1991},
+  publisher={IEEE}
+}
+@article{chang2007miles,
+  title={MILES: MATLAB package for solving Mixed Integer LEast Squares problems},
+  author={Chang, Xiao-Wen and Zhou, Tianyang},
+  journal={GPS Solutions},
+  volume={11},
+  number={4},
+  pages={289--294},
+  year={2007},
+  publisher={Springer}
+}
+@inproceedings{chen2008feature,
+  title={Feature extraction using surrounding-line integral bispectrum for radar emitter signal},
+  author={Chen, Tao-wei and Jin, Wei-dong and Li, Jie},
+  booktitle={2008 IEEE International Joint Conference on Neural Networks (IEEE World Congress on Computational Intelligence)},
+  pages={294--298},
+  year={2008},
+  organization={IEEE}
+}
+@article{chen2016projected,
+  title={The Projected Power Method: An Efficient Algorithm for Joint Alignment from Pairwise Differences},
+  author={Chen, Yuxin and Candes, Emmanuel},
+  journal={arXiv preprint arXiv:1609.05820},
+  year={2016}
+}
+@inproceedings{chen2014near,
+	title={Near-Optimal Joint Object Matching via Convex Relaxation},
+	author={Chen, Yuxin and Guibas, Leonidas and Huang, Qixing},
+	booktitle={Proceedings of the 31st International Conference on Machine Learning (ICML-14)},
+	pages={100--108},
+	year={2014}
+}
+@misc{grant2008cvx,
+	title={{CVX}: {M}atlab software for disciplined convex programming},
+	author={Grant, Michael and Boyd, Stephen and Ye, Yinyu},
+	year={2008}
+}
+@article{dempster1977maximum,
+	title={Maximum likelihood from incomplete data via the EM algorithm},
+	author={Dempster, Arthur P and Laird, Nan M and Rubin, Donald B},
+	journal={Journal of the royal statistical society. Series B (methodological)},
+	pages={1--38},
+	year={1977},
+	publisher={JSTOR}
+}
+@article{devroye2016sub,
+  title={Sub-Gaussian mean estimators},
+  author={Devroye, Luc and Lerasle, Matthieu and Lugosi, Gabor and Oliveira, Roberto I and others},
+  journal={The Annals of Statistics},
+  volume={44},
+  number={6},
+  pages={2695--2725},
+  year={2016},
+  publisher={Institute of Mathematical Statistics}
+}
+@article{diamond1992multiple,
+  title={On the multiple simultaneous superposition of molecular structures by rigid body transformations},
+  author={Diamond, R},
+  journal={Protein Science},
+  volume={1},
+  number={10},
+  pages={1279--1287},
+  year={1992},
+  publisher={Wiley Online Library}
+}
+@article{dobriban2017optimal,
+	title={Optimal prediction in the linearly transformed spiked model},
+	author={Dobriban, Edgar and Leeb, William and Singer, Amit},
+	journal={arXiv preprint arXiv:1709.03393},
+	year={2017}
+}
+@book{dryden1998statistical,
+  title={Statistical shape analysis},
+  author={Dryden, Ian L and Mardia, Kanti V},
+  volume={4},
+  year={1998},
+  publisher={J. Wiley Chichester}
+}
+@book{dumitrescu2007positive,
+  title={Positive trigonometric polynomials and signal processing applications},
+  author={Dumitrescu, Bogdan Alexandru},
+  year={2007},
+  publisher={Springer Science \& Business Media}
+}
+@article{fienup1982phase,
+  title={Phase retrieval algorithms: a comparison},
+  author={Fienup, James R},
+  journal={Applied optics},
+  volume={21},
+  number={15},
+  pages={2758--2769},
+  year={1982},
+  publisher={Optical Society of America}
+}
+@article{foroosh2002extension,
+  title={Extension of phase correlation to subpixel registration},
+  author={Foroosh, Hassan and Zerubia, Josiane B and Berthod, Marc},
+  journal={IEEE transactions on image processing},
+  volume={11},
+  number={3},
+  pages={188--200},
+  year={2002},
+  publisher={IEEE}
+}
+@book{frank2006three,
+  title={Three-dimensional electron microscopy of macromolecular assemblies: visualization of biological molecules in their native state},
+  author={Frank, Joachim},
+  year={2006},
+  publisher={Oxford University Press}
+}
+@article{gaffney2007imaging,
+	title={Imaging atomic structure and dynamics with ultrafast X-ray scattering},
+	author={Gaffney, KJ and Chapman, HN},
+	journal={Science},
+	volume={316},
+	number={5830},
+	pages={1444--1448},
+	year={2007},
+	publisher={American Association for the Advancement of Science}
+}
+@book{galbraith2012mathematics,
+  title={Mathematics of public key cryptography},
+  author={Galbraith, Steven D},
+  year={2012},
+  publisher={Cambridge University Press}
+}
+@article{gavish-donoho-2017,
+	title={Optimal shrinkage of singular values},
+	author={Gavish, Matan and Donoho, David L.},
+	journal={IEEE Transactions on Information Theory},
+	volume={63},
+	number={4},
+	pages={2137-2152},
+	year={2017}
+}
+@article{genrtr,
+  title={Trust-region methods on {R}iemannian manifolds},
+  author={Absil, P-A and Baker, Christopher G and Gallivan, Kyle A},
+  journal={Foundations of Computational Mathematics},
+  volume={7},
+  number={3},
+  pages={303--330},
+  year={2007},
+  publisher={Springer}
+}
+@article{giannakis1989signal,
+  title={Signal reconstruction from multiple correlations: frequency-and time-domain approaches},
+  author={Giannakis, Georgios B},
+  journal={JOSA A},
+  volume={6},
+  number={5},
+  pages={682--697},
+  year={1989},
+  publisher={Optical Society of America}
+}
+@inproceedings{gil2005using,
+  title={Using multilayer perceptrons to align high range resolution radar signals},
+  author={Gil-Pita, Roberto and Rosa-Zurera, Manuel and Jarabo-Amores, P and L{\'o}pez-Ferreras, Francisco},
+  booktitle={International Conference on Artificial Neural Networks},
+  pages={911--916},
+  year={2005},
+  organization={Springer}
+}
+@article{goldstein2016phasemax,
+  title={PhaseMax: Convex phase retrieval via basis pursuit},
+  author={Goldstein, Tom and Studer, Christoph},
+  journal={arXiv preprint arXiv:1610.07531},
+  year={2016}
+}
+@article{goemans1995improved,
+	title={Improved approximation algorithms for maximum cut and satisfiability problems using semidefinite programming},
+	author={Goemans, Michel X and Williamson, David P},
+	journal={Journal of the ACM (JACM)},
+	volume={42},
+	number={6},
+	pages={1115--1145},
+	year={1995},
+	publisher={ACM}
+}
+@article{harshman1970foundations,
+	title={Foundations of the parafac procedure: models and conditions for an" explanatory" multimodal factor analysis},
+	author={Harshman, Richard A},
+	year={1970},
+	publisher={University of California at Los Angeles Los Angeles, CA}
+}
+@inproceedings{jaganathan2012recovery,
+  title={Recovery of sparse {1-D} signals from the magnitudes of their {Fourier} transform},
+  author={Jaganathan, Kishore and Oymak, Samet and Hassibi, Babak},
+  booktitle={Information Theory Proceedings (ISIT), 2012 IEEE International Symposium On},
+  pages={1473--1477},
+  year={2012},
+  organization={IEEE}
+}
+@inproceedings{jaganathan2013sparse,
+  title={Sparse phase retrieval: Convex algorithms and limitations},
+  author={Jaganathan, Kishore and Oymak, Samet and Hassibi, Babak},
+  booktitle={Information Theory Proceedings (ISIT), 2013 IEEE International Symposium on},
+  pages={1022--1026},
+  year={2013},
+  organization={IEEE}
+}
+@article{johnstone2001distribution,
+	title={On the distribution of the largest eigenvalue in principal components analysis},
+	author={Johnstone, Iain M},
+	journal={Annals of Statistics},
+	volume={29},
+	number={2},
+	pages={295--327},
+	year={2001},
+	publisher={JSTOR}
+}
+@inproceedings{kakarala2009bispectrum,
+  title={Bispectrum on finite groups},
+  author={Kakarala, Ramakrishna},
+  booktitle={2009 IEEE International Conference on Acoustics, Speech and Signal Processing},
+  pages={3293--3296},
+  year={2009},
+  organization={IEEE}
+}
+@article{kakarala2012bispectrum,
+  title={The bispectrum as a source of phase-sensitive invariants for Fourier descriptors: a group-theoretic approach},
+  author={Kakarala, Ramakrishna},
+  journal={Journal of Mathematical Imaging and Vision},
+  volume={44},
+  number={3},
+  pages={341--353},
+  year={2012},
+  publisher={Springer}
+}
+@article{kakarala2009completeness,
+  title={Completeness of bispectrum on compact groups},
+  author={Kakarala, RAMAKRISHNA},
+  journal={arXiv preprint arXiv:0902.0196},
+  volume={1},
+  year={2009},
+  publisher={Citeseer}
+}
+@article{kam1980reconstruction,
+	title={The reconstruction of structure from electron micrographs of randomly oriented particles},
+	author={Kam, Zvi},
+	journal={Journal of Theoretical Biology},
+	volume={82},
+	number={1},
+	pages={15--39},
+	year={1980},
+	publisher={Elsevier}
+}
+@article{kay1993fundamentals,
+  title={Fundamentals of statistical signal processing, volume I: estimation theory},
+  author={Kay, Steven M},
+  year={1993},
+  publisher={Prentice Hall}
+}
+@article{kondor2007novel,
+	title={A novel set of rotationally and translationally invariant features for images based on the non-commutative bispectrum},
+	author={Kondor, R.},
+	journal={arXiv preprint cs/0701127},
+	year={2007}
+}
+@inproceedings{kosir1995multiple,
+  title={A multiple measurement approach for feature alignment},
+  author={Kosir, Pete and DeWall, Robert and Mitchell, Richard A},
+  booktitle={Aerospace and Electronics Conference, 1995. NAECON 1995., Proceedings of the IEEE 1995 National},
+  volume={1},
+  pages={94--101},
+  year={1995},
+  organization={IEEE}
+}
+@article{lederman2016representation,
+  title={A Representation Theory Perspective on Simultaneous Alignment and Classification},
+  author={Lederman, Roy R and Singer, Amit},
+  journal={arXiv preprint arXiv:1607.03464},
+  year={2016}
+}
+@article{lederman2017continuously,
+	title={Continuously heterogeneous hyper-objects in cryo-EM and 3-D movies of many temporal dimensions},
+	author={Lederman, Roy R and Singer, Amit},
+	journal={arXiv preprint arXiv:1704.02899},
+	year={2017}
+}
+@article{luo1993angular,
+	title={THE ANGULAR BISPECTRUM OF THE COSMIC MICROWAVE BACKGROUND},
+	author={Luo, Xiachun},
+	journal={The Astrophysical journal},
+	volume={427},
+	number={2},
+	pages={L71--L71},
+	year={1994},
+	publisher={IOP}
+}
+@article{maia2016trickle,
+	title={The trickle before the torrent-diffraction data from X-ray lasers},
+	author={Maia, Filipe RNC and Hajdu, Janos},
+	journal={Scientific data},
+	volume={3},
+	pages={160059},
+	year={2016},
+	publisher={Nature Publishing Group}
+}
+@article{manopt,
+  author  = {Boumal, N. and Mishra, B. and Absil, P.-A. and Sepulchre, R.},
+  title   = {{M}anopt, a {M}atlab Toolbox for Optimization on Manifolds},
+  journal = {Journal of Machine Learning Research},
+  year    = {2014},
+  volume  = {15},
+  pages   = {1455--1459},
+  url     = {http://www.manopt.org}
+}
+@article{marabini1994practical,
+	title={Practical issues on invariant image averaging using the bispectrum},
+	author={Marabini, Roberto and Carazo, Jos{\'e} Mar{\'\i}a},
+	journal={Signal processing},
+	volume={40},
+	number={2-3},
+	pages={119--128},
+	year={1994},
+	publisher={Elsevier}
+}
+@article{marabini1996new,
+	title={On a new computationally fast image invariant based on bispectral projections},
+	author={Marabini, Roberto and Carazo, Jos{\'e} Mar{\'\i}a},
+	journal={Pattern recognition letters},
+	volume={17},
+	number={9},
+	pages={959--967},
+	year={1996},
+	publisher={Elsevier}
+}
+@article{marron1990unwrapping,
+  title={Unwrapping algorithm for least-squares phase recovery from the modulo 2$\pi$ bispectrum phase},
+  author={Marron, JC and Sanchez, PP and Sullivan, RC},
+  journal={JOSA A},
+  volume={7},
+  number={1},
+  pages={14--20},
+  year={1990},
+  publisher={Optical Society of America}
+}
+@article{matsuoka1984phase,
+  title={Phase estimation using the bispectrum},
+  author={Matsuoka, Toshifumi and Ulrych, Tad J},
+  journal={Proceedings of the IEEE},
+  volume={72},
+  number={10},
+  pages={1403--1411},
+  year={1984},
+  publisher={IEEE}
+}
+@article{mcneil2010x,
+	title={X-ray free-electron lasers},
+	author={McNeil, Brian WJ and Thompson, Neil R},
+	journal={Nature photonics},
+	volume={4},
+	number={12},
+	pages={814--821},
+	year={2010},
+	publisher={Nature Publishing Group}
+}
+@article{mendel1991tutorial,
+  title={Tutorial on higher-order statistics (spectra) in signal processing and system theory: Theoretical results and some applications},
+  author={Mendel, Jerry M},
+  journal={Proceedings of the IEEE},
+  volume={79},
+  number={3},
+  pages={278--305},
+  year={1991},
+  publisher={Ieee}
+}
+@book{natterer2001mathematics,
+	title={The mathematics of computerized tomography},
+	author={Natterer, Frank},
+	year={2001},
+	publisher={SIAM}
+}
+@article{nikias1987bispectrum,
+  title={Bispectrum estimation: A digital signal processing framework},
+  author={Nikias, Chrysostomos L and Raghuveer, Mysore R},
+  journal={Proceedings of the IEEE},
+  volume={75},
+  number={7},
+  pages={869--891},
+  year={1987},
+  publisher={IEEE}
+}
+@article{ning1989bispectral,
+  title={Bispectral analysis of the rat {EEG} during various vigilance states},
+  author={Ning, Taikang and Bronzino, Joseph D},
+  journal={IEEE Transactions on Biomedical Engineering},
+  volume={36},
+  number={4},
+  pages={497--499},
+  year={1989},
+  publisher={IEEE}
+}
+@book{oppenheim2010discrete,
+  title={Discrete-time signal processing},
+  author={Oppenheim, Alan V and Schafer, Ronald W},
+  year={2010},
+  publisher={Pearson Higher Education}
+}
+@article{park2011stochastic,
+	title={A stochastic kinematic model of class averaging in single-particle electron microscopy},
+	author={Park, Wooram and Midgett, Charles R and Madden, Dean R and Chirikjian, Gregory S},
+	journal={The International journal of robotics research},
+	volume={30},
+	number={6},
+	pages={730--754},
+	year={2011},
+	publisher={SAGE Publications Sage UK: London, England}
+}
+@article{park2014assembly,
+	title={An assembly automation approach to alignment of noncircular projections in electron microscopy},
+	author={Park, Wooram and Chirikjian, Gregory S},
+	journal={IEEE Transactions on Automation Science and Engineering},
+	volume={11},
+	number={3},
+	pages={668--679},
+	year={2014},
+	publisher={IEEE}
+}
+@article{paul2007asymptotics,
+	title={Asymptotics of sample eigenstructure for a large dimensional spiked covariance model},
+	author={Paul, Debashis},
+	journal={Statistica Sinica},
+	volume={17},
+	number={4},
+	pages={1617-1642},
+	year={2007}
+}
+@article{perry2016message,
+  title={Message-passing algorithms for synchronization problems over compact groups},
+  author={Perry, Amelia and Wein, Alexander S and Bandeira, Afonso S and Moitra, Ankur},
+  journal={arXiv preprint arXiv:1610.04583},
+  year={2016}
+}
+
+@article{perry2017sample,
+	title={The sample complexity of multi-reference alignment},
+	author={Perry, Amelia and Weed, Jonathan and Bandeira, Afonso and Rigollet, Philippe and Singer, Amit},
+	journal={arXiv preprint at arXiv:1707.00943},
+	year={2017}
+}
+@article{ranieri2013phase,
+  title={Phase retrieval for sparse signals: Uniqueness conditions},
+  author={Ranieri, Juri and Chebira, Amina and Lu, Yue M and Vetterli, Martin},
+  journal={arXiv preprint arXiv:1308.3058},
+  year={2013}
+}
+@article{robinson2004fundamental,
+  title={Fundamental performance limits in image registration},
+  author={Robinson, Dirk and Milanfar, Peyman},
+  journal={IEEE Transactions on Image Processing},
+  volume={13},
+  number={9},
+  pages={1185--1199},
+  year={2004},
+  publisher={IEEE}
+}
+@article{robinson2009optimal,
+  title={Optimal registration of aliased images using variable projection with applications to super-resolution},
+  author={Robinson, Dirk and Farsiu, Sina and Milanfar, Peyman},
+  journal={The Computer Journal},
+  volume={52},
+  number={1},
+  pages={31--42},
+  year={2009},
+  publisher={Br Computer Soc}
+}
+@article{kondor701127novel,
+	title={A novel set of rotationally and translationally invariant features for images based on the non-commutative bispectrum, 2007b},
+	author={Kondor, Risi},
+	journal={arXiv preprint cs/0701127}
+}
+@article{sadler1992shift,
+  title={Shift-and rotation-invariant object reconstruction using the bispectrum},
+  author={Sadler, Brian M and Giannakis, Georgios B},
+  journal={JOSA A},
+  volume={9},
+  number={1},
+  pages={57--69},
+  year={1992},
+  publisher={Optical Society of America}
+}
+@article{scheres2005maximum,
+	title={Maximum-likelihood multi-reference refinement for electron microscopy images},
+	author={Scheres, Sjors HW and Valle, Mikel and Nu{\~n}ez, Rafael and Sorzano, Carlos OS and Marabini, Roberto and Herman, Gabor T and Carazo, Jose-Maria},
+	journal={Journal of molecular biology},
+	volume={348},
+	number={1},
+	pages={139--149},
+	year={2005},
+	publisher={Elsevier}
+}
+@article{singer2011angular,
+  title={Angular synchronization by eigenvectors and semidefinite programming},
+  author={Singer, Amit},
+  journal={Applied and computational harmonic analysis},
+  volume={30},
+  number={1},
+  pages={20--36},
+  year={2011},
+  publisher={Elsevier}
+}
+@article{singer2011three,
+  title={Three-dimensional structure determination from common lines in cryo-{EM} by eigenvectors and semidefinite programming},
+  author={Singer, Amit and Shkolnisky, Yoel},
+  journal={SIAM journal on imaging sciences},
+  volume={4},
+  number={2},
+  pages={543--572},
+  year={2011},
+  publisher={SIAM}
+}
+@article{sirohi20163,
+	title={The 3.8 {{\AA}} resolution cryo-{EM} structure of {Z}ika virus},
+	author={Sirohi, Devika and Chen, Zhenguo and Sun, Lei and Klose, Thomas and Pierson, Theodore C and Rossmann, Michael G and Kuhn, Richard J},
+	journal={Science},
+	volume={352},
+	number={6284},
+	pages={467--470},
+	year={2016},
+	publisher={American Association for the Advancement of Science}
+}
+@article{shechtman2015phase,
+  title={Phase retrieval with application to optical imaging: a contemporary overview},
+  author={Shechtman, Yoav and Eldar, Yonina C and Cohen, Oren and Chapman, Henry Nicholas and Miao, Jianwei and Segev, Mordechai},
+  journal={IEEE signal processing magazine},
+  volume={32},
+  number={3},
+  pages={87--109},
+  year={2015},
+  publisher={IEEE}
+}
+@article{shkolnisky2012viewing,
+  title={Viewing direction estimation in cryo-{EM} using synchronization},
+  author={Shkolnisky, Yoel and Singer, Amit},
+  journal={SIAM journal on imaging sciences},
+  volume={5},
+  number={3},
+  pages={1088--1110},
+  year={2012},
+  publisher={SIAM}
+}
+@book{stewart2001matrix,
+	title={Matrix Algorithms: Volume II: Eigensystems},
+	author={Stewart, Gilbert W},
+	year={2001},
+	publisher={SIAM}
+}
+@article{sun2016geometric,
+  title={A geometric analysis of phase retrieval},
+  author={Sun, Ju and Qu, Qing and Wright, John},
+  journal={arXiv preprint arXiv:1602.06664},
+  year={2016}
+}
+@article{theobald2012optimal,
+  title={Optimal simultaneous superpositioning of multiple structures with missing data},
+  author={Theobald, Douglas L and Steindel, Phillip A},
+  journal={Bioinformatics},
+  volume={28},
+  number={15},
+  pages={1972--1979},
+  year={2012},
+  publisher={Oxford Univ Press}
+}
+@article{rosen2016certifiably,
+	title={A certifiably correct algorithm for synchronization over the special Euclidean group},
+	author={Rosen, David M and Carlone, Luca and Bandeira, Afonso S and Leonard, John J},
+	journal={arXiv preprint arXiv:1611.00128},
+	year={2016}
+}
+@article{van2000single,
+  title={Single-particle electron cryo-microscopy: towards atomic resolution},
+  author={van Heel, Marin and Gowen, Brent and Matadeen, Rishi and Orlova, Elena V and Finn, Robert and Pape, Tillmann and Cohen, Dana and Stark, Holger and Schmidt, Ralf and Schatz, Michael and others},
+  journal={Quarterly reviews of biophysics},
+  volume={33},
+  number={04},
+  pages={307--369},
+  year={2000},
+  publisher={Cambridge Univ Press}
+}
+@article{waldspurger2015phase,
+  title={Phase recovery, maxcut and complex semidefinite programming},
+  author={Waldspurger, Ir{\`e}ne and dAspremont, Alexandre and Mallat, St{\'e}phane},
+  journal={Mathematical Programming},
+  volume={149},
+  number={1-2},
+  pages={47--81},
+  year={2015},
+  publisher={Springer}
+}
+@article{wang2013orientation,
+  title={Orientation determination of cryo-{EM} images using least unsquared deviations},
+  author={Wang, Lanhui and Singer, Amit and Wen, Zaiwen},
+  journal={SIAM journal on imaging sciences},
+  volume={6},
+  number={4},
+  pages={2450--2483},
+  year={2013},
+  publisher={SIAM}
+}
+@article{wang2000cosmic,
+  title={Cosmic microwave background bispectrum and inflation},
+  author={Wang, Limin and Kamionkowski, Marc},
+  journal={Physical Review D},
+  volume={61},
+  number={6},
+  pages={063504},
+  year={2000},
+  publisher={APS}
+}
+@article{weiss1983fundamental,
+  title={Fundamental limitations in passive time delay estimation--{P}art {I}: Narrow-band systems},
+  author={Weiss, A and Weinstein, Ehud},
+  journal={IEEE Transactions on Acoustics, Speech, and Signal Processing},
+  volume={31},
+  number={2},
+  pages={472--486},
+  year={1983},
+  publisher={IEEE}
+}
+@article{weinstein1984fundamental,
+  title={Fundamental limitations in passive time-delay estimation--{P}art {II}: Wide-band systems},
+  author={Weinstein, Ehud and Weiss, A},
+  journal={IEEE transactions on acoustics, speech, and signal processing},
+  volume={32},
+  number={5},
+  pages={1064--1078},
+  year={1984},
+  publisher={IEEE}
+}
+@article{yang2012optimality,
+  title={Optimality conditions for the nonlinear programming problems on {R}iemannian manifolds},
+  author={Yang, Wei Hong and Zhang, Lei-Hong and Song, Ruyi},
+  journal={Pacific Journal of Optimization},
+  volume={10},
+  number={2},
+  pages={415--434},
+  year={2014}
+}
+@article{yellott1992uniqueness,
+  title={Uniqueness properties of higher-order autocorrelation functions},
+  author={Yellott, John I and Iverson, Geoffrey J},
+  journal={JOSA A},
+  volume={9},
+  number={3},
+  pages={388--404},
+  year={1992},
+  publisher={Optical Society of America}
+}
+@article{yu2014useful,
+	title={A useful variant of the Davis--Kahan theorem for statisticians},
+	author={Yu, Yi and Wang, Tengyao and Samworth, Richard J},
+	journal={Biometrika},
+	volume={102},
+	number={2},
+	pages={315--323},
+	year={2014},
+	publisher={Oxford University Press}
+}
+@article{zhao2014rotationally,
+  title={Rotationally invariant image representation for viewing direction classification in cryo-{EM}},
+  author={Zhao, Zhizhen and Singer, Amit},
+  journal={Journal of structural biology},
+  volume={186},
+  number={1},
+  pages={153--166},
+  year={2014},
+  publisher={Elsevier}
+}
+@article{zwart2003fast,
+  title={Fast translation invariant classification of {HRR} range profiles in a zero phase representation},
+  author={Zwart, Joris Portegies and van der Heiden, Ren{\'e} and Gelsema, Sjoerd and Groen, Frans},
+  journal={IEE Proceedings-Radar, Sonar and Navigation},
+  volume={150},
+  number={6},
+  pages={411--418},
+  year={2003},
+  publisher={IET}
+}
+@Article{pataki1998rank,
+	Title                    = {On the rank of extreme matrices in semidefinite programs and the multiplicity of optimal eigenvalues},
+	Author                   = {Pataki, G.},
+	Journal                  = {Mathematics of operations research},
+	Year                     = {1998},
+	Number                   = {2},
+	Pages                    = {339--358},
+	Volume                   = {23},
+}
+@Article{boumal2015staircase,
+	Title                    = {A {R}iemannian low-rank method for optimization over semidefinite matrices with block-diagonal constraints},
+	Author                   = {Boumal, N.},
+	Journal                  = {arXiv preprint arXiv:1506.00575v2},
+	Year                     = {2015}
+}
+@article{zhong2017near,
+	title={Near-optimal bounds for phase synchronization},
+	author={Zhong, Yiqiao and Boumal, Nicolas},
+	journal={arXiv preprint arXiv:1703.06605},
+	year={2017}
+}
+@article{ChapRobb,
+	author = "Chapman, Douglas G. and Robbins, Herbert",
+	doi = "10.1214/aoms/1177729548",
+	fjournal = "The Annals of Mathematical Statistics",
+	journal = "Ann. Math. Statist.",
+	month = "12",
+	number = "4",
+	pages = "581--586",
+	publisher = "The Institute of Mathematical Statistics",
+	title = "Minimum Variance Estimation Without Regularity Assumptions",
+	url = "http://dx.doi.org/10.1214/aoms/1177729548",
+	volume = "22",
+	year = "1951"
+}
+@book{CramerRao,
+  title={Mathematical Methods of Statistics (PMS-9)},
+  author={Cram{\'e}r, Harald},
+  volume={9},
+  year={2016},
+  publisher={Princeton university press}
+}
+@article{efron1973stein,
+	title={Stein's estimation rule and its competitors-an empirical {B}ayes approach},
+	author={Efron, Bradley and Morris, Carl},
+	journal={Journal of the American Statistical Association},
+	volume={68},
+	number={341},
+	pages={117-130},
+	year={1973}
+}
+@article{efron1975data,
+	title={Data analysis using {S}tein's estimator and its generalizations},
+	author={Efron, Bradley and Morris, Carl},
+	journal={Journal of the American Statistical Association},
+	volume={70},
+	number={350},
+	pages={311-319},
+	year={1975}
+}
+@inproceedings{james1961estimation,
+	title={Estimation with quadratic loss},
+	author={James, William and Stein, Charles},
+	booktitle={Proceedings of the Fourth Berkeley Symposium on Mathematical Statistics and Probability},
+	pages={361-379},
+	year={1961},
+}
+@article{levin20173d,
+	title={3D ab initio modeling in cryo-EM by autocorrelation analysis},
+	author={Levin, Eitan and Bendory, Tamir and Boumal, Nicolas and Kileel, Joe and Singer, Amit},
+	journal={arXiv preprint arXiv:1710.08076},
+	year={2017}
+}
+
+
+
+

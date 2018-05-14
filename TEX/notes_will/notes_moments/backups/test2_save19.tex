@@ -1,0 +1,472 @@
+\documentclass{article}
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage{url} 
+\usepackage[authoryear]{natbib}
+%%%\usepackage{babel}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{color}
+\usepackage{framed}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+%%%\usepackage{custom_tex}
+\usepackage{grffile}
+\usepackage{multirow}
+\usepackage{xcolor}
+%\usepackage{setspace}
+\usepackage{comment}
+\usepackage{xr}
+%\externaldocument{sharp_PCA_AoS_supp}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{definition}[thm]{Definition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{example}[thm]{Example}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\theoremstyle{thm}
+\newtheorem{conj}{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}
+
+
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GCD}{\mathbf{GCD}}
+\newcommand{\XX}{\mathcal{X}}
+
+\newcommand{\mean}[2]{\frac{1}{#1}\sum_{#2=1}^{#1}}
+
+
+%
+%
+%
+%
+\begin{document}
+
+\section{Setup}
+
+We have the following model. $x$ is a signal of length $L$. For large $n$, we observe the vector $Y \in \mathbb{R}^n$, which is of the form 
+%
+\begin{align}
+%
+    Y = G \ast x + N
+%
+\end{align}
+%
+where $G$ is a sum of diracs at locations at least $2L$ apart, and $N$ is a vector of $n$ iid Gaussians. The goal is to recover $x$? 
+
+We will assume that the first and last copies of $x$ are at least $L$ places removed from the boundaries of the interval $[1,n + L]$ (if not we can just zero-pad the interval). We will also denote by $I_1,\dots,I_J$ the $J$ subintervals containing the signal; and take $I_j = [a_j,b_j]$. When we take the limit $n \to \infty$, we'll let $J = J_n$ grow with $n$, as is natural. We will see that we require $J_n = \Omega(n)$ in order for the limits to not vanish (and obviously $J_n = O(n)$ too).
+
+Note that I'm not just computing the expected value. I'm actually showing convergence almost surely as $n \to \infty$.
+
+%
+%
+%
+
+\section{First moment}
+
+We have:
+%
+\begin{align}
+%
+    M_1 = \frac{1}{n} \sum_{i=1}^n Y_i
+        = \frac{1}{n/L} \sum_{j=1}^{J_n} \frac{1}{L}\sum_{i=1}^L x_i
+            + \frac{1}{n} \sum_{i=1}^n N_i
+    \to \gamma \cdot \bar{x},
+%
+\end{align}
+%
+where the limit is almost surely (we've used the strong law of large numbers), where $\gamma = \lim_{n\to\infty} J_n L / n$ is the fraction of the observations containing the signal.
+
+
+
+
+\begin{comment}
+
+Actually, what Tamir meant when he said first moment was the average of the windows' averages (a scalar), not the average window (a vector). But this also converges a.s.\ to $\gamma \cdot \bar{x}$, by simply exchanging limits and finite sums, as follows. The sample mean of the window starting at index $i$ is just $\frac{1}{L} \sum_{k=0}^{L-1} Y_{i+k}$. Averaging these over all $n$ windows and taking the limit as $n \to \infty$ we get:
+%
+\begin{align}
+%
+    \lim_{n\to\infty} \frac{1}{n} \sum_{i=1}^n \frac{1}{L} \sum_{k=0}^{L-1} Y_{i+k}
+    =  \frac{1}{L} \sum_{k=0}^{L-1} \lim_{n\to\infty} \frac{1}{n} \sum_{i=1}^n Y_{i+k}
+    = \gamma \cdot \bar{x}.
+%
+\end{align}
+
+\end{comment}
+
+%
+%
+%
+
+\section{Second moment}
+
+We fix a value $\Delta$ between $0$ and $L-1$. We will compute the second moment:
+%
+\begin{align}
+%
+    M_2(\Delta) = 
+        \lim_{n \to \infty} \frac{1}{n} \sum_{i=1}^{n-\Delta} Y_i Y_{i+\Delta}.
+%
+\end{align}
+
+
+%
+%
+%
+
+\subsection{Clean signal without noise}
+
+First, if there is no noise, and under the wide spacing assumption, we can break the sum into $J_n$ different sums, one for each copy of $x$ embedded in the signal:
+%
+\begin{align}
+%
+    M_2(\Delta) 
+        &= \frac{1}{n} \sum_{j=1}^{J_n} \sum_{i=a_j}^{b_j-\Delta} Y_i Y_{i+\Delta}
+        = \frac{1}{n} \sum_{j=1}^{J_n} \sum_{i=1}^{L-\Delta} x_i x_{i+\Delta}
+    \nonumber \\
+    &= \frac{J_n L}{n} \frac{1}{L} \sum_{i=1}^{L-\Delta} x_i x_{i+\Delta}
+        \to \gamma \cdot R_2(\Delta),
+%
+\end{align}
+%
+where here we have defined $R_2(\Delta)$ as element $\Delta$ of the autocorrelation of $x$. 
+%
+%
+%
+
+\subsection{Pure noise without signal}
+
+Here, $Y_i = N_i$. We first fix $\Delta$ between $1$ and $L-1$. Break up the sum into $\Delta$ terms as follows:
+%
+\begin{align}
+%
+    M_2(\Delta) &=\frac{1}{n} \sum_{i=1}^n N_i  N_{i+\Delta}
+        \nonumber \\
+    &= \frac{1}{\Delta} \sum_{m=0}^{\Delta-1} \frac{1}{n/\Delta}\sum_{j=1}^{n/\Delta} 
+        N_{j+(j-1)\Delta + m} N_{j + j\Delta + m}.
+%
+\end{align}
+%
+Each term
+%
+\begin{math}
+    \frac{1}{n/\Delta}\sum_{j=1}^{n/\Delta} 
+        N_{j\Delta + m} N_{(j + 1)\Delta + m}
+\end{math}
+%
+is an average of $n / \Delta$ iid terms with expectation zero, and so converges to 0 a.s.\ as $n \to \infty$. (Of course, it's not exactly $n / \Delta$ terms; there will be finitely many terms unaccounted for this way, but these are negligible).
+
+If $\Delta = 0$, then the computation is even easier:
+%
+\begin{align}
+%
+    M_2(\Delta) = \frac{1}{n} \sum_{i=1}^n N_i^2 
+        \operatorname*{\longrightarrow}^{a.s.} \sigma^2.
+%
+\end{align}
+
+So $M_2(\Delta) = \sigma^2$ if $\Delta = 0$, and 0 otherwise.
+
+%%%So the second moment matrix of pure noise converges a.s.\ as $n \to \infty$ to $\sigma^2 I_L$.
+
+
+%
+%
+%
+
+\subsection{Signal plus noise}
+
+We will denote by $\XX = x \ast G$, so $Y = \XX + N$. Then the second moment of the signal plus noise is:
+%
+\begin{align}
+%
+    M_2(\Delta,Y) = M_2(\Delta,\XX) + M_2(\Delta,N) 
+        + \frac{1}{n}\sum_{i=1}^{n-\Delta} \XX_i N_{i+\Delta}
+        + \frac{1}{n}\sum_{i=1}^{n-\Delta} \XX_{i+\Delta} N_i.
+%
+\end{align}
+%
+The law of large numbers says the cross terms vanish as $n \to \infty$. So the limit is simply:
+%
+\begin{align}
+%
+    M_2(\Delta,Y) = 
+    \begin{cases}
+        \gamma \cdot R_2(\Delta), &\text{ if } \Delta > 0; \\
+        \gamma \cdot R_2(\Delta) + \sigma^2, &\text{ if } \Delta = 0.
+    \end{cases}
+%
+\end{align}
+
+%
+%
+%
+
+\section{Third moments}
+
+The same idea lets us compute the third moments. We fix two indices $\Delta_1 < \Delta_2$, and define:
+%
+\begin{align}
+%
+    M_3(\Delta_1,\Delta_2) = \sum_{i=1}^{n-\Delta_2} Y_i Y_{i+\Delta_1} Y_{i+\Delta_2}.
+%
+\end{align}
+
+
+%
+%
+%
+
+\subsection{Pure noise, no signal}
+
+Again, the idea is to break up the big average over $n$ terms into a sum of $\Delta_2$ averages, each of $\approx n / \Delta_2$ independent terms. We write:
+%
+\begin{align}
+%
+    & M_3(\Delta_1,\Delta_2)  \nonumber \\
+    & = \frac{1}{\Delta_2}\sum_{m=0}^{\Delta_2-1}
+        \frac{1}{(n/\Delta_2)}\sum_{j=1}^{n/\Delta_2} 
+            N_{j+(j-1)\Delta_2+m} N_{j+\Delta_1 + (j-1)\Delta_2 + m} N_{j+j\Delta_2 + m}.
+%
+\end{align}
+%
+Each of the $\Delta_2$ terms indexed by $m$ converges is an average of $n/\Delta_2$ independent terms with mean zero, and so converges a.s.\ to zero as $n \to \infty$.
+
+
+%
+%
+%
+
+\subsection{Clean signal, no noise}
+
+Again, this is just like the second moment case. Write:
+%
+\begin{align}
+%
+    M_3(\Delta_1,\Delta_2) 
+        &= \frac{1}{n} \sum_{j=1}^{J_n} \sum_{i=a_j}^{b_j-\Delta_2} 
+            Y_i Y_{i+\Delta_1} Y_{i+\Delta_2}
+        = \frac{1}{n} \sum_{j=1}^{J_n} \sum_{i=1}^{L-\Delta_2} 
+            x_i x_{i+\Delta_1} x_{i+\Delta_2}
+    \nonumber \\
+    &= \frac{J_n L}{n} \frac{1}{L} \sum_{i=1}^{L-\Delta} x_i x_{i+\Delta_1} x_{i+\Delta_2}
+        \to \gamma \cdot R_3(\Delta_1,\Delta_2),
+%
+\end{align}
+%
+where here we have defined $R_3(\Delta_1,\Delta_2)$ as element $(\Delta_1,\Delta_2)$ of the third moment of $x$.
+
+
+%
+%
+%
+
+\subsection{Signal plus noise}
+
+We have:
+%
+\begin{align}
+%
+    M_3(\Delta_1,\Delta_2,Y) = M_3(\Delta_1,\Delta_2,\XX) + M_3(\Delta_1,\Delta_2,N)
+        + \text{cross terms}.
+%
+\end{align}
+%
+If $0 < \Delta_1 < \Delta_2$, then all of the cross terms can be shown to go to zero by the same kind of argument we've used several times before.
+
+If $\Delta_1 = \Delta_2 = \Delta$, there is a surviving cross-term, namely:
+%
+\begin{align}
+%
+    \frac{1}{n} \sum_{i=1}^{n-\Delta} \XX_i N_{i+\Delta}^2
+    = \frac{1}{(n/L)} \sum_{j=1}^{J_n} \frac{1}{L} \sum_{i=a_j}^{b_j} \XX_i N_{i+\Delta}^2.
+%
+\end{align}
+%
+Each of $S_j \equiv \frac{1}{L} \sum_{i=a_j}^{b_j} \XX_i N_{i+\Delta}^2 \sim \frac{1}{L} \sum_{i=1}^{L} x_i \ep_i^2$, where $\ep_i \sim N(0,\sigma^2)$; and they are independent random variables with mean $\E[S_j] = \sigma^2 \cdot \bar{x}$. So by the law of large numbers,
+%
+\begin{align}
+%
+    \frac{1}{(n/L)} \sum_{j=1}^{J_n} \frac{1}{L} \sum_{i=a_j}^{b_j} \XX_i N_{i+\Delta}^2
+    \to \gamma \cdot \sigma^2 \cdot \bar{x}.
+%
+\end{align}
+
+Similarly, if $\Delta_1 = 0$, then there is a surviving cross-term which converges to $\gamma \cdot \sigma^2 \cdot \bar{x}$ as well. So in summary,
+%
+\begin{align}
+%
+    M_3(\Delta_1,\Delta_2,Y) = 
+    \begin{cases}
+        \gamma \cdot R_3(\Delta_1,\Delta_2), &\text{ if } 0 < \Delta_1 < \Delta_2; \\
+        \gamma \cdot R_3(\Delta_1,\Delta_2) + \gamma \cdot \sigma^2 \cdot \bar{x},
+                        &\text{ if } \Delta_1 = 0 \text{ or } \Delta_1 = \Delta_2.
+    \end{cases}
+%
+\end{align}
+
+%
+
+
+%
+%
+%
+
+
+\section{Attempt at EM}
+
+Let's derive the EM algorithm, where we treat the locations $a_j$ as random latent variables. A simple model is that the $a_j$ are chosen independently and uniformly at random (though take note that this permits overlaps of the signal copies).
+
+We will denote by $G=\sum_{j=1}^J \delta_{a_j}$ the random vector of signal locations. We'll assume the number of signals $J$ is known. The generative model is:
+%
+\begin{align}
+%
+    p(Y , G | x)
+    = \frac{\exp\{-\| Y - G \ast x \|^2 / (2\sigma^2)\}}{(2\pi\sigma^2)^{n/2}} 
+        \cdot \frac{1}{n^J}.
+%
+\end{align}
+
+The log-likelihood is then (up to an additive constant):
+%
+\begin{align}
+%
+    \LL(x; Y, G) \propto - \|Y - G\ast x\|^2.
+%
+\end{align}
+
+The probability distribution of $G$, given $Y$ and $x$, is:
+%
+\begin{align}
+%
+    p(G | Y, x) = \frac{ p(Y , G | x) }{ p(Y | x) }
+    \propto \exp\{-\| Y - G \ast x \|^2 / (2\sigma^2)\}.
+%
+\end{align}
+
+If $x^{(t)}$ is a guess for $x$ on the $t^{th}$ iterate of EM, then we define the weights:
+%
+\begin{align}
+%
+    w_t(G) = p(G | Y,x^{(t)}) = \exp\{-\| Y - G \ast x^{(t)} \|^2 / (2\sigma^2)\},
+%
+\end{align}
+%
+and the $Q$-function:
+%
+\begin{align}
+%
+    Q(x|x^{(t)}) 
+    &= \E_{G|Y,x^{(t)}} \left[ \LL(x^{(t)};Y,G) \right]
+        \nonumber \\
+    &\propto - \sum_{G} \|Y - G\ast x\|^2 \cdot w_t(G).
+%
+\end{align}
+%
+The EM algorithm defines the next guess of $x$ to be:
+%
+\begin{align}
+%
+    x^{(t+1)} = \operatorname*{\arg\max}_x Q(x|x^{(t)})
+        = \operatorname*{\arg\min}_x \sum_{G} \|Y - G\ast x\|^2 \cdot w_t(G).
+%
+\end{align}
+
+But finding this minimum is hard, since the sum is over all ${n}\choose{J}$ possible values of $G$; if $J \sim n$, as we expect is necessary to have any chance of recovery, the number of terms will grow exponentially with $n$.
+
+
+
+
+
+
+
+\end{document}
+
+
+\subsection{Second moment of signal plus noise}
+
+
+
+Break the sum $\sum_{i=1}^n Y[i + k-1] Y[i + l - 1]$ into three terms: where $i + k-1$ and $i+l-1$ are disjoint from all intervals $I_j$ -- we will denote this set $\I$; where both $i + k - 1$ and $i + l -1$ lie entirely inside one of the $I_j$; and the rest, where exactly one of $i+k-1$ and $i+l-1$ lie in an interval $I_j$. So we have:
+%
+\begin{align}
+%
+    & \sum_{i=1}^n Y[i+k-1] Y[i+l-1]    \nonumber \\
+    =& \left(\sum_{i \in \I}  
+        + \sum_{j=1}^J \sum_{i=a_j - l + 1}^{a_j - k} 
+        + \sum_{j=1}^J \sum_{i=b_j - l + 2}^{b_j - k+1} 
+        + \sum_{j=1}^J \sum_{i=a_j-k+1}^{b_j-l+1}
+      \right)  Y[i+k-1] Y[i+l-1]
+%
+\end{align}
+
+We will use that $Y[a_j + m] = x[m+1] + \ep[a_j+m]$, $m=0,\dots,L-1$. For the second term, the inner sum is
+%
+\begin{align}
+%
+    &\sum_{i=a_j - l + 1}^{a_j - k} Y[i+k-1] Y[i+l-1]
+        \nonumber \\
+%
+    =&\sum_{i=1}^{\Delta} Y[a_j -\Delta + i-1] Y[a_j + i-1]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta}\ep[a_j -\Delta + i-1] (x[i] + \ep[a_j + i-1])
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta}\ep[a_j -\Delta + i-1] x[i]
+        + \sum_{i=1}^{\Delta}\ep[a_j -\Delta + i-1] \ep[a_j + i-1]
+%
+\end{align}
+%
+
+We also use that $Y[b_j - m] = x[L-m] + \ep[b_j-m]$, $m=0,\dots,L-1$. For the third term, the inner sum is
+%
+\begin{align}
+%
+    & \sum_{i=b_j - l + 2}^{b_j - k+1} Y[i+k-1] Y[i+l-1]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta} Y[i+b_j-\Delta] Y[i+b_j]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta} (x[L-\Delta+i]+\ep[i+b_j-\Delta]) \ep[i+b_j]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{\Delta} x[L-\Delta+i] \ep[i+b_j]
+        + \sum_{i=1}^{\Delta} \ep[i+b_j-\Delta] \ep[i+b_j]
+\end{align}
+%
+
+The inner sum of the fourth term is:
+%
+\begin{align}
+%
+    &\sum_{i=a_j-k+1}^{b_j-l+1} Y[i+k-1] Y[i+l-1]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{L - \Delta} Y[i+a_j-1] Y[i+a_j + \Delta - 1]
+        \nonumber \\
+%
+    =& \sum_{i=1}^{L - \Delta} (x[i]+\ep[i+a_j-1])(x[i+\Delta] +\ep[i+a_j + \Delta - 1])
+        \nonumber \\
+%
+    =& \sum_{i=1}^{L - \Delta} x[i] x[i+\Delta]
+        + \sum_{i=1}^{L - \Delta} x[i]\ep[i+a_j + \Delta - 1]
+        \nonumber \\
+        &+ \sum_{i=1}^{L - \Delta} \ep[i+a_j-1] x[i+\Delta] 
+        + \sum_{i=1}^{L - \Delta} \ep[i+a_j-1]\ep[i+a_j + \Delta - 1])
+%
+\end{align}
+
+
+\end{document}
