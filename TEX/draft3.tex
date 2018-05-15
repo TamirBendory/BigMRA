@@ -192,7 +192,7 @@ This method requires only one pass over the data and can recover the signals in 
 
 In this section we describe  some numerical experiments and show results. The experimental details and the algorithms are discussed at length in Section~\ref{sec:methods}.
 
-In the first experiment, we estimated Einstein's image of size $50\times 50$ from multiple micrographs of size $4096\times 4096$ pixels, contaminated  with additive i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ and $\SNR$ of $1/20$. An illustrative example of a micrograph appears in the right panel of Figure~\ref{fig:micro_example}.
+In the first experiment, we estimated Einstein's image of size $50\times 50$ from multiple micrographs of size $4096\times 4096$ pixels, contaminated  with additive i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ ($\SNR=1/20$). An illustrative example of a micrograph appears in the right panel of Figure~\ref{fig:micro_example}.
 Each micrograph contains multiple occurrences of Einstein's image  in random locations, while keeping a separation of  $49$ pixels between the images in each direction. From the micrographs, we estimated the signal's power spectrum, which is equivalent to the second-order autocorrelation. Then, in order to estimate the signal itself, we applied a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR).
 
 As an initial guess, we picked an image of the physicist Issac Newton; see Figure~\ref{fig:newton}. If the algorithm was prone to model bias, we would expect to get as an output an image that resembles Newton, similarly to the ``Einstein from noise'' effect of Figure~\ref{fig:EinsteinFromNoise}. However, the experiment exhibits the desired phenomenon: the more data we collect, the better the reconstruction quality. 
@@ -291,22 +291,19 @@ The estimation quality of the triangle signal is poorer than the other two signa
 
 \section{Discussion}
 
-All current algorithmic pipeline for SPR using cryo--EM start with a particle picking technique which is prone to model bias. 
-Bypassing the particle picking stage and constructing a 3-D model directly from the data---without assuming prior knowledge on the particle to be estimated---can be used to the construction of ab initio models or to generate multiple denoised projections that can be used for 2-D classification. 
-It might be even possible to use such templates for the particle picking stage, now with templates that were extracted from the data itself. 
+All current algorithmic pipeline for SPR using cryo--EM start with a particle picking algorithm which is prone to model bias. 
+Bypassing the particle picking stage and constructing a 3-D model directly from the data---without assuming prior knowledge on the particle to be estimated---can be used to reconstruct ab initio models to initialize a refinement algorithm.  Alternatively, it can be applied to generate templates for a particle picker which does not suffer from model bias.
 
 In this paper, we examined a simplified model that, we believe, captures important features of the SPR problem. 
-While Bayesian algorithms are currently dominate the field, they are intractable for our problem. As alternative, we propose to use autocorrelation analysis technique that shares some common lines  with Kam's method for ab inito modeling~\cite{kam1980reconstruction,levin20173d,singer2018mathematics}. 
+While the field is currently dominated by Bayesian methods such as EM, they are intractable for such problems. As an alternative, we propose to use autocorrelation analysis technique that shares some common lines (did you get the wordplay?)  with Kam's method for ab inito modeling~\cite{kam1980reconstruction,levin20173d,singer2018mathematics}. 
 That being said, the SPR model is far more complicated than the model presented here. In a future research, we hope to bridge this gap.
 
 
-Our results rely on two core assumptions that are not necessarily met by in an SPR experiment.  
-First, we modeled the background information as i.i.d.\ additive noise. In practice, the background information may be structured or depend on the signal. 
-Yet, autocorrelation analysis is easily adapted to different noise statistics.
-
-In addition, we assumed that the signal occurrences are all separated by the length of the signal, see~\eqref{eq:spacing}. 
+Our results rely on two core assumptions that are not necessarily met by an SPR experiment.  
+First, we modeled the background information as i.i.d.\ additive noise. In practice, the background information may be structured or signal dependent. 
+Second, we assumed that the signal occurrences are all separated by the length of the signal, see~\eqref{eq:spacing}. 
 This separation can be induced by careful experimental design \TODO{???}. 
-If the signals are not separated, one can introduce a new variable that represents the distribution of the spacing between signal occurrences and then compute explicitly the relation between the autocorrelation of the data and the signals. It is yet to be studied under what conditions on this distribution one can estimate the signals. 
+If the signals are not separated, one can introduce a new variable that represents the distribution of the spacing between signal occurrences and then compute explicitly the relation between the autocorrelation functions of the data and the signals. It is yet to be studied under what conditions on this distribution one can estimate the signals. 
 
 %The first entry $p[1]$ will represent the probability that two consecutive signals are separated by only one entry, $p[2]$ the probability for spacing of two entries and so on. Using this auxiliary variable $p$, one can write explicitly the relation between the autocorrelation functions of the data and those of the signal in a similar way to~\eqref{eq:data_ac}. 
 %An interesting question is  under what conditions on $p$ and the signals, one can estimate the signals from the data.

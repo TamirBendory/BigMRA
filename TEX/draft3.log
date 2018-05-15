@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.5)  15 MAY 2018 10:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.5)  15 MAY 2018 11:12
 entering extended mode
 **./draft3.tex
 (draft3.tex
@@ -577,17 +577,17 @@ Underfull \hbox (badness 6300) in paragraph at lines 293--296
  []
 
 ) [13] [14] [15]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 576.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 573.
 
 
 ("C:\Users\Tamir\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 576.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 573.
 
 [16]
-Overfull \hbox (2.9072pt too wide) in paragraph at lines 632--635
+Overfull \hbox (2.9072pt too wide) in paragraph at lines 629--632
  \T1/cmr/bx/n/10.95 Expectation-maximization.[] \T1/cmr/m/n/10.95 In-ter-est-in
 gly, expectation-maximization (EM)---a pop-u-lar al-
  []
@@ -630,7 +630,7 @@ ic/amsfonts/cm/cmr7.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts
 X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Tamir/AppData/Local/P
 rograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Tamir/App
 Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on draft3.pdf (20 pages, 2725210 bytes).
+Output written on draft3.pdf (20 pages, 2725172 bytes).
 PDF statistics:
  635 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
