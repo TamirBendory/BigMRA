@@ -15,7 +15,7 @@ X = double(rgb2gray(imread('Einstein5_small.jpg')));
 X = X - mean(X(:));
 X = X/max(abs(X(:)));
 
-L = 5; %50;
+L = 50;
 W = 2*L-1;
 X = imresize(X, [L, L]);
 X_zp = [X zeros(L, W-L) ; zeros(W-L, W)];
@@ -26,13 +26,13 @@ sigma = 3;
 % Desired number of occurrences of the signal X in each micrograph
 m_want = 1000;
 %
-micrograph_batch = 4;
+micrograph_batch = 256;
 % Number of epocs
 epocs = 100000;
 % Number of micrographs to generate
 n_micrographs = epocs*micrograph_batch;
 % Each micrograph is square of size NxN
-N = 50; %4096;
+N = 4096;
 
 err_PS = zeros(epocs,1);
 err_rrr = zeros(epocs,1);

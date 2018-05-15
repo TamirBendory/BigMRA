@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.5)  14 MAY 2018 20:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.5)  15 MAY 2018 10:14
 entering extended mode
 **./draft3.tex
 (draft3.tex
@@ -546,23 +546,13 @@ Overfull \hbox (16.26161pt too wide) in paragraph at lines 229--230
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<Einstein_progress.pdf, id=72, 963.6pt x 459.7175pt>
+[4]
+<Einstein_progress.pdf, id=76, 421.575pt x 316.18124pt>
 File: Einstein_progress.pdf Graphic file (type pdf)
 <use Einstein_progress.pdf>
 Package pdftex.def Info: Einstein_progress.pdf  used on input line 263.
-(pdftex.def)             Requested size: 481.79883pt x 229.85818pt.
+(pdftex.def)             Requested size: 295.10048pt x 221.32535pt.
 
-Overfull \hbox (40.95137pt too wide) in paragraph at lines 263--264
- [][] 
- []
-
-
-LaTeX Warning: Reference `eq:error' on page 4 undefined on input line 264.
-
-
-LaTeX Warning: Reference `eq:error' on page 4 undefined on input line 264.
-
-[4]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -587,66 +577,62 @@ Underfull \hbox (badness 6300) in paragraph at lines 293--296
  []
 
 ) [13] [14] [15]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 578.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 576.
 
 
 ("C:\Users\Tamir\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 578.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 576.
 
 [16]
-Overfull \hbox (2.9072pt too wide) in paragraph at lines 634--637
+Overfull \hbox (2.9072pt too wide) in paragraph at lines 632--635
  \T1/cmr/bx/n/10.95 Expectation-maximization.[] \T1/cmr/m/n/10.95 In-ter-est-in
 gly, expectation-maximization (EM)---a pop-u-lar al-
  []
 
-[17] [18] [19] [20] (draft3.aux)
-
-LaTeX Warning: There were undefined references.
-
- ) 
+[17] [18] [19] [20] (draft3.aux) ) 
 Here is how much of TeX's memory you used:
- 5805 strings out of 493303
- 89629 string characters out of 3129785
- 160141 words of memory out of 3000000
- 9200 multiletter control sequences out of 15000+200000
+ 5806 strings out of 493303
+ 89647 string characters out of 3129785
+ 160158 words of memory out of 3000000
+ 9201 multiletter control sequences out of 15000+200000
  28047 words of font info for 70 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,22n,39p,988b,524s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
-ecbi1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\
-ec\dpi600\ecsx1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour
-\jknappen\ec\dpi600\ectt1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts
-\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk> <C:\Users\Tamir\AppData\Local\MiKTeX
-\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1095.pk> <C:\Users\Tamir\AppData\Lo
-cal\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk> <C:\Users\Tamir\
-AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk> <C:\Us
-ers\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.
-pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
-\ecbx1440.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen
-\ec\dpi600\ecrm1000.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfou
-r\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\font
-s\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\Tamir\AppData\Local\MiKTe
-X\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk><C:/Users/Tamir/AppData/Lo
-cal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Tam
-ir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb>
-<C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/c
-m/cmmi10.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publ
-ic/amsfonts/cm/cmmi6.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Tamir/AppData/Local/Programs/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Tamir/AppData/Local/
-Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/Tamir/App
-Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/User
-s/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.p
-fb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
-s/cm/cmsy10.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmsy8.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/f
-onts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on draft3.pdf (20 pages, 2730297 bytes).
+ <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fon
+ts\pk\ljfour\jknappen\ec\dpi600\ecbi1095.pk> <C:\Users\Tamir\AppData\Local\MiKT
+eX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1095.pk> <C:\Users\Tamir\AppData\
+Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1095.pk> <C:\Users\Tami
+r\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk> <C:\
+Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss109
+5.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi6
+00\ecbx1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknapp
+en\ec\dpi600\ecti1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljf
+our\jknappen\ec\dpi600\ecrm1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fo
+nts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\Tamir\AppData\Local\MiK
+TeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Tamir\AppData
+\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\Tam
+ir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:
+\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm17
+28.pk><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmex10.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Tamir/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Tamir/AppDat
+a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/
+Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pf
+b><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmr6.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmr7.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Tamir/AppData/Local/P
+rograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Tamir/App
+Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on draft3.pdf (20 pages, 2725210 bytes).
 PDF statistics:
- 696 PDF objects out of 1000 (max. 8388607)
+ 635 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  76 words of extra memory for PDF output out of 10000 (max. 10000000)
 

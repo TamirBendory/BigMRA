@@ -23,20 +23,22 @@
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:Einstein}{{1a}{2}}
 \newlabel{sub@fig:Einstein}{{a}{2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Einstein from noise experiment. As a template, we use Einstein's image of size $50\times 50$ pixels. We drawn $n$ images of the same size whose entries are composed of i.i.d.\ Gaussian entries with the same mean and variance as Einstein's image. Each noise image was aligned with respect to the template by the maximal value of their cross correlation. After the alignment, all the images were averaged. As can be seen, the more pure noise images we use, the closer the averaged image to the template. \relax }}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Einstein from noise experiment. As a template, we used Einstein's image of size $50\times 50$ pixels. We drawn $n$ images of the same size whose entries are composed of i.i.d.\ Gaussian entries with the same mean and variance as Einstein's image. Each noise image was aligned with respect to the template by the maximal value of their cross correlation. After the alignment, all the images were averaged. As can be seen, the more pure noise images we use, the closer the averaged image to the template. \relax }}{2}}
 \newlabel{fig:EinsteinFromNoise}{{1}{2}}
 \@writefile{toc}{\contentsline {paragraph}{Simplified model for SPR}{2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Example of data sequences (micrographs) of size $250\times 250$ with additive i.i.d.\ Gaussian noise with variance $\sigma ^2$. Each micrograph contains four occurrences of a $50 \times 50$ image of Einstein that appears in Figure~\ref  {fig:Einstein}.\relax }}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Example of data sequences (micrographs) of size $250\times 250$ with additive i.i.d.\ Gaussian noise with variance $\sigma ^2$. Each micrograph contains four occurrences of a $50 \times 50$ image of Einstein; see Figure~\ref  {fig:Einstein}.\relax }}{3}}
 \newlabel{fig:micro_example}{{2}{3}}
 \@writefile{toc}{\contentsline {paragraph}{Autocorrelation analysis.}{3}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Results}{4}}
 \citation{kam1980reconstruction}
 \citation{levin20173d}
 \citation{singer2018mathematics}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton. We show estimations of Einstein using $P=1024,1024\times 10$ and $1024\times 100$ number of micrographs, each contains $800$ image occurrences on average (to verify). The RMSE is $0.5514$, $0.3494$ and $0.2112$, respectively. The power spectrum estimation RMSE is, respectively, $0.0269 $, $0.0083$ and $0.0027$. {\color  {red}{[Can add more images to exemplify the progress]}}\relax }}{5}}
+\newlabel{fig:newton}{{3a}{5}}
+\newlabel{sub@fig:newton}{{a}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton in the left panel. We show estimations of Einstein using $P=1024,1024\times 10$ and $1024\times 100$ number of micrographs, each contains $700$ image occurrences on average and the ${\textsf  {SNR}}$ is $1/20$. The signal's estimation RMSE is $0.5514$, $0.3494$ and $0.2112$, respectively. The power spectrum estimation RMSE is, respectively, $0.0269 $, $0.0083$ and $0.0027$. {\color  {red}{[Can add more images to exemplify the progress]}}\relax }}{5}}
 \newlabel{fig:Einst_example}{{3}{5}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Discussion}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  The left panel shows the recovery error (in log-log scale) of Einstein's image defined in~\textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:error}\unskip \@@italiccorr )}} as a function of the number of the collected micrographs. The right panel presents the error of estimating the power spectrum of the signal from the data. As expected, in log-log scale, the curve has a $-1/2$ slope.\relax }}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  The left panel shows the RMSE of estimating the power spectrum of the signal from the data as a function of the number of collected micrographs. As expected, the curve is linear with slope $-1/2$ in logarithmic scale. The right panel shows the RMSE (in logarithmic scale) of recovering Einstein's image. {\color  {red}{[The program still runs so these figures will be extended to the right (more micrographs).]}}\relax }}{6}}
 \newlabel{fig:error_per_micro}{{4}{6}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Methods}{6}}
 \newlabel{sec:methods}{{4}{6}}
@@ -44,7 +46,7 @@
 \newlabel{eq:model}{{4.1}{6}}
 \newlabel{eq:spacing}{{4.2}{6}}
 \@writefile{toc}{\contentsline {paragraph}{Aperiodic autocorrelation functions}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Red signals are the ground truth (targets) and the blue signals are our estimations. Individual RMSE of the estimates: $0.0239393 / 0.208925 / 0.0335956$. The estimated $\gamma $'s are $0.02574 / 0.01693 / 0.00818$ and the true ones $0.02561 / 0.01707 / 0.00853$. The ${\textsf  {SNR}}$ is $1/12$. {\color  {red}{[to replace with a progress plot`]}}\relax }}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces An experiment for estimate three one-dimensional signals simultaneously with noise level $\sigma =3$. Red signals are the ground truth (targets) and the blue signals are our estimations. Individual RMSE of the estimates: $0.0239393 / 0.208925 / 0.0335956$. The estimated $\gamma $'s are $0.02574 / 0.01693 / 0.00818$ and the true ones $0.02561 / 0.01707 / 0.00853$. The ${\textsf  {SNR}}$ is $1/12$. {\color  {red}{[1. to replace with a ``progress'' plot 2. replace the triangle signal 3. add error progress figure]}}\relax }}{7}}
 \newlabel{fig:1Dheterosignals}{{5}{7}}
 \newlabel{eq:ac_general}{{4.3}{7}}
 \newlabel{eq:ac_special}{{4.4}{7}}

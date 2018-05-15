@@ -1,7 +1,7 @@
 clear; close all; clc;
 % script to generate progress figures for the paper
 
-ind = [2,20,200];
+ind = [2,1,250,350];
 newton = rgb2gray(imread('newton.jpg'));
 X = double(rgb2gray(imread('Einstein5_small.jpg')));
 X = X - mean(X(:));
@@ -11,39 +11,18 @@ X = imresize(X, [50, 50]);
 figure(1); imagesc(newton); colormap gray; axis tight square off
 pdf_print_code(gcf, 'newton', 12)
 
-
-str = strcat('images\Xest_',num2str(ind(1)),'.mat');
+for i = 1:length(ind)
+str = strcat('images\Xest_',num2str(ind(i)),'.mat');
 load(str);
 err1 = norm(Xest_rrr - X,'fro')/norm(X(:));
 err2 = norm(rot90(Xest_rrr,2) - X,'fro')/norm(X(:));
 if err2<err1
     Xest_rrr = rot90(Xest_rrr,2);
 end
-figure(2); imagesc(Xest_rrr); colormap gray; axis tight square off
-str = strcat('reconstruction',num2str(ind(1)));
+figure; imagesc(Xest_rrr); colormap gray; axis tight square off
+str = strcat('reconstruction',num2str(ind(i)));
 pdf_print_code(gcf, str, 12)
-
-str = strcat('images\Xest_',num2str(ind(2)),'.mat');
-load(str);
-err1 = norm(Xest_rrr - X,'fro')/norm(X(:));
-err2 = norm(rot90(Xest_rrr,2) - X,'fro')/norm(X(:));
-if err2<err1
-    Xest_rrr = rot90(Xest_rrr,2);
 end
-figure(3); imagesc(Xest_rrr); colormap gray; axis tight square off
-str = strcat('reconstruction',num2str(ind(2)));
-pdf_print_code(gcf, str, 12)
-
-str = strcat('images\Xest_',num2str(ind(3)),'.mat');
-load(str);
-err1 = norm(Xest_rrr - X,'fro')/norm(X(:));
-err2 = norm(rot90(Xest_rrr,2) - X,'fro')/norm(X(:));
-if err2<err1
-    Xest_rrr = rot90(Xest_rrr,2);
-end
-figure(4); imagesc(Xest_rrr); colormap gray; axis tight square off
-str = strcat('reconstruction',num2str(ind(3)));
-pdf_print_code(gcf, str, 12)
 
 %% progress
 
