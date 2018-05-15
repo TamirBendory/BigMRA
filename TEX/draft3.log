@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.5)  14 MAY 2018 14:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.5)  14 MAY 2018 20:14
 entering extended mode
 **./draft3.tex
 (draft3.tex
@@ -440,144 +440,181 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {C:/Users/Tamir/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-LaTeX Font Info:    Try loading font information for T1+cmss on input line 123.
+<Einstein.pdf, id=13, 421.575pt x 316.18124pt>
+File: Einstein.pdf Graphic file (type pdf)
+<use Einstein.pdf>
+Package pdftex.def Info: Einstein.pdf  used on input line 112.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+<Einstein_from_noise_n10.pdf, id=14, 421.575pt x 316.18124pt>
+File: Einstein_from_noise_n10.pdf Graphic file (type pdf)
+<use Einstein_from_noise_n10.pdf>
+Package pdftex.def Info: Einstein_from_noise_n10.pdf  used on input line 117.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+<Einstein_from_noise_n100.pdf, id=15, 421.575pt x 316.18124pt>
+File: Einstein_from_noise_n100.pdf Graphic file (type pdf)
+<use Einstein_from_noise_n100.pdf>
+Package pdftex.def Info: Einstein_from_noise_n100.pdf  used on input line 122.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+<Einstein_from_noise_n1000.pdf, id=16, 421.575pt x 316.18124pt>
+File: Einstein_from_noise_n1000.pdf Graphic file (type pdf)
+<use Einstein_from_noise_n1000.pdf>
+Package pdftex.def Info: Einstein_from_noise_n1000.pdf  used on input line 128.
+
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+<Einstein_from_noise_n10000.pdf, id=17, 421.575pt x 316.18124pt>
+File: Einstein_from_noise_n10000.pdf Graphic file (type pdf)
+<use Einstein_from_noise_n10000.pdf>
+Package pdftex.def Info: Einstein_from_noise_n10000.pdf  used on input line 133
+.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+<Einstein_from_noise_n100000.pdf, id=18, 421.575pt x 316.18124pt>
+File: Einstein_from_noise_n100000.pdf Graphic file (type pdf)
+<use Einstein_from_noise_n100000.pdf>
+Package pdftex.def Info: Einstein_from_noise_n100000.pdf  used on input line 13
+8.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+ [2 <./Einstein.pdf> <./Einstein_from_noise_n10.pdf> <./Einstein_from_noise_n10
+0.pdf> <./Einstein_from_noise_n1000.pdf> <./Einstein_from_noise_n10000.pdf> <./
+Einstein_from_noise_n100000.pdf>]
+LaTeX Font Info:    Try loading font information for T1+cmss on input line 160.
 
 
 ("C:\Users\Tamir\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\t1cmss.fd"
 File: t1cmss.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-<micrograph_Einstein_example_clean.pdf, id=13, 259.97125pt x 260.975pt>
+<micrograph_Einstein_example_clean.pdf, id=46, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_clean.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_clean.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_clean.pdf  used on input l
-ine 130.
+ine 167.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
-<micrograph_Einstein_example_s05.pdf, id=14, 259.97125pt x 260.975pt>
+<micrograph_Einstein_example_s05.pdf, id=47, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_s05.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_s05.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s05.pdf  used on input lin
-e 135.
+e 172.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
-<micrograph_Einstein_example_s3.pdf, id=15, 259.97125pt x 260.975pt>
+<micrograph_Einstein_example_s3.pdf, id=48, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_s3.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_s3.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s3.pdf  used on input line
- 140.
+ 177.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
+
+[3 <./micrograph_Einstein_example_clean.pdf> <./micrograph_Einstein_example_s05
+.pdf> <./micrograph_Einstein_example_s3.pdf>]
+<Newton.pdf, id=68, 421.575pt x 316.18124pt>
+File: Newton.pdf Graphic file (type pdf)
+<use Newton.pdf>
+Package pdftex.def Info: Newton.pdf  used on input line 214.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+
+Overfull \hbox (16.26161pt too wide) in paragraph at lines 214--215
+ [][] 
+ []
+
+<reconstruction2.pdf, id=69, 421.575pt x 316.18124pt>
+File: reconstruction2.pdf Graphic file (type pdf)
+<use reconstruction2.pdf>
+Package pdftex.def Info: reconstruction2.pdf  used on input line 219.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+
+Overfull \hbox (16.26161pt too wide) in paragraph at lines 219--220
+ [][] 
+ []
+
+<reconstruction20.pdf, id=70, 421.575pt x 316.18124pt>
+File: reconstruction20.pdf Graphic file (type pdf)
+<use reconstruction20.pdf>
+Package pdftex.def Info: reconstruction20.pdf  used on input line 224.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+
+Overfull \hbox (16.26161pt too wide) in paragraph at lines 224--225
+ [][] 
+ []
+
+<reconstruction200.pdf, id=71, 421.575pt x 316.18124pt>
+File: reconstruction200.pdf Graphic file (type pdf)
+<use reconstruction200.pdf>
+Package pdftex.def Info: reconstruction200.pdf  used on input line 229.
+(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
+
+Overfull \hbox (16.26161pt too wide) in paragraph at lines 229--230
+ [][] 
+ []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[2] [3 <./micrograph_Einstein_example_clean.pdf> <./micrograph_Einstein_example
-_s05.pdf> <./micrograph_Einstein_example_s3.pdf>]
-<Newton.pdf, id=44, 421.575pt x 316.18124pt>
-File: Newton.pdf Graphic file (type pdf)
-<use Newton.pdf>
-Package pdftex.def Info: Newton.pdf  used on input line 175.
-(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
-
-Overfull \hbox (16.26161pt too wide) in paragraph at lines 175--176
- [][] 
- []
-
-<reconstruction2.pdf, id=45, 421.575pt x 316.18124pt>
-File: reconstruction2.pdf Graphic file (type pdf)
-<use reconstruction2.pdf>
-Package pdftex.def Info: reconstruction2.pdf  used on input line 180.
-(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
-
-Overfull \hbox (16.26161pt too wide) in paragraph at lines 180--181
- [][] 
- []
-
-<reconstruction20.pdf, id=46, 421.575pt x 316.18124pt>
-File: reconstruction20.pdf Graphic file (type pdf)
-<use reconstruction20.pdf>
-Package pdftex.def Info: reconstruction20.pdf  used on input line 185.
-(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
-
-Overfull \hbox (16.26161pt too wide) in paragraph at lines 185--186
- [][] 
- []
-
-<reconstruction200.pdf, id=47, 421.575pt x 316.18124pt>
-File: reconstruction200.pdf Graphic file (type pdf)
-<use reconstruction200.pdf>
-Package pdftex.def Info: reconstruction200.pdf  used on input line 190.
-(pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
-
-Overfull \hbox (16.26161pt too wide) in paragraph at lines 190--191
- [][] 
- []
-
-<Einstein_progress.pdf, id=48, 963.6pt x 459.7175pt>
+<Einstein_progress.pdf, id=72, 963.6pt x 459.7175pt>
 File: Einstein_progress.pdf Graphic file (type pdf)
 <use Einstein_progress.pdf>
-Package pdftex.def Info: Einstein_progress.pdf  used on input line 222.
+Package pdftex.def Info: Einstein_progress.pdf  used on input line 263.
 (pdftex.def)             Requested size: 481.79883pt x 229.85818pt.
 
-Overfull \hbox (40.95137pt too wide) in paragraph at lines 222--223
+Overfull \hbox (40.95137pt too wide) in paragraph at lines 263--264
  [][] 
  []
 
 
-LaTeX Warning: Reference `eq:error' on page 4 undefined on input line 223.
+LaTeX Warning: Reference `eq:error' on page 4 undefined on input line 264.
 
 
-LaTeX Warning: Reference `eq:error' on page 4 undefined on input line 223.
+LaTeX Warning: Reference `eq:error' on page 4 undefined on input line 264.
 
+[4]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<XP_1D_heterogeneous/hetero_example.pdf, id=49, 1155.31625pt x 331.2375pt>
+<XP_1D_heterogeneous/hetero_example.pdf, id=77, 1155.31625pt x 331.2375pt>
 File: XP_1D_heterogeneous/hetero_example.pdf Graphic file (type pdf)
 <use XP_1D_heterogeneous/hetero_example.pdf>
 Package pdftex.def Info: XP_1D_heterogeneous/hetero_example.pdf  used on input 
-line 244.
+line 285.
 (pdftex.def)             Requested size: 440.84746pt x 126.39214pt.
-[4 <./Newton.pdf> <./reconstruction2.pdf> <./reconstruction20.pdf> <./reconstru
-ction200.pdf>] [5 <./Einstein_progress.pdf>] [6 <./XP_1D_heterogeneous/hetero_e
-xample.pdf>] [7] [8] (draft3.bbl
+[5 <./Newton.pdf> <./reconstruction2.pdf> <./reconstruction20.pdf> <./reconstru
+ction200.pdf>] [6 <./Einstein_progress.pdf>] [7 <./XP_1D_heterogeneous/hetero_e
+xample.pdf>] [8] (draft3.bbl
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 4.
 
 ("C:\Users\Tamir\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-[9] [10] [11]
+[9] [10] [11] [12]
 Underfull \hbox (badness 6300) in paragraph at lines 293--296
 []\T1/cmr/m/n/10.95 Amit Singer.  Math-e-mat-ics for cryo-electron mi-croscopy.
   \T1/cmr/m/it/10.95 arXiv preprint
  []
 
-) [12] [13] [14]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 537.
+) [13] [14] [15]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 578.
 
 
 ("C:\Users\Tamir\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 537.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 578.
 
-[15]
-Overfull \hbox (2.9072pt too wide) in paragraph at lines 593--596
+[16]
+Overfull \hbox (2.9072pt too wide) in paragraph at lines 634--637
  \T1/cmr/bx/n/10.95 Expectation-maximization.[] \T1/cmr/m/n/10.95 In-ter-est-in
 gly, expectation-maximization (EM)---a pop-u-lar al-
  []
 
-[16] [17] [18] [19] (draft3.aux)
+[17] [18] [19] [20] (draft3.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 5772 strings out of 493303
- 88531 string characters out of 3129785
- 160116 words of memory out of 3000000
- 9173 multiletter control sequences out of 15000+200000
+ 5805 strings out of 493303
+ 89629 string characters out of 3129785
+ 160141 words of memory out of 3000000
+ 9200 multiletter control sequences out of 15000+200000
  28047 words of font info for 70 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,22n,39p,988b,525s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,22n,39p,988b,524s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
 ecbi1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\
 ec\dpi600\ecsx1095.pk> <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour
@@ -601,14 +638,15 @@ ic/amsfonts/cm/cmmi6.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/font
 s/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Tamir/AppData/Local/Programs/MiK
 TeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Tamir/AppData/Local/
 Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/Tamir/App
-Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/User
-s/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10
-.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfo
-nts/cm/cmsy8.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
-public/amsfonts/symbols/msbm10.pfb>
-Output written on draft3.pdf (19 pages, 1803649 bytes).
+Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/User
+s/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.p
+fb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
+s/cm/cmsy10.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmsy8.pfb><C:/Users/Tamir/AppData/Local/Programs/MiKTeX 2.9/f
+onts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on draft3.pdf (20 pages, 2730297 bytes).
 PDF statistics:
- 660 PDF objects out of 1000 (max. 8388607)
+ 696 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 76 words of extra memory for PDF output out of 10000 (max. 10000000)
 
