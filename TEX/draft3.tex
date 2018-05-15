@@ -320,14 +320,15 @@ The forward model can be posed as a mixture of \emph{blind deconvolution} proble
 y = \sum_{i=1}^K x_i\ast s_i + \varepsilon,\quad \varepsilon\sim\mathcal{N}(0,\sigma^2 I).
 \end{equation}
 %We model the background information as i.i.d.\ Gaussian noise with zero mean and $\sigma^2$ variance. 
-The nonzero values of each  $s_i\in\{0,1\}^N$ determine the position of the occurrences of the corresponding $x_i$. 
+The nonzero values of each  $s_i\in\{0,1\}^N$ determine the position of $x_i$'s occurrences. 
 We denote the set of these nonzero values by 
  $\mathcal{S}_i$ and its cardinality by $\vert \mathcal{S}_i\vert = M_i$. 
-By assuming that all $\mathcal{S}_i$'s are disjoint,  we let $s = \sum_{i=1}^Ks_i$, $\mathcal{S} = \bigcup_{i=1}^{K} \mathcal{S}_i$ and  $\vert \mathcal{S}\vert :=M =  \sum_{i=1}^{K}M_i$.  Neither the $M_i$'s nor $M$ are assumed to be known. Literature survey on blind deconvolution and related problems is given in Appendix~\ref{sec:related_literature}.
+By assuming that all $\mathcal{S}_i$'s are disjoint,  we let $s = \sum_{i=1}^Ks_i$, $\mathcal{S} = \bigcup_{i=1}^{K} \mathcal{S}_i$ and  $\vert \mathcal{S}\vert :=M =  \sum_{i=1}^{K}M_i$.  %Neither the $M_i$'s nor $M$ are assumed to be known.
+ Literature survey on blind deconvolution and related problems is given in Appendix~\ref{sec:related_literature}.
 
-In order to estimate the mixture of autocorrelations, we assume that the support of $s$ is not clustered. In particular,
+In order to estimate the mixture of autocorrelations, we assume that the support of $s$ is not clustered. In particular, we assume that
 \begin{equation} \label{eq:spacing}
-\text{For all }  i,j\in\mathcal{S}, \, i\neq j,  \quad  \vert i-j \vert\geq L-1.  
+  \vert i-j \vert\geq L-1,   \quad \text{for all } i,j\in\mathcal{S} \text{ such that } i\neq j.
 \end{equation}
 The goal of the problem is to estimate $x_1,\ldots,x_K$ from $y$.
 
@@ -341,21 +342,20 @@ The goal of the problem is to estimate $x_1,\ldots,x_K$ from $y$.
 
 \paragraph{Aperiodic autocorrelation functions}
 %\subsection{Aperiodic autocorrelation functions} \label{sec:aperiodic_ac}
-
-For the purpose of this paper, we need the first three (aperiodic) autocorrelation functions. The first-order autocorelation is the mean of the signals. For  
+For  
 $z\in\RL$ and $k\geq 2$, the autocorrelation of order $k$ is defined for any integer shifts $\ell_1, \ldots, \ell_{k-1}$ by
 \begin{align}
 	a_z^k[\ell_1,\ldots,\ell_{k-1}]  & = \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\ldots z[i+\ell_{k-1}],
 	\label{eq:ac_general}
 \end{align}
 where indexing of $z$ out of the bounds $0, \ldots, L-1$ is zero-padded, as usual.
-Explicitly, the first three autocorrelations are
+Explicitly, the mean (which can be thought of as a first-order autocorrelation) and the second and third autocorrelations are given by
 \begin{align} 
 	a_z^1 & = \sum_{i=0}^{L-1} z[i], \nonumber\\
 	a_z^2[\ell] & = \sum_{i = \max\{0, -\ell\}}^{L-1 + \min\{0, -\ell\}} z[i]z[i+\ell], \nonumber\\
 	a_z^3[\ell_1,\ell_2] & = \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{L-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. \label{eq:ac_special}
 \end{align}
-Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].$$
+Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and also $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].$$
 %Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), then they are equivalent to the autocorrelation functions.
 
 \paragraph{Estimating the autocorrelation function of a single signal}
@@ -388,7 +388,7 @@ As before, we consider  the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty
 \begin{align}
 	\gamma_k = \frac{M_k L}{N}, \quad \gamma = \sum_{k=1}^K\gamma_k.
 \end{align}
-If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then one can estimate the mixture of the $K$ signals'  autocorrelations, similarly to~\eqref{eq:data_ac_k1}: 
+If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then  similarly to~\eqref{eq:data_ac_k1} one can estimate the mixture of the $K$ signals'  autocorrelations:
 \begin{align}
 \lim_{N\to\infty} a_y^1 & = \sum_{k=1}^K\gamma_k a_{x_k}^1, \nonumber\\
 \lim_{N\to\infty} a_y^2[\ell] & = \sum_{k=1}^K\gamma_k a_{x_k}^2[\ell] +\sigma^2\delta[\ell],  \label{eq:data_ac}\\
@@ -397,33 +397,45 @@ If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then one
 This relation is proven in  Appendix~\ref{sec:autocorrelation_computation}.
 
 \paragraph{Numerical experiments details}
-For the 2-D experiment, we generated $P$ micrographs of size $4000\times 4000$ with Einstein's image of size $50\times 50$. 
-In each micrograph, we placed the image in random locations while keeping the separation condition~\eqref{eq:spacing}.  In particular, to picked a random location on the micrograph and used an accept/reject rule based on the separation constraint and locations picked so far. We stopped the process when we reached the desired number of occurrences, or the micrograph was dense enough so that we failed to find an open space (randomly) repeatedly.  
-Then, an i.i.d.\ Gaussian noise was added.
-On average, each micrograph contains $860$ images and the signal--to--noise ratio ($\SNR$) is approximately $1/18$. 
-Different micrographs are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
+For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated $P$ micrographs of size $4096\times 4096$ pixels. 
+In each micrograph, we placed Einstein's image of size $50\times 50$  in random locations (see Figure~\ref{fig:Einstein}), while keeping the separation condition~\eqref{eq:spacing}.  
+This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
+an accept/reject rule based on the separation constraint and locations picked so far. In average, $700$ images were placed in each micrograph.   
+Then, an i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ was added inducing $\SNR$ of approximately $1/20$. An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
+%Different micrographs are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
 
 
-
-Given the micrographs $y$, we proceed to compute the moments. In Appendix~\ref{sec:theory} we provide an argument on the number of equations we get from the autocorrelation function. To ease the computation, we assume to know the number of Einstein's occurrences and the noise level. This allow us to compute only the first and second moment. In dimensional greater than one, almost all images are uniquely determined from their second-order aperiodic up to reflection through the origin~\cite{hayes1982reconstruction,bendory2017fourier}. To estimate the signal, we use a popular algorithm called relaxed-reflect-reflect (RRR) iterates as
+In this experiment, we assume to know the number of Einstein's occurrences and the noise level. 
+In this situation, the second-order autocorrelation (or, equivalently, the Fourier magnitudes of the signal) determines  almost all images  uniquely up to reflection through the origin~\cite{hayes1982reconstruction,bendory2017fourier}. 
+Therefore, we estimate the signal's Fourier magnitude from the Fourier magnitude of the micrographs, in the cost of one  FFT per micrograph.
+To estimate the signal, we use a phase retrieval algorithm called relaxed-reflect-reflect (RRR) that iterates by
 \begin{equation}
-x_{\ell+1} = x_\ell + \beta (P_2(2P_1(x_\ell) - x_\ell) - P_1(x_\ell)).
+z \rightarrow z + \beta (P_2(2P_1(z) - z) - P_1(z)),
 \end{equation}
-The RRR estimates a $2L\times 2L$ image. Exact solution contains Einstein's image in the upper-left corner and zero else where. The operation $P_1(z)$ combines the Fourier phases of  $z$ with the Fourier transform of the second-order autocorrelation, which in the absence of noise, is exactly the Fourier magnitude of the solution. The operator $P_1(z)$ zeros out all entries of $z$ outside the upper-left corner.
+where we set $\beta=1$.
+RRR estimates a $2L\times 2L$ image. Exact solution contains Einstein's image in the upper-left corner and zero else where. The operator $P_2(z)$ combines the Fourier phases of  the current estimation $z$ with the Fourier magnitudes of the signal  (estimated from the data). The operator $P_1(z)$ zeros out all entries of $z$ outside the $L\times L$ upper-left corner. 
+In order to compare the performance in multiple cases and different noise levels, the algorithm stopped after a fixed number of 1000 iterations and the iteration with the smallest error compared to the ground truth (also taking into account the reflection ambiguity) was chosen as the solution. While this cannot be done in practice since we do not have access to the ground truth, this procedure enables us to compare a large number of instances in different noisy environments \TODO{Note the last two sentences!}.
 
-For the 1D experiment, we worked with signals of length $L = 21$ and generated the data in the same way as in the 2D example. However, here we computed the first three autocorrelation functions. We removed the biased terms (see~\eqref{eq:data_ac_k1}) so we do not need to know $\sigma$ ahead. 
+For the 1-D experiment, we worked with three signals of length $L = 21$ and generated the data in the same way as in the 2-D example.
+The only difference is that here, for each
+placement, one of the three signals is picked at random proportionally to the desired number
+of occurrences of each.
+In this experiment, we computed the first three autocorrelation functions. 
+We do not assume to know the number of occurrences of each signal $\gamma_i$ ahead and we removed the biased terms (see~\eqref{eq:data_ac_k1}) so we do not need to know $\sigma$ either. 
+In Appendix~\ref{sec:theory} we provide an argument on the number of equations we get from the first three autocorrelation functions. 
+
 To estimate the signal, we employ an optimization algorithm on the following nonlinear least-squares problem that estimate the signals and their number of occurrences simultaneously:
 \begin{multline}
 \min_{\substack{\hat x_1, \ldots, \hat x_K \in \reals^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2.
 \label{eq:optim1D}
 \end{multline}
-where $W \geq L$ is the length of the sought signals and $w_1 = 1/2, w_2 = 1/2(L-1), w_3 = \frac{1}{(L-1)(L-2)}$; see~\cite{boumal2017heterogeneous} see for discussion in choosing the weights properly.
+where $W \geq L$ is the length of the sought signals and $w_1 = \frac{1}{2}, w_2 =\frac{1}{2}(L-1), w_3 = \frac{1}{(L-1)(L-2)}$; see~\cite{boumal2017heterogeneous} see for discussion on how to choose the weights properly.
 
 
  Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers.
 %Since we can only initialize randomly at first, this approach would often fail in practice. Alternatively,
 Thus, we first run the optimization with $W = 2L-1$. This problem appears to have fewer poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ whose autocorrelation functions are the closest the measured ones in the sense of~\eqref{eq:optim1D}. 
-This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints \TODO{I might need a reference for this} on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
+This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints \TODO{reference} on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
 
 
 

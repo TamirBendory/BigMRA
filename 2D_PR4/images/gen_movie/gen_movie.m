@@ -10,7 +10,7 @@ open(v);
 fig = figure('position',[100 100 500 500]);
 
 % data parameters
-max_ind = 259;
+max_ind = 505;
 axisX = 512*(1:max_ind);
 L = 50;
 W = 2*L-1;
