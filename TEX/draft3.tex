@@ -18,6 +18,18 @@
 \usepackage{mathtools} 
 \usepackage[margin=1.2in]{geometry}
 
+
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GCD}{\mathbf{GCD}}
+\newcommand{\XX}{\mathcal{X}}
+\newcommand{\SUM}{\text{sum}}
+\newcommand{\1}{\mathbf{1}}
+
+
 \newcommand{\TODO}[1]{{\color{red}{[#1]}}}
 
 \makeatletter
@@ -100,47 +112,48 @@ Nowadays, it also still popular to pick particles manually. This method, while i
 
 The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
 In this experiment, the image of Einstein is correlated with multiple images of pure noise. The noisy images are aligned to Einstein's image using cross-correlation and then averaged. 
-In Figure~\ref{fig:EinsteinFromNoise} we conducted this experiment with different number of noise images. With merely 1000 noise images, Einstein's face is clearly observed in the averaged image. With $10,000$  image, the output is remarkably similar to the template image of Einstein rather than to pure noise. Crucially, the more noisy images we use, the more severe the model bias towards the template. 
+In~\cite{shatsky2009method}, it was shown that with merely  1000 noise images, the averaged image is remarkably similar to the template image of Einstein rather than to pure noise.
+%In Figure~\ref{fig:EinsteinFromNoise} we conducted this experiment with different number of noise images. With merely 1000 noise images, Einstein's face is clearly observed in the averaged image. With $10,000$  image, the output is remarkably similar to the template image of Einstein rather than to pure noise. Crucially, the more noisy images we use, the more severe the model bias towards the template. 
 In the context of cryo--EM, this example demonstrates how our prior assumptions about the particle may influence the reconstructed structure.
 This true in general to any method which is based on template matching.
+\TODO{Do we have a nice experiment to exemplify the phenomenon?}
 
+%\begin{figure}[h!]
+%	\centering
+%	\begin{subfigure}[h]{0.3\textwidth}
+%		\centering
+%		\includegraphics[scale=0.3]{Einstein}
+%		\caption{\label{fig:Einstein}Einstein image (template)}
+%	\end{subfigure}%
+%	\begin{subfigure}[h]{0.3\textwidth}
+%		\centering
+%		\includegraphics[scale=0.3]{Einstein_from_noise_n10}
+%		\caption{$n = 10$}
+%	\end{subfigure}
+%	\begin{subfigure}[h]{0.3\textwidth}
+%		\centering
+%		\includegraphics[scale=0.3]{Einstein_from_noise_n100}
+%		\caption{$n = 10^2$}
+%	\end{subfigure}
 
-\begin{figure}[h!]
-	\centering
-	\begin{subfigure}[h]{0.3\textwidth}
-		\centering
-		\includegraphics[scale=0.3]{Einstein}
-		\caption{\label{fig:Einstein}Einstein image (template)}
-	\end{subfigure}%
-	\begin{subfigure}[h]{0.3\textwidth}
-		\centering
-		\includegraphics[scale=0.3]{Einstein_from_noise_n10}
-		\caption{$n = 10$}
-	\end{subfigure}
-	\begin{subfigure}[h]{0.3\textwidth}
-		\centering
-		\includegraphics[scale=0.3]{Einstein_from_noise_n100}
-		\caption{$n = 10^2$}
-	\end{subfigure}
+%	\begin{subfigure}[h]{0.3\textwidth}
+%	\centering
+%	\includegraphics[scale=0.3]{Einstein_from_noise_n1000}
+%	\caption{$n = 10^3$}
+%\end{subfigure}%
+%\begin{subfigure}[h]{0.3\textwidth}
+%	\centering
+%	\includegraphics[scale=0.3]{Einstein_from_noise_n10000}
+%	\caption{$n = 10^4$}
+%\end{subfigure}
+%\begin{subfigure}[h]{0.3\textwidth}
+%	\centering
+%	\includegraphics[scale=0.3]{Einstein_from_noise_n100000}
+%	\caption{$n = 10^5$}
+%\end{subfigure}
 
-	\begin{subfigure}[h]{0.3\textwidth}
-	\centering
-	\includegraphics[scale=0.3]{Einstein_from_noise_n1000}
-	\caption{$n = 10^3$}
-\end{subfigure}%
-\begin{subfigure}[h]{0.3\textwidth}
-	\centering
-	\includegraphics[scale=0.3]{Einstein_from_noise_n10000}
-	\caption{$n = 10^4$}
-\end{subfigure}
-\begin{subfigure}[h]{0.3\textwidth}
-	\centering
-	\includegraphics[scale=0.3]{Einstein_from_noise_n100000}
-	\caption{$n = 10^5$}
-\end{subfigure}
-
-	\caption{\label{fig:EinsteinFromNoise} Einstein from noise experiment. As a template, we used Einstein's image of size $50\times 50$ pixels. We drawn $n$ images of the same size whose entries are composed of i.i.d.\ Gaussian entries with the same mean and variance as Einstein's image. Each noise image was aligned with respect to the template by the maximal value of their cross correlation. After the alignment, all the images were averaged. As can be seen, the more pure noise images we use, the closer the averaged image to the template.   }	
-\end{figure}
+%\caption{\label{fig:EinsteinFromNoise} Einstein from noise experiment. As a template, we used Einstein's image of size $50\times 50$ pixels. We drawn $n$ images of the same size whose entries are composed of i.i.d.\ Gaussian entries with the same mean and variance as Einstein's image. Each noise image was aligned with respect to the template by the maximal value of their cross correlation. After the alignment, all the images were averaged. As can be seen, the more pure noise images we use, the closer the averaged image to the template.   }	
+%\end{figure}
 
 Besides the model bias, particle pickers have several limitations due to the high noise level, in particular for small particles and in low contrast. 
 As a result, the projections in the 2D images are typically not centered; including the correct centers as parameters dramatically increases the complexity of reconstruction algorithms.
@@ -154,7 +167,7 @@ A precise mathematical formulation of the model and the estimation problem is pr
 To be clear, we do not consider here many prominent features of real SPR experiments and do not aim to reconstruct any 3-D structure; instead, we solve a simpler problem that we believe captures key elements of the true SPR problem. We also mention in passing that similar models emerge in different scientific fields, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
 
 Figure~\ref{fig:micro_example} shows a simple example of our problem with  one signal ($K=1$). 
-Each panel demonstrates an image of size $250\times 250$, containing 4 occurrences of an Einstein image of size $50\times 50$ presented in Figure~\ref{fig:Einstein}. 
+Each panel demonstrates an image of size $250\times 250$, containing 4 occurrences of an Einstein image of size $50\times 50$. 
 The left panel shows the data without noise. In the middle panel,  i.i.d.\ Gaussian noise with standard deviation $\sigma=0.5$  was added, however,  Einstein is still easily identified. In this scenario it is likely that standard detection algorithms can locate the copies of the signal within the micrograph. In the right panel, we show the same data swamped in  
 i.i.d.\ Gaussian noise with standard deviation  $\sigma=3$.
 Clearly, identifying the locations of Einstein in this micrograph is much more challenging. In fact, it can be shown that in the low signal--to--noise (\SNR) regime, 
@@ -177,7 +190,7 @@ detection  of individual image occurrences is impossible---even if the true imag
 		\includegraphics[scale=0.5]{micrograph_Einstein_example_s3}
 		\caption{$\sigma = 3$}
 	\end{subfigure}
-	\caption{\label{fig:micro_example} Example of data sequences (micrographs) of size $250\times 250$ with additive i.i.d.\ Gaussian noise with variance $\sigma^2$. Each micrograph contains four occurrences of a $50 \times 50$ image of Einstein; see Figure~\ref{fig:Einstein}.}	
+	\caption{\label{fig:micro_example} Example of data sequences (micrographs) of size $250\times 250$ with additive i.i.d.\ Gaussian noise with variance $\sigma^2$. Each micrograph contains four occurrences of a $50 \times 50$ image of Einstein.}	
 \end{figure}
 
 
@@ -312,7 +325,7 @@ If the signals are not separated, one can introduce a new variable that represen
 \section{Methods} \label{sec:methods}
 
 
-\paragraph{Mathematical model}
+\paragraph{Mathematical model.}
 
 Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the data. 
 The forward model can be posed as a mixture of \emph{blind deconvolution} problems between binary signals and the target signals $x_i$:
@@ -358,7 +371,7 @@ Explicitly, the mean (which can be thought of as a first-order autocorrelation) 
 Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and also $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].$$
 %Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), then they are equivalent to the autocorrelation functions.
 
-\paragraph{Estimating the autocorrelation function of a single signal}
+\paragraph{Estimating the autocorrelation function of a single signal.}
 
 We first consider the problem of estimating the autocorrelations of a single signal from the data. 
 The main principles carry through for $K>1$ as will be shown next.  
@@ -382,7 +395,7 @@ to a scaled, biased, version of the signal's autocorrelation:
 for $\ell,\ell_1,\ell_2=0,\ldots L-1$, and where $\delta$ denotes the Kronecker delta function. 
 %These relations are proven in Appendix~\ref{sec:autocorrelation_computation}.
 
-\paragraph{Estimating the autocorrelation function of a multiple signals}
+\paragraph{Estimating the autocorrelation function of a multiple signals.}
 
 As before, we consider  the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty$, while preserving fixed ratios
 \begin{align}
@@ -396,9 +409,9 @@ If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then  si
 \end{align}
 This relation is proven in  Appendix~\ref{sec:autocorrelation_computation}.
 
-\paragraph{Numerical experiments details}
+\paragraph{Numerical experiments details.}
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated $P$ micrographs of size $4096\times 4096$ pixels. 
-In each micrograph, we placed Einstein's image of size $50\times 50$  in random locations (see Figure~\ref{fig:Einstein}), while keeping the separation condition~\eqref{eq:spacing}.  
+In each micrograph, we placed Einstein's image of size $50\times 50$  in random locations, while keeping the separation condition~\eqref{eq:spacing}.  
 This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
 an accept/reject rule based on the separation constraint and locations picked so far. In average, $700$ images were placed in each micrograph.   
 Then, an i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ was added inducing $\SNR$ of approximately $1/20$. An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
@@ -477,48 +490,124 @@ This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time
 
 \appendix
 
-\section{Autocorrelation estimations} \label{sec:autocorrelation_computation}
+\section{Proof of \eqref{eq:data_ac}} \label{sec:autocorrelation_computation}
 
-Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriates weights, see~\cite{boumal2017heterogeneous}. 
+Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
 
-Let us define
+We will let the number of instances of the signal $M$ grow with $N$, and write $M=M_N$ to emphasize this. We assume $M_N$ grows proportionally with $N$, and define:
+%
 \begin{equation}
 \gamma = \lim_{N\to\infty} \frac{M_NL}{N}<1.
 \end{equation}
-With a bit abuse of notation, $M_N$ stresses that $M$ is a function of $N$. Indeed, by assuming $M_N=\Omega(N)$, we deduce $\gamma>0$.
-We start by considering the first autocorrelation of the data
-\begin{equation}
-a_y^1 = \sum_{i=0}^{N-1} y[i] = \frac{1}{N/L}\sum_{j=0}^{M_N-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}} \xrightarrow{a.s.}\gamma a_x^1,
-\end{equation}
-where the noise term converges to zero almost surely (a.s.) by the law of large numbers.
+%
+We will assume that $M_N=\Omega(N)$, so that $\gamma>0$. In the sequel, we will suppress the explicit dependence of $M$ on $N$ for notational convenience.
 
-We proceed with the second autocorrelation for fixed $\ell\in[0,\ldots,L-1]$. We can compute:
+We start by considering the mean of the data:
+%
 \begin{equation}
-\begin{split}
-a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell] \\
-& \underbrace{\frac{1}{N}\sum_{j=1}^{M_N}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}},
-\end{split}
+a_y^1 = \frac{1}{N}\sum_{i=0}^{N-1} y[i] =
+\frac{1}{N/L}\sum_{j=0}^{M-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] +    
+\underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}}
+\xrightarrow{a.s.}\gamma a_x^1,
 \end{equation}
-where the cross terms between the signal and the noise vanish  almost surely in the limit $N\to\infty$. 
+%
+where the noise term converges to zero almost surely (a.s.) by the strong law of large numbers.
 
-We treat the signal and noise terms separately. We first break the signal term into $M_N$ different sums, each contains one copy of the signal, and get
+We proceed with the (second-order) autocorrelation for fixed $\ell\in[0,\ldots,L-1]$. We can compute:
+%
+
+\begin{align}
+%
+a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]
+\nonumber \\
+& = \underbrace{\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}}
++ \underbrace{\frac{1}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] \varepsilon[s_j + i + \ell]}_{\text{cross-term}}.
+%
+\end{align}
+
+The cross-terms are linear in the noise, and are easily shown to vanish almost surely in the limit $N\to\infty$, by the strong law of large numbers. As for the signal term, we break it into $M$ different sums, each containing one copy of the signal. This gives:
+%
 \begin{equation} \label{eq:2nd_moment_signal_term}
-\frac{1}{N}\sum_{j=1}^{M_N}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] = \frac{M_NL}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] = \gamma a_x^2[\ell].
+%
+\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] = \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\xrightarrow{N\to\infty}\gamma a_x^2[\ell].
+%
 \end{equation}
-Similarly, for $\ell\neq 0$, we can break the noise term into a sum of independent terms 
+%
+
+We next analyze the pure noise term. When $\ell\neq 0$, we can break the noise term into a sum of independent terms:
+%
 \begin{equation}
+%
 \frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
+%
 \end{equation}
-Each term of $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, and thus converges to zero almost surely as $N\to\infty$.
-If $\ell=0$, 
+%
+Each sum $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, and thus converges to zero almost surely as $N\to\infty$. If $\ell=0$, then we have:
+%
 \begin{equation}
+%
 \frac{1}{N}\sum_{i=0}^{N-1} \varepsilon^2[i] \xrightarrow{a.s.} \sigma^2.
+%
 \end{equation}
 
-We are now moving to analyze the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2$ and recall that 
-\begin{equation*}
-a_y^3[\ell_1,\ell_2] = \sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]. 
-\end{equation*}
+We now analyze the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2\ge0$. We have:
+%
+\begin{align}
+%
+&a_y^3[\ell_1,\ell_2] 
+= \frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]
+\nonumber \\
+%
+=& \underbrace{ \frac{ML}{N}\frac{1}{M}\sum_{j=1}^M 
+	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x[i]x[i+\ell_1]x[i+\ell_2]   }_{(1)}
++ \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]}_{(2)}
+\nonumber \\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} x[i]\ep[s_j + i+\ell_1]\ep[s_j+ i+\ell_2]}_{(3)}
++ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]}_{(4)}
+\nonumber \\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_2]\ep[s_j+i+\ell_1-\ell_2]x[i]}_{(5)}
++ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i]x[i+\ell_1-\ell_2]x[i]}_{(6)}
+\nonumber \\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[s_j+ i+\ell_2]}_{(7)}
++ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_1-1} x[i]x[i+\ell_1]\ep[s_j+ i+\ell_2]}_{(8)}.
+%
+\end{align}
+%
+Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge to 0 almost surely by the law of large numbers, by similar arguments as used previously. Term (1) converges to $\gamma a_x^3[\ell_1,\ell_2]$ almost surely, for the same reasons as~\eqref{eq:2nd_moment_signal_term}. To deal with terms (2)--(5), we must distinguish between different values of $\ell_1$ and $\ell_1$.
+
+{\bf Case 1:} $0 < \ell_2 < \ell_1$. Here, all summands with elements of $\ep$ involve products of distinct entries, which have expected value 0. Consequently, the usual argument shows that terms (2)--(5) all converge to 0 almost surely as $N \to \infty$.
+
+{\bf Case 2:} $0=\ell_2 < \ell_1$. Term (2) is an average of products of the form $\ep[i]^2\ep[i+\ell_1]$, which have mean zero; consequently, term (2) converges to 0 almost surely. The same argument as for Case 1 shows that (3) and (5) also converge to 0. For term (4), we write:
+%
+\begin{align}
+%
+&\frac{1}{N}\sum_{j=1}^{M} 
+\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]
+\nonumber \\
+&= \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-1}x[i] \frac{1}{M}\sum_{j=1}^{M} \ep[s_j+i-\ell_1]^2
+\xrightarrow{N\to\infty} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2.
+%
+\end{align}
+
+{\bf Case 3:} $0<\ell_2 = \ell_1$. An argument nearly identical to that for Case 2 shows that terms (2), (4) and (5) converge to 0, while term (3) converges to $\gamma a_x^1 \sigma^2$.
+
+{\bf Case 4:} $0=\ell_2 = \ell_1$. The same argument as for term (4) in Case 2 shows that terms (3), (4) and (5) all converge to $\gamma a_x^1 \sigma^2$. Term (2) is an average of $\ep[i]^3$, which is mean zero; consequently, it converges to 0.
+
+
+This completes the proof of \eqref{eq:data_ac}.
+
+
+
+
+
+
+\begin{comment}
 Writing explicitly in terms of signal and noise, the sum can be broken into eight terms. The first contains only signal terms (does not see noise) and converges to $\gamma a_x^3$ from the same reasons as~\eqref{eq:2nd_moment_signal_term}. Three other terms contain the product of two signal entries and one noise term. Since the noise is independent of the signal and has zero mean, these terms go to zero almost surely.
 
 We next analyze the contribution of the term composed of triple products of noise terms. For $\ell_1\neq 0$, this sum can be formulate as follows:
@@ -530,74 +619,139 @@ For each fixed $i$, we sum of over $N/\ell_1$ independent variables that goes to
 To complete the analysis, we consider the three terms composed of the product of two noise terms and one signal entry. Most of these terms converge to zero almost surely because of independency between the noise entries. For $\ell_1=0, \ell_2=0$ and $\ell_1=\ell_2$,  a simple computation shows that the sum converges to $\gamma\sigma^2a_x^1$; c.f.~\cite{boumal2017heterogeneous}.
 
 
-\section{Related literature} \label{sec:related_literature}
-
-\paragraph{Blind deconvolution.}
-Blind deconvolution is a longstanding problem, arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
-To make the problem well-posed, we must  assume some prior knowledge or  structure. 
-In our case, the prior information is that $s$ is a binary signal that satisfies the separation constraint~\eqref{eq:spacing}. 
-Other settings of blind deconvolution problems have been analyzed recently, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi2016guaranteed}
-where the focus is on high $\SNR$ regimes.
+\end{comment}
 
 
-An important feature of the problem under consideration is that while both $x_i$'s and $s_i$'s are unknown, the goal is merely to estimate the $x_i$'s. The  $s_i$'s  are referred to as \emph{nuisance  variables}. Indeed, in many blind deconvolution applications the sole purpose is to recover one of the unknown signals. For instance, in image deblurring, both the blurring
-kernel and the high-resolution image are unknown, but the primary goal is only
-to sharpen the image.
 
-\paragraph{The impossibility of detection in low $\SNR$.}
-If $x$ is known and $K=1$, then a sparse signal can be estimated by linear programming  in the high $\SNR$ regime, e.g.,~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see that, suppose that an oracle provides us $M$ windows of length $W>L$, each contains one copy of $x$. That is to say, we get a series of windows of length $W$, each one contains a signal at an unknown location. 
-Estimating the position of the known signal within each  window is an easier problem than detecting the support of $s$. 
-Nevertheless, even this problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Therefore, we conclude that detecting the nonzero values of $s$ is impossible in low $\SNR$. As aforementioned, this work focuses on this regime and examines under what conditions we can estimate the signals, despite the impossibility of detecting their individual occurrences.
+
+
+\section{Related work} \label{sec:related_literature}
+
 
 \paragraph{System identification.}
-For $K=1$, our problem can be also interpreted as a special case of the system identification problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
-\begin{eqnarray}
+
+For $K=1$, our problem can be interpreted as a special case of the system identification problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
+%
+\begin{math}
+%
 y = x\ast w + \varepsilon,  
-\end{eqnarray} 
-where $x$ is the unknown signal (``system''), $w$ is an unknown, random, input sequence and $\varepsilon$ is an additive noise.   
+%
+\end{math} 
+%
+where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
 %The problem has also been studied in the case of a known input $w$~\cite{pillonetto2010new,dinuzzo2015kernels,bottegal2016robust}. 
-The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under
-this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}.
-In the special case where $w\in\{0,1\}^N$, satisfying the spacing requirement~\eqref{eq:spacing}, we obtain our
-model in the  case of a single signal ($K = 1$).
+The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w\in\{0,1\}^N$, satisfying the spacing requirement~\eqref{eq:spacing}, we obtain our model in the  case of a single signal ($K = 1$). The same observation model is used for blind deconvolution, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 
-Likelihood-based methods seek to maximize the likelihood function for $x$,
-given the observed signal $y$. Solving this optimization exactly is typically
-intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC); in special
-cases, including the case where $w$ is binary, EM has been used~\cite{cappe1999simulation}.
-The EM method is based upon a certain ``forward-backward'' procedure
-used in hidden Markov models~\cite{rabiner1989tutorial}. 
-However, the complexity of this procedure is still nonlinear in $N$, and therefore its usage is limited for big data sets.   
-Another paper considers parameterized models for multiple distinct signals, as in our heterogeneity framework ($K>1$)~\cite{andrieu2001bayesian}.
-Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem.
+%%%To make the problem well-posed, we must  assume some prior knowledge or  structure.  In our case, the prior information is that $s$ is a binary signal that satisfies the separation constraint~\eqref{eq:spacing}.  Other settings of blind deconvolution problems have been analyzed recently, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi 016guaranteed} where the focus is on high $\SNR$ regimes. Importantly, in the system identification problem, the goal is only to recover $x$, not the sequence $w$, or in our case, the signal locations $s_i$. We refer to the $s_i$'s as \emph{nuisance parameters}.
 
-Because likelihood methods are computationally expensive, methods based
-on recovery from moments, which are akin to our method, have
-also been previously used for system identification. 
-Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
+%%%An important feature of the problem under consideration is that while both $x_i$'s and $s_i$'s are unknown, the goal is merely to estimate the $x_i$'s. The  $s_i$'s  are referred to as \emph{nuisance  variables}. Indeed, in many blind deconvolution applications the sole purpose is to recover one of the unknown signals. For instance, in image deblurring, both the blurring kernel and the high-resolution image are unknown, but the primary goal is only to sharpen the image.
+
+
+\paragraph{Likelihood-based methods.}
+
+Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
+
+Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
+
+In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
+%
+%%%Interestingly, expectation-maximization (EM)---a popular algorithm for similar estimation problems, such as Gaussian mixture models and multireference alignment---is intractable for this problem. This is true even if  $K=1$ and the number of signal occurrences $M$ is known.
+%
+Indeed, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$.
+In total, even when excluding forbidden combinations due to the spacing constraint, there are $O(N^M)$ such combinations, and the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large.
+
+Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
+
+%
+
+
+
 
 \section{Theory} \label{sec:theory}
 
-A one-dimensional signal is determined uniquely and stably by its third-order autocorrelation as proven in the following simple proposition.
+\paragraph{The impossibility of detection in low $\SNR$.}
+If $x$ is known and $K=1$, then the locations $s_i$ can be estimated via linear programming  in the high $\SNR$ regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see this, suppose that an oracle provides us $M$ windows of length $W>L$, each containing exactly one copy of $x$. Suppose too that the oracle provides us with $x$ itself. That is to say, we get a series of windows of length $W$, each one containing a signal $x$ at an unknown location; and our only task is to estimate the locations. This is an easier problem than detecting the support of $s$. Nevertheless, even this simpler problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Consequently, detecting the nonzero values of $s$ is impossible in low $\SNR$. 
+
+%%%As aforementioned, this work focuses on this regime and examines under what conditions we can estimate the signals, despite the impossibility of detecting their individual occurrences.
+
+%
+
+\paragraph{Estimating a signal from its third-order autocorrelation.}
+
+A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, since $z[0]$ and $z[L-1]$ are non-zero by definition, we have the formula:
+%
+\begin{align} \label{eq-uniqueness}
+%
+z[k] = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
+%
+\end{align}
+
+In particular, we have proven the following proposition:
+
 \begin{proposition} \label{prop:uniqueness}
-	Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then:
-	\begin{itemize}
-		\item \textbf{Uniqueness:} 	 $z$  is determined uniquely from  $a_z^2$ and $a_z^3$.
-		\item \textbf{Finite sensitivity:} 	Suppose we can only measure $\tilde{a_z^3}[k,L-1] = a_z^3[k,L-1]+\upsilon$ and that $\vert z[0]z[L-1]\vert \geq \delta>0$.
-		Then,  $\hat{z}[k] =\frac{\tilde{a_z^3}[k,L-1]}{a_z^2[L-1]} $ satisfies $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\delta}$. 
-	\end{itemize}
-	\begin{proof}
-		By assumption $a_z^2[L-1] = z[0]z[L-1]\neq 0$.
-		Then, the uniqueness results, for all $k=0,\ldots L-1$,  follows from:
-		\begin{equation*}
-		a_z^3[k,L-1] = z[0]z[k]z[L-1].
-		\end{equation*}
-		In addition, 
-		\begin{equation*}
-		\hat{z}[k] = \frac{\tilde{a_z^3}[k,L-1]}{a_z^2[L-1]} = z[k]+\frac{\upsilon}{a_z^2[L-1]} \quad \Rightarrow \quad \vert \hat{z}[k] - {z}[k]\vert \leq \frac{\vert\upsilon\vert}{\delta}.
-		\end{equation*} 
-	\end{proof}
+	%
+	Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then $z$ is determined uniquely from  $a_z^2$ and $a_z^3$.
 \end{proposition}
+
+Some remarks are in order. First, formula \eqref{eq-uniqueness} is not numerically stable if $z[0]$ and/or $z[L-1]$ are close to 0. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares procedures, which is empirically more robust to additive noise; we have seen similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous}.
+
+Second, if the spacing condition~\eqref{eq:spacing} holds, then the length of the signal can be determined from the autocorrelations.
+%%%and therefore the assumption that the first and last entries are nonzero is met.
+In particular, if~\eqref{eq:spacing} holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
+
+
+
+\begin{comment}
+
+%%%Finally, computing the $d$th autocorrelation amplifies the variance of the noise by a factor $d$ in the low $\SNR$ regime. Therefore, if we can estimate $a_z^3$ up to small perturbation, it implies that we can estimate $a_z^2$ accurately as the proposition assumes. 
+
+
+First, the second result of Proposition~\ref{prop:uniqueness} shows that there exists a very simple estimator that has finite sensitivity. In the next numerical experiments we use an estimator based on nonconvex LS that shows empirical robustness to additive noise, in accordance with related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous}. 
+Second, these results carry through to signals of any dimension.
+Third, if the spacing condition~\eqref{eq:spacing} holds, then the length of the signal can be determined from the autocorrelations and 
+therefore the assumption that the first and last entries are nonzero is met. In particular, if~\eqref{eq:spacing} holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
+Finally, computing the $d$th autocorrelation amplifies the variance of the noise by a factor $d$ in the low $\SNR$ regime. Therefore, if we can estimate $a_z^3$ up to small perturbation, it implies that we can estimate $a_z^2$ accurately as the proposition assumes. 
+
+
+
+
+, this uniqueness result holds for signals of any dimension. Third
+
+
+Furthermore,
+as proven in the following simple proposition.
+%
+\begin{proposition} \label{prop:uniqueness}
+%
+Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then $z$ is determined uniquely from  $a_z^2$ and $a_z^3$. More precisely, suppose we can measure $\tilde{a}_z^3[k,L-1] = a_z^3[k,L-1]+\upsilon$ and that $\vert z[0]z[L-1]\vert \geq \delta>0$.
+Then,  $\hat{z}[k] =\frac{\tilde{a}_z^3[k,L-1]}{a_z^2[L-1]} $ satisfies $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\delta}$. 
+
+\end{proposition}
+
+
+\begin{proof}
+%
+By assumption $a_z^2[L-1] = z[0]z[L-1]\neq 0$.
+Then, the uniqueness results, for all $k=0,\ldots L-1$,  follows from:
+%
+\begin{equation*}
+%
+a_z^3[k,L-1] = z[0]z[k]z[L-1].
+%
+\end{equation*}
+%
+In addition, 
+%
+\begin{equation*}
+%
+\hat{z}[k] = \frac{\tilde{a}_z^3[k,L-1]}{a_z^2[L-1]} = z[k]+\frac{\upsilon}{a_z^2[L-1]} \quad \Rightarrow \quad \vert \hat{z}[k] - {z}[k]\vert \leq \frac{\vert\upsilon\vert}{\delta}.
+%
+\end{equation*} 
+%
+\end{proof}
+
+
+
 
 A few remarks are in order. 
 First, the second result of Proposition~\ref{prop:uniqueness} shows that there exists a very simple estimator that has finite sensitivity. In the next numerical experiments we use an estimator based on nonconvex LS that shows empirical robustness to additive noise, in accordance with related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous}. 
@@ -606,23 +760,40 @@ Third, if the spacing condition~\eqref{eq:spacing} holds, then the length of the
 therefore the assumption that the first and last entries are nonzero is met. In particular, if~\eqref{eq:spacing} holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
 Finally, computing the $d$th autocorrelation amplifies the variance of the noise by a factor $d$ in the low $\SNR$ regime. Therefore, if we can estimate $a_z^3$ up to small perturbation, it implies that we can estimate $a_z^2$ accurately as the proposition assumes. 
 
-Considering the third-order autocorrelation is also a necessary condition to determine a signal from its autocorrelations. Indeed, the second-order autocorrelation of a one-dimensional signal does not determine a signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}. On the other hand, for dimensions greater than one, almost all signals are determined uniquely, up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However,  in order to determine the reflection symmetry, one needs to use additional information.
+
+\end{comment}
 
 
-If the noise level $\sigma^2$ is known, one can estimate the ratio $M/N$ from the first two moments.
+Note too that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely~\cite{beinert2015ambiguities,bendory2017fourier}.
+%%%Considering the third-order autocorrelation is also a necessary condition to determine a signal from its autocorrelations. Indeed, the second-order autocorrelation of a one-dimensional signal does not determine a signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}.
+However, for dimensions greater than one, almost all signals are determined uniquely up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
+
+
+\paragraph{Identifiability of parameters from the moments of $y$.}
+
+The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately give the moments of the signal $x$, as seen by formula~\eqref{eq:data_ac_k1}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma = \lim_{N\to\infty}ML/N$, where $M=M_N$ grows with $N$. We will show, however, that $x$ is still identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
+
+First, we observe that if the noise level $\sigma$ is known, one can estimate $\gamma$ from the first two moments of the observed vector $y$.
+%
 \begin{proposition} \label{prop:gamma}
-	Let $K=1$, $N\to\infty$ and $\sigma$ fixed. If the mean of $x$ is nonzero, then 
+	Let $K=1$ and $\sigma > 0$ be fixed. If the mean of $x$ is nonzero, then 
+	%
 	\begin{equation*}
-	\frac{M}{N} = \frac{1}{L}\frac{(a^1_y)^2}{\sum_{j=0}^{L-1}a_y^2[j]-\sigma^2}.
+	%
+	\gamma = \lim_{N \to \infty}\frac{(a^1_y)^2}{\sum_{j=0}^{L-1}a_y^2[j]-\sigma^2} \quad \text{a.s.}
+	%
 	\end{equation*}
-	\begin{proof}
-		The proof follows from plugging the explicit expressions of~\eqref{eq:data_ac_k1} into the right hand side of the equality.
-	\end{proof}
+	%
 \end{proposition}
+\begin{proof}
+	The proof follows from plugging the explicit expressions of~\eqref{eq:data_ac_k1} into the right hand side of the equality.
+\end{proof}
 
-If we use third-order autocorrelation information, then it is possible to estimate both the ratio $M/N$ and $\sigma$ simultaneously.
+Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are identifiable. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that it holds for all $x$ inside a set $\Omega \subset \RL$, whose complement $\RL \setminus \Omega$ has Lebesgue measure zero.
+
 \begin{proposition} \label{prop:gamma_sigma}
-	Let $K=1$, $N\to\infty$ and $\sigma$ fixed. Then, $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $M/N$ and $\sigma$ uniquely for a generic signal $x$. If $\frac{M}{N}\geq\frac{1}{4(L-1)}$, then it holds for any signal with nonzero mean. 
+	%
+	Let $K=1$, and $\sigma > 0$ be fixed. Then, $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma\geq\frac{1}{4L(L-1)}$, then this holds for any signal $x$ with nonzero mean. 
 	\begin{proof}
 		See Appendix~\ref{sec:proof_prop_gamma_sigma}.
 	\end{proof}
@@ -630,43 +801,49 @@ If we use third-order autocorrelation information, then it is possible to estima
 
 From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can directly deduce the following:
 \begin{corollary}
-	Let $K=1$, $N\to\infty$ and $\sigma$ is fixed. Then, the signal, the ratio $M/N$ and $\sigma$ can be recovered from the first three autocorrelation functions if:
+	Let $K=1$ and $\sigma > 0$ be fixed. Then the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are identifiable from the first three autocorrelation functions of $y$ if:
 	\begin{itemize}
-		\item $x$ is generic;
-		\item  $x[0],x[L-1]\neq 0$, $x$ has nonzero mean and $\frac{M}{N}\geq\frac{1}{4(L-1)}$.
+		\item Either the signal $x$ is generic; or
+		\item  Both $x[0]$  and $x[L-1]$ are nonzero, $x$ has nonzero mean, and $\gamma\geq\frac{1}{4L(L-1)}$.
 	\end{itemize}
 \end{corollary}
-
-\paragraph{Expectation-maximization.}
-Interestingly, expectation-maximization (EM)---a popular algorithm for similar estimation problems, such as Gaussian mixture models and multireference alignment---is intractable for this problem. This is true even if  $K=1$ and the number of signal occurrences $M$ is known.
-In particular, in each iteration, EM assigns a probability to any feasible combination of positioning the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$.
-In total, even when excluding forbidden combinations due to the spacing constraint, there are $O(N^M)$ such combinations.
 
 
 \paragraph{Open theoretical questions.}
 
+Our method of estimating $x$ uses the third-order moments of the observations. These empirical moments are used to obtain consistent estimators of population parameters related to the the mean and second- and third-order autocorrelations of $x$, to which we fit the signal $x$. Consequently, the number of signal occurrences $M$ should grow at least as fast as $1/\SNR^3$ to achieve a constant estimation error. In the related problem of multireference alignment~\cite{perry2017sample,abbe2017multireference}, this is optimal in the low $\SNR$ regime; we conjecture that the same is true for our problem.
 
-The minimal order of data statistics used to get an accurate estimation of a signal is important to understand, in the asymptotic $\SNR$ regime, the sample complexity of the problem.
-In methods which are based on detection and averaging, the number of signals occurrences  must scale like $1/\SNR$. On the contrary, the required number signal occurrences using the autocorrelation analysis should scale like $1/\SNR^d$  to retain a constant estimation error. Accordingly, in our  method, $M$ must scale like $1/\SNR^3$. We believe that similarly to the closely-related problem of multirefrence alignment~\cite{perry2017sample,abbe2017multireference}, this estimation rate is optimal in the low $\SNR$ regime.
 
-Another interesting question is how many signals can be demixed from the autocorrelation functions.
-For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose, and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements---there are $\frac{(L-1)(L-2)}{2}$ remaining moments. As a result, it is unnecessary to estimate $\sigma$. We have 
+
+Another interesting question is how many signals $x_1,\dots,x_K$ can be demixed from their mixed autocorrelation functions. In~\cite{boumal2017heterogeneous}, we empirically observed that $K \sim \sqrt{L}$ signals can be estimated simultaneously from their mixed second- and third-order autocorrelations, using the least-squares procedure. In~\cite{weinthesis} [TKTK: add reference to Alex Wein's thesis, or put personal correspondence], this result is shown theoretically for a different, and much less efficient, algorithm. In our current setting, the additional parameters $\gamma$ and $\sigma$ make the problem more challenging; however, we conjecture that the number of estimable signals still grows like $\sqrt{L}$.
+
+%%%That being said, we conjecture that the number of signals that can be demixed by an efficient algorithm is significantly smaller, and scales like $\sqrt{L}$; see~\cite{boumal2017heterogeneous,weinthesis} [TKTK: reference for missing Wein's thesis].
+
+
+%%% We conjecture that similarly to the 
+
+
+%%%In methods which are based on detection and averaging, the number of signals occurrences  must scale like $1/\SNR$. 
+
+\begin{comment}
+
+Another interesting question is how many signals $x_1,\dots,x_K$ can be demixed from their mixed autocorrelation functions. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose, and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements---there are $\frac{(L-1)(L-2)}{2}$ remaining moments. As a result, it is unnecessary to estimate $\sigma$. We have 
 \begin{align*}
 1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1 \approx L/2,
 \end{align*}
 moments in total.
 
-In the related problem of demixing signals from their periodic autocorrelation functions, there are strong evidences that the number of signals that, theoretically, can be demixed is equal to the number of different equations~\cite{bandeira2017estimation}. Based on these evidence, we conjecture the same here, namely, $L/2$ signals can be estimated simultaneously.  That being said, we believe the number of classed that can actually be demixed by efficient algorithm is significantly smaller  and scale like $\sqrt{L}$; see~\cite{boumal2017heterogeneous,weinthesis}.
+In the related problem of demixing signals from their periodic autocorrelation functions, there is evidence that the number of identifiable signals is equal to the number of different equations~\cite{bandeira2017estimation}. Based on this, we conjecture that the same phenomenon holds here as well, namely that $L/2$ signals are identifiable.  That being said, we conjecture that the number of signals that can be demixed by an efficient algorithm is significantly smaller, and scales like $\sqrt{L}$; see~\cite{boumal2017heterogeneous,weinthesis} [TKTK: reference for missing Wein's thesis].
+
+\end{comment}
+
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
-We aim to prove that one can estimate both $\sigma$ and $\beta = M/N$ from the observed first three moments.
-To this end, we construct two quadratic equations of $\beta$ from the observed (measured) quantities, independent of $\sigma$.
-Then, we show that these equations are independent and therefore $\beta$ is uniquely defined. 
-Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
-Throughout the proof, it is important to distinguish between observed and unobserved values. 
-to this end, we denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$, while using $F_i$ for functions of the signal's autocorrelations. 
+We will prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we will work with $\beta = \gamma / L$ rather than $\gamma$ itself. We will construct two quadratic equations satisfied by $\beta$ from observed quantities, independent of $\sigma$. Then, we will show that these equations are independent, and hence that $\beta$ is uniquely defined.  Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
 
+Throughout the proof, it is important to distinguish between observed and unobserved values. 
+We denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$, while using $F_i$ for functions of the signal's autocorrelations. 
 
 Recall that $a_y^1 = \beta(\one^Tx)$ and  
 and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ stands for vector of ones. Taking the product:
@@ -674,7 +851,7 @@ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ stands for vector of 
 \begin{split}
 E_1 &:= a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2) \\
 & = \sigma^2a_y^1 + \beta^2F_1,
- \end{split}
+\end{split}
 \end{equation}
 where $F_1 := a_x^3[0,0] + \sum_{j=1}^{L-1}(a_x^3[j,j] + a_x^3[0,j])$. 
 The terms of $F_1$ can be also estimated from $a_y^3$, while taking the scaling and bias terms into account:
@@ -758,7 +935,6 @@ More than that, for any nonzero $x$, $(a_x^1)^2 >\sum_{i=1}^{L-1} a_x^2[i]$. The
 \beta \geq \frac{1}{4(L-1)},
 \end{equation*}
 the condition~\eqref{eq:cond} cannot be satisfied for any signal. 
-
 
 
 
