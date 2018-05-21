@@ -113,6 +113,13 @@ In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it
 
 In this paper, we argue that there is a gap between the two questions in the quoted excerpt above, and that one may be able to exploit it. Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction. This can be understood from a statistical point of view by counting the number of parameters that one aims to estimate. For a given target resolution, the number of parameters required to describe the 3-D model of the molecule is fixed: it does not depend on the amount of data collected. In contrast, particle picking involves estimation of several so-called nuisance parameters for each projection present in the micrographs, such as their locations for example. To overcome low $\SNR$s, the ratio of data to parameters must increase. This is impossible if the number of parameters grows with the amount of data collected, but not so if the number of parameters remains fixed. Simply put, the key is to bypass the particle picking stage. %Thus, acquiring more data does not necessarily allow to improve the particle picking stage, whereas it should in principle allow to improve the molecule reconstruction.
 
+\TODO{Paragraph about the simplified model + moments approach + announce the results}
+
+\TODO{Paragraph about bias; can also mention computational aspects (single pass, etc.)}
+
+\TODO{Already mention challenges? I think it's a good place.}
+
+\clearpage
 
 The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
 In this experiment, the image of Einstein is correlated with multiple images of pure noise. The noisy images are aligned to Einstein's image using cross-correlation and then averaged. 
