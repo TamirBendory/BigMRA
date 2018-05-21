@@ -80,7 +80,7 @@
 
 \begin{document}
 
-\title{Toward single particle reconstruction without particle picking}
+\title{Toward single particle reconstruction without particle picking: Breaking the detection limit}
 
 
 \author{Tamir Bendory, Nicolas Boumal, William Leeb and Amit Singer}
@@ -97,22 +97,21 @@ Cryo--electron microscopy (cryo--EM) is an innovative technology for single part
 %; see for instance~\cite{kuhlbrandt2014resolution,bartesaghi20152,smith2014beyond}.
 %This technological advancement was recognized by the 2017 Nobel Prize in Chemistry~\cite{nobel}. 
 % 
-In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice. Within the ice, the molecules are randomly oriented and positioned. The microscope produces a 2D image of the samples embedded in the ice called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions.
+In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice. Within the ice, the molecules are randomly oriented and positioned. The microscope produces a 2D image of the samples embedded in the ice called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecules from the micrographs.
 
-The signal to noise ratio ($\SNR$) of the projections in the micrographs is a function of two dominating factors. On the one hand, the $\SNR$ is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the $\SNR$ is a function of the molecule size. The smaller the molecule, the fewer detected electrons carry information about the sample.
+The signal to noise ratio ($\SNR$) of the projections in the micrographs is a function of two dominating factors. On the one hand, the $\SNR$ is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the $\SNR$ is a function of the molecule size. The smaller the molecules, the fewer detected electrons carry information about them.
 
 %\paragraph{Particle picking.}
 All contemporary methods in the field split the reconstruction procedure in several stages.
-The first stage consists in extracting the various particle projections from the micrographs. This is called \emph{particle picking}. Ulterior stages aim to construct a 3-D model of the molecule from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. As can be seen from Figure~\ref{fig:micro_example}, locating the particles becomes increasingly challenging as the $\SNR$ degrades. Crucially, it can be shown that detection of individual particles is impossible below a certain critical $\SNR$---\TODO{ref}.
+The first stage consists in extracting the various particle projections from the micrographs. This is called \emph{particle picking}. Ulterior stages aim to construct a 3-D model of the molecule from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. As can be seen from Figure~\ref{fig:micro_example}, locating the particles becomes increasingly challenging as the $\SNR$ degrades.
 
-
-This fact has been recognized early on by the cryo-EM community. In particular, in a highly cited paper from 1995, Henderson~\cite{henderson1995limitations} investigates the following questions:
+Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical $\SNR$. This fact has been recognized early on by the cryo-EM community. In particular, in a highly cited paper from 1995, Henderson~\cite{henderson1995limitations} investigates the following questions:
 \begin{quote}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{quote}
-In this paper and in others that followed~[gaebner?], it was established that particle picking is impossible for molecules below a certain weight. This has been widely understood as meaning that SPR itself is impossible for such molecules, as exemplified by recent literature~[lots of things here.]
+In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight. This has often been understood as meaning that particle reconstruction itself is impossible for such molecules~\cite{khoshouei2017cryo,liu2018nearatomic,liang2017phase}. \TODO{This list may be unfair, as some of these papers (in particular, \cite{liang2017phase}) just state that small molecules are very challenging, which is true.}
 
-In this paper, we argue that there is a gap between the two questions in the quoted excerpt above. Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction. This can be understood from a statistical point of view by counting the number of parameters that one aims to estimate. For a given target resolution, the number of parameters required to describe the 3-D model of the molecule is fixed: it does not depend on the amount of data collected. In contrast, particle picking involves estimation of several so-called nuisance parameters for each projection present in the micrographs, such as their locations for example. Thus, acquiring more data does not necessarily allow to improve the particle picking stage, whereas it should in principle allow to improve the molecule reconstruction.
+In this paper, we argue that there is a gap between the two questions in the quoted excerpt above, and that one may be able to exploit it. Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction. This can be understood from a statistical point of view by counting the number of parameters that one aims to estimate. For a given target resolution, the number of parameters required to describe the 3-D model of the molecule is fixed: it does not depend on the amount of data collected. In contrast, particle picking involves estimation of several so-called nuisance parameters for each projection present in the micrographs, such as their locations for example. To overcome low $\SNR$s, the ratio of data to parameters must increase. This is impossible if the number of parameters grows with the amount of data collected, but not so if the number of parameters remains fixed. Simply put, the key is to bypass the particle picking stage. %Thus, acquiring more data does not necessarily allow to improve the particle picking stage, whereas it should in principle allow to improve the molecule reconstruction.
 
 
 The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
