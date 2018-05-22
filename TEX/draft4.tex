@@ -92,7 +92,7 @@
 
 \section{Introduction}
 
-Cryo--electron microscopy (cryo--EM) is an innovative technology for single particle reconstruction (SPR) of macromolecules. 
+\TODO{Revise--Cryo--electron microscopy (cryo--EM) is an innovative technology for single particle reconstruction (SPR) of macromolecules.} 
 %In recent years, structures of many molecules, previously regarded as insurmountable, are now being reconstructed to near-atomic resolution
 %; see for instance~\cite{kuhlbrandt2014resolution,bartesaghi20152,smith2014beyond}.
 %This technological advancement was recognized by the 2017 Nobel Prize in Chemistry~\cite{nobel}. 
@@ -103,21 +103,35 @@ The signal to noise ratio ($\SNR$) of the projections in the micrographs is a fu
 
 %\paragraph{Particle picking.}
 All contemporary methods in the field split the reconstruction procedure in several stages.
-The first stage consists in extracting the various particle projections from the micrographs. This is called \emph{particle picking}. Ulterior stages aim to construct a 3-D model of the molecule from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. As can be seen from Figure~\ref{fig:micro_example}, locating the particles becomes increasingly challenging as the $\SNR$ degrades.
+The first stage consists in extracting the various particle projections from the micrographs. This is called \emph{particle picking}. Later stages aim to construct a 3-D model of the molecule from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. As can be seen from Figure~\ref{fig:micro_example}, locating the particles becomes increasingly challenging as the $\SNR$ degrades.
 
 Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical $\SNR$. This fact has been recognized early on by the cryo-EM community. In particular, in a highly cited paper from 1995, Henderson~\cite{henderson1995limitations} investigates the following questions:
 \begin{quote}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{quote}
-In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight. This has often been understood as meaning that particle reconstruction itself is impossible for such molecules~\cite{khoshouei2017cryo,liu2018nearatomic,liang2017phase}. \TODO{This list may be unfair, as some of these papers (in particular, \cite{liang2017phase}) just state that small molecules are very challenging, which is true.}
+In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight.
+%This has often been understood as meaning that particle reconstruction itself is impossible for such molecules~\cite{khoshouei2017cryo,liu2018nearatomic,liang2017phase}. \TODO{This list may be unfair, as some of these papers (in particular, \cite{liang2017phase}) just state that small molecules are very challenging, which is true.}
+As a result, it is impossible to reconstruct such small molecules by any of the existing computational pipelines for single particle analysis, as the particles themselves cannot be picked from the micrographs.
+%
+%\TODO{either here, or in a close neighborhood of this paragraph you should mention the advances that the field has made in recent years towards reconstruction of small size molecules: mention Volta phase plate and the scaffolding cage (and cite the papers I sent you).}
+This has motivated recent technical advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
+%
+%
+Despite this progress, detecting small molecules in the micrographs remains a challenge. 
 
-In this paper, we argue that there is a gap between the two questions in the quoted excerpt above, and that one may be able to exploit it. Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction. This can be understood from a statistical point of view by counting the number of parameters that one aims to estimate. For a given target resolution, the number of parameters required to describe the 3-D model of the molecule is fixed: it does not depend on the amount of data collected. In contrast, particle picking involves estimation of several so-called nuisance parameters for each projection present in the micrographs, such as their locations for example. To overcome low $\SNR$s, the ratio of data to parameters must increase. This is impossible if the number of parameters grows with the amount of data collected, but not so if the number of parameters remains fixed. Simply put, the key is to bypass the particle picking stage. %Thus, acquiring more data does not necessarily allow to improve the particle picking stage, whereas it should in principle allow to improve the molecule reconstruction.
+In this paper, we argue that there is a gap between the two questions in the quoted excerpt above, and that one may be able to exploit it to design better reconstruction algorithms.
+Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction.
+%This can be understood from a statistical point of view by counting the number of parameters that one aims to estimate. \TODO{For a given target resolution, the number of parameters required to describe the 3-D model of the molecule is fixed: it does not depend on the amount of data collected. In contrast, particle picking involves estimation of several so-called nuisance parameters for each projection present in the micrographs, such as their locations for example. To overcome low $\SNR$s, the ratio of data to parameters must increase. This is impossible if the number of parameters grows with the amount of data collected, but not so if the number of parameters remains fixed. Simply put, the key is to bypass the particle picking stage.}
+%%Thus, acquiring more data does not necessarily allow to improve the particle picking stage, whereas it should in principle allow to improve the molecule reconstruction.
+%%Indeed, the signal itself (the many different views of the molecule) is still present in the micrograph: 
+%Indeed, in principle at least, the micrograph does contain the necessary information (several views of the molecule(s) of interest). While we may not be able to locate these views, we may still be able to extract the relevant information through other means.
+Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that, by bypassing particle picking, one can, in principle, \TODO{reconstruct arbitrarily small molecules.}
 
 \TODO{Paragraph about the simplified model + moments approach + announce the results}
 
 \TODO{Paragraph about bias; can also mention computational aspects (single pass, etc.)}
 
-\TODO{Already mention challenges? I think it's a good place.}
+%\TODO{Already mention challenges? I think it's a good place.} -- no, not here: in conclusion
 
 \clearpage
 
