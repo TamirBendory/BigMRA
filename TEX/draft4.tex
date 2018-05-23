@@ -231,13 +231,13 @@ Another interesting feature of the described approach pertains to model bias, wh
 %This method requires only one pass over the data and can recover the signals in any $\SNR$, if the signals appear enough times in the data. As a side note, we mention that expectation-maximization---a popular framework in SPR---is intractable for this problem (see Appendix~\ref{sec:theory}  for more details). 
 
 
-\paragraph{Model bias.} The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
-In this experiment, the image of Einstein is correlated with multiple images of pure noise. The noisy images are aligned to Einstein's image using cross-correlation and then averaged. 
-In~\cite{shatsky2009method}, it was shown that with merely  1000 noise images, the averaged image is remarkably similar to the template image of Einstein rather than to pure noise.
+%\paragraph{Model bias.} The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
+%In this experiment, the image of Einstein is correlated with multiple images of pure noise. The noisy images are aligned to Einstein's image using cross-correlation and then averaged. 
+%In~\cite{shatsky2009method}, it was shown that with merely  1000 noise images, the averaged image is remarkably similar to the template image of Einstein rather than to pure noise.
 %In Figure~\ref{fig:EinsteinFromNoise} we conducted this experiment with different number of noise images. With merely 1000 noise images, Einstein's face is clearly observed in the averaged image. With $10,000$  image, the output is remarkably similar to the template image of Einstein rather than to pure noise. Crucially, the more noisy images we use, the more severe the model bias towards the template. 
-In the context of cryo--EM, this example demonstrates how our prior assumptions about the particle may influence the reconstructed structure.
-This true in general to any method which is based on template matching.
-\TODO{Do we have a nice experiment to exemplify the phenomenon?}
+%In the context of cryo--EM, this example demonstrates how our prior assumptions about the particle may influence the reconstructed structure.
+%This true in general to any method which is based on template matching.
+%\TODO{Do we have a nice experiment to exemplify the phenomenon?}
 
 
 \section{Results} \label{sec:results}
@@ -281,7 +281,7 @@ As expected, the RMSE of estimating the power spectrum   decreases linearly with
 		\includegraphics[scale=0.3]{reconstruction200}
 		\caption{$P = 1024\times 100$}
 	\end{subfigure}%
-	\caption{\label{fig:Einst_example} Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton in the left panel. We show estimations of Einstein using $P=1024,1024\times 10$ and $1024\times 100$ number of micrographs, each contains $700$ image occurrences on average and the $\SNR$ is $1/20$. The signal's estimation RMSE is $0.5514$, $0.3494$ and $0.2112$, respectively. The power spectrum estimation RMSE is, respectively, $0.0269 $, $0.0083$ and $0.0027$. \TODO{Can add more images to exemplify the progress}\TODO{Resolution of Newton too high?}}	
+	\caption{\label{fig:Einst_example} \TODO{Caption and image not yet revised} Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton in the left panel. We show estimations of Einstein using $P=1024,1024\times 10$ and $1024\times 100$ number of micrographs, each contains $700$ image occurrences on average and the $\SNR$ is $1/20$. The signal's estimation RMSE is $0.5514$, $0.3494$ and $0.2112$, respectively. The power spectrum estimation RMSE is, respectively, $0.0269 $, $0.0083$ and $0.0027$. \TODO{Can add more images to exemplify the progress}\TODO{Resolution of Newton too high?}}	
 \end{figure}
 
 
