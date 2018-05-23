@@ -125,9 +125,17 @@ Specifically, the impossibility of particle picking does not necessarily imply i
 %%Thus, acquiring more data does not necessarily allow to improve the particle picking stage, whereas it should in principle allow to improve the molecule reconstruction.
 %%Indeed, the signal itself (the many different views of the molecule) is still present in the micrograph: 
 %Indeed, in principle at least, the micrograph does contain the necessary information (several views of the molecule(s) of interest). While we may not be able to locate these views, we may still be able to extract the relevant information through other means.
-Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that, by bypassing particle picking, one can, in principle, \TODO{reconstruct arbitrarily small molecules.}
+Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle packing imposes on molecule size do not translate into limits on particle reconstruction.
 
-\TODO{Paragraph about the simplified model + moments approach + announce the results}
+%\TODO{Paragraph about the simplified model}
+As a proof of concept \TODO{To support our point?}, we study a simplified model where an unknown image appears numerous times at unknown locations in several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
+The goal is to estimate the planted image. The task is interesting in particular when the $\SNR$ is low enough that particle picking cannot be done reliably.
+%Figure~\ref{fig:Einst_example} displays the results of our method, detailed in Section~\ref{sec:results}.
+A precise mathematical formulation of the model, including an extension where more than one planted images are to be recovered, is provided in Section~\ref{sec:methods}.
+To be clear, we do not consider here many prominent features of real SPR experiments and do not aim to reconstruct any 3-D structure. Instead, we solve a simpler problem that we believe captures key elements of the SPR problem. We note that similar models emerge in spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
+
+\TODO{moments approach + announce the results}
+
 
 \TODO{Paragraph about bias; can also mention computational aspects (single pass, etc.)}
 
@@ -135,13 +143,7 @@ Indeed, the aim is only to reconstruct the molecule: estimating the locations of
 
 \clearpage
 
-The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
-In this experiment, the image of Einstein is correlated with multiple images of pure noise. The noisy images are aligned to Einstein's image using cross-correlation and then averaged. 
-In~\cite{shatsky2009method}, it was shown that with merely  1000 noise images, the averaged image is remarkably similar to the template image of Einstein rather than to pure noise.
-%In Figure~\ref{fig:EinsteinFromNoise} we conducted this experiment with different number of noise images. With merely 1000 noise images, Einstein's face is clearly observed in the averaged image. With $10,000$  image, the output is remarkably similar to the template image of Einstein rather than to pure noise. Crucially, the more noisy images we use, the more severe the model bias towards the template. 
-In the context of cryo--EM, this example demonstrates how our prior assumptions about the particle may influence the reconstructed structure.
-This true in general to any method which is based on template matching.
-\TODO{Do we have a nice experiment to exemplify the phenomenon?}
+
 
 %\begin{figure}[h!]
 %	\centering
@@ -180,23 +182,18 @@ This true in general to any method which is based on template matching.
 %\caption{\label{fig:EinsteinFromNoise} Einstein from noise experiment. As a template, we used Einstein's image of size $50\times 50$ pixels. We drawn $n$ images of the same size whose entries are composed of i.i.d.\ Gaussian entries with the same mean and variance as Einstein's image. Each noise image was aligned with respect to the template by the maximal value of their cross correlation. After the alignment, all the images were averaged. As can be seen, the more pure noise images we use, the closer the averaged image to the template.   }	
 %\end{figure}
 
-Besides the model bias, particle pickers have several limitations due to the high noise level, in particular for small particles and in low contrast. 
-As a result, the projections in the 2D images are typically not centered; including the correct centers as parameters dramatically increases the complexity of reconstruction algorithms.
+%Besides the model bias, particle pickers have several limitations due to the high noise level, in particular for small particles and in low contrast. 
+%As a result, the projections in the 2D images are typically not centered; including the correct centers as parameters dramatically increases the complexity of reconstruction algorithms.
 %In addition, the information from particles that are too close to each other is usually neglected. Hence, valuable information that can be harnessed is omitted. 
 
-\paragraph{Simplified model for SPR} In this paper, we present a preliminary study that aims to show that estimating a particle 
-directly from the micrograph, without identifying the location of individual particle images in the micrograph, might be possible. 
+%\paragraph{Simplified model for SPR}
 
-In particular, we consider the toy problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown  locations in a noisy data sequence $y$. Here, $y$ plays the role of the micrograph and the $K$ signals can be thought of as $K$ different viewing directions of the particle, each of which  appears multiple times in the micrograph. 
-A precise mathematical formulation of the model and the estimation problem is provided in Section~\ref{sec:methods}.
-To be clear, we do not consider here many prominent features of real SPR experiments and do not aim to reconstruct any 3-D structure; instead, we solve a simpler problem that we believe captures key elements of the true SPR problem. We also mention in passing that similar models emerge in different scientific fields, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
+%In this paper, we present a preliminary study that aims to show that estimating a particle 
+%directly from the micrograph, without identifying the location of individual particle images in the micrograph, might be possible. 
 
-Figure~\ref{fig:micro_example} shows a simple example of our problem with  one signal ($K=1$). 
-Each panel demonstrates an image of size $250\times 250$, containing 4 occurrences of an Einstein image of size $50\times 50$. 
-The left panel shows the data without noise. In the middle panel,  i.i.d.\ Gaussian noise with standard deviation $\sigma=0.5$  was added, however,  Einstein is still easily identified. In this scenario it is likely that standard detection algorithms can locate the copies of the signal within the micrograph. In the right panel, we show the same data swamped in  
-i.i.d.\ Gaussian noise with standard deviation  $\sigma=3$.
-Clearly, identifying the locations of Einstein in this micrograph is much more challenging. In fact, it can be shown that in the low signal--to--noise ($\SNR$) regime, 
-detection  of individual image occurrences is impossible---even if the true image is known---and therefore particle picking is impossible.  This phenomenon is explained in detail in Appendix~\ref{sec:theory}.
+%In particular, we consider the toy problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown  locations in a noisy data sequence $y$. Here, $y$ plays the role of the micrograph and the $K$ signals can be thought of as $K$ different viewing directions of the particle, each of which  appears multiple times in the micrograph. 
+%A precise mathematical formulation of the model and the estimation problem is provided in Section~\ref{sec:methods}.
+%To be clear, we do not consider here many prominent features of real SPR experiments and do not aim to reconstruct any 3-D structure; instead, we solve a simpler problem that we believe captures key elements of the true SPR problem. We also mention in passing that similar models emerge in different scientific fields, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
 
 \begin{figure}[h!]
 	\centering
@@ -215,7 +212,12 @@ detection  of individual image occurrences is impossible---even if the true imag
 		\includegraphics[scale=0.5]{micrograph_Einstein_example_s3}
 		\caption{$\sigma = 3$}
 	\end{subfigure}
-	\caption{\label{fig:micro_example} Example of data sequences (micrographs) of size $250\times 250$ with additive i.i.d.\ Gaussian noise with variance $\sigma^2$. Each micrograph contains four occurrences of a $50 \times 50$ image of Einstein.}	
+	\caption{\label{fig:micro_example} Example of data sequences (micrographs) of size $250\times 250$ with additive i.i.d.\ Gaussian noise with variance $\sigma^2$. Each micrograph contains four occurrences of a $50 \times 50$ image of Einstein. Figure~\ref{fig:micro_example} shows a simple example of our problem with  one signal ($K=1$). 
+		Each panel demonstrates an image of size $250\times 250$, containing 4 occurrences of an Einstein image of size $50\times 50$. 
+		The left panel shows the data without noise. In the middle panel,  i.i.d.\ Gaussian noise with standard deviation $\sigma=0.5$  was added, however,  Einstein is still easily identified. In this scenario it is likely that standard detection algorithms can locate the copies of the signal within the micrograph. In the right panel, we show the same data swamped in  
+		i.i.d.\ Gaussian noise with standard deviation  $\sigma=3$.
+		Clearly, identifying the locations of Einstein in this micrograph is much more challenging. In fact, it can be shown that in the low signal--to--noise ($\SNR$) regime, 
+		detection  of individual image occurrences is impossible---even if the true image is known---and therefore particle picking is impossible.  This phenomenon is explained in detail in Appendix~\ref{sec:theory}.}	
 \end{figure}
 
 
@@ -226,7 +228,17 @@ In a nutshell, the method consists of two stages. First, we estimate a mixture (
 In the second stage, the signals are estimated from the mixed autocorrelations using a nonconvex least-squares (LS) algorithm or a phase retrieval algorithm; see Section~\ref{sec:methods} for details.
 This method requires only one pass over the data and can recover the signals in any $\SNR$, if the signals appear enough times in the data. As a side note, we mention that expectation-maximization---a popular framework in SPR---is intractable for this problem (see Appendix~\ref{sec:theory}  for more details). 
 
-\section{Results}
+
+\paragraph{Model bias.} The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
+In this experiment, the image of Einstein is correlated with multiple images of pure noise. The noisy images are aligned to Einstein's image using cross-correlation and then averaged. 
+In~\cite{shatsky2009method}, it was shown that with merely  1000 noise images, the averaged image is remarkably similar to the template image of Einstein rather than to pure noise.
+%In Figure~\ref{fig:EinsteinFromNoise} we conducted this experiment with different number of noise images. With merely 1000 noise images, Einstein's face is clearly observed in the averaged image. With $10,000$  image, the output is remarkably similar to the template image of Einstein rather than to pure noise. Crucially, the more noisy images we use, the more severe the model bias towards the template. 
+In the context of cryo--EM, this example demonstrates how our prior assumptions about the particle may influence the reconstructed structure.
+This true in general to any method which is based on template matching.
+\TODO{Do we have a nice experiment to exemplify the phenomenon?}
+
+
+\section{Results} \label{sec:results}
 
 In this section we describe  some numerical experiments and show results. The experimental details and the algorithms are discussed at length in Section~\ref{sec:methods}.
 
@@ -267,7 +279,7 @@ As expected, the RMSE of estimating the power spectrum   decreases linearly with
 		\includegraphics[scale=0.3]{reconstruction200}
 		\caption{$P = 1024\times 100$}
 	\end{subfigure}%
-	\caption{\label{fig:Einst_example} Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton in the left panel. We show estimations of Einstein using $P=1024,1024\times 10$ and $1024\times 100$ number of micrographs, each contains $700$ image occurrences on average and the $\SNR$ is $1/20$. The signal's estimation RMSE is $0.5514$, $0.3494$ and $0.2112$, respectively. The power spectrum estimation RMSE is, respectively, $0.0269 $, $0.0083$ and $0.0027$. \TODO{Can add more images to exemplify the progress}}	
+	\caption{\label{fig:Einst_example} Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton in the left panel. We show estimations of Einstein using $P=1024,1024\times 10$ and $1024\times 100$ number of micrographs, each contains $700$ image occurrences on average and the $\SNR$ is $1/20$. The signal's estimation RMSE is $0.5514$, $0.3494$ and $0.2112$, respectively. The power spectrum estimation RMSE is, respectively, $0.0269 $, $0.0083$ and $0.0027$. \TODO{Can add more images to exemplify the progress}\TODO{Resolution of Newton too high?}}	
 \end{figure}
 
 
@@ -666,6 +678,7 @@ y = x\ast w + \varepsilon,
 where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
 %The problem has also been studied in the case of a known input $w$~\cite{pillonetto2010new,dinuzzo2015kernels,bottegal2016robust}. 
 The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w\in\{0,1\}^N$, satisfying the spacing requirement~\eqref{eq:spacing}, we obtain our model in the  case of a single signal ($K = 1$). The same observation model is used for blind deconvolution, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+\TODO{ref this by Giannakis: \cite{giannakis1989identification}}
 
 %%%To make the problem well-posed, we must  assume some prior knowledge or  structure.  In our case, the prior information is that $s$ is a binary signal that satisfies the separation constraint~\eqref{eq:spacing}.  Other settings of blind deconvolution problems have been analyzed recently, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi 016guaranteed} where the focus is on high $\SNR$ regimes. Importantly, in the system identification problem, the goal is only to recover $x$, not the sequence $w$, or in our case, the signal locations $s_i$. We refer to the $s_i$'s as \emph{nuisance parameters}.
 
@@ -995,22 +1008,20 @@ P_\omega(k,\phi)  = \sum_{\ell=0}^{L} \sum_{m=-\ell}^{\ell} A_{\ell,m}(k)
 \end{equation}
 
 Next, we want to relate the projections $P_\omega$ with the autocorrelation functions computed from the micrograph.
-For simplicity, we ignore noise affects and assume that the projections are sufficiently separated.
-The $(\Delta_x,\Delta_y)$ entry of the second-order autocorrelation of the micrograph is equal, up to a constant that depends on the number of projections, to
+We assume the projections are sufficiently separated so that the $(\Delta_x,\Delta_y)$ entry of the second-order autocorrelation of the micrograph is proportional to:
 \begin{equation}
-M_2(\Delta_x,\Delta_y) \propto \sum_{n=1}^N \sum_{x,y}P_n(x,y)P_n(x+\Delta_x,y+\Delta_y),
+	M_2(\Delta_x, \Delta_y) \propto \sum_{n=1}^N \sum_{x,y}P_n(x,y)P_n(x+\Delta_x,y+\Delta_y) + \textrm{bias},
 \end{equation}
-where $P_n$ denotes the $n$th projection. By taking $n\to\infty$ and assuming uniform distribution of viewing directions, we get 
+where $P_n$ denotes the $n$th projection. The assumption here is that $(\Delta_x, \Delta_y)$ are small enough so that, in computing the auto-correlation, points $(x, y)$ and $(x+\Delta_x, y+\Delta_y)$ do not touch distinct particles. By taking $n\to\infty$ and assuming uniform distribution of viewing directions, we get 
 \begin{equation}
 M_2(\Delta_x,\Delta_y)\propto\sum_{x,y}\int_{\omega} P_\omega(x,y)P_\omega(x+\Delta_x,y+\Delta_y)d\omega.
 \end{equation}
 In the same way and under the same conditions, the third moment is given by 
 \begin{equation} 
-M_3(\Delta_x^1,\Delta_y^1;\Delta_x^2,\Delta_y^2) \propto \sum_{x,y}\int_{\omega} P_\omega(x,y)P_\omega(x+\Delta_x^1,y+\Delta_y^1)P_\omega(x+\Delta_x^2,y+\Delta_y^2)d\omega.
+M_3(\Delta_x^1,\Delta_y^1;\Delta_x^2,\Delta_y^2) \propto \sum_{x,y}\int_{\omega} P_\omega(x,y)P_\omega(x+\Delta_x^1,y+\Delta_y^1)P_\omega(x+\Delta_x^2,y+\Delta_y^2)d\omega + \textrm{bias}.
 \end{equation}
 
-In order to determine the particle, by~\eqref{eq:volume} one needs to estimate an order of $L^3$ spherical harmonics coefficients.
-If the pixel size is proportional to $1/L$ (to match the volume's resolution), then $M_3$ provides an order of $L^4$ equations of $P_\omega$ which depends (after coordinate transformation) linearly in the spherical harmonic coefficients through~\eqref{eq:P}. 
+In order to determine the particle, by~\eqref{eq:volume} one needs to estimate on the order of $L^3$ spherical harmonics coefficients. If the pixel size is proportional to $1/L$ (to match the volume's resolution), then $M_3$ provides on the order of $L^4$ equations involving triple products of $P_\omega$. Since $P_\omega$ depends (after coordinate transformation) linearly in the spherical harmonic coefficients through~\eqref{eq:P}, this means we have a system of $\sim L^4$ cubic equations in the $\sim L^3$ sought parameters. Importantly, the coefficients of these equations can be estimated from the micrographs directly, without particle picking stage.
 
 
 \end{document}
