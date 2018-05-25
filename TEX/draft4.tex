@@ -117,7 +117,7 @@ As a result, it is impossible to reconstruct such small molecules by any of the 
 This has motivated recent technical advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
 %
 %
-Despite this progress, detecting small molecules in the micrographs remains a challenge. 
+Despite this progress, detecting small molecules (below 50 kDa) in the micrographs remains a challenge. 
 
 In this paper, we argue that there is a gap between the two questions in the quoted excerpt above, and that one may be able to exploit it to design better reconstruction algorithms.
 Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction.
@@ -128,7 +128,7 @@ Specifically, the impossibility of particle picking does not necessarily imply i
 Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle packing imposes on molecule size do not translate into limits on particle reconstruction.
 
 %\TODO{Paragraph about the simplified model}
-As a proof of concept \TODO{To support our point?}, we study a simplified model where an unknown image appears numerous times at unknown locations in several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
+As a proof of concept, we study a simplified model where an unknown image appears numerous times at unknown locations in several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
 The goal is to estimate the planted image. The task is interesting in particular when the $\SNR$ is low enough that particle picking cannot be done reliably.
 %Figure~\ref{fig:Einst_example} displays the results of our method, detailed in Section~\ref{sec:results}.
 A precise mathematical formulation of the model, including an extension where more than one planted images are to be recovered, is provided in Section~\ref{sec:methods}.
@@ -138,10 +138,7 @@ In order to recover the planted image, we use autocorrelation analysis. In a nut
 %To do so, we assume the image occurrences are well separated.
 For any noise level, these autocorrelations can be estimated to any desired accuracy provided individual occurrences of the image are well separated and the image appears sufficiently many times in the micrographs. Importantly, there is no need to detect individual occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. These directly yield estimates for the autocorrelations of the image. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem via least-squares or a phase retrieval algorithm; see Figure~\ref{fig:Einst_example} for an illustration and Section~\ref{sec:methods} for details. As a side note, we mention that expectation-maximization (EM)---a popular framework in SPR---is intractable for this problem; see Appendix~\ref{sec:theory} for a discussion.
 
-Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using cross-correlation and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates are required.
-
-
-\TODO{What about this one? \cite{vanheel1992correlation}}
+Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{vanheel1992correlation,shatsky2009method,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using cross-correlation and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates are required.
 
 
 %\TODO{Paragraph about bias; can also mention computational aspects (single pass, etc.)}

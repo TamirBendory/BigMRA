@@ -35,10 +35,10 @@
 \makeatletter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
-\numberwithin{equation}{section}
+%\numberwithin{equation}{section}
 %\numberwithin{figure}{section}
 \theoremstyle{plain}
-\newtheorem{thm}{\protect\theoremname}[section]
+\newtheorem{thm}{\protect\theoremname}
 \theoremstyle{definition}
 \newtheorem{defn}[thm]{\protect\definitionname}
 \theoremstyle{remark}
@@ -88,11 +88,11 @@
 
 
 
-The 3-D Fourier transform of an L-bandlimited 3-D volume (e.g., particle) can be expanded by  spherical harmonics:
+The 3-D Fourier transform of an L-bandlimited 3-D volume (e.g., particle) can be expanded into spherical harmonics:
 \begin{equation} \label{eq:volume}
 \hat{V}(k,\theta,\phi)  = \sum_{\ell=0}^{L} \sum_{m=-\ell}^{\ell} A_{\ell,m}(k)Y_\ell^{m}(\theta,\phi),
 \end{equation}
-where $(\theta,\phi)$ are two angles on the sphere, $k$ is the radial coordinate, $Y_{\ell}^m(\theta,\phi)$ is the spherical harmonic of degree $\ell$ and order $m$ and  $A_{\ell,m}(k)$ are the associated spherical harmonics coefficients, to be estimated. 
+where $\theta \in [0,\pi)$ is the polar angle, $\phi \in [0,2\pi)$ is the azimuthal angle, $k$ is the radial coordinate, $Y_{\ell}^m(\theta,\phi)$ is the spherical harmonic of degree $\ell$ and order $m$ and  $A_{\ell,m}(k)$ are the associated spherical harmonics coefficients. The goal is to estimate the functions $A_{l,m}$.
 A rotation of the volume by $\omega\in SO(3)$ can be described using the Wigner D-function $D_{m,m'}^{\ell}$:
 \begin{equation}
 \begin{split}
@@ -102,20 +102,20 @@ A rotation of the volume by $\omega\in SO(3)$ can be described using the Wigner 
 \end{split}
 \end{equation}
 
-By the Fourier slice theorem, each cryo--EM measurement (projection) is equivalent (through 2-D Fourier transform) to the slice of $\hat{V}$, associated with $\theta= \pi/2$, after $\hat{V}$ was rotated by $\omega\in SO(3)$. Explicitly, the Fourier transform of a projection from the viewing direction $\omega$ is related to the spherical harmonic coefficients of the object through:
+By the Fourier slice theorem, the Fourier transform of each cryo-EM measurement (that is, each projection) is a slice of $\hat V$, associated with $\theta= \pi/2$, after $\hat{V}$ was rotated by $\omega\in SO(3)$. Explicitly, the Fourier transform of a projection from the viewing direction $\omega$ is related to the spherical harmonic coefficients of the object through:
 \begin{equation} \label{eq:P}
 \begin{split}
-P_\omega(k,\phi)  = \sum_{\ell=0}^{L} \sum_{m=-\ell}^{\ell} A_{\ell,m}(k) 
+\hat P_\omega(k,\phi)  = \sum_{\ell=0}^{L} \sum_{m=-\ell}^{\ell} A_{\ell,m}(k) 
 \sum_{m'=-\ell}^{\ell}{D_{m,m'}^{\ell}(\omega)}Y_\ell^{m'}(\pi/2,\phi).
 \end{split}
 \end{equation}
 
-Next, we want to relate the projections $P_\omega$ with the mean and the autocorrelation functions computed directly from the micrograph.
-The mean of the micrograph is proptional to 
+Next, we relate the projections $P_\omega$ to the mean and the autocorrelation functions, both computable from the observed micrographs.
+The mean of the micrograph is proportional to 
 \begin{equation}
-M_1 \propto \sum_{n=1}^N \sum_{x,y}P_n(x,y),
+M_1 \propto \sum_{n=1}^N \sum_{x,y}P_{\omega_n}(x,y),
 \end{equation}
-where $P_n$ denotes the $n$th projection. By taking $n\to\infty$, we get  
+where $\omega_n$ denotes the viewing direction of the $n$th projection. By taking $n\to\infty$, we get  
 \begin{equation}
 M_1 \propto \sum_{x,y}\int_{\omega}P_\omega(x,y)\rho(\omega) d\omega,
 \end{equation}
@@ -134,6 +134,6 @@ M_3(\Delta_x^1,\Delta_y^1;\Delta_x^2,\Delta_y^2) \propto \sum_{x,y}\int_{\omega}
 In order to determine the particle, by~\eqref{eq:volume} one needs to estimate order of $L^3$ spherical harmonics coefficients. If the pixel size is proportional to $1/L$ (to match the volume's resolution), then $M_3$ provides order of $L^4$ equations involving triple products of $P_\omega$. 
 However, 
 since  the in-plane rotation of each particle image is usually uniformly distributed, $M_3$  depends on only three parameters: the length of the vector $(\Delta_x^1,\Delta_y^1)$, the length of the vector  $(\Delta_x^2,\Delta_y^2)$ and the  angle between the two vectors.  Therefore,  $M_3$  provides only $\sim L^3$ equations. 
- Since $P_\omega$ depends (after coordinate transformation) linearly in the spherical harmonic coefficients through~\eqref{eq:P}, this means we have a system of $\sim L^3$ cubic equations in the $\sim L^3$ sought parameters. Importantly, the coefficients of these equations can be estimated from the micrographs directly, without particle picking stage.
+ Since $P_\omega$ depends (after coordinate transformation) linearly on the spherical harmonic coefficients through~\eqref{eq:P}, this means we have a system of $\sim L^3$ cubic equations in the $\sim L^3$ sought parameters. Importantly, the coefficients of these equations can be estimated from the micrographs directly, without particle picking.
 
 \end{document}
