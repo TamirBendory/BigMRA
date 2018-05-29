@@ -117,7 +117,8 @@ As a result, it is impossible to reconstruct such small molecules by any of the 
 This has motivated recent technical advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
 %
 %
-Despite this progress, detecting small molecules (below 50 kDa) in the micrographs remains a challenge. 
+Despite this progress, detecting small molecules (below 50 kDa) in the micrographs remains a challenge.
+We note that nuclear magnetic resonance (NMR) spectroscopy and X-ray crystallography are well suited to reconstruct small molecules. Yet, cryo--EM has a lot to offer even for molecules with already known structures obtained via NMR spectroscopy or X-ray crystallography, because these methods have limited ability to distinguish conformational variability. \TODO{Need a ref for this claim.}
 
 In this paper, we argue that there is a gap between the two questions in the quoted excerpt above, and that one may be able to exploit it to design better reconstruction algorithms.
 Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction.
@@ -139,7 +140,7 @@ In order to recover the planted image, we use autocorrelation analysis. In a nut
 For any noise level, these autocorrelations can be estimated to any desired accuracy provided individual occurrences of the image are well separated and the image appears sufficiently many times in the micrographs. Importantly, there is no need to detect individual occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. These directly yield estimates for the autocorrelations of the image. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem via least-squares or a phase retrieval algorithm; see Figure~\ref{fig:Einst_example} for an illustration and Section~\ref{sec:methods} for details. As a side note, we mention that expectation-maximization (EM)---a popular framework in SPR---is intractable for this problem; see Appendix~\ref{sec:theory} for a discussion.
 
 Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{vanheel1992correlation,shatsky2009method,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using cross-correlation and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates are required.
-\TODO{Why do we want to use cryo--EM for small molecules? Such molecules can typically be crystallized or reconstrcuted by NMR. Answer: heterogeneity! For instance, there is still a debate about the conformations of the hemoglobin.  }
+
 
 %\TODO{Paragraph about bias; can also mention computational aspects (single pass, etc.)}
 
@@ -340,23 +341,30 @@ The estimation quality of the triangle signal is poorer than the other two signa
 
 \section{Discussion}
 
-All current algorithmic pipeline for SPR using cryo--EM start with a particle picking algorithm which is prone to model bias. 
-Bypassing the particle picking stage and constructing a 3-D model directly from the data---without assuming prior knowledge on the particle to be estimated---can be used to reconstruct ab initio models to initialize a refinement algorithm.  Alternatively, it can be applied to generate templates for a particle picker which does not suffer from model bias.
+%All current algorithmic pipelines for SPR using cryo--EM start with a particle picking algorithm which is prone to model bias. 
+%Bypassing the particle picking stage and constructing a 3-D model directly from the data---without assuming prior knowledge on the particle to be estimated---can be used to reconstruct ab initio models to initialize a refinement algorithm.  Alternatively, it can be applied to generate templates for a particle picker which does not suffer from model bias.
 
-In this paper, we examined a simplified model that, we believe, captures important features of the SPR problem. 
-While the field is currently dominated by Bayesian methods such as EM, they are intractable for such problems. As an alternative, we propose to use autocorrelation analysis technique that shares some common lines (did you get the wordplay?)  with Kam's method for ab inito modeling~\cite{kam1980reconstruction,levin20173d,singer2018mathematics}. 
-That being said, the SPR model is far more complicated than the model presented here. In a future research, we hope to bridge this gap.
+In this paper, we examined a model that captures certain important features of the SPR problem. In this model, the aim is to estimate one, or possibly several, images from micrographs. To this end, we compute the autocorrelation functions of the data and relate them to the unknown parameters. This leads to a system of polynomial equations which must be solved.
+
+The same general approach can be applied directly to SPR from cryo-EM. In this scenario, the micrographs contain numerous tomographic projections of molecules (possibly in different conformations) taken under unknown viewing directions. The aim here is to estimate the 3-D volumes of the different conformations directly from micrographs. In Appendix~\TODO{ref}, we show that the number of polynomial equations provided by the third-order autocorrelations is of the same order as the number of unknown volume coefficients. This hints that it may be possible to reconstruct a constant number of distinct volumes from these equations directly. Crucially, this involves no particle picking, and hence also does not involve a viewing direction estimation stage for individual particles. \TODO{Where and how do we cite Kam? Fred?}
+
+\TODO{Do we want to say something about the number of images that we need? Specifically, do we want to address the fact that the numerical experiments suggest we may need a gigantic number of them for cryo, and mention trends in cryo technology that are encouraging in that regard? (Of course, we can't compare to RELION etc.\ in SNRs so low that one can't particle pick; that's not the point here.)}
 
 
-Our results rely on two core assumptions that are not necessarily met by an SPR experiment.  
-First, we modeled the background information as i.i.d.\ additive noise. In practice, the background information may be structured or signal dependent. 
-Second, we assumed that the signal occurrences are all separated by the length of the signal, see~\eqref{eq:spacing}. 
-This separation can be induced by careful experimental design \TODO{???}. 
-If the signals are not separated, one can introduce a new variable that represents the distribution of the spacing between signal occurrences and then compute explicitly the relation between the autocorrelation functions of the data and the signals. It is yet to be studied under what conditions on this distribution one can estimate the signals. 
+%While the field is currently dominated by Bayesian methods such as EM, they are intractable for such problems. As an alternative, we propose to use autocorrelation analysis technique that shares some common lines (did you get the wordplay?)  with Kam's method for ab initio modeling~\cite{kam1980reconstruction,levin20173d,singer2018mathematics}. That being said, the SPR model is far more complicated than the model presented here. In a future research, we hope to bridge this gap.
+
+
+As stated, our approach relies on two core assumptions that are not necessarily verified in SPR experiments.
+First, we assume an additive white noise model, while in practice the noise may be structured or signal dependent. To address this point, it may be necessary to investigate better noise models and to extend the autocorrelation analysis to these models.
+Second, we assume that any two signal occurrences are sufficiently separated, as required by~\eqref{eq:spacing}. 
+This separation can be induced by careful experimental design \TODO{Ref?}.
+If the signals are not well separated, one can introduce new variables that represent the distribution of the spacing between signal occurrences. Here as well, the relation between the autocorrelation functions of the data and the signals can be derived. These variations lead to different inverse problems. No sufficient conditions for them to be solvable are currently known.
 
 %The first entry $p[1]$ will represent the probability that two consecutive signals are separated by only one entry, $p[2]$ the probability for spacing of two entries and so on. Using this auxiliary variable $p$, one can write explicitly the relation between the autocorrelation functions of the data and those of the signal in a similar way to~\eqref{eq:data_ac}. 
 %An interesting question is  under what conditions on $p$ and the signals, one can estimate the signals from the data.
 
+
+\TODO{We recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. Insofar as the computational challenges are concerned, we note that expectation-maximization algorithms (EM) have, over time, become the norm in the cryo-EM community, as exemplified by the popular RELION package. The idea of using EM for cryo-EM can be traced back at least to~\TODO{Sigworth}. At the time, such approaches also seemed challenging.}
 
 \section{Methods} \label{sec:methods}
 
@@ -376,9 +384,10 @@ By assuming that all $\mathcal{S}_i$'s are disjoint,  we let $s = \sum_{i=1}^Ks_
  Literature survey on blind deconvolution and related problems is given in Appendix~\ref{sec:related_literature}.
 
 In order to estimate the mixture of autocorrelations, we assume that the support of $s$ is not clustered. In particular, we assume that
-\begin{equation} \label{eq:spacing}
+\begin{align}
   \vert i-j \vert\geq 2L-1,   \quad \text{for all } i,j\in\mathcal{S} \text{ such that } i\neq j.
-\end{equation}
+  \label{eq:spacing}
+\end{align}
 The goal of the problem is to estimate $x_1,\ldots,x_K$ from $y$.
 
 

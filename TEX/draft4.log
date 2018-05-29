@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2018.5.21)  27 MAY 2018 14:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.20)  29 MAY 2018 15:37
 entering extended mode
 **./draft4.tex
 (draft4.tex
@@ -197,7 +197,7 @@ Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
 \c@subtable=\count103
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\mathtools\mathtools.sty"
-Package: mathtools 2018/01/08 v1.21 mathematical typesetting tools
+Package: mathtools 2017/05/24 v1.19 mathematical typesetting tools
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\tools\calc.sty"
 Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
@@ -409,7 +409,7 @@ File: micrograph_Einstein_example_clean.pdf Graphic file (type pdf)
 
 <use micrograph_Einstein_example_clean.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_clean.pdf used on input li
-ne 206.
+ne 207.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 
 <micrograph_Einstein_example_s05.pdf, id=20, 259.97125pt x 260.975pt>
@@ -417,7 +417,7 @@ File: micrograph_Einstein_example_s05.pdf Graphic file (type pdf)
 
 <use micrograph_Einstein_example_s05.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s05.pdf used on input line
- 211.
+ 212.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 
 <micrograph_Einstein_example_s3.pdf, id=21, 259.97125pt x 260.975pt>
@@ -425,12 +425,12 @@ File: micrograph_Einstein_example_s3.pdf Graphic file (type pdf)
 
 <use micrograph_Einstein_example_s3.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s3.pdf used on input line 
-216.
+217.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 
 
 LaTeX Warning: Reference `fig:EinsteinFromNoise' on page 4 undefined on input l
-ine 247.
+ine 248.
 
 [4
 
@@ -439,10 +439,10 @@ df> <./micrograph_Einstein_example_s3.pdf>]
 <Newton.pdf, id=46, 421.575pt x 316.18124pt>
 File: Newton.pdf Graphic file (type pdf)
  <use Newton.pdf>
-Package pdftex.def Info: Newton.pdf used on input line 263.
+Package pdftex.def Info: Newton.pdf used on input line 264.
 (pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
 
-Overfull \hbox (16.26161pt too wide) in paragraph at lines 263--264
+Overfull \hbox (16.26161pt too wide) in paragraph at lines 264--265
  [][] 
  []
 
@@ -450,10 +450,10 @@ Overfull \hbox (16.26161pt too wide) in paragraph at lines 263--264
 File: reconstruction2.pdf Graphic file (type pdf)
 
 <use reconstruction2.pdf>
-Package pdftex.def Info: reconstruction2.pdf used on input line 268.
+Package pdftex.def Info: reconstruction2.pdf used on input line 269.
 (pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
 
-Overfull \hbox (16.26161pt too wide) in paragraph at lines 268--269
+Overfull \hbox (16.26161pt too wide) in paragraph at lines 269--270
  [][] 
  []
 
@@ -461,10 +461,10 @@ Overfull \hbox (16.26161pt too wide) in paragraph at lines 268--269
 File: reconstruction20.pdf Graphic file (type pdf)
 
 <use reconstruction20.pdf>
-Package pdftex.def Info: reconstruction20.pdf used on input line 273.
+Package pdftex.def Info: reconstruction20.pdf used on input line 274.
 (pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
 
-Overfull \hbox (16.26161pt too wide) in paragraph at lines 273--274
+Overfull \hbox (16.26161pt too wide) in paragraph at lines 274--275
  [][] 
  []
 
@@ -472,10 +472,10 @@ Overfull \hbox (16.26161pt too wide) in paragraph at lines 273--274
 File: reconstruction200.pdf Graphic file (type pdf)
 
 <use reconstruction200.pdf>
-Package pdftex.def Info: reconstruction200.pdf used on input line 278.
+Package pdftex.def Info: reconstruction200.pdf used on input line 279.
 (pdftex.def)             Requested size: 126.47346pt x 94.8551pt.
 
-Overfull \hbox (16.26161pt too wide) in paragraph at lines 278--279
+Overfull \hbox (16.26161pt too wide) in paragraph at lines 279--280
  [][] 
  []
 
@@ -483,7 +483,7 @@ Overfull \hbox (16.26161pt too wide) in paragraph at lines 278--279
 File: Einstein_progress.pdf Graphic file (type pdf)
 
 <use Einstein_progress.pdf>
-Package pdftex.def Info: Einstein_progress.pdf used on input line 312.
+Package pdftex.def Info: Einstein_progress.pdf used on input line 313.
 (pdftex.def)             Requested size: 295.10048pt x 221.32535pt.
 
 
@@ -494,7 +494,7 @@ File: XP_1D_heterogeneous/hetero_example.pdf Graphic file (type pdf)
 
 <use XP_1D_heterogeneous/hetero_example.pdf>
 Package pdftex.def Info: XP_1D_heterogeneous/hetero_example.pdf used on input l
-ine 334.
+ine 335.
 (pdftex.def)             Requested size: 440.84746pt x 126.39214pt.
  [5 <./Newton.pdf> <./reconstruction2.pdf> <./reconstruction20.pdf> <./reconstr
 uction200.pdf>] [6 <./Einstein_progress.pdf>] [7 <./XP_1D_heterogeneous/hetero_
@@ -506,15 +506,15 @@ Underfull \hbox (badness 6300) in paragraph at lines 266--269
  []
 
 [13]) [14] [15] [16] [17]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 843.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 852.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 843.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 852.
  [18] [19] [20]
-Overfull \hbox (7.43501pt too wide) in paragraph at lines 1001--1002
+Overfull \hbox (7.43501pt too wide) in paragraph at lines 1010--1011
 []\T1/cmr/m/n/10.95 By the Fourier slice the-o-rem, each cryo--EM mea-sure-ment
  (pro-jec-tion) is equiv-a-lent (through
  []
@@ -526,38 +526,39 @@ LaTeX Warning: There were undefined references.
  ) 
 Here is how much of TeX's memory you used:
  5757 strings out of 493323
- 84324 string characters out of 3139052
- 165307 words of memory out of 3000000
+ 84324 string characters out of 3139050
+ 164308 words of memory out of 3000000
  9153 multiletter control sequences out of 15000+200000
  28405 words of font info for 70 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,18n,39p,988b,525s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Math User\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi
-600\ecsx1095.pk> <C:\Users\Math User\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\j
-knappen\ec\dpi600\ecrm1440.pk> <C:\Users\Math User\AppData\Local\MiKTeX\2.9\fon
-ts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk> <C:\Users\Math User\AppData\Local\
-MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk> <C:\Users\Math User\
-AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1095.pk> <C:\Us
-ers\Math User\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1
-095.pk> <C:\Users\Math User\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\e
-c\dpi600\ecrm1095.pk> <C:\Users\Math User\AppData\Local\MiKTeX\2.9\fonts\pk\ljf
-our\jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\Math User\AppData\Local\MiKTeX\2.
-9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Math User\AppData\L
-ocal\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\Math 
-User\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <
-C:\Users\Math User\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
-ecrm1728.pk><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.
-pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/
-Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program 
-Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.p
-fb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on draft4.pdf (22 pages, 1814258 bytes).
+ <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dp
+i600\ecsx1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour
+\jknappen\ec\dpi600\ecrm1440.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\
+fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk> <C:\Users\nboumal-x1\AppData\Lo
+cal\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk> <C:\Users\nbouma
+l-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1095.pk> <
+C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
+\ecti1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkn
+appen\ec\dpi600\ecrm1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\font
+s\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\nboumal-x1\AppData\Local\
+MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\nboumal-x1
+\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\U
+sers\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecr
+m1200.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappe
+n\ec\dpi600\ecrm1728.pk><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfont
+s/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cme
+x10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Progr
+am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public
+/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfont
+s/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy
+8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.p
+fb>
+Output written on draft4.pdf (22 pages, 1815798 bytes).
 PDF statistics:
  591 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
