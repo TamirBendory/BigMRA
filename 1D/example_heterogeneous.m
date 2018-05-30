@@ -10,7 +10,7 @@ L = 21;
 W = 2*L-1;
 X = zeros(L, K);
 X(:, 1) = [ones(ceil(L/2), 1) ; -ones(floor(L/2), 1)];
-X(:, 2) = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
+X(:, 2) = [linspace(1, -1, ceil(L/2))' ; linspace(-1, 1, floor(L/2))'];
 X(:, 3) = randn(L, 1);
 
 % Pick a noise level
@@ -57,6 +57,7 @@ moments.list3 = list3;
 
 clear y_clean y_obs;
 ID = randi(1000000);
+fprintf('\n\nThis XP ID: %d\n\n', ID);
 filename_data = sprintf('data_example_heterogeneous_n_%d_%d', n, ID);
 save([filename_data, '.mat']);
 
@@ -70,18 +71,7 @@ sigma_est = 0; % irrelevant if biased terms are excluded and if the weights inte
 save([filename_data, '.mat']);
 
 %%
-best_error = inf;
-best_P = [];
-permutations = perms(1:K);
-for p = 1 : size(permutations, 1)
-    P = permutations(p, :);
-    relative_error = norm(X-X2(:, P), 'fro') / norm(X, 'fro');
-    if relative_error < best_error
-        best_error = relative_error;
-        best_P = P;
-    end
-end
-P = best_P;
+P = best_permutation(X, X2);
 
 fprintf('==\n');
 fprintf('Relative error subsignals of length L: %g\n', norm(X-X1_L(:, P), 'fro') / norm(X, 'fro'));
