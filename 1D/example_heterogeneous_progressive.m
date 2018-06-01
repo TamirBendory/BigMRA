@@ -40,7 +40,7 @@ SNR = norm(y_clean, 'fro')/norm(y_obs-y_clean, 'fro');
 %% The grand experiment starts here
 
 % Select sizes of sub-micrographs to consider.
-ns = unique(round(logspace(7, log10(n), 9)));
+ns = unique(round(logspace(8, log10(n), 9)));
 
 % How many times do we optimize from a different random initial guess?
 n_init_optim = 3;
@@ -155,4 +155,4 @@ set(gcf, 'Color', 'w');
 
 figname1 = sprintf('heterogeneous_progressive_n%d_%d', n, ID);
 savefig(1, [figname1, '.fig']);
-pdf_print_code(1, [figname1 '.pdf'], 14);
+pdf_print_code(1, [figname1 '.pdf'], 13);
