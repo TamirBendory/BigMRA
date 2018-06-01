@@ -245,42 +245,80 @@ In this section we describe  some numerical experiments and show results. The ex
 In the first experiment, we estimated Einstein's image of size $50\times 50$ from multiple micrographs of size $4096\times 4096$ pixels, contaminated  with additive i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ ($\SNR=1/20$). An illustrative example of a micrograph appears in the right panel of Figure~\ref{fig:micro_example}.
 Each micrograph contains multiple occurrences of Einstein's image  in random locations, while keeping a separation of  $49$ pixels between the images in each direction. From the micrographs, we estimated the signal's power spectrum, which is equivalent to the second-order autocorrelation. Then, in order to estimate the signal itself, we applied a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR).
 
-As an initial guess, we picked an image of the physicist Issac Newton; see Figure~\ref{fig:newton}. If the algorithm was prone to model bias, we would expect to get as an output an image that resembles Newton, similarly to the ``Einstein from noise'' effect of Figure~\ref{fig:EinsteinFromNoise}. However, the experiment exhibits the desired phenomenon: the more data we collect, the better the reconstruction quality. 
+As an initial guess, we picked an image of the physicist Issac Newton. If the algorithm was prone to model bias, we would expect to get as an output an image that resembles Newton, similarly to the ``Einstein from noise.'' However, the experiment exhibits the desired phenomenon: the more data we collect, the better the reconstruction quality. 
 
-Figure~\ref{fig:Einst_example} demonstrates several recovery results for different number of recorded micrographs. Figure~\ref{fig:error_per_micro} presents the normalized recovery error and the power spectrum estimation error as a function of the number of micrographs.
+Figure~\ref{fig:Einst_example} demonstrates several recovery results for different number of recorded micrographs. Figure~\ref{fig:error_per_micro} presents the normalized recovery error as a function of the number of micrographs.
 To measure the error, we use the root mean square error (RMSE) defined as 
 \begin{equation}
 \text{RMSE}  := \frac{\|x - \hat{x}\|_{\text{F}}}{\|x \|_{\text{F}}},
 \end{equation} 
-where $x$ and $\hat{x}$ are, respectively, the underlying and estimated image, and $\|\cdot\|_{\text{F}}$ stands for the Frobenius norm. 
-As expected, the RMSE of estimating the power spectrum   decreases linearly with slope $-1/2$ in logarithmic scale. 
-\TODO{Few comments: 1. We have a movie in the supplementary material. 2. Does the error also have the right slope? 3. We can put more images to exemplify the progress 4. Need to improve the micrograph's generation code  }
+where $x$ and $\hat{x}$ are, respectively, the underlying and estimated image, and $\|\cdot\|_{\text{F}}$ stands for the Frobenius norm.  
+\TODO{ We have a movie in the supplementary material.}
 
 
 \begin{figure}[h!]
 	\centering
-	\begin{subfigure}[h]{0.25\textwidth}
+	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
-		\includegraphics[scale=0.3]{Newton}
-		\caption{\label{fig:newton}Newton  (model)}
+		\includegraphics[scale=0.45]{reconstruction1_cropped}
+		\caption{\small $P = 512$}
 	\end{subfigure}%
-	\begin{subfigure}[h]{0.25\textwidth}
+	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
-		\includegraphics[scale=0.3]{reconstruction2}
-		\caption{\small $P =1024$}
+		\includegraphics[scale=0.45]{reconstruction10_cropped}
+		\caption{\small $P = 512\times 10$}
 	\end{subfigure}%
-	\begin{subfigure}[h]{0.25\textwidth}
+
+		\begin{subfigure}[h]{0.45\textwidth}
 		\centering
-		\includegraphics[scale=0.3]{reconstruction20}
-		\caption{$P = 1024\times 10$}
+		\includegraphics[scale=0.45]{reconstruction100_cropped}
+		\caption{ \small $P = 512\times 10^2$ }
 	\end{subfigure}%
-	\begin{subfigure}[h]{0.25\textwidth}
+	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
-		\includegraphics[scale=0.3]{reconstruction200}
-		\caption{$P = 1024\times 100$}
+		\includegraphics[scale=0.45]{reconstruction1000_cropped}
+		\caption{\small $P = 512\times 10^3$}
 	\end{subfigure}%
-	\caption{\label{fig:Einst_example} \TODO{Caption and image not yet revised} Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton in the left panel. We show estimations of Einstein using $P=1024,1024\times 10$ and $1024\times 100$ number of micrographs, each contains $700$ image occurrences on average and the $\SNR$ is $1/20$. The signal's estimation RMSE is $0.5514$, $0.3494$ and $0.2112$, respectively. The power spectrum estimation RMSE is, respectively, $0.0269 $, $0.0083$ and $0.0027$. \TODO{Can add more images to exemplify the progress}\TODO{Resolution of Newton too high?}}	
+
+%	\begin{subfigure}[h]{0.33\textwidth}
+%		\centering
+%		\includegraphics[scale=0.33]{Einstein_progress_cropped}
+%		\caption{\label{fig:err_curve}\small Error curve}
+%	\end{subfigure}%
+
+%\begin{figure}[h!]
+%	\centering
+%	\begin{subfigure}[h]{0.25\textwidth}
+%		\centering
+%		\includegraphics[scale=0.3]{Newton}
+%		\caption{\label{fig:newton}Newton  (model)}
+%	\end{subfigure}%
+%	\begin{subfigure}[h]{0.25\textwidth}
+%		\centering
+%		\includegraphics[scale=0.3]{reconstruction2}
+%		\caption{\small $P =1024$}
+%	\end{subfigure}%
+%	\begin{subfigure}[h]{0.25\textwidth}
+%		\centering
+%		\includegraphics[scale=0.3]{reconstruction20}
+%		\caption{$P = 1024\times 10$}
+%	\end{subfigure}%
+%	\begin{subfigure}[h]{0.25\textwidth}
+%		\centering
+%		\includegraphics[scale=0.3]{reconstruction200}
+%		\caption{$P = 1024\times 100$}
+%	\end{subfigure}%
+	\caption{\label{fig:Einst_example} Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton. We show estimations of Einstein using $P$ micrographs, each contains $700$ image occurrences on average and the $\SNR$ is $1/20$.  \TODO{We may want to add another image with $P=512\times 10^4$ and the image of Newton.} }	
 \end{figure}
+
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.7]{Einstein_progress}
+\caption{\label{fig:error_per_micro} The figure  shows the RMSE  (in logarithmic scale) of recovering Einstein's image.}	
+\end{figure}
+
 
 
 %
@@ -307,13 +345,6 @@ The estimation quality of the triangle signal is poorer than the other two signa
 \TODO{1. We will replace the figure with a ``progress figure'' (like we did for Einstien) for each signals and a plot of the recovery error for all three signals. 2. We may want to replace the triangle signal}
 %We do not assume the knowledge of the noise level. 
 %Crucially, starting from the point of $n\approx10^8$, the RMSE of the signal estimation decreases linearly with slope $-1/2$---the expected estimation rate of the autocorrelation functions---implying the stability of the recovery algorithm. 
-  
-\begin{figure}[h]
-\centering
-\includegraphics[scale=.7]{Einstein_progress}
-\caption{\label{fig:error_per_micro} The left panel shows the RMSE of estimating the power spectrum of the signal from the data as a function of the number of  collected micrographs. As expected, the curve is linear with slope $-1/2$ in logarithmic scale. The right panel shows the RMSE  (in logarithmic scale) of recovering Einstein's image. \TODO{The program still runs so these figures will be extended to the right (more micrographs).}}	
-\end{figure}
-
 %
 %\begin{figure}[t]
 %	\centering

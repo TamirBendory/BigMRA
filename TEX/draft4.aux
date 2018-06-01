@@ -22,12 +22,10 @@
 \newlabel{fig:micro_example}{{1}{4}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Results}{4}}
 \newlabel{sec:results}{{2}{4}}
-\newlabel{fig:newton}{{2a}{5}}
-\newlabel{sub@fig:newton}{{a}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  {\color  {red}{[Caption and image not yet revised]}} Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton in the left panel. We show estimations of Einstein using $P=1024,1024\times 10$ and $1024\times 100$ number of micrographs, each contains $700$ image occurrences on average and the $\ensuremath  {\textsf  {SNR}}$ is $1/20$. The signal's estimation RMSE is $0.5514$, $0.3494$ and $0.2112$, respectively. The power spectrum estimation RMSE is, respectively, $0.0269 $, $0.0083$ and $0.0027$. {\color  {red}{[Can add more images to exemplify the progress]}}{\color  {red}{[Resolution of Newton too high?]}}\relax }}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton. We show estimations of Einstein using $P$ micrographs, each contains $700$ image occurrences on average and the $\ensuremath  {\textsf  {SNR}}$ is $1/20$. {\color  {red}{[We may want to add another image with $P=512\times 10^4$ and the image of Newton.]}} \relax }}{5}}
 \newlabel{fig:Einst_example}{{2}{5}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Discussion}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  The left panel shows the RMSE of estimating the power spectrum of the signal from the data as a function of the number of collected micrographs. As expected, the curve is linear with slope $-1/2$ in logarithmic scale. The right panel shows the RMSE (in logarithmic scale) of recovering Einstein's image. {\color  {red}{[The program still runs so these figures will be extended to the right (more micrographs).]}}\relax }}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  The figure shows the RMSE (in logarithmic scale) of recovering Einstein's image.\relax }}{6}}
 \newlabel{fig:error_per_micro}{{3}{6}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces An experiment for estimate three one-dimensional signals simultaneously with noise level $\sigma =3$. Red signals are the ground truth (targets) and the blue signals are our estimations. Individual RMSE of the estimates: $0.0239393 / 0.208925 / 0.0335956$. The estimated $\gamma $'s are $0.02574 / 0.01693 / 0.00818$ and the true ones $0.02561 / 0.01707 / 0.00853$. The $\ensuremath  {\textsf  {SNR}}$ is $1/12$. {\color  {red}{[1. to replace with a ``progress'' plot 2. replace the triangle signal 3. add error progress figure]}}\relax }}{7}}
 \newlabel{fig:1Dheterosignals}{{4}{7}}
@@ -79,33 +77,30 @@
 \bibcite{henderson1995limitations}{26}
 \bibcite{henderson2013avoiding}{27}
 \bibcite{jefferies1993restoration}{28}
-\bibcite{kam1980reconstruction}{29}
-\bibcite{khoshouei2017cryo}{30}
-\bibcite{kormylo1983identifiability}{31}
-\bibcite{langlois2014automated}{32}
-\bibcite{levin20173d}{33}
-\bibcite{lewicki1998review}{34}
-\bibcite{liang2017phase}{35}
-\bibcite{lii1982deconvolution}{36}
-\bibcite{liu2018nearatomic}{37}
-\bibcite{ljung1998system}{38}
-\bibcite{ogura2004automatic}{39}
-\bibcite{perry2017sample}{40}
-\bibcite{rabiner1989tutorial}{41}
-\bibcite{scheres2015semi}{42}
-\bibcite{shalvi1990new}{43}
-\bibcite{shatsky2009method}{44}
-\bibcite{singer2018mathematics}{45}
-\bibcite{tugnait1984identification}{46}
-\bibcite{vanheel2013finding}{47}
-\bibcite{vanheel1992correlation}{48}
-\bibcite{voss2009dog}{49}
-\bibcite{weinthesis}{50}
-\bibcite{zhu2016deep}{51}
+\bibcite{khoshouei2017cryo}{29}
+\bibcite{kormylo1983identifiability}{30}
+\bibcite{langlois2014automated}{31}
+\bibcite{lewicki1998review}{32}
+\bibcite{liang2017phase}{33}
+\bibcite{lii1982deconvolution}{34}
+\bibcite{liu2018nearatomic}{35}
+\bibcite{ljung1998system}{36}
+\bibcite{ogura2004automatic}{37}
+\bibcite{perry2017sample}{38}
+\bibcite{rabiner1989tutorial}{39}
+\bibcite{scheres2015semi}{40}
+\bibcite{shalvi1990new}{41}
+\bibcite{shatsky2009method}{42}
+\bibcite{tugnait1984identification}{43}
+\bibcite{vanheel2013finding}{44}
+\bibcite{vanheel1992correlation}{45}
+\bibcite{voss2009dog}{46}
+\bibcite{weinthesis}{47}
+\bibcite{zhu2016deep}{48}
 \citation{boumal2017heterogeneous}
 \@writefile{toc}{\contentsline {section}{\numberline {A}Proof of \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:data_ac}\unskip \@@italiccorr )}}}{14}}
 \newlabel{sec:autocorrelation_computation}{{A}{14}}
-\newlabel{eq:2nd_moment_signal_term}{{A.4}{15}}
+\newlabel{eq:2nd_moment_signal_term}{{A.4}{14}}
 \citation{benveniste1980robust}
 \citation{kormylo1983identifiability}
 \citation{jefferies1993restoration}
@@ -117,10 +112,6 @@
 \citation{andrieu2001bayesian}
 \citation{cappe1999simulation}
 \citation{rabiner1989tutorial}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Related work}{16}}
-\newlabel{sec:related_literature}{{B}{16}}
-\@writefile{toc}{\contentsline {paragraph}{System identification.}{16}}
-\@writefile{toc}{\contentsline {paragraph}{Likelihood-based methods.}{16}}
 \citation{lii1982deconvolution}
 \citation{giannakis1989identification}
 \citation{tugnait1984identification}
@@ -130,6 +121,10 @@
 \citation{bendory2017robust}
 \citation{bernstein2017deconvolution}
 \citation{aguerrebere2016fundamental}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Related work}{16}}
+\newlabel{sec:related_literature}{{B}{16}}
+\@writefile{toc}{\contentsline {paragraph}{System identification.}{16}}
+\@writefile{toc}{\contentsline {paragraph}{Likelihood-based methods.}{16}}
 \citation{bendory2017bispectrum}
 \citation{boumal2017heterogeneous}
 \citation{beinert2015ambiguities}
@@ -142,24 +137,23 @@
 \@writefile{toc}{\contentsline {paragraph}{Estimating a signal from its third-order autocorrelation.}{17}}
 \newlabel{eq-uniqueness}{{C.1}{17}}
 \newlabel{prop:uniqueness}{{C.1}{17}}
+\@writefile{toc}{\contentsline {paragraph}{Identifiability of parameters from the moments of $y$.}{17}}
 \citation{perry2017sample}
 \citation{abbe2017multireference}
 \citation{boumal2017heterogeneous}
 \citation{weinthesis}
-\@writefile{toc}{\contentsline {paragraph}{Identifiability of parameters from the moments of $y$.}{18}}
 \newlabel{prop:gamma}{{C.2}{18}}
 \newlabel{prop:gamma_sigma}{{C.3}{18}}
 \@writefile{toc}{\contentsline {paragraph}{Open theoretical questions.}{18}}
-\@writefile{toc}{\contentsline {section}{\numberline {D}Proof of Proposition~\ref  {prop:gamma_sigma}}{19}}
-\newlabel{sec:proof_prop_gamma_sigma}{{D}{19}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Proof of Proposition~\ref  {prop:gamma_sigma}}{18}}
+\newlabel{sec:proof_prop_gamma_sigma}{{D}{18}}
 \newlabel{eq:E1}{{D.1}{19}}
 \newlabel{eq:E2}{{D.2}{19}}
 \newlabel{eq:E12}{{D.3}{19}}
 \newlabel{eq:sigma2}{{D.4}{19}}
 \newlabel{eq:quad1}{{D.5}{19}}
-\newlabel{eq:E3}{{D.6}{20}}
-\newlabel{eq:E4}{{D.7}{20}}
-\newlabel{eq:quad2}{{D.8}{20}}
+\newlabel{eq:E3}{{D.6}{19}}
+\newlabel{eq:E4}{{D.7}{19}}
 \citation{harauz1989automatic}
 \citation{ogura2004automatic}
 \citation{zhu2016deep}
@@ -169,8 +163,9 @@
 \citation{scheres2015semi}
 \citation{langlois2014automated}
 \citation{voss2009dog}
-\newlabel{eq:cond}{{D.9}{21}}
+\newlabel{eq:quad2}{{D.8}{20}}
+\newlabel{eq:cond}{{D.9}{20}}
 \@writefile{toc}{\contentsline {section}{\numberline {E}Stuff}{21}}
 \@writefile{toc}{\contentsline {section}{\numberline {F}The autocorrelation functions in cryo--EM}{21}}
 \newlabel{eq:volume}{{F.1}{21}}
-\newlabel{eq:P}{{F.3}{22}}
+\newlabel{eq:P}{{F.3}{21}}

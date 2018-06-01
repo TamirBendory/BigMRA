@@ -164,12 +164,6 @@ Stuart~M Jefferies and Julian~C Christou.
 \newblock Restoration of astronomical images by iterative blind deconvolution.
 \newblock {\em The Astrophysical Journal}, 415:862, 1993.
 
-\bibitem{kam1980reconstruction}
-Zvi Kam.
-\newblock The reconstruction of structure from electron micrographs of randomly
-  oriented particles.
-\newblock {\em Journal of Theoretical Biology}, 82(1):15--39, 1980.
-
 \bibitem{khoshouei2017cryo}
 Maryam Khoshouei, Mazdak Radjainia, Wolfgang Baumeister, and Radostin Danev.
 \newblock Cryo-{EM} structure of haemoglobin at 3.2 {\aa} determined with the
@@ -188,11 +182,6 @@ Robert Langlois, Jesper Pallesen, Jordan~T Ash, Danny~Nam Ho, John~L
 \newblock Automated particle picking for low-contrast macromolecules in
   cryo-electron microscopy.
 \newblock {\em Journal of structural biology}, 186(1):1--7, 2014.
-
-\bibitem{levin20173d}
-Eitan Levin, Tamir Bendory, Nicolas Boumal, Joe Kileel, and Amit Singer.
-\newblock {3D} ab initio modeling in cryo-em by autocorrelation analysis.
-\newblock {\em arXiv preprint arXiv:1710.08076}, 2017.
 
 \bibitem{lewicki1998review}
 Michael~S Lewicki.
@@ -261,11 +250,6 @@ Maxim Shatsky, Richard~J Hall, Steven~E Brenner, and Robert~M Glaeser.
 \newblock A method for the alignment of heterogeneous macromolecules from
   electron microscopy.
 \newblock {\em Journal of structural biology}, 166(1):67--78, 2009.
-
-\bibitem{singer2018mathematics}
-Amit Singer.
-\newblock Mathematics for cryo-electron microscopy.
-\newblock {\em arXiv preprint arXiv:1803.06714}, 2018.
 
 \bibitem{tugnait1984identification}
 Jitendra Tugnait.

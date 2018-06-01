@@ -39,8 +39,8 @@ figure(11);
 err_rrr(28) = [];
 %subplot(122); 
 loglog((1:last_ind)*512,err_rrr(1:last_ind)); 
-%ylabel('recovery error');
-%xlabel('# micrographs')
+ylabel('recovery error');
+xlabel('# micrographs')
 xlim([512,512*last_ind])
 axis square
 grid on
