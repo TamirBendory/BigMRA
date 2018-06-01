@@ -40,7 +40,7 @@ SNR = norm(y_clean, 'fro')/norm(y_obs-y_clean, 'fro');
 %% The grand experiment starts here
 
 % Select sizes of sub-micrographs to consider.
-ns = unique(round(logspace(5, log10(n), 9)));
+ns = unique(round(logspace(7, log10(n), 9)));
 
 % How many times do we optimize from a different random initial guess?
 n_init_optim = 3;
@@ -124,7 +124,7 @@ for kk = 1 : K
         X2 = result.X2;
         T = 0:(L-1);
         plot(T, X2(:, kk), T, X(:, kk), 'LineWidth', 1);
-%         ylim([-2, 2]);
+        ylim([-2, 2]);
 %         set(gca, 'YTick', [-2, 0, 2]);
         xlim([0, 20]);
         set(gca, 'XTick', [0, 10, 20]);
@@ -137,15 +137,16 @@ for kk = 1 : K
     end
     
     subplot(3, 4, subplotcounter);
-    rmse2 = zeros(9, 1);
-    for nn = 1 : 9
+    rmse2 = zeros(size(ns));
+    for nn = 1 : length(ns)
         result = results(nn);
         X2 = result.X2;
         rmse2(nn) = norm(X2(:, kk) - X(:, kk), 'fro') / norm(X(:, kk), 'fro');
     end
     loglog(ns, rmse2, '.-');
-    q = polyfit(log10(ns), log10(rmse2), 1);
-    title(sprintf('Relative RMSE; slope: %g', q(1)));
+    xlim([min(ns), max(ns)]);
+%     q = polyfit(log10(ns), log10(rmse2), 1);
+%     title(sprintf('Relative RMSE; slope: %g', q(1)));
     subplotcounter = subplotcounter + 1;
     
 end
