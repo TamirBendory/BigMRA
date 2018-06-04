@@ -146,7 +146,7 @@ Another interesting feature of the described approach pertains to model bias, wh
 
 %\TODO{Already mention challenges? I think it's a good place.} -- no, not here: in conclusion
 
-\clearpage
+%\clearpage
 
 
 
@@ -200,7 +200,7 @@ Another interesting feature of the described approach pertains to model bias, wh
 %A precise mathematical formulation of the model and the estimation problem is provided in Section~\ref{sec:methods}.
 %To be clear, we do not consider here many prominent features of real SPR experiments and do not aim to reconstruct any 3-D structure; instead, we solve a simpler problem that we believe captures key elements of the true SPR problem. We also mention in passing that similar models emerge in different scientific fields, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
 
-\begin{figure}[h!]
+\begin{figure}[t]
 	\centering
 	\begin{subfigure}[h]{0.33\textwidth}
 		\centering
@@ -217,7 +217,7 @@ Another interesting feature of the described approach pertains to model bias, wh
 		\includegraphics[scale=0.5]{micrograph_Einstein_example_s3}
 		\caption{$\sigma = 3$}
 	\end{subfigure}
-	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains four occurrences of the same $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low $\SNR$, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}	
+	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contain the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low $\SNR$, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}	
 \end{figure}
 
 

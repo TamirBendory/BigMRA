@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2018.5.31)  1 JUN 2018 12:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.20)  4 JUN 2018 12:31
 entering extended mode
 **./draft4.tex
 (draft4.tex
@@ -175,11 +175,11 @@ Package color Info: Driver file: pdftex.def on input line 147.
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption.sty"
-Package: caption 2018/05/01 v3.3-147 Customizing captions (AR)
+Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption3.sty"
-Package: caption3 2018/05/27 v1.8a caption3 kernel (AR)
-Package caption3 Info: TeX engine: e-TeX on input line 64.
+Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 67.
 \captionmargin=\dimen114
 \captionmargin@=\dimen115
 \captionwidth=\dimen116
@@ -192,12 +192,12 @@ Package caption3 Info: TeX engine: e-TeX on input line 64.
 Package caption Info: float package is loaded.
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\caption\subcaption.sty"
-Package: subcaption 2018/05/01 v1.1-162 Sub-captions (AR)
+Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
 \c@subfigure=\count102
 \c@subtable=\count103
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\mathtools\mathtools.sty"
-Package: mathtools 2018/01/08 v1.21 mathematical typesetting tools
+Package: mathtools 2017/05/24 v1.19 mathematical typesetting tools
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\tools\calc.sty"
 Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
@@ -403,8 +403,8 @@ LaTeX Font Info:    Try loading font information for T1+cmss on input line 102.
 File: t1cmss.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 ) [1
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3]
-<micrograph_Einstein_example_clean.pdf, id=19, 259.97125pt x 260.975pt>
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
+<micrograph_Einstein_example_clean.pdf, id=16, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_clean.pdf Graphic file (type pdf)
 
 <use micrograph_Einstein_example_clean.pdf>
@@ -412,7 +412,7 @@ Package pdftex.def Info: micrograph_Einstein_example_clean.pdf used on input li
 ne 207.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 
-<micrograph_Einstein_example_s05.pdf, id=20, 259.97125pt x 260.975pt>
+<micrograph_Einstein_example_s05.pdf, id=17, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_s05.pdf Graphic file (type pdf)
 
 <use micrograph_Einstein_example_s05.pdf>
@@ -420,36 +420,37 @@ Package pdftex.def Info: micrograph_Einstein_example_s05.pdf used on input line
  212.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 
-<micrograph_Einstein_example_s3.pdf, id=21, 259.97125pt x 260.975pt>
+<micrograph_Einstein_example_s3.pdf, id=18, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_s3.pdf Graphic file (type pdf)
 
 <use micrograph_Einstein_example_s3.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s3.pdf used on input line 
 217.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
-
-<reconstruction1_cropped.pdf, id=22, 259.97125pt x 258.9675pt>
+ [3 <./micrograph_Einstein_example_clean.pdf> <./micrograph_Einstein_example_s0
+5.pdf> <./micrograph_Einstein_example_s3.pdf>] <reconstruction1_cropped.pdf, id
+=42, 259.97125pt x 258.9675pt>
 File: reconstruction1_cropped.pdf Graphic file (type pdf)
 
 <use reconstruction1_cropped.pdf>
 Package pdftex.def Info: reconstruction1_cropped.pdf used on input line 263.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
-<reconstruction10_cropped.pdf, id=23, 259.97125pt x 258.9675pt>
+<reconstruction10_cropped.pdf, id=43, 259.97125pt x 258.9675pt>
 File: reconstruction10_cropped.pdf Graphic file (type pdf)
 
 <use reconstruction10_cropped.pdf>
 Package pdftex.def Info: reconstruction10_cropped.pdf used on input line 268.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
-<reconstruction100_cropped.pdf, id=24, 259.97125pt x 258.9675pt>
+<reconstruction100_cropped.pdf, id=44, 259.97125pt x 258.9675pt>
 File: reconstruction100_cropped.pdf Graphic file (type pdf)
 
 <use reconstruction100_cropped.pdf>
 Package pdftex.def Info: reconstruction100_cropped.pdf used on input line 274.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
-<reconstruction1000_cropped.pdf, id=25, 259.97125pt x 258.9675pt>
+<reconstruction1000_cropped.pdf, id=45, 259.97125pt x 258.9675pt>
 File: reconstruction1000_cropped.pdf Graphic file (type pdf)
 
 <use reconstruction1000_cropped.pdf>
@@ -457,10 +458,7 @@ Package pdftex.def Info: reconstruction1000_cropped.pdf used on input line 279.
 
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<Einstein_progress.pdf, id=26, 421.575pt x 316.18124pt>
+<Einstein_progress.pdf, id=46, 421.575pt x 316.18124pt>
 File: Einstein_progress.pdf Graphic file (type pdf)
 
 <use Einstein_progress.pdf>
@@ -470,22 +468,18 @@ Package pdftex.def Info: Einstein_progress.pdf used on input line 318.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[4
-
- <./micrograph_Einstein_example_clean.pdf> <./micrograph_Einstein_example_s05.p
-df> <./micrograph_Einstein_example_s3.pdf>]
-<XP_1D_heterogeneous/hetero_example.pdf, id=50, 1155.31625pt x 331.2375pt>
+<XP_1D_heterogeneous/hetero_example.pdf, id=47, 1155.31625pt x 331.2375pt>
 File: XP_1D_heterogeneous/hetero_example.pdf Graphic file (type pdf)
 
 <use XP_1D_heterogeneous/hetero_example.pdf>
 Package pdftex.def Info: XP_1D_heterogeneous/hetero_example.pdf used on input l
 ine 366.
 (pdftex.def)             Requested size: 440.84746pt x 126.39214pt.
- [5 <./reconstruction1_cropped.pdf> <./reconstruction10_cropped.pdf> <./reconst
-ruction100_cropped.pdf> <./reconstruction1000_cropped.pdf>] [6 <./Einstein_prog
-ress.pdf>] [7 <./XP_1D_heterogeneous/hetero_example.pdf>] [8] [9] (draft4.bbl [
-10] [11] [12] [13]) [14] [15]
-[16] [17]
+ [4 <./reconstruction1_cropped.pdf> <./reconstruction10_cropped.pdf> <./reconst
+ruction100_cropped.pdf> <./reconstruction1000_cropped.pdf>] [5 <./Einstein_prog
+ress.pdf>] [6 <./XP_1D_heterogeneous/hetero_example.pdf>] [7] [8] (draft4.bbl [
+9] [10] [11] [12]) [13] [14]
+[15] [16]
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 883.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
@@ -493,52 +487,52 @@ File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 883.
- [18]
-[19] [20]
+ [17]
+[18] [19]
 Overfull \hbox (7.43501pt too wide) in paragraph at lines 1041--1042
 []\T1/cmr/m/n/10.95 By the Fourier slice the-o-rem, each cryo--EM mea-sure-ment
  (pro-jec-tion) is equiv-a-lent (through
  []
 
-[21] [22] (draft4.aux) ) 
+[20] [21] (draft4.aux) ) 
 Here is how much of TeX's memory you used:
- 5779 strings out of 493323
- 84951 string characters out of 3139040
- 165719 words of memory out of 3000000
- 9175 multiletter control sequences out of 15000+200000
+ 5751 strings out of 493323
+ 84434 string characters out of 3139050
+ 165275 words of memory out of 3000000
+ 9147 multiletter control sequences out of 15000+200000
  28405 words of font info for 70 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,18n,39p,988b,530s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Tamir Bendory\AppData\Local\MiKTeX\2.9\fonts
-\pk\ljfour\jknappen\ec\dpi600\ecsx1095.pk> <C:\Users\Tamir Bendory\AppData\Loca
-l\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1440.pk> <C:\Users\Tamir Be
-ndory\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk> 
-<C:\Users\Tamir Bendory\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dp
-i600\ecrm0800.pk> <C:\Users\Tamir Bendory\AppData\Local\MiKTeX\2.9\fonts\pk\ljf
-our\jknappen\ec\dpi600\ecss1095.pk> <C:\Users\Tamir Bendory\AppData\Local\MiKTe
-X\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk> <C:\Users\Tamir Bendory\A
-ppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.pk> <C:\Use
-rs\Tamir Bendory\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ec
-bx1440.pk> <C:\Users\Tamir Bendory\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkn
-appen\ec\dpi600\ecrm1000.pk> <C:\Users\Tamir Bendory\AppData\Local\MiKTeX\2.9\f
-onts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\Tamir Bendory\AppData\
-Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\Tami
-r Bendory\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.
-pk><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/P
-rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
-amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
-m/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb
-><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Pro
-gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program File
-s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 
-2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on draft4.pdf (22 pages, 1749928 bytes).
+ 39i,18n,39p,988b,525s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk
+\ljfour\jknappen\ec\dpi600\ecsx1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKT
+eX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1440.pk> <C:\Users\nboumal-x1\App
+Data\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk> <C:\Users
+\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm080
+0.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec
+\dpi600\ecss1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljf
+our\jknappen\ec\dpi600\ecti1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2
+.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.pk> <C:\Users\nboumal-x1\AppData
+\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\nbo
+umal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk
+> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi
+600\ecbx1000.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\
+jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\f
+onts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk><C:/Program Files/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.
+pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/P
+rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Fil
+es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symb
+ols/msbm10.pfb>
+Output written on draft4.pdf (21 pages, 1749806 bytes).
 PDF statistics:
- 603 PDF objects out of 1000 (max. 8388607)
+ 601 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
