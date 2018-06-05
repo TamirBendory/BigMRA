@@ -438,6 +438,8 @@ Alternatively, if the signals are not well separated, one can introduce new para
 
 \paragraph{Mathematical model.}
 
+\TODO{This exposition doesn't work for 2D images.}
+
 Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the data. 
 The forward model can be posed as a mixture of \emph{blind deconvolution} problems between binary signals and the target signals $x_i$:
 \begin{equation} \label{eq:model}
@@ -455,7 +457,7 @@ In order to estimate the mixture of autocorrelations, we assume that the support
   \vert i-j \vert\geq 2L-1,   \quad \text{for all } i,j\in\mathcal{S} \text{ such that } i\neq j.
   \label{eq:spacing}
 \end{align}
-The goal of the problem is to estimate $x_1,\ldots,x_K$ from $y$.
+The goal is to estimate $x_1,\ldots,x_K$ from $y$.
 
 
 %
@@ -467,6 +469,9 @@ The goal of the problem is to estimate $x_1,\ldots,x_K$ from $y$.
 
 \paragraph{Aperiodic autocorrelation functions}
 %\subsection{Aperiodic autocorrelation functions} \label{sec:aperiodic_ac}
+
+\TODO{$L$ is a bad notation here since it could be L or n; and k is poor notation too because we use it to sum up to K.}
+
 For  
 $z\in\RL$ and $k\geq 2$, the autocorrelation of order $k$ is defined for any integer shifts $\ell_1, \ldots, \ell_{k-1}$ by
 \begin{align}
@@ -521,11 +526,11 @@ If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then  si
 \end{align}
 This relation is proven in  Appendix~\ref{sec:autocorrelation_computation}.
 
-\paragraph{Numerical experiments details.}
+\paragraph{First numerical experiment.}
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated $P$ micrographs of size $4096\times 4096$ pixels. 
 In each micrograph, we placed Einstein's image of size $50\times 50$  in random locations, while keeping the separation condition~\eqref{eq:spacing}.  
 This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
-an accept/reject rule based on the separation constraint and locations picked so far. In average, $700$ images were placed in each micrograph.   
+an accept/reject rule based on the separation constraint and locations picked so far. On average, $700$ images were placed in each micrograph.   
 Then, an i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ was added inducing $\SNR$ of approximately $1/20$. An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
 %Different micrographs are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
 
@@ -541,6 +546,7 @@ where we set $\beta=1$.
 RRR estimates a $2L\times 2L$ image. Exact solution contains Einstein's image in the upper-left corner and zero else where. The operator $P_2(z)$ combines the Fourier phases of  the current estimation $z$ with the Fourier magnitudes of the signal  (estimated from the data). The operator $P_1(z)$ zeros out all entries of $z$ outside the $L\times L$ upper-left corner. 
 In order to compare the performance in multiple cases and different noise levels, the algorithm stopped after a fixed number of 1000 iterations and the iteration with the smallest error compared to the ground truth (also taking into account the reflection ambiguity) was chosen as the solution. While this cannot be done in practice since we do not have access to the ground truth, this procedure enables us to compare a large number of instances in different noisy environments \TODO{Note the last two sentences!}.
 
+\paragraph{Second numerical experiment.}
 For the 1-D experiment, we worked with three signals of length $L = 21$ and generated the data in the same way as in the 2-D example.
 The only difference is that here, for each
 placement, one of the three signals is picked at random proportionally to the desired number
