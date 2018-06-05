@@ -35,6 +35,12 @@ Jean-Marc Azais, Yohann De~Castro, and Fabrice Gamboa.
 \newblock {\em Applied and Computational Harmonic Analysis}, 38(2):177--195,
   2015.
 
+\bibitem{bauschke2004rrr}
+Heinz~H. Bauschke, Patrick~L. Combettes, and D.Russell Luke.
+\newblock Finding best approximation pairs relative to two closed convex sets
+  in {H}ilbert spaces.
+\newblock {\em Journal of Approximation Theory}, 127(2):178--192, 2004.
+
 \bibitem{beinert2015ambiguities}
 Robert Beinert and Gerlind Plonka.
 \newblock Ambiguities in one-dimensional discrete phase retrieval from fourier
@@ -97,6 +103,11 @@ Quentin Denoyelle, Vincent Duval, and Gabriel Peyr{\'e}.
 \newblock Support recovery for sparse super-resolution of positive measures.
 \newblock {\em Journal of Fourier Analysis and Applications}, 23(5):1153--1194,
   2017.
+
+\bibitem{elser2017rrr}
+Veit Elser.
+\newblock Matrix product constraints by projection methods.
+\newblock {\em Journal of Global Optimization}, 68(2):329--355, 2017.
 
 \bibitem{frank1983automatic}
 Joachim Frank and Terence Wagenknecht.

@@ -240,22 +240,36 @@ Another interesting feature of the described approach pertains to model bias, wh
 
 \section{Results} \label{sec:results}
 
-\TODO{Results: What answer was found to the research question; what did the study find? Was the tested hypothesis true?}
+%\TODO{Results: What answer was found to the research question; what did the study find? Was the tested hypothesis true?}
 
-In this section we describe  some numerical experiments and show results. The experimental details and the algorithms are discussed at length in Section~\ref{sec:methods}.
+%To support the claim that it may be possible to bypass particle picking in SPR from micrographs, as a proof of concept,
+We conducted two experiments in the simplified image formation model described in the introduction:
+\begin{enumerate}
+	\item The first experiment aims to recover a 2D image from an increasing number of micrographs with high noise, similar to the rightmost panel of Figure~\ref{fig:micro_example}. This is done using moments of \TODO{first and} second order, as these are sufficient to recover a 2D image up to elementary symmetries;
+	\item The second experiment aims to recover three distinct 1D signals from an increasing number of 1D micrographs with high noise. For this task, it is necessary to use moments up to third order.
+\end{enumerate}
+As outlined below, we find that it is indeed possible to recover good estimates of the ground truth signals from the highly corrupted micrographs, without particle picking. Furthermore, we find that the quality of estimation increases with the amount of data collected, despite the fact that particle picking remains challenging. The methods section provides additional details. In the discussion section, we outline how the general approach could be extended to full 3D SPR.
 
-In the first experiment, we estimated Einstein's image of size $50\times 50$ from multiple micrographs of size $4096\times 4096$ pixels, contaminated  with additive i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ ($\SNR=1/20$). An illustrative example of a micrograph appears in the right panel of Figure~\ref{fig:micro_example}.
-Each micrograph contains multiple occurrences of Einstein's image  in random locations, while keeping a separation of  $49$ pixels between the images in each direction. From the micrographs, we estimated the signal's power spectrum, which is equivalent to the second-order autocorrelation. Then, in order to estimate the signal itself, we applied a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR).
 
-As an initial guess, we picked an image of the physicist Issac Newton. If the algorithm was prone to model bias, we would expect to get as an output an image that resembles Newton, similarly to the ``Einstein from noise.'' However, the experiment exhibits the desired phenomenon: the more data we collect, the better the reconstruction quality. 
+%In this section we describe  some numerical experiments and show results. The experimental details and the algorithms are discussed at length in Section~\ref{sec:methods}.
 
-Figure~\ref{fig:Einst_example} demonstrates several recovery results for different number of recorded micrographs. Figure~\ref{fig:error_per_micro} presents the normalized recovery error as a function of the number of micrographs.
-To measure the error, we use the root mean square error (RMSE) defined as 
-\begin{equation}
-\text{RMSE}  := \frac{\|x - \hat{x}\|_{\text{F}}}{\|x \|_{\text{F}}},
-\end{equation} 
-where $x$ and $\hat{x}$ are, respectively, the underlying and estimated image, and $\|\cdot\|_{\text{F}}$ stands for the Frobenius norm.  
-\TODO{ We have a movie in the supplementary material.}
+In the first experiment, we estimated Einstein's image of size $50\times 50$ from a growing number of micrographs, each of size $4096\times 4096$ pixels. A micrograph contains, on average, 700 occurrences of the target image at random locations. The latter are chosen so that two occurrences are always separated by at least 49 pixels. Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$ (this corresponds to $\SNR=1/20$). This high noise level is illustrated in the right panel of Figure~\ref{fig:micro_example}.
+
+We compute the average autocorrelation of the micrographs (equivalently, the average of their power spectra). This is a particularly simple computation. In the methods section, we show how, owing to separation of the occurrences, a determined portion of the averaged autocorrelation allows to estimate the power spectrum of the unknown image itself. Mathematically, it is easy to show that the quality of this estimate improves steadily as the amount of data grows, regardless of noise level. Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{bauschke2004rrr,elser2017rrr}.\footnote{\TODO{What about biased terms? Do we need to know $\sigma$ in the 2D experiment? What about the number of occurrences, do we need to know that? Quid of symmetries? And quid first order moments?}} RRR is initialized with a picture of the physicist Isaac Newton and iterates to produce the estimate.\footnote{\TODO{Initializing with a face is debatable: it might helps the algorithm. On the other hand, I agree that it supports the notion that we don't get trapped too easily.}}
+
+Figure~\ref{fig:Einst_example} shows several estimated images for a growing number of micrographs. (A movie is available in \TODO{supplementary material}.) Figure~\ref{fig:error_per_micro} presents the normalized recovery error as a function of the amount of data available. Error is measured as the ratio of the root mean square error (RMSE) to the norm of the ground truth (square root of the sum of squared pixel intensities.) This is computed after fixing elementary symmetries (see methods.) As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many micrographs, without particle picking.
+
+
+%defined as 
+%\begin{equation}
+%\text{RMSE}  := \frac{\|x - \hat{x}\|_{\text{F}}}{\|x \|_{\text{F}}},
+%\end{equation} 
+%where $x$ and $\hat{x}$ are, respectively, the underlying and estimated image, and $\|\cdot\|_{\text{F}}$ stands for the Frobenius norm.  
+%\TODO{We have a movie in the supplementary material.}
+
+%%%% This is about bias, and it's imprecise; let's leave it out?
+%As an initial guess, we picked an image of the physicist Issac Newton. If the algorithm was prone to model bias, we would expect to get as an output an image that resembles Newton, similarly to the ``Einstein from noise.'' However, the experiment exhibits the desired phenomenon: the more data we collect, the better the reconstruction quality. 
+
 
 
 \begin{figure}[h!]
@@ -310,7 +324,9 @@ where $x$ and $\hat{x}$ are, respectively, the underlying and estimated image, a
 %		\includegraphics[scale=0.3]{reconstruction200}
 %		\caption{$P = 1024\times 100$}
 %	\end{subfigure}%
-	\caption{\label{fig:Einst_example} Recovery of Einstein's image. The RRR algorithm is initialized with the image of the physicist Issac Newton. We show estimations of Einstein using $P$ micrographs, each contains $700$ image occurrences on average and the $\SNR$ is $1/20$.  \TODO{We may want to add another image with $P=512\times 10^4$ and the image of Newton.} }	
+	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized with an image of the physicist Isaac Newton. Estimates are obtained from $P$ micrographs (growing across panels), each containing $700$ image occurrences on average.---\TODO{We may want to add another image with $P=512\times 10^4$ and the image of Newton.}
+		% At a noise level of $\sigma = 3$, this amounts to an $\SNR$ of $1/20$.
+	}
 \end{figure}
 
 
@@ -318,7 +334,7 @@ where $x$ and $\hat{x}$ are, respectively, the underlying and estimated image, a
 \begin{figure}[h]
 \centering
 \includegraphics[scale=.7]{Einstein_progress}
-\caption{\label{fig:error_per_micro} The figure  shows the RMSE  (in logarithmic scale) of recovering Einstein's image.}	
+\caption{\label{fig:error_per_micro} Relative root mean square error of the estimate of Einstein's image as a function of the number of observed micrographs (logarithmic scale along both axes.)}
 \end{figure}
 
 
@@ -332,19 +348,14 @@ where $x$ and $\hat{x}$ are, respectively, the underlying and estimated image, a
 %is poorer than the other two signals, a phenomenon that can be explained using Proposition~\ref{prop:uniqueness}.
 
 
-Results from a similar experiment with three ($K=3$) one-dimensional signals are presented in Figure~\ref{fig:1Dheterosignals}.
- We define the ratio of the space occupied by the $i$th signal as 
-\begin{equation}
-\gamma_i = \frac{M_i L}{N},
-\end{equation}
-where $M_i$ is the number of signal's  occurrences, $L$ is the length of the signal and $N$ is the micrograph length.
-These ratios present the {density} of the the signals in the data.
-In the experiment, we do not assume to know these ratios, neither the noise level $\sigma$. 
+In the second experiment, three 1D signals, each of length $L = 21$, appear at random locations in one long 1D signal, which we call a micrograph by analogy. Any two occurrences are separated by at least 20 entries. The signals appear respectively about 30, 20 and 10 million times in a micrograph of length 12.3 billion. The micrograph is then contaminated with additive white Gaussian noise. Neither the number of occurrences nor the noise level $\sigma$ are known. In the methods section, we show how autocorrelations of the micrograph can be used to estimate weighted averages of the autocorrelations of the target signals. The individual signals and their relative densities are then estimated from autocorrelations up to order three by solving a nonlinear least-squares problem.
 
-In order to estimate the signals, we computed the first three autocorrelation functions of the data and then estimated the signals and their corresponding $\gamma_i$ using a nonconvex least-squares. 
-As can be seen, given enough signal occurrences, we can estimate accurately the signals. 
-The estimation quality of the triangle signal is poorer than the other two signals, a phenomenon that is explained using Proposition~\ref{prop:uniqueness}.
-\TODO{1. We will replace the figure with a ``progress figure'' (like we did for Einstien) for each signals and a plot of the recovery error for all three signals. 2. We may want to replace the triangle signal}
+Figure~\ref{fig:1Dheterosignals} shows how the estimates improve as we see a larger and larger fraction of the micrograph (that is, as more and more data becomes available.) As is clear from the picture, despite the high noise level which would make it very challenging to locate the signal occurrences, the individual signals can be estimated accurately given enough data. Furthermore, the propensity of each signal can also be estimated.
+
+%In order to estimate the signals, we computed the first three autocorrelation functions of the data and then estimated the signals and their corresponding $\gamma_i$ using a nonconvex least-squares. 
+%As can be seen, given enough signal occurrences, we can estimate accurately the signals. 
+%The estimation quality of the triangle signal is poorer than the other two signals, a phenomenon that is explained using Proposition~\ref{prop:uniqueness}.
+
 %We do not assume the knowledge of the noise level. 
 %Crucially, starting from the point of $n\approx10^8$, the RMSE of the signal estimation decreases linearly with slope $-1/2$---the expected estimation rate of the autocorrelation functions---implying the stability of the recovery algorithm. 
 %
@@ -475,7 +486,7 @@ to a scaled, biased, version of the signal's autocorrelation:
 for $\ell,\ell_1,\ell_2=0,\ldots L-1$, and where $\delta$ denotes the Kronecker delta function. 
 %These relations are proven in Appendix~\ref{sec:autocorrelation_computation}.
 
-\paragraph{Estimating the autocorrelation function of a multiple signals.}
+\paragraph{Estimating the autocorrelation function of multiple signals.}
 
 As before, we consider  the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty$, while preserving fixed ratios
 \begin{align}
