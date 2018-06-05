@@ -348,7 +348,9 @@ Figure~\ref{fig:Einst_example} shows several estimated images for a growing numb
 %is poorer than the other two signals, a phenomenon that can be explained using Proposition~\ref{prop:uniqueness}.
 
 
-In the second experiment, three 1D signals, each of length $L = 21$, appear at random locations in one long 1D signal, which we call a micrograph by analogy. Any two occurrences are separated by at least 20 entries. The signals appear respectively about 30, 20 and 10 million times in a micrograph of length 12.3 billion. The micrograph is then contaminated with additive white Gaussian noise. Neither the number of occurrences nor the noise level $\sigma$ are known. In the methods section, we show how autocorrelations of the micrograph can be used to estimate weighted averages of the autocorrelations of the target signals. The individual signals and their relative densities are then estimated from autocorrelations up to order three by solving a nonlinear least-squares problem.
+In the second experiment, three 1D signals, each of length $L = 21$, appear at random locations in one long 1D signal, which we call a micrograph by analogy. Any two occurrences are separated by at least 20 entries. The signals appear respectively about 30, 20 and 10 million times in a micrograph of length 12.3 billion. The micrograph is then contaminated with additive white Gaussian noise. This results in an $\SNR$ of about $1/9$, while about 10\% of the micrograph contains signal. Neither the number of occurrences nor the noise level $\sigma$ are known.
+
+In the methods section, we detail how autocorrelations of the micrograph can be used to estimate weighted averages of the autocorrelations of the target signals. The individual signals and their relative densities are then estimated from autocorrelations up to order three by solving a nonlinear least-squares problem.
 
 Figure~\ref{fig:1Dheterosignals} shows how the estimates improve as we see a larger and larger fraction of the micrograph (that is, as more and more data becomes available.) As is clear from the picture, despite the high noise level which would make it very challenging to locate the signal occurrences, the individual signals can be estimated accurately given enough data. Furthermore, the propensity of each signal can also be estimated.
 
@@ -377,7 +379,10 @@ Figure~\ref{fig:1Dheterosignals} shows how the estimates improve as we see a lar
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\linewidth]{heterogeneous_progressive_n12300000000_466300}
-	\caption{An experiment for estimate three one-dimensional signals simultaneously with noise level $\sigma=3$. Red signals are the ground truth (targets) and the blue signals are our estimations. Individual RMSE of the estimates: $0.0239393 / 0.208925 / 0.0335956$. The estimated $\gamma$'s are $0.02574 / 0.01693 / 0.00818$ and the true ones $0.02561 / 0.01707 / 0.00853$. The $\SNR$ is $1/12$. \TODO{1. to replace with a ``progress'' plot 2. replace the triangle signal 3. add error progress figure}}
+	\caption{For the second experiment, each row shows, three times, one of the target signals (red), overlaid with an estimate (blue) obtained from a growing portion of the noisy micrograph (about $10^8$, $10^9$ and $10^{10}$ entries available to compute autocorrelations.) The last column depicts evolution of the relative root mean square error in estimating each individual target signal. Signals 1 to 3 appear respectively about 30, 20 and 10 million times. With the whole micrograph available, the algorithm estimated those to be 29.8, 21.9 and 10.0 million, respectively.
+%		
+%		An experiment for estimate three one-dimensional signals simultaneously with noise level $\sigma=3$. Red signals are the ground truth (targets) and the blue signals are our estimations. Individual RMSE of the estimates: $0.0239393 / 0.208925 / 0.0335956$. The estimated $\gamma$'s are $0.02574 / 0.01693 / 0.00818$ and the true ones $0.02561 / 0.01707 / 0.00853$. The $\SNR$ is $1/12$. \TODO{1. to replace with a ``progress'' plot 2. replace the triangle signal 3. add error progress figure}
+	}
 	\label{fig:1Dheterosignals}
 \end{figure}
 

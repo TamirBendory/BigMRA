@@ -32,18 +32,18 @@
 \@writefile{toc}{\contentsline {section}{\numberline {4}Methods}{6}}
 \newlabel{sec:methods}{{4}{6}}
 \@writefile{toc}{\contentsline {paragraph}{Mathematical model.}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces An experiment for estimate three one-dimensional signals simultaneously with noise level $\sigma =3$. Red signals are the ground truth (targets) and the blue signals are our estimations. Individual RMSE of the estimates: $0.0239393 / 0.208925 / 0.0335956$. The estimated $\gamma $'s are $0.02574 / 0.01693 / 0.00818$ and the true ones $0.02561 / 0.01707 / 0.00853$. The $\ensuremath  {\textsf  {SNR}}$ is $1/12$. {\color  {red}{[1. to replace with a ``progress'' plot 2. replace the triangle signal 3. add error progress figure]}}\relax }}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces For the second experiment, each row shows, three times, one of the target signals (red), overlaid with an estimate (blue) obtained from a growing portion of the noisy micrograph (about $10^8$, $10^9$ and $10^{10}$ entries available to compute autocorrelations.) The last column depicts evolution of the relative root mean square error in estimating each individual target signal. Signals 1 to 3 appear respectively about 30, 20 and 10 million times. With the whole micrograph available, the algorithm estimated those to be 29.8, 21.9 and 10.0 million, respectively. \relax }}{7}}
 \newlabel{fig:1Dheterosignals}{{4}{7}}
 \newlabel{eq:model}{{4.1}{7}}
 \newlabel{eq:spacing}{{4.2}{7}}
-\@writefile{toc}{\contentsline {paragraph}{Aperiodic autocorrelation functions}{7}}
-\newlabel{eq:ac_general}{{4.3}{7}}
+\@writefile{toc}{\contentsline {paragraph}{Aperiodic autocorrelation functions}{8}}
+\newlabel{eq:ac_general}{{4.3}{8}}
 \newlabel{eq:ac_special}{{4.4}{8}}
 \@writefile{toc}{\contentsline {paragraph}{Estimating the autocorrelation function of a single signal.}{8}}
 \newlabel{eq:data_ac_k1}{{4.6}{8}}
-\@writefile{toc}{\contentsline {paragraph}{Estimating the autocorrelation function of multiple signals.}{8}}
 \citation{hayes1982reconstruction}
 \citation{bendory2017fourier}
+\@writefile{toc}{\contentsline {paragraph}{Estimating the autocorrelation function of multiple signals.}{9}}
 \newlabel{eq:data_ac}{{4.8}{9}}
 \@writefile{toc}{\contentsline {paragraph}{Numerical experiments details.}{9}}
 \citation{boumal2017heterogeneous}
@@ -54,9 +54,9 @@
 \bibcite{abed1997blind}{2}
 \bibcite{aguerrebere2016fundamental}{3}
 \bibcite{andrieu2001bayesian}{4}
+\newlabel{eq:optim1D}{{4.10}{10}}
 \bibcite{ayers1988iterative}{5}
 \bibcite{azais2015spike}{6}
-\newlabel{eq:optim1D}{{4.10}{10}}
 \bibcite{bauschke2004rrr}{7}
 \bibcite{beinert2015ambiguities}{8}
 \bibcite{bendory2017robust}{9}
@@ -104,7 +104,7 @@
 \citation{boumal2017heterogeneous}
 \@writefile{toc}{\contentsline {section}{\numberline {A}Proof of \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:data_ac}\unskip \@@italiccorr )}}}{14}}
 \newlabel{sec:autocorrelation_computation}{{A}{14}}
-\newlabel{eq:2nd_moment_signal_term}{{A.4}{14}}
+\newlabel{eq:2nd_moment_signal_term}{{A.4}{15}}
 \citation{benveniste1980robust}
 \citation{kormylo1983identifiability}
 \citation{jefferies1993restoration}
@@ -116,6 +116,10 @@
 \citation{andrieu2001bayesian}
 \citation{cappe1999simulation}
 \citation{rabiner1989tutorial}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Related work}{16}}
+\newlabel{sec:related_literature}{{B}{16}}
+\@writefile{toc}{\contentsline {paragraph}{System identification.}{16}}
+\@writefile{toc}{\contentsline {paragraph}{Likelihood-based methods.}{16}}
 \citation{lii1982deconvolution}
 \citation{giannakis1989identification}
 \citation{tugnait1984identification}
@@ -125,10 +129,6 @@
 \citation{bendory2017robust}
 \citation{bernstein2017deconvolution}
 \citation{aguerrebere2016fundamental}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Related work}{16}}
-\newlabel{sec:related_literature}{{B}{16}}
-\@writefile{toc}{\contentsline {paragraph}{System identification.}{16}}
-\@writefile{toc}{\contentsline {paragraph}{Likelihood-based methods.}{16}}
 \citation{bendory2017bispectrum}
 \citation{boumal2017heterogeneous}
 \citation{beinert2015ambiguities}
@@ -141,23 +141,24 @@
 \@writefile{toc}{\contentsline {paragraph}{Estimating a signal from its third-order autocorrelation.}{17}}
 \newlabel{eq-uniqueness}{{C.1}{17}}
 \newlabel{prop:uniqueness}{{C.1}{17}}
-\@writefile{toc}{\contentsline {paragraph}{Identifiability of parameters from the moments of $y$.}{17}}
 \citation{perry2017sample}
 \citation{abbe2017multireference}
 \citation{boumal2017heterogeneous}
 \citation{weinthesis}
+\@writefile{toc}{\contentsline {paragraph}{Identifiability of parameters from the moments of $y$.}{18}}
 \newlabel{prop:gamma}{{C.2}{18}}
 \newlabel{prop:gamma_sigma}{{C.3}{18}}
 \@writefile{toc}{\contentsline {paragraph}{Open theoretical questions.}{18}}
-\@writefile{toc}{\contentsline {section}{\numberline {D}Proof of Proposition~\ref  {prop:gamma_sigma}}{18}}
-\newlabel{sec:proof_prop_gamma_sigma}{{D}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Proof of Proposition~\ref  {prop:gamma_sigma}}{19}}
+\newlabel{sec:proof_prop_gamma_sigma}{{D}{19}}
 \newlabel{eq:E1}{{D.1}{19}}
 \newlabel{eq:E2}{{D.2}{19}}
 \newlabel{eq:E12}{{D.3}{19}}
 \newlabel{eq:sigma2}{{D.4}{19}}
 \newlabel{eq:quad1}{{D.5}{19}}
-\newlabel{eq:E3}{{D.6}{19}}
-\newlabel{eq:E4}{{D.7}{19}}
+\newlabel{eq:E3}{{D.6}{20}}
+\newlabel{eq:E4}{{D.7}{20}}
+\newlabel{eq:quad2}{{D.8}{20}}
 \citation{harauz1989automatic}
 \citation{ogura2004automatic}
 \citation{zhu2016deep}
@@ -167,9 +168,8 @@
 \citation{scheres2015semi}
 \citation{langlois2014automated}
 \citation{voss2009dog}
-\newlabel{eq:quad2}{{D.8}{20}}
-\newlabel{eq:cond}{{D.9}{20}}
+\newlabel{eq:cond}{{D.9}{21}}
 \@writefile{toc}{\contentsline {section}{\numberline {E}Stuff}{21}}
 \@writefile{toc}{\contentsline {section}{\numberline {F}The autocorrelation functions in cryo--EM}{21}}
 \newlabel{eq:volume}{{F.1}{21}}
-\newlabel{eq:P}{{F.3}{21}}
+\newlabel{eq:P}{{F.3}{22}}
