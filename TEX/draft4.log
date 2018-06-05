@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.20)  4 JUN 2018 12:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.20)  5 JUN 2018 11:29
 entering extended mode
 **./draft4.tex
 (draft4.tex
@@ -429,76 +429,78 @@ Package pdftex.def Info: micrograph_Einstein_example_s3.pdf used on input line
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
  [3 <./micrograph_Einstein_example_clean.pdf> <./micrograph_Einstein_example_s0
 5.pdf> <./micrograph_Einstein_example_s3.pdf>] <reconstruction1_cropped.pdf, id
-=42, 259.97125pt x 258.9675pt>
+=41, 259.97125pt x 258.9675pt>
 File: reconstruction1_cropped.pdf Graphic file (type pdf)
 
 <use reconstruction1_cropped.pdf>
-Package pdftex.def Info: reconstruction1_cropped.pdf used on input line 263.
+Package pdftex.def Info: reconstruction1_cropped.pdf used on input line 265.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
-<reconstruction10_cropped.pdf, id=43, 259.97125pt x 258.9675pt>
+<reconstruction10_cropped.pdf, id=42, 259.97125pt x 258.9675pt>
 File: reconstruction10_cropped.pdf Graphic file (type pdf)
 
 <use reconstruction10_cropped.pdf>
-Package pdftex.def Info: reconstruction10_cropped.pdf used on input line 268.
+Package pdftex.def Info: reconstruction10_cropped.pdf used on input line 270.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
-<reconstruction100_cropped.pdf, id=44, 259.97125pt x 258.9675pt>
+<reconstruction100_cropped.pdf, id=43, 259.97125pt x 258.9675pt>
 File: reconstruction100_cropped.pdf Graphic file (type pdf)
 
 <use reconstruction100_cropped.pdf>
-Package pdftex.def Info: reconstruction100_cropped.pdf used on input line 274.
+Package pdftex.def Info: reconstruction100_cropped.pdf used on input line 276.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
-<reconstruction1000_cropped.pdf, id=45, 259.97125pt x 258.9675pt>
+<reconstruction1000_cropped.pdf, id=44, 259.97125pt x 258.9675pt>
 File: reconstruction1000_cropped.pdf Graphic file (type pdf)
 
 <use reconstruction1000_cropped.pdf>
-Package pdftex.def Info: reconstruction1000_cropped.pdf used on input line 279.
+Package pdftex.def Info: reconstruction1000_cropped.pdf used on input line 281.
 
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
-<Einstein_progress.pdf, id=46, 421.575pt x 316.18124pt>
+<Einstein_progress.pdf, id=45, 421.575pt x 316.18124pt>
 File: Einstein_progress.pdf Graphic file (type pdf)
 
 <use Einstein_progress.pdf>
-Package pdftex.def Info: Einstein_progress.pdf used on input line 318.
+Package pdftex.def Info: Einstein_progress.pdf used on input line 320.
 (pdftex.def)             Requested size: 295.10048pt x 221.32535pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<XP_1D_heterogeneous/hetero_example.pdf, id=47, 1155.31625pt x 331.2375pt>
-File: XP_1D_heterogeneous/hetero_example.pdf Graphic file (type pdf)
 
-<use XP_1D_heterogeneous/hetero_example.pdf>
-Package pdftex.def Info: XP_1D_heterogeneous/hetero_example.pdf used on input l
-ine 366.
-(pdftex.def)             Requested size: 440.84746pt x 126.39214pt.
+<heterogeneous_progressive_n12300000000_466300.pdf, id=46, 790.955pt x 431.6125
+pt>
+File: heterogeneous_progressive_n12300000000_466300.pdf Graphic file (type pdf)
+
+ <use heterogeneous_progressive_n12300000000_466300.pdf>
+Package pdftex.def Info: heterogeneous_progressive_n12300000000_466300.pdf used
+ on input line 368.
+(pdftex.def)             Requested size: 440.84746pt x 240.56857pt.
  [4 <./reconstruction1_cropped.pdf> <./reconstruction10_cropped.pdf> <./reconst
 ruction100_cropped.pdf> <./reconstruction1000_cropped.pdf>] [5 <./Einstein_prog
-ress.pdf>] [6 <./XP_1D_heterogeneous/hetero_example.pdf>] [7] [8] (draft4.bbl [
-9] [10] [11] [12]) [13] [14]
-[15] [16]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 883.
+ress.pdf>] [6 <./heterogeneous_progressive_n12300000000_466300.pdf>] [7] [8] [9
+] (draft4.bbl
+[10] [11] [12]) [13] [14] [15] [16] [17]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 887.
 
- ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 883.
- [17]
-[18] [19]
-Overfull \hbox (7.43501pt too wide) in paragraph at lines 1041--1042
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 887.
+ [18] [19] [20]
+Overfull \hbox (7.43501pt too wide) in paragraph at lines 1045--1046
 []\T1/cmr/m/n/10.95 By the Fourier slice the-o-rem, each cryo--EM mea-sure-ment
  (pro-jec-tion) is equiv-a-lent (through
  []
 
-[20] [21] (draft4.aux) ) 
+[21] [22] (draft4.aux) ) 
 Here is how much of TeX's memory you used:
- 5751 strings out of 493323
- 84434 string characters out of 3139050
- 165275 words of memory out of 3000000
+ 5750 strings out of 493323
+ 84489 string characters out of 3139050
+ 166275 words of memory out of 3000000
  9147 multiletter control sequences out of 15000+200000
  28405 words of font info for 70 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -530,9 +532,9 @@ type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
 blic/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsf
 onts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symb
 ols/msbm10.pfb>
-Output written on draft4.pdf (21 pages, 1749806 bytes).
+Output written on draft4.pdf (22 pages, 1756339 bytes).
 PDF statistics:
- 601 PDF objects out of 1000 (max. 8388607)
+ 605 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

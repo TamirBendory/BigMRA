@@ -126,7 +126,7 @@ Specifically, the impossibility of particle picking does not necessarily imply i
 %%Thus, acquiring more data does not necessarily allow to improve the particle picking stage, whereas it should in principle allow to improve the molecule reconstruction.
 %%Indeed, the signal itself (the many different views of the molecule) is still present in the micrograph: 
 %Indeed, in principle at least, the micrograph does contain the necessary information (several views of the molecule(s) of interest). While we may not be able to locate these views, we may still be able to extract the relevant information through other means.
-Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle packing imposes on molecule size do not translate into limits on particle reconstruction.
+Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle picking imposes on molecule size do not translate into limits on particle reconstruction.
 
 %\TODO{Paragraph about the simplified model}
 As a proof of concept, we study a simplified model where an unknown image appears numerous times at unknown locations in several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
@@ -137,9 +137,9 @@ To be clear, we do not consider here many prominent features of real SPR experim
 
 In order to recover the planted image, we use autocorrelation analysis. In a nutshell, we relate the autocorrelation functions of the micrographs to the autocorrelation functions of the planted image.
 %To do so, we assume the image occurrences are well separated.
-For any noise level, these autocorrelations can be estimated to any desired accuracy provided individual occurrences of the image are well separated and the image appears sufficiently many times in the micrographs. Importantly, there is no need to detect individual occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. These directly yield estimates for the autocorrelations of the image. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem via least-squares or a phase retrieval algorithm; see Figure~\ref{fig:Einst_example} for an illustration and Section~\ref{sec:methods} for details. As a side note, we mention that expectation-maximization (EM)---a popular framework in SPR---is intractable for this problem; see Appendix~\ref{sec:theory} for a discussion.
+For any noise level, these autocorrelations can be estimated to any desired accuracy, provided individual occurrences of the image are well separated and the image appears sufficiently many times in the micrographs. Importantly, there is no need to detect individual occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. These directly yield estimates for the autocorrelations of the image. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem via least-squares or a phase retrieval algorithm; see Figure~\ref{fig:Einst_example} for an illustration and Section~\ref{sec:methods} for details. As a side note, we mention that expectation-maximization (EM)---a popular framework in SPR---is intractable for this problem; see Appendix~\ref{sec:theory} for a discussion.
 
-Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{vanheel1992correlation,shatsky2009method,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using cross-correlation and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates are required.
+Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{vanheel1992correlation,shatsky2009method,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using cross-correlation and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates are required, thus significantly reducing concerns about model bias.
 
 
 %\TODO{Paragraph about bias; can also mention computational aspects (single pass, etc.)}
@@ -239,6 +239,8 @@ Another interesting feature of the described approach pertains to model bias, wh
 
 
 \section{Results} \label{sec:results}
+
+\TODO{Results: What answer was found to the research question; what did the study find? Was the tested hypothesis true?}
 
 In this section we describe  some numerical experiments and show results. The experimental details and the algorithms are discussed at length in Section~\ref{sec:methods}.
 
@@ -363,7 +365,7 @@ The estimation quality of the triangle signal is poorer than the other two signa
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[width=\linewidth]{XP_1D_heterogeneous/hetero_example}
+	\includegraphics[width=\linewidth]{heterogeneous_progressive_n12300000000_466300}
 	\caption{An experiment for estimate three one-dimensional signals simultaneously with noise level $\sigma=3$. Red signals are the ground truth (targets) and the blue signals are our estimations. Individual RMSE of the estimates: $0.0239393 / 0.208925 / 0.0335956$. The estimated $\gamma$'s are $0.02574 / 0.01693 / 0.00818$ and the true ones $0.02561 / 0.01707 / 0.00853$. The $\SNR$ is $1/12$. \TODO{1. to replace with a ``progress'' plot 2. replace the triangle signal 3. add error progress figure}}
 	\label{fig:1Dheterosignals}
 \end{figure}
@@ -371,6 +373,8 @@ The estimation quality of the triangle signal is poorer than the other two signa
 
 
 \section{Discussion}
+
+\TODO{Discussion: What might the answer imply and why does it matter? How does it fit in with what other researchers have found? What are the perspectives for future research?}
 
 %All current algorithmic pipelines for SPR using cryo--EM start with a particle picking algorithm which is prone to model bias. 
 %Bypassing the particle picking stage and constructing a 3-D model directly from the data---without assuming prior knowledge on the particle to be estimated---can be used to reconstruct ab initio models to initialize a refinement algorithm.  Alternatively, it can be applied to generate templates for a particle picker which does not suffer from model bias.
