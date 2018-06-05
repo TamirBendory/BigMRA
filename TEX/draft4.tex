@@ -396,31 +396,42 @@ Figure~\ref{fig:1Dheterosignals} shows how the estimates improve as we see a lar
 %All current algorithmic pipelines for SPR using cryo--EM start with a particle picking algorithm which is prone to model bias. 
 %Bypassing the particle picking stage and constructing a 3-D model directly from the data---without assuming prior knowledge on the particle to be estimated---can be used to reconstruct ab initio models to initialize a refinement algorithm.  Alternatively, it can be applied to generate templates for a particle picker which does not suffer from model bias.
 
-\TODO{Where and how do we cite Kam? Fred?}
 
 In the simplified model we examined, the aim is to estimate one, or possibly several, images from micrographs. Our strategy is to compute autocorrelation functions of the data and to relate these statistics to the unknown parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations. Depending on the scenario, we did so using either a phase retrieval algorithm or a nonlinear least-squares algorithm.
 
 The same general approach can, in principle, be applied directly to SPR from cryo-EM. Here, the micrographs contain numerous tomographic projections of molecules (possibly in different conformations) under unknown viewing directions. The aim is to estimate the 3-D volumes of the different conformations directly from micrographs. Each volume can be expanded linearly in a basis, so that the volume is characterized by its expansion coefficients. Since tomographic projection is a linear operation, autocorrelations of the micrographs (which can be estimated easily) are polynomial functions of the sought coefficients. Thus, autocorrelations of the micrographs provide a system of polynomial equations in the volume parameters, and the question becomes: are these equations sufficient to uniquely identify the volumes, and can we solve the system?
 
-We show in Appendix~\ref{sec:cryoem} that the number of polynomial equations provided by the third-order autocorrelations is of the same order as the number of coefficients required to describe one volume at the same resolution as the particle projections. This hints that it may be possible to reconstruct a constant number of distinct volumes from these equations directly. Crucially, the outlined approach involves no particle picking, and a fortiori no viewing direction estimation. As a result, it may not be limited to large molecules in the same way that particle picking approaches are. Concerns for model bias would also be greatly reduced.
-
-\TODO{Do we want to say something about the number of images that we need? Specifically, do we want to address the fact that the numerical experiments suggest we may need a gigantic number of them for cryo, and mention trends in cryo technology that are encouraging in that regard? (Of course, we can't compare to RELION etc.\ in SNRs so low that one can't particle pick; that's not the point here.)}
+We show in Appendix~\ref{sec:cryoem} that the number of polynomial equations provided by the third-order autocorrelations is of the same order as the number of coefficients required to describe one volume at resolution comparable to that of the particle projections. This hints that it may be possible to reconstruct one or even several distinct volumes from these equations directly. Additional parameters in these equations could encode an unknown non-uniform viewing direction distribution and an unknown conformation distribution, which could then also be estimated. Crucially, the outlined approach involves no particle picking, hence a fortiori no viewing direction estimation or conformation clustering. As a result, it may not be limited to large molecules in the same way that particle picking approaches are. Concerns for model bias would also greatly be reduced.
 
 
 %While the field is currently dominated by Bayesian methods such as EM, they are intractable for such problems. As an alternative, we propose to use autocorrelation analysis technique that shares some common lines (did you get the wordplay?)  with Kam's method for ab initio modeling~\cite{kam1980reconstruction,levin20173d,singer2018mathematics}. That being said, the SPR model is far more complicated than the model presented here. In a future research, we hope to bridge this gap.
 
+Of course, we recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. We discuss a few now.
 
+One possible concern is that the numerical experiments conducted here suggest a large amount of data may be necessary.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable $\SNR$ is an interesting research question.} Recent trends in high-throughput cryo-EM technology \TODO{?} give hope that this may be a lesser concern in the long term. Still, large amounts of data also imply large amounts of computations. On this front, we note that computing autocorrelations of low orders can be done efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one look at each micrograph is necessary. The output of this data processing stage is a succinct summary in the form of autocorrelation estimates. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an all important question then is whether the equations can be solved meaningfully in practice. The proof-of-concept experiments above suggest they might.
+
+%Insofar as the computational challenges are concerned, we note that expectation-maximization algorithms (EM) have, over time, become the norm in the cryo-EM community, as exemplified by the popular RELION package. The idea of using EM for cryo-EM can be traced back at least to~\TODO{Sigworth}. At the time, such approaches also seemed challenging.
+
+
+%\TODO{Do we want to say something about the number of images that we need? Specifically, do we want to address the fact that the numerical experiments suggest we may need a gigantic number of them for cryo, and mention trends in cryo technology that are encouraging in that regard? (Of course, we can't compare to RELION etc.\ in SNRs so low that one can't particle pick; that's not the point here.)}
+
+Beyond data acquisition and computational challenges, there are modeling issues to consider.
 As stated, our approach relies on two core assumptions that are not necessarily verified in SPR experiments.
-First, we assume an additive white noise model, while in practice the noise may be structured or signal dependent. To address this point, it may be necessary to investigate better noise models and to extend the autocorrelation analysis to these models.
-Second, we assume that any two signal occurrences are sufficiently separated, as required by~\eqref{eq:spacing}. 
-This separation could be induced by careful experimental design \TODO{Ref?}.
-If the signals are not well separated, one can introduce new variables that represent the distribution of the spacing between signal occurrences. Here as well, the relation between the autocorrelation functions of the data and the signals can be derived. These variations lead to different inverse problems. No sufficient conditions for them to be solvable are currently known.
+First, we assume an additive white noise model, while in practice the noise may be structured or signal dependent. To address this point, it may be necessary to investigate better noise models and to extend the autocorrelation analysis accordingly.
+Second, we assume that any two signal occurrences are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the target signals. 
+Perhaps this separation could be induced by careful experimental design \TODO{?}.
+Alternatively, if the signals are not well separated, one can introduce new parameters which encode the distribution of the spacing between occurrences. Here as well, relations between autocorrelation functions of the data and of the signals can be derived.
+%Each variation leads to a different inverse problem. No sufficient conditions for them to be solvable are currently known.
+
+
+\TODO{Do we want to note here that EM used to be perceived as computationally out of reach back when it was proposed [cite Fred], yet is now the de facto standard method as exemplified by RELION? Do we also want to stress that models have been refined over decades?}
+
+\TODO{Should we discuss CTF? Where, and to what extent?}
+
+\TODO{Where and how do we cite Kam? Fred?}
 
 %The first entry $p[1]$ will represent the probability that two consecutive signals are separated by only one entry, $p[2]$ the probability for spacing of two entries and so on. Using this auxiliary variable $p$, one can write explicitly the relation between the autocorrelation functions of the data and those of the signal in a similar way to~\eqref{eq:data_ac}. 
 %An interesting question is  under what conditions on $p$ and the signals, one can estimate the signals from the data.
-
-
-\TODO{We recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. Insofar as the computational challenges are concerned, we note that expectation-maximization algorithms (EM) have, over time, become the norm in the cryo-EM community, as exemplified by the popular RELION package. The idea of using EM for cryo-EM can be traced back at least to~\TODO{Sigworth}. At the time, such approaches also seemed challenging.}
 
 \section{Methods} \label{sec:methods}
 

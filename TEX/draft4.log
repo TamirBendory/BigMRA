@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.20)  5 JUN 2018 16:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.20)  5 JUN 2018 17:27
 entering extended mode
 **./draft4.tex
 (draft4.tex
@@ -485,62 +485,63 @@ onstruction100_cropped.pdf> <./reconstruction1000_cropped.pdf>] [6 <./Einstein_
 progress.pdf> <./heterogeneous_progressive_n12300000000_466300.pdf>] [7
 
 ] [8] [9] [10] (draft4.bbl
-[11] [12] [13]) [14] [15] [16] [17] [18]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 908.
+[11] [12] [13] [14]) [15] [16] [17] [18]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 919.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 908.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 919.
  [19] [20] [21]
-Overfull \hbox (7.43501pt too wide) in paragraph at lines 1066--1067
+Overfull \hbox (7.43501pt too wide) in paragraph at lines 1077--1078
 []\T1/cmr/m/n/10.95 By the Fourier slice the-o-rem, each cryo--EM mea-sure-ment
  (pro-jec-tion) is equiv-a-lent (through
  []
 
 [22] [23] (draft4.aux) ) 
 Here is how much of TeX's memory you used:
- 5765 strings out of 493323
- 84648 string characters out of 3139050
- 166295 words of memory out of 3000000
- 9157 multiletter control sequences out of 15000+200000
- 30715 words of font info for 77 fonts, out of 3000000 for 9000
+ 5771 strings out of 493323
+ 84710 string characters out of 3139050
+ 165296 words of memory out of 3000000
+ 9160 multiletter control sequences out of 15000+200000
+ 33025 words of font info for 80 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,18n,39p,1003b,525s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,18n,39p,1129b,525s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk
 \ljfour\jknappen\ec\dpi600\ecsx1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKT
 eX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1440.pk> <C:\Users\nboumal-x1\App
 Data\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk> <C:\Users
-\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm090
+\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss090
 0.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec
-\dpi600\ecrm0600.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljf
-our\jknappen\ec\dpi600\ecrm0800.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2
-.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1095.pk> <C:\Users\nboumal-x1\AppData
-\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk> <C:\Users\nbo
-umal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.pk
+\dpi600\ecrm0900.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljf
+our\jknappen\ec\dpi600\ecrm0600.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2
+.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0800.pk> <C:\Users\nboumal-x1\AppData
+\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1095.pk> <C:\Users\nbo
+umal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
 > <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi
-600\ecbx1440.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\
-jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\f
-onts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\nboumal-x1\AppData\Loc
-al\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\nboumal
--x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk><C:
-/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program
- Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publ
-ic/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7
-.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/P
-rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on draft4.pdf (23 pages, 1769965 bytes).
+600\ecrm1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\
+jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\f
+onts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\nboumal-x1\AppData\Loc
+al\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk> <C:\Users\nboumal
+-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C
+:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
+ecrm1728.pk><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.
+pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/
+Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program 
+Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/f
+onts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Pro
+gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program File
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on draft4.pdf (23 pages, 1774136 bytes).
 PDF statistics:
- 651 PDF objects out of 1000 (max. 8388607)
+ 663 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
