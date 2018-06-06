@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.20)  5 JUN 2018 17:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.20)  6 JUN 2018 18:39
 entering extended mode
 **./draft4.tex
 (draft4.tex
@@ -484,31 +484,31 @@ Package pdftex.def Info: heterogeneous_progressive_n12300000000_466300.pdf used
 onstruction100_cropped.pdf> <./reconstruction1000_cropped.pdf>] [6 <./Einstein_
 progress.pdf> <./heterogeneous_progressive_n12300000000_466300.pdf>] [7
 
-] [8] [9] [10] (draft4.bbl
-[11] [12] [13] [14]) [15] [16] [17] [18]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 925.
+] [8] [9] [10] [11]
+(draft4.bbl [12] [13] [14]) [15] [16] [17] [18] [19]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 946.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 925.
- [19] [20] [21]
-Overfull \hbox (7.43501pt too wide) in paragraph at lines 1083--1084
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 946.
+ [20] [21] [22]
+Overfull \hbox (7.43501pt too wide) in paragraph at lines 1104--1105
 []\T1/cmr/m/n/10.95 By the Fourier slice the-o-rem, each cryo--EM mea-sure-ment
  (pro-jec-tion) is equiv-a-lent (through
  []
 
-[22] [23] (draft4.aux) ) 
+[23] [24] (draft4.aux) ) 
 Here is how much of TeX's memory you used:
  5771 strings out of 493323
  84710 string characters out of 3139050
- 165296 words of memory out of 3000000
+ 168297 words of memory out of 3000000
  9160 multiletter control sequences out of 15000+200000
  33025 words of font info for 80 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,18n,39p,1129b,525s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,18n,39p,1582b,525s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\nboumal-x1\AppData\Local\MiKTeX\2.9\fonts\pk
 \ljfour\jknappen\ec\dpi600\ecsx1095.pk> <C:\Users\nboumal-x1\AppData\Local\MiKT
 eX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1440.pk> <C:\Users\nboumal-x1\App
@@ -532,16 +532,17 @@ pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/
 Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program 
 Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiK
 TeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pf
-b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Pro
-gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program File
-s/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on draft4.pdf (23 pages, 1774572 bytes).
+onts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
+m/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb
+><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Pro
+gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program File
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 
+2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on draft4.pdf (24 pages, 1788289 bytes).
 PDF statistics:
- 663 PDF objects out of 1000 (max. 8388607)
+ 675 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -379,7 +379,7 @@ Figure~\ref{fig:1Dheterosignals} shows how the estimates improve as we see a lar
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\linewidth]{heterogeneous_progressive_n12300000000_466300}
-	\caption{For the second experiment, each row shows, three times, one of the target signals (red), overlaid with an estimate (blue) obtained from a growing portion of the noisy micrograph (about $10^8$, $10^9$ and $10^{10}$ entries available to compute autocorrelations.) The last column depicts evolution of the relative root mean square error in estimating each individual target signal. Signals 1 to 3 appear respectively about 30, 20 and 10 million times. With the whole micrograph available, the algorithm estimated those to be 29.8, 21.9 and 10.0 million, respectively.
+	\caption{For the second experiment, each row shows, three times, one of the target signals (red), overlaid with an estimate (blue) obtained from a growing portion of the noisy micrograph (about $10^8$, $10^9$ and $10^{10}$ entries available to compute autocorrelations.) The last column depicts evolution of the relative root mean square error in estimating each individual target signal. Signals 1 to 3 appear respectively about 30.0, 20.0 and 10.0 million times. With the whole micrograph available, the algorithm estimated those to be 29.8, 21.9 and 10.0 million, respectively.
 %		
 %		An experiment for estimate three one-dimensional signals simultaneously with noise level $\sigma=3$. Red signals are the ground truth (targets) and the blue signals are our estimations. Individual RMSE of the estimates: $0.0239393 / 0.208925 / 0.0335956$. The estimated $\gamma$'s are $0.02574 / 0.01693 / 0.00818$ and the true ones $0.02561 / 0.01707 / 0.00853$. The $\SNR$ is $1/12$. \TODO{1. to replace with a ``progress'' plot 2. replace the triangle signal 3. add error progress figure}
 	}
@@ -436,28 +436,36 @@ Alternatively, if the signals are not well separated, one can introduce new para
 \section{Methods} \label{sec:methods}
 
 
-\paragraph{Mathematical model.}
+We here explicitly derive algebraic relations between the autocorrelation functions of the micrographs and the autocorrelation functions of the target signals. For ease of exposition, we do so in the 1-D case. Extension to the 2-D case is straightforward. We also give additional technical details regarding the two experiments presented in Section~\ref{sec:results}.
 
-\TODO{This exposition doesn't work for 2D images.}
-
-Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the data. 
-The forward model can be posed as a mixture of \emph{blind deconvolution} problems between binary signals and the target signals $x_i$:
-\begin{equation} \label{eq:model}
-y = \sum_{i=1}^K x_i\ast s_i + \varepsilon,\quad \varepsilon\sim\mathcal{N}(0,\sigma^2 I).
-\end{equation}
-%We model the background information as i.i.d.\ Gaussian noise with zero mean and $\sigma^2$ variance. 
-The nonzero values of each  $s_i\in\{0,1\}^N$ determine the position of $x_i$'s occurrences. 
-We denote the set of these nonzero values by 
- $\mathcal{S}_i$ and its cardinality by $\vert \mathcal{S}_i\vert = M_i$. 
-By assuming that all $\mathcal{S}_i$'s are disjoint,  we let $s = \sum_{i=1}^Ks_i$, $\mathcal{S} = \bigcup_{i=1}^{K} \mathcal{S}_i$ and  $\vert \mathcal{S}\vert :=M =  \sum_{i=1}^{K}M_i$.  %Neither the $M_i$'s nor $M$ are assumed to be known.
- Literature survey on blind deconvolution and related problems is given in Appendix~\ref{sec:related_literature}.
-
-In order to estimate the mixture of autocorrelations, we assume that the support of $s$ is not clustered. In particular, we assume that
+Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the observed micrograph (notice that it is equivalent to think of the data as being one long micrograph or multiple shorter micrographs concatenated into one.)
+The forward model (or ``image'' formation model) is as follows. For each target signal $x_k$, an unknown binary signal $s_k \in \{0, 1\}^{N-L+1}$ indicates (with 1's) the starting positions of all occurrences of $x_k$ in $y$, so that, with additive white Gaussian noise:
 \begin{align}
-  \vert i-j \vert\geq 2L-1,   \quad \text{for all } i,j\in\mathcal{S} \text{ such that } i\neq j.
-  \label{eq:spacing}
+	y & = \sum_{k=1}^K x_k \ast s_k + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
+	\label{eq:model}
 \end{align}
-The goal is to estimate $x_1,\ldots,x_K$ from $y$.
+where $\ast$ denotes (zero-padded) convolution. The binary signals obey the following property:
+\begin{align}
+	\textrm{If } s_k[i] = 1 \textrm{ and } s_{k'}[j] = 1 \textrm{ but } (k, i) \neq (k, j), \textrm{ then } |i - j| \geq 2L-1.
+	\label{eq:spacing}
+\end{align}
+In words: the starting positions of any two occurrences (be it of the same signal or of two different signals) must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
+
+From $y$, we aim to recover $x_1, \ldots x_K$, and possibly also the number of occurrences of each. In contrast, particle picking is the task of estimating the binary signal $s = s_1 + \cdots + s_K$, while clustering is the task of separating $s$ into its components $s_1, \ldots, s_K$. Neither of the latter can be performed reliably if $\sigma$ is large (that is, at low $\SNR$.)
+
+%We denote the set of these nonzero values by 
+% $\mathcal{S}_i$ and its cardinality by $\vert \mathcal{S}_i\vert = M_i$. 
+%By assuming that all $\mathcal{S}_i$'s are disjoint,  we let $s = \sum_{i=1}^Ks_i$, $\mathcal{S} = \bigcup_{i=1}^{K} \mathcal{S}_i$ and  $\vert \mathcal{S}\vert :=M =  \sum_{i=1}^{K}M_i$.  %Neither the $M_i$'s nor $M$ are assumed to be known.
+
+
+Considering~\eqref{eq:model}, one can think of this inverse problem as a mixture of blind deconvolution problems between binary signals and the target signals. Related literature is briefly surveyed in Appendix~\ref{sec:related_literature}.
+
+%In order to estimate the mixture of autocorrelations, we assume that the support of $s$ is not clustered. In particular, we assume that
+%\begin{align}
+%  \vert i-j \vert\geq 2L-1,   \quad \text{for all } i,j\in\mathcal{S} \text{ such that } i\neq j.
+%  \label{eq:spacing}
+%\end{align}
+%The goal is to estimate $x_1,\ldots,x_K$ from $y$.
 
 
 %
@@ -470,61 +478,74 @@ The goal is to estimate $x_1,\ldots,x_K$ from $y$.
 \paragraph{Aperiodic autocorrelation functions}
 %\subsection{Aperiodic autocorrelation functions} \label{sec:aperiodic_ac}
 
-\TODO{$L$ is a bad notation here since it could be L or n; and k is poor notation too because we use it to sum up to K.}
+%\TODO{$L$ is a bad notation here since it could be L or n; and k is poor notation too because we use it to sum up to K.}
 
-For  
-$z\in\RL$ and $k\geq 2$, the autocorrelation of order $k$ is defined for any integer shifts $\ell_1, \ldots, \ell_{k-1}$ by
+In general, for a signal $z$ of length $m$, the autocorrelation of order $q \geq 1$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{align}
-	a_z^k[\ell_1,\ldots,\ell_{k-1}]  & = \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\ldots z[i+\ell_{k-1}],
+	a_z^q[\ell_1,\ldots,\ell_{k-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
 	\label{eq:ac_general}
 \end{align}
-where indexing of $z$ out of the bounds $0, \ldots, L-1$ is zero-padded, as usual.
-Explicitly, the mean (which can be thought of as a first-order autocorrelation) and the second and third autocorrelations are given by
+where indexing of $z$ out of the bounds $0, \ldots, m-1$ is zero-padded.
+For our purposes, this will be applied both to $x_k$'s (each of length $L$) and to $y$ (of length $N$).
+Explicitly, the first-, second- and third-order autocorrelations are given by
 \begin{align} 
-	a_z^1 & = \sum_{i=0}^{L-1} z[i], \nonumber\\
-	a_z^2[\ell] & = \sum_{i = \max\{0, -\ell\}}^{L-1 + \min\{0, -\ell\}} z[i]z[i+\ell], \nonumber\\
-	a_z^3[\ell_1,\ell_2] & = \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{L-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. \label{eq:ac_special}
+	a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} z[i], \nonumber\\
+	a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} z[i]z[i+\ell], \nonumber\\
+	a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. \label{eq:ac_special}
 \end{align}
-Note that the autocorrelation functions are symmetric so that $a_z^2[\ell] = a_z^2[-\ell]$ and also $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].$$
+The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^2[-\ell]$, and
+\begin{align*}
+	a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
+\end{align*}
 %Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), then they are equivalent to the autocorrelation functions.
+Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and $a_z^3$ contain \TODO{TKTK} (respectively) non-trivial distinct real numbers, generically.
 
 \paragraph{Estimating the autocorrelation function of a single signal.}
 
-We first consider the problem of estimating the autocorrelations of a single signal from the data. 
-The main principles carry through for $K>1$ as will be shown next.  
-
-%In order to estimate the autocorrelations of the signal, we first compute the first $L$ entries of the data's autocorrelations. 
-For the purpose of the analysis, we consider  the asymptotic regime where $M,N\to\infty$, while preserving fixed ratio. 
-Specifically, we define the ratio of the measurement occupied by  the signal as
-\begin{equation}
-\gamma = \frac{M L}{N}.
-\end{equation}
-Under the spacing constraint~\eqref{eq:spacing}, we have $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
-
-The main pillar of this work is the following simple observation.
-If the support signal $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then the first $L$ entries of the data autocorrelations converge 
-to a scaled, biased, version of the signal's autocorrelation:
-\begin{align} 
-\lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1, \nonumber\\
-\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] +\sigma^2\delta[\ell], \label{eq:data_ac_k1} \\
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] + \sigma^2\gamma a_{x}^1 \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), \nonumber
+For the special case $K = 1$ where a single signal signal $x = x_1$ must be recovered, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, so that we treat it first. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
+\begin{align}
+	\gamma & = \frac{M L}{N}
 \end{align}
-for $\ell,\ell_1,\ell_2=0,\ldots L-1$, and where $\delta$ denotes the Kronecker delta function. 
-%These relations are proven in Appendix~\ref{sec:autocorrelation_computation}.
+denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint~\eqref{eq:spacing} imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
+
+One simple observation is that the first-order autocorrelation of $y$ (its mean) is independent of the locations of $x$. Since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:\footnote{We did not fully specify a random generating model for the location vector $s$. The expectation is still well defined specifically because the quantity under consideration is independent of $s$ under the assumptions.}
+\begin{align*}
+	\E\{ a_y^1 \} & = \gamma a_x^1.
+\end{align*}
+We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density.) In that regime, the law of large numbers gives meaning to the following statement:
+\begin{align*}
+	\lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
+\end{align*}
+Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
+
+The spacing constraint~\eqref{eq:spacing} gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
+\begin{align*}
+	\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
+\end{align*}
+for $\ell = 0, \ldots, L-1$, where $\delta$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
+Along the same lines, one can establish a relation for third-order autocorrelations:
+\begin{align}
+	\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big),
+	\label{eq:data_ac_k1}
+\end{align}
+for $\ell_1,\ell_2 = 0, \ldots, L-1$. Here too, few entries are affected by $\sigma$ in the limit.
+Detailed derivations for identities in this and the next part are given in Appendix~\ref{sec:autocorrelation_computation}.
 
 \paragraph{Estimating the autocorrelation function of multiple signals.}
 
-As before, we consider  the asymptomatic regime where $M_1,\ldots,M_K,N\to\infty$, while preserving fixed ratios
+Returning to the general case $K \geq 1$, let $M_1, \ldots, M_k$ denote the number of occurrences of signals $x_1, \ldots, x_K$ respectively, and define
 \begin{align}
-	\gamma_k = \frac{M_k L}{N}, \quad \gamma = \sum_{k=1}^K\gamma_k.
+	\gamma_k & = \frac{M_k L}{N}, & \gamma & = \sum_{k=1}^K\gamma_k.
 \end{align}
-If the support $s$ satisfies the spacing constraint~\eqref{eq:spacing}, then  similarly to~\eqref{eq:data_ac_k1} one can estimate the mixture of the $K$ signals'  autocorrelations:
+As above, we consider the asymptotic regime where $M_1,\ldots,M_K,N\to\infty$ while preserving the ratios $\gamma_k$ constant.
+% 
+Still under the spacing constraint~\eqref{eq:spacing}, similarly to the developments above, one can estimate a mixture of the autocorrelations of the $K$ target signals from the autocorrelations of the micrograph:
 \begin{align}
 \lim_{N\to\infty} a_y^1 & = \sum_{k=1}^K\gamma_k a_{x_k}^1, \nonumber\\
 \lim_{N\to\infty} a_y^2[\ell] & = \sum_{k=1}^K\gamma_k a_{x_k}^2[\ell] +\sigma^2\delta[\ell],  \label{eq:data_ac}\\
 \lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \sum_{k=1}^K\gamma_k a_{x_k}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{k=1}^K\gamma_k a_{x_k}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
 \end{align}
-This relation is proven in  Appendix~\ref{sec:autocorrelation_computation}.
+where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightforward to estimate from data. The right hand side involves polynomial functions of unknowns $\gamma_1, \ldots, \gamma_K, x_1, \ldots, x_K$. The task is to solve these polynomial equations in a robust way.
 
 \paragraph{First numerical experiment.}
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated $P$ micrographs of size $4096\times 4096$ pixels. 
@@ -553,9 +574,9 @@ placement, one of the three signals is picked at random proportionally to the de
 of occurrences of each.
 In this experiment, we computed the first three autocorrelation functions. 
 We do not assume to know the number of occurrences of each signal $\gamma_i$ ahead and we removed the biased terms (see~\eqref{eq:data_ac_k1}) so we do not need to know $\sigma$ either. 
-In Appendix~\ref{sec:theory} we provide an argument on the number of equations we get from the first three autocorrelation functions. 
+\TODO{In Appendix~\ref{sec:theory} we provide an argument on the number of equations we get from the first three autocorrelation functions. -- Was this removed? I can't find it.}
 
-To estimate the signal, we employ an optimization algorithm on the following nonlinear least-squares problem that estimate the signals and their number of occurrences simultaneously:
+To estimate the signal, we use an optimization algorithm on the following nonlinear least-squares problem that estimates the signals and their density of occurrences simultaneously:
 \begin{multline}
 \min_{\substack{\hat x_1, \ldots, \hat x_K \in \reals^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2.
 \label{eq:optim1D}
@@ -565,7 +586,7 @@ where $W \geq L$ is the length of the sought signals and $w_1 = \frac{1}{2}, w_2
 
  Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers.
 %Since we can only initialize randomly at first, this approach would often fail in practice. Alternatively,
-Thus, we first run the optimization with $W = 2L-1$. This problem appears to have fewer poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ whose autocorrelation functions are the closest the measured ones in the sense of~\eqref{eq:optim1D}. 
+Thus, we first run the optimization with $W = 2L-1$. This problem appears to have fewer poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ whose autocorrelation functions are closest to the measured ones in the sense of~\eqref{eq:optim1D}. 
 This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints \TODO{reference} on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
 
 
@@ -789,7 +810,7 @@ Because likelihood methods are computationally expensive, methods based on recov
 \section{Theory} \label{sec:theory}
 
 \paragraph{The impossibility of detection in low $\SNR$.}
-If $x$ is known and $K=1$, then the locations $s_i$ can be estimated via linear programming  in the high $\SNR$ regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see this, suppose that an oracle provides us $M$ windows of length $W>L$, each containing exactly one copy of $x$. Suppose too that the oracle provides us with $x$ itself. That is to say, we get a series of windows of length $W$, each one containing a signal $x$ at an unknown location; and our only task is to estimate the locations. This is an easier problem than detecting the support of $s$. Nevertheless, even this simpler problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Consequently, detecting the nonzero values of $s$ is impossible in low $\SNR$. 
+If $K=1$ and $x$ is known, then the locations $s_i$ can be estimated via linear programming  in the high $\SNR$ regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see this, suppose that an oracle provides us $M$ windows of length $W>L$, each containing exactly one copy of $x$. Suppose too that the oracle provides us with $x$ itself. That is to say, we get a series of windows of length $W$, each one containing a signal $x$ at an unknown location; and our only task is to estimate the locations. This is an easier problem than detecting the support of $s$. Nevertheless, even this simpler problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Consequently, detecting the nonzero values of $s$ is impossible in low $\SNR$.  \TODO{This is an important point for us. As stated, it is imprecise. I like the reduction idea to $M$ windows, but then two things: (1) if we cite Aguerrebere, we need to be specific in what theorem we reference and we need to check the assumptions, and (b) in any case, we need to be precise regarding what "impossible" means -- I'm guessing the result is a bit more subtle, saying something like: the probability of type I / type II error is at least this much. Also, someone might oppose that we don't need to get them all right, and we don't need to get them exactly right.. To address such concerns, we need to be specific.}
 
 %%%As aforementioned, this work focuses on this regime and examines under what conditions we can estimate the signals, despite the impossibility of detecting their individual occurrences.
 
