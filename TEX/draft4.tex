@@ -498,7 +498,7 @@ The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^
 	a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 \end{align*}
 %Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), then they are equivalent to the autocorrelation functions.
-Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and $a_z^3$ contain \TODO{TKTK} (respectively) non-trivial distinct real numbers, generically.
+Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and $a_z^3$ contain \TODO{TKTK--I think it was commented in the latex} (respectively) non-trivial distinct real numbers, generically.
 
 \paragraph{Estimating the autocorrelation function of a single signal.}
 
@@ -547,6 +547,8 @@ Still under the spacing constraint~\eqref{eq:spacing}, similarly to the developm
 \end{align}
 where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightforward to estimate from data: it provides a succinct summary of it. The right hand side involves polynomial functions of unknowns $\gamma_1, \ldots, \gamma_K, x_1, \ldots, x_K$. The task is to solve these polynomial equations in a robust way.
 
+\TODO{It would be more natural to present the 1D XP first given everything that preceeds, then to present the 2D XP, where we can explain it's a pretty special case.}
+
 \paragraph{First numerical experiment.}
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated $P$ micrographs of size $4096\times 4096$ pixels. 
 In each micrograph, we placed Einstein's image of size $50\times 50$  in random locations, while keeping the separation condition~\eqref{eq:spacing}.  
@@ -568,6 +570,9 @@ RRR estimates a $2L\times 2L$ image. Exact solution contains Einstein's image in
 In order to compare the performance in multiple cases and different noise levels, the algorithm stopped after a fixed number of 1000 iterations and the iteration with the smallest error compared to the ground truth (also taking into account the reflection ambiguity) was chosen as the solution. While this cannot be done in practice since we do not have access to the ground truth, this procedure enables us to compare a large number of instances in different noisy environments \TODO{Note the last two sentences!}.
 
 \paragraph{Second numerical experiment.}
+
+\TODO{I had a quite precise explanation of this experiment in the latex. Was it changed because we need to shorten, or is length not an issue? Nature Method's website states the methods section should give enough details for someone to be able to reproduce the experiment.}
+
 For the 1-D experiment, we worked with three signals of length $L = 21$ and generated the data in the same way as in the 2-D example.
 The only difference is that here, for each
 placement, one of the three signals is picked at random proportionally to the desired number
