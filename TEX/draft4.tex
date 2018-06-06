@@ -436,7 +436,7 @@ Alternatively, if the signals are not well separated, one can introduce new para
 \section{Methods} \label{sec:methods}
 
 
-We here explicitly derive algebraic relations between the autocorrelation functions of the micrographs and the autocorrelation functions of the target signals. For ease of exposition, we do so in the 1-D case. Extension to the 2-D case is straightforward. We also give additional technical details regarding the two experiments presented in Section~\ref{sec:results}.
+We derive algebraic relations between the autocorrelation functions of the micrographs and the autocorrelation functions of the target signals. For ease of exposition, we do so in the 1-D case. Extension to the 2-D case is straightforward. We also give additional technical details regarding the two experiments presented in Section~\ref{sec:results}.
 
 Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the observed micrograph (notice that it is equivalent to think of the data as being one long micrograph or multiple shorter micrographs concatenated into one.)
 The forward model (or ``image'' formation model) is as follows. For each target signal $x_k$, an unknown binary signal $s_k \in \{0, 1\}^{N-L+1}$ indicates (with 1's) the starting positions of all occurrences of $x_k$ in $y$, so that, with additive white Gaussian noise:
@@ -485,7 +485,7 @@ In general, for a signal $z$ of length $m$, the autocorrelation of order $q \geq
 	a_z^q[\ell_1,\ldots,\ell_{k-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
 	\label{eq:ac_general}
 \end{align}
-where indexing of $z$ out of the bounds $0, \ldots, m-1$ is zero-padded.
+where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
 For our purposes, this will be applied both to $x_k$'s (each of length $L$) and to $y$ (of length $N$).
 Explicitly, the first-, second- and third-order autocorrelations are given by
 \begin{align} 
@@ -502,7 +502,7 @@ Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and
 
 \paragraph{Estimating the autocorrelation function of a single signal.}
 
-For the special case $K = 1$ where a single signal signal $x = x_1$ must be recovered, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, so that we treat it first. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
+For the special case $K = 1$ where a single signal $x = x_1$ must be recovered, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, so that we treat it first. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
 \begin{align}
 	\gamma & = \frac{M L}{N}
 \end{align}
@@ -533,7 +533,7 @@ Detailed derivations for identities in this and the next part are given in Appen
 
 \paragraph{Estimating the autocorrelation function of multiple signals.}
 
-Returning to the general case $K \geq 1$, let $M_1, \ldots, M_k$ denote the number of occurrences of signals $x_1, \ldots, x_K$ respectively, and define
+Returning to the general case $K \geq 1$, let $M_1, \ldots, M_K$ denote the number of occurrences of signals $x_1, \ldots, x_K$ respectively, and define
 \begin{align}
 	\gamma_k & = \frac{M_k L}{N}, & \gamma & = \sum_{k=1}^K\gamma_k.
 \end{align}
@@ -545,7 +545,7 @@ Still under the spacing constraint~\eqref{eq:spacing}, similarly to the developm
 \lim_{N\to\infty} a_y^2[\ell] & = \sum_{k=1}^K\gamma_k a_{x_k}^2[\ell] +\sigma^2\delta[\ell],  \label{eq:data_ac}\\
 \lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \sum_{k=1}^K\gamma_k a_{x_k}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{k=1}^K\gamma_k a_{x_k}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
 \end{align}
-where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightforward to estimate from data. The right hand side involves polynomial functions of unknowns $\gamma_1, \ldots, \gamma_K, x_1, \ldots, x_K$. The task is to solve these polynomial equations in a robust way.
+where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightforward to estimate from data: it provides a succinct summary of it. The right hand side involves polynomial functions of unknowns $\gamma_1, \ldots, \gamma_K, x_1, \ldots, x_K$. The task is to solve these polynomial equations in a robust way.
 
 \paragraph{First numerical experiment.}
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated $P$ micrographs of size $4096\times 4096$ pixels. 
