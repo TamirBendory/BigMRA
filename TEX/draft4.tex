@@ -497,8 +497,7 @@ The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^
 \begin{align*}
 	a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 \end{align*}
-%Additionally, if the moments of the signal depend only on the difference between the indices (Toeplitz structure), then they are equivalent to the autocorrelation functions.
-Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and $a_z^3$ contain \TODO{TKTK--I think it was commented in the latex} (respectively) non-trivial distinct real numbers, generically.
+%Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and $a_z^3$ contain \TODO{TKTK--I think it was commented in the latex} (respectively) non-trivial distinct real numbers, generically.
 
 \paragraph{Estimating the autocorrelation function of a single signal.}
 
@@ -547,84 +546,104 @@ Still under the spacing constraint~\eqref{eq:spacing}, similarly to the developm
 \end{align}
 where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightforward to estimate from data: it provides a succinct summary of it. The right hand side involves polynomial functions of unknowns $\gamma_1, \ldots, \gamma_K, x_1, \ldots, x_K$. The task is to solve these polynomial equations in a robust way.
 
-\TODO{It would be more natural to present the 1D XP first given everything that preceeds, then to present the 2D XP, where we can explain it's a pretty special case.}
-
-\paragraph{First numerical experiment.}
-For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated $P$ micrographs of size $4096\times 4096$ pixels. 
-In each micrograph, we placed Einstein's image of size $50\times 50$  in random locations, while keeping the separation condition~\eqref{eq:spacing}.  
-This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
-an accept/reject rule based on the separation constraint and locations picked so far. On average, $700$ images were placed in each micrograph.   
-Then, an i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ was added inducing $\SNR$ of approximately $1/20$. An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
-%Different micrographs are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
+%\TODO{It would be more natural to present the 1D XP first given everything that preceeds, then to present the 2D XP, where we can explain it's a pretty special case.}
 
 
-In this experiment, we assume to know the number of Einstein's occurrences and the noise level. 
-In this situation, the second-order autocorrelation (or, equivalently, the Fourier magnitudes of the signal) determines  almost all images  uniquely up to reflection through the origin~\cite{hayes1982reconstruction,bendory2017fourier}. 
-Therefore, we estimate the signal's Fourier magnitude from the Fourier magnitude of the micrographs, in the cost of one  FFT per micrograph.
-To estimate the signal, we use a phase retrieval algorithm called relaxed-reflect-reflect (RRR) that iterates by
-\begin{equation}
-z \rightarrow z + \beta (P_2(2P_1(z) - z) - P_1(z)),
-\end{equation}
-where we set $\beta=1$.
-RRR estimates a $2L\times 2L$ image. Exact solution contains Einstein's image in the upper-left corner and zero else where. The operator $P_2(z)$ combines the Fourier phases of  the current estimation $z$ with the Fourier magnitudes of the signal  (estimated from the data). The operator $P_1(z)$ zeros out all entries of $z$ outside the $L\times L$ upper-left corner. 
-In order to compare the performance in multiple cases and different noise levels, the algorithm stopped after a fixed number of 1000 iterations and the iteration with the smallest error compared to the ground truth (also taking into account the reflection ambiguity) was chosen as the solution. While this cannot be done in practice since we do not have access to the ground truth, this procedure enables us to compare a large number of instances in different noisy environments \TODO{Note the last two sentences!}.
+\paragraph{Numerical experiment with three 1-D signals.}
 
-\paragraph{Second numerical experiment.}
 
-\TODO{I had a quite precise explanation of this experiment in the latex. Was it changed because we need to shorten, or is length not an issue? Nature Method's website states the methods section should give enough details for someone to be able to reproduce the experiment.}
+For the 1-D experiment depicted in Figure~\ref{fig:1Dheterosignals}, we fix $K = 3$ signals of length $L = 21$. Following the forward model described at the beginning of this section, we generate an observation $y$ of length $12.3 \cdot 10^9$. Each of the three signals appears, respectively (and approximately) $30.0 \cdot 10^6$, $20.0 \cdot 10^6$ and $10.0 \cdot 10^6$ times in $y$ for a total of exactly $60 \cdot 10^6$ occurrences, such that at least $L-1$ zeros separate any two occurrences of any signals. 
+This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far. For each placement, one of the three signals is picked at random according to the proportions $1/2, 1/3, 1/6$. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting $\SNR$ of $y$
+% sqrt((m_want*sum(X.^2)')/(sigma^2*n))
+is about 1/9.
 
-For the 1-D experiment, we worked with three signals of length $L = 21$ and generated the data in the same way as in the 2-D example.
-The only difference is that here, for each
-placement, one of the three signals is picked at random proportionally to the desired number
-of occurrences of each.
-In this experiment, we computed the first three autocorrelation functions. 
-We do not assume to know the number of occurrences of each signal $\gamma_i$ ahead and we removed the biased terms (see~\eqref{eq:data_ac_k1}) so we do not need to know $\sigma$ either. 
-\TODO{In Appendix~\ref{sec:theory} we provide an argument on the number of equations we get from the first three autocorrelation functions. -- Was this removed? I can't find it.}
 
-To estimate the signal, we use an optimization algorithm on the following nonlinear least-squares problem that estimates the signals and their density of occurrences simultaneously:
+This is enough noise to make cross-correlations of $y$ even with the true signals display peaks at essentially random locations, uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
+
+%\TODO{TB: I would place the equation counting argument in the theory section in the paragraph of open questions (I marked th place)}
+%
+Given the observation $y$, we proceed to compute the autocorrelations. The first-order autocorrelation is straightforward. For second-order autocorrelations, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no noise-induced bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to make sense of the computed quantities. Likewise, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$---there are $\frac{(L-1)(L-2)}{2}$ remaining entries. We have
+\begin{align*}
+1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
+\end{align*}
+coefficients in total. Since we aim to estimate $KL$ parameters (for the $K$ signals of length $L$) plus $K$ parameters (for the densities $\gamma_k$), an absolute upper bound on $K$ (simply to ensure we have at least as many equations as we have unknowns) is
+\begin{align*}
+K(L+1) \leq \frac{1}{2} L (L-1) + 1.
+\end{align*}
+Thus, $(L-1)/2$ (up to a small approximation) is an absolute upper limit on $K$.
+
+In practice, the autocorrelations are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
+
+Having computed the moments of interest, we now estimate signals $x_1, \ldots, x_K$ and coefficients $\gamma_1, \ldots, \gamma_K$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear least-squares problem:
 \begin{multline}
 \min_{\substack{\hat x_1, \ldots, \hat x_K \in \reals^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2.
 \label{eq:optim1D}
 \end{multline}
-where $W \geq L$ is the length of the sought signals and $w_1 = \frac{1}{2}, w_2 =\frac{1}{2}(L-1), w_3 = \frac{1}{(L-1)(L-2)}$; see~\cite{boumal2017heterogeneous} see for discussion on how to choose the weights properly.
+where $W \geq L$ is the length of the sought signals and the weights are set to $w_1 = 1/2, w_2 = 1/2n_2, w_3 = 1/2n_3$, where $n_2, n_3$ are the number of moments used: $n_2 = L-1$, $n_3 = \frac{(L-1)(L-2)}{2}$ (weights could also be set in accordance with variance estimates as in~\cite{boumal2017heterogeneous}).
 
-
- Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers.
+Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers.
 %Since we can only initialize randomly at first, this approach would often fail in practice. Alternatively,
-Thus, we first run the optimization with $W = 2L-1$. This problem appears to have fewer poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ whose autocorrelation functions are closest to the measured ones in the sense of~\eqref{eq:optim1D}. 
-This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints \TODO{reference} on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
-
-
-
-%For the 1-D experiment, we fix $K = 3$ signals of length $L = 21$, as depicted in Figure~\TODO{ref}. Following the data model described in Section~\TODO{ref}, we generate an observation $y$ of length $24.6 \cdot 10^9$. Each of the three signals appears, respectively (and approximately) $300 \cdot 10^6$, $200 \cdot 10^6$ and $100 \cdot 10^6$ times in $y$, such that at least $L-1$ zeros separate two occurrences of any signals. 
-%This is done by randomly selecting $600 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far. For each placement, one of the three signals is picked at random proportionally to the desired number of occurrences of each. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The SNR of $y$
-% sqrt((m_want*sum(X.^2)')/(sigma^2*n))
-%is about 1/12.
-
-
-%This is enough noise to make cross-correlations of $y$ even with the true signals display peaks at random locations, uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
-
-%\TODO{TB: I would place the equation counting argument in the theory section in the paragraph of open questions (I marked th place)}
-%
-%Given the observation $y$, we proceed to compute the moments. The first-order moment is straightforward. For second-order moments, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to estimate the moments. Likewise, for third-order moments, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant moments for our purpose \TODO{Do we want to include a figure to explain why that is?}, and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid biased elements---there are $\frac{(L-1)(L-2)}{2}$ remaining moments. As a result, it is unnecessary to estimate $\sigma$. We have \TODO{TB: We may want to put this calculation is the last paragraph of Section 3.1 }
-%\begin{align*}
-%1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
-%\end{align*}
-%moments in total. In practice, these are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
-%
-%Having computed the moments of interest, we now estimate signals $x_1, \ldots, x_K$ and coefficients $\gamma_1, \ldots, \gamma_K$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear least-squares problem:
-%\begin{multline}
-%\min_{\substack{\hat x_1, \ldots, \hat x_K \in \reals^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2.
-%\label{eq:optim1D}
-%\end{multline}
-%where $W \geq L$ is the length of the sought signals and \TODO{explain $w_i$'s: currently they are $w_1 = 1/2, w_2 = 1/2n_2, w_3 = 1/2n_3$, where $n_2, n_3$ are the number of moments used: $n_2 = L-1$, $n_3 = \frac{(L-1)(L-2)}{2}$. Issue is: this is not very smart..}. Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers.
-%%Since we can only initialize randomly at first, this approach would often fail in practice. Alternatively,
-%Thus, we first run the optimization with $W = 2L-1$. This problem appears to have fewer poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ (with cyclic indexing \TODO{we should understand / explain this}) that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints \TODO{I might need a reference for this} on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
+Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
 %\TODO{Should we do variable projection for the gammas, that is, exploit the fact the problem is a regular least squares in the gammas (up to the positivity constraints) to substitute the explicit optimum for them? Not sure it's worth the effort. -- Ok, it's probably not a good idea, because even with fixed gammas to the correct value, optimization takes a while.}
 %\TODO{Do we still need to stress at this point that the optimization part has complexity independent of length of observation? Should be pretty clear at this point already.}
 %
 %
 
+%\TODO{separation}
+%
+%For the 1-D experiment, we worked with three signals of length $L = 21$ and generated the data in the same way as in the 2-D example.
+%The only difference is that here, for each
+%placement, one of the three signals is picked at random proportionally to the desired number
+%of occurrences of each.
+%In this experiment, we computed the first three autocorrelation functions. 
+%We do not assume to know the number of occurrences of each signal $\gamma_i$ ahead and we removed the biased terms (see~\eqref{eq:data_ac_k1}) so we do not need to know $\sigma$ either. 
+%\TODO{In Appendix~\ref{sec:theory} we provide an argument on the number of equations we get from the first three autocorrelation functions. -- Was this removed? I can't find it.}
+
+%To estimate the signal, we use an optimization algorithm on the following nonlinear least-squares problem that estimates the signals and their density of occurrences simultaneously:
+%\begin{multline}
+%\min_{\substack{\hat x_1, \ldots, \hat x_K \in \reals^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2.
+%\label{eq:optim1D}
+%\end{multline}
+%where $W \geq L$ is the length of the sought signals and $w_1 = \frac{1}{2}, w_2 =\frac{1}{2}(L-1), w_3 = \frac{1}{(L-1)(L-2)}$; see~\cite{boumal2017heterogeneous} see for discussion on how to choose the weights properly.
+
+
+%Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers.
+%Since we can only initialize randomly at first, this approach would often fail in practice. Alternatively,
+%Thus, we first run the optimization with $W = 2L-1$. This problem appears to have fewer poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ whose autocorrelation functions are closest to the measured ones in the sense of~\eqref{eq:optim1D}. 
+%This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints \TODO{reference} on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
+
+
+
+
+
+
+
+
+\paragraph{Numerical experiment with 2-D image.}
+
+For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generate $P$ micrographs of size $4096\times 4096$ pixels. 
+In each micrograph, we place Einstein's image of size $50\times 50$  in random locations, while preserving the separation condition~\eqref{eq:spacing}.  
+This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
+an accept/reject rule based on the separation constraint and locations picked so far.
+On average, $700$ images are placed in each micrograph.   
+Then, i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ is added, inducing an $\SNR$ of approximately $1/20$.
+An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
+%Different micrographs are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
+
+
+In this experiment, we assume we know the noise level $\sigma$ as well as the total number of occurrences of the target image across all micrographs.
+In start contrast with the 1-D setup, the second-order autocorrelation determines almost any target image uniquely, up to reflection through the origin~\cite{hayes1982reconstruction,bendory2017fourier}.\footnote{\TODO{Should we cite \cite{bendory2017fourier} here? I'm not against citing it somewhere, but for the specific claim being justified here, it seems the older reference should be enough.}} This is because the second-order autocorrelations correspond to the Fourier magnitudes of the signal through the 2-D Fourier transform. 
+Therefore, we estimate the signal's Fourier magnitudes (or power spectrum) from the Fourier magnitudes of the micrographs, at the cost of one 2-D fast Fourier transform (FFT) per micrograph. These can be computed highly efficiently and in parallel.
+
+To recover the target image from the estimated power spectrum, we use a phase retrieval algorithm called relaxed-reflect-reflect (RRR). This algorithm iterates the map
+\begin{align*}
+	z & \leftarrow z + \beta (P_2(2P_1(z) - z) - P_1(z))
+\end{align*}
+on an image $z$ of size $2L\times 2L$.
+We set the parameter $\beta$ to 1.
+The map is designed so that, if the estimated power spectrum is exact, then fixed points contain Einstein's image in the upper-left corner of size $L \times L$, and zeros elsewhere. The operator $P_2(z)$ combines the Fourier phases of  the current estimation $z$ with the estimated Fourier magnitudes. The operator $P_1(z)$ zeros out all entries of $z$ outside the $L\times L$ upper-left corner. 
+
+In order to compare the performance in multiple cases and at different noise levels, the algorithm is stopped after a fixed number of iterations (1000) and the iterate with the smallest error compared to the ground truth (up to the reflection ambiguity) is chosen as the solution. While this cannot be done in practice (since we do not have access to the ground truth to determine which iterate is best), this procedure enables us to compare a large number of instances in different noise environments. \TODO{Note the last two sentences!}
 
 
 \bibliographystyle{plain}
@@ -815,7 +834,11 @@ Because likelihood methods are computationally expensive, methods based on recov
 \section{Theory} \label{sec:theory}
 
 \paragraph{The impossibility of detection in low $\SNR$.}
-If $K=1$ and $x$ is known, then the locations $s_i$ can be estimated via linear programming  in the high $\SNR$ regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see this, suppose that an oracle provides us $M$ windows of length $W>L$, each containing exactly one copy of $x$. Suppose too that the oracle provides us with $x$ itself. That is to say, we get a series of windows of length $W$, each one containing a signal $x$ at an unknown location; and our only task is to estimate the locations. This is an easier problem than detecting the support of $s$. Nevertheless, even this simpler problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Consequently, detecting the nonzero values of $s$ is impossible in low $\SNR$.  \TODO{This is an important point for us. As stated, it is imprecise. I like the reduction idea to $M$ windows, but then two things: (1) if we cite Aguerrebere, we need to be specific in what theorem we reference and we need to check the assumptions, and (b) in any case, we need to be precise regarding what "impossible" means -- I'm guessing the result is a bit more subtle, saying something like: the probability of type I / type II error is at least this much. Also, someone might oppose that we don't need to get them all right, and we don't need to get them exactly right.. To address such concerns, we need to be specific.}
+If $K=1$ and $x$ is known, then the locations $s_i$ can be estimated via linear programming  in the high $\SNR$ regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see this, suppose that an oracle provides us $M$ windows of length $W>L$, each containing exactly one copy of $x$. Suppose too that the oracle provides us with $x$ itself. That is to say, we get a series of windows of length $W$, each one containing a signal $x$ at an unknown location; and our only task is to estimate the locations. This is an easier problem than detecting the support of $s$. Nevertheless, even this simpler problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Consequently, detecting the nonzero values of $s$ is impossible in low $\SNR$.
+
+\TODO{NB: This is an important point for us. As stated, it is imprecise. I like the reduction idea to $M$ windows, but then two things: (1) if we cite Aguerrebere, we need to be specific what theorem we reference and we need to check the assumptions, and (b) in any case, we need to be precise regarding what "impossible" means -- I'm guessing the result is a bit more subtle, saying something like: the probability of type I / type II error is at least this much. Also, someone might oppose that we don't need to get them \emph{all} right, and we don't need to get them \emph{exactly} right.. To address such concerns, we need to be specific. After reading the Aguerberre paper quite carefully, one of the important points in there is that they assume a continuous model, so that shifts are continuous (that's why they can do CRBs -- CRBs are not defined for discrete problems; of course, you could define them with some work (I assume), but that's not what they did, so just referencing them doesn't cut it.}
+
+\TODO{NB: Here is a suggestion: we could further simplify the problem by having the oracle also state, for each window, that the shift is either of two possibly shifts (with 50/50 prior.) Then, knowing all of this and also knowing $x$, deciding which shift it is is a matter of deciding which Gaussian a vector came from, where both Gaussians have $\sigma^2 I$ variance and known mean. So, the distance test (which is equivalent to the likelihood ratio test) is optimal (that ought to be a Neyman-Pearson result). The probability of mistake is then at least $\frac{1}{2}\operatorname{erfc}\left(\frac{\|x_{shift 1} - x_{shift 2}\|}{2\sigma}\right)$, where $x_{shift 1}$ is a signal of the length of the given window with $x$ placed at a certain position, and zeros elsewhere. We can then argue that (if there is a positive lower bound on the norms up there), there always exists a sigma such that the probability of mistake is this incredibly simpler problem is still arbitrarily close to 1/2 (random chance.) having said all of that, we can then also reference Aguereberre (carefully) and make the point that, in their specific setup, they show getting a lot of images indeed helps, but not beyond a certain error level which has to do with sigma, so that for large sigma, however much data we get, we can't estimate shifts (in their setting) accurately.}
 
 %%%As aforementioned, this work focuses on this regime and examines under what conditions we can estimate the signals, despite the impossibility of detecting their individual occurrences.
 
