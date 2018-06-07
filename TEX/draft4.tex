@@ -255,7 +255,7 @@ As outlined below, we find that it is indeed possible to recover good estimates 
 
 In the first experiment, we estimated Einstein's image of size $50\times 50$ and mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. A micrograph contains, on average, 700 occurrences of the target image at random locations. The latter are chosen so that two occurrences are always separated by at least 49 pixels. Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$ (this corresponds to $\SNR=1/20$). This high noise level is illustrated in the right panel of Figure~\ref{fig:micro_example}. In this first experiment, we assume knowledge of $\sigma$ and of the total number of signal occurrences across all micrographs.
 
-We compute the average autocorrelation of the micrographs (equivalently, the average of their power spectra). This is a particularly simple computation. In the methods section, we show how, owing to separation of the occurrences, a determined portion of the averaged autocorrelation allows to estimate the power spectrum of the unknown image itself. Mathematically, it is easy to show that the quality of this estimate improves steadily as the amount of data grows, regardless of noise level. Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{bauschke2004rrr,elser2017rrr}.\footnote{\TODO{Quid of symmetries?}} RRR is initialized with a picture of the physicist Isaac Newton and iterates to produce the estimate.\footnote{\TODO{Initializing with a face is debatable: it might help the algorithm. On the other hand, I agree that it supports the notion that we don't get trapped too easily.}}
+We compute the average autocorrelation of the micrographs (equivalently, the average of their power spectra). This is a particularly simple computation. In the methods section, we show how, owing to separation of the occurrences, a determined portion of the averaged autocorrelation allows to estimate the power spectrum of the unknown image itself. Mathematically, it is easy to show that the quality of this estimate improves steadily as the amount of data grows, regardless of noise level. Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{bauschke2004rrr,elser2017rrr}. RRR is initialized with a picture of the physicist Isaac Newton and iterates to produce the estimate, up to a reflection ambiguity.\footnote{\TODO{Initializing with a face is debatable: it might help the algorithm. On the other hand, I agree that it supports the notion that we don't get trapped too easily.}}
 
 Figure~\ref{fig:Einst_example} shows several estimated images for a growing number of micrographs. (A movie is available in \TODO{supplementary material}.) Figure~\ref{fig:error_per_micro} presents the normalized recovery error as a function of the amount of data available. Error is measured as the ratio of the root mean square error (RMSE) to the norm of the ground truth (square root of the sum of squared pixel intensities.) This is computed after fixing elementary symmetries (see methods.) As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many micrographs, without particle picking.
 
@@ -424,7 +424,7 @@ Alternatively, if the signals are not well separated, one can introduce new para
 %Each variation leads to a different inverse problem. No sufficient conditions for them to be solvable are currently known.
 
 
-\TODO{Do we want to note here that EM used to be perceived as computationally out of reach back when it was proposed [cite Fred], yet is now the de facto standard method as exemplified by RELION? Do we also want to stress that models have been refined over decades?}
+\TODO{Do we want to note here that EM used to be perceived as computationally out of reach back when it was proposed [cite Fred], yet is now the de facto standard method as exemplified by RELION? Do we also want to stress that models have been refined over decades? Both points are rather defensive in nature.	}
 
 \TODO{Should we discuss CTF? Where, and to what extent?}
 
@@ -622,7 +622,7 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 \paragraph{Numerical experiment with 2-D image.}
 
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generate $P$ micrographs of size $4096\times 4096$ pixels. 
-In each micrograph, we place Einstein's image of size $50\times 50$  in random locations, while preserving the separation condition~\eqref{eq:spacing}.  
+In each micrograph, we place Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition~\eqref{eq:spacing}.  
 This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
 an accept/reject rule based on the separation constraint and locations picked so far.
 On average, $700$ images are placed in each micrograph.   
@@ -631,8 +631,8 @@ An example of a micrograph's excerpt is presented in the right panel of Figure~\
 %Different micrographs are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
 
 
-In this experiment, we assume we know the noise level $\sigma$ as well as the total number of occurrences of the target image across all micrographs.
-In start contrast with the 1-D setup, the second-order autocorrelation determines almost any target image uniquely, up to reflection through the origin~\cite{hayes1982reconstruction,bendory2017fourier}.\footnote{\TODO{Should we cite \cite{bendory2017fourier} here? I'm not against citing it somewhere, but for the specific claim being justified here, it seems the older reference should be enough.}} This is because the second-order autocorrelations correspond to the Fourier magnitudes of the signal through the 2-D Fourier transform. 
+In this experiment, we assume we know the noise level $\sigma$ and the total number of occurrences of the target image across all micrographs.
+In start contrast with the 1-D setup, the second-order autocorrelation determines almost any target image uniquely, up to reflection through the origin~\cite{hayes1982reconstruction,bendory2017fourier}.\footnote{\TODO{Should we cite \cite{bendory2017fourier} here? I'm not against citing it somewhere, but for the specific claim being supported here, it seems the older reference should be enough.}} This is because the second-order autocorrelations correspond to the Fourier magnitudes of the signal through the 2-D Fourier transform. 
 Therefore, we estimate the signal's Fourier magnitudes (or power spectrum) from the Fourier magnitudes of the micrographs, at the cost of one 2-D fast Fourier transform (FFT) per micrograph. These can be computed highly efficiently and in parallel.
 
 To recover the target image from the estimated power spectrum, we use a phase retrieval algorithm called relaxed-reflect-reflect (RRR). This algorithm iterates the map
@@ -641,7 +641,7 @@ To recover the target image from the estimated power spectrum, we use a phase re
 \end{align*}
 on an image $z$ of size $2L\times 2L$.
 We set the parameter $\beta$ to 1.
-The map is designed so that, if the estimated power spectrum is exact, then fixed points contain Einstein's image in the upper-left corner of size $L \times L$, and zeros elsewhere. The operator $P_2(z)$ combines the Fourier phases of  the current estimation $z$ with the estimated Fourier magnitudes. The operator $P_1(z)$ zeros out all entries of $z$ outside the $L\times L$ upper-left corner. 
+The map is designed so that, if the estimated power spectrum is exact, then fixed points contain Einstein's image in the upper-left corner of size $L \times L$, \TODO{possibly reflected}, and zeros elsewhere. The operator $P_2(z)$ combines the Fourier phases of  the current estimation $z$ with the estimated Fourier magnitudes. The operator $P_1(z)$ zeros out all entries of $z$ outside the $L\times L$ upper-left corner. 
 
 In order to compare the performance in multiple cases and at different noise levels, the algorithm is stopped after a fixed number of iterations (1000) and the iterate with the smallest error compared to the ground truth (up to the reflection ambiguity) is chosen as the solution. While this cannot be done in practice (since we do not have access to the ground truth to determine which iterate is best), this procedure enables us to compare a large number of instances in different noise environments. \TODO{Note the last two sentences!}
 
