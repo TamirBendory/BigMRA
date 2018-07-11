@@ -35,12 +35,6 @@ Jean-Marc Azais, Yohann De~Castro, and Fabrice Gamboa.
 \newblock {\em Applied and Computational Harmonic Analysis}, 38(2):177--195,
   2015.
 
-\bibitem{bauschke2004rrr}
-Heinz~H. Bauschke, Patrick~L. Combettes, and D.Russell Luke.
-\newblock Finding best approximation pairs relative to two closed convex sets
-  in {H}ilbert spaces.
-\newblock {\em Journal of Approximation Theory}, 127(2):178--192, 2004.
-
 \bibitem{beinert2015ambiguities}
 Robert Beinert and Gerlind Plonka.
 \newblock Ambiguities in one-dimensional discrete phase retrieval from fourier
