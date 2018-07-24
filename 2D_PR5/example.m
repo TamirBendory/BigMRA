@@ -3,10 +3,10 @@ close all;
 clc;
 
 seed_rng = rng('shuffle');
-
-if isempty(gcp('nocreate'))
-    parpool(72,'IdleTimeout', 240);
-end
+% 
+% if isempty(gcp('nocreate'))
+%     parpool(72,'IdleTimeout', 240);
+% end
 
 %% Defining the problem
 
@@ -46,7 +46,7 @@ X_N = imresize(X_N, [L, L]);
 X_N = X_N - mean(X_N(:));
 X_init = zeros(W);
 X_init(1:L,1:L) = X_N;
-
+X_init(1:L,1:L) = rand(L)-1/2;
 %% Generate the micrographs and collect their moments
 
 %m_eff = zeros(n_micrographs, 1);
