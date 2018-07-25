@@ -18,7 +18,6 @@
 \usepackage{mathtools} 
 \usepackage[margin=1.2in]{geometry}
 
-
 \newcommand{\LL}{\mathcal{L}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\I}{\mathcal{I}}
@@ -33,6 +32,7 @@
 \newcommand{\kk}{\textbf{k}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\mb}{\mathbf}
+\newcommand{\mk}{\mathfrak}
 
 \newcommand{\TODO}[1]{{\color{red}{[#1]}}}
 
@@ -81,6 +81,8 @@
 \newcommand{\hx}{\hat{x}} 
 \newcommand{\one}{\mathbf{1}} 
 \newcommand{\SNR}{\ensuremath{\textsf{SNR}}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
 
 \begin{document}
 
@@ -454,7 +456,7 @@ The forward model (or ``image'' formation model) is as follows. An unknown binar
 	\label{eq:model}
 \end{align}
 where $\ast$ denotes linear convolution. Let $\textbf{i}:=(i_1,i_2)$ and similarly for \textbf{j}.
-The binary signals obey the following property:
+The binary signals obey the following property: \TODO{Rewrite in terms of $\delta$ functions for consistency with 3D}
 \begin{align}
 	\textrm{If } s[\textbf{i}] = 1 \textrm{ then } s[\textbf{j}] = 0 \textrm{ for all}  \|\textbf{i}-\textbf{j}\|_\infty\leq 2L-1.
 	\label{eq:spacing}
@@ -503,7 +505,7 @@ For the purpose of this experiment, we need only the mean of the signal and its 
  \end{align}
  It can be shown that in the limit of $N\to\infty$,  the mean of the microgaph is equal to the mean of the signal $x$, scaled by the scalar 
  \begin{align}
- \gamma & = \frac{M L}{N},
+ \gamma & = \frac{M L^2}{N^2},
  \end{align}
  which denotes the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint~\eqref{eq:spacing} imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
  Similarly, the second-order autocorrelations are related through 
@@ -673,59 +675,49 @@ In order to compare the performance in multiple cases and at different noise lev
 
 
 \subsection{3-D experiment}
+\TODO{Add similarities to 2-D}
 
+\TODO{Proposal: Use W for size of projection, M for size of micrograph}
 
-We derive a relation between the steered bispectrum derived in Sect.~\ref{sec:steering} to the volume, expanded in a suitable basis. Specifically, expand the Fourier-transformed volume as
-\[ \widehat V(c\kk) = \sum_{\ell,m,s}a_{\ell,m,s}j_{\ell,s}(k)Y_{\ell,m}(\kk/k),\]
-for $k\leq 1$ and zero otherwise, where $c$ is the assumed bandlimit, $Y_{\ell,m}$ may be taken to be either real or complex, and $j_{\ell,s}(r)$ is some radial basis function (in practice, either spherical bessel or the radial part of the 3D PSWFs as in [Lederman]). We work here with the complex spherical harmonics, given by
-\[ Y_{\ell,m}(\theta,\varphi) = \sqrt{\frac{2\ell+1}{4\pi}\cdot\frac{(\ell-m)!}{(\ell+m)!}}P_{\ell}^m(\cos\theta)e^{i m\varphi},\]
-where $P_{\ell}^m$ are the associated Legendre polynomials with the Condon-Shortley phase. 
+Let $\phi$ be the Coulomb potential representing the molecule we wish to recover, and denote it 3-D Fourier transform by $\widehat \phi$. In this paper, we assume that $\widehat\phi$ is given as a finite expansion of the form
+\be\label{eq:volume_expansion} 
+\widehat \phi(k, \theta, \varphi) = \sum_{\ell = 0}^L\sum_{m=-\ell}^{\ell}\sum_{s=1}^{S(\ell)}a_{\ell, m, s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k),
+\ee
+where $Y_{\ell}^m$ are complex spherical harmonics and $j_{\ell,s}$ are normalized spherical Bessel functions, see Appendix TKTK for definitions. \TODO{Mention somewhere that since $\phi$ is real-valued, we recover only coefficients with $m\geq 0$.} Given $\omega\in\text{SO}(3)$, denote by $I_{\omega}$ the projection obtained from viewing direction $\omega$, and denote by $\widehat I_{\omega}$ its 2-D Fourier transform. By the Fourier projection-slice theorem~\cite[p. 11]{natterer1986mathematics}, the 2D Fourier transform of $I_{\omega}$ is given by \TODO{Move to appendix?}
+\be\label{eq:projection_model}
+\widehat I_{\omega}(k,\varphi) = \sum_{\ell,m,m',s}a_{\ell,m,s}D_{m',m}^{\ell}(\omega)Y_{\ell}^{m'}\left(\frac{\pi}{2},\varphi\right)j_{\ell,s}(k),\ee
+where $D_{m',m}^{\ell}(\omega)$ is a Wigner-D matrix rotating spherical harmonics. 
 
-\TODO{To write down the definition of the $j$ --- the spherical bessel (to copy from the ISBI)}
-
-In this experiment, the micrograph is related to the projections by 
-\begin{equation}
-\mathcal{I}(\rr) = \sum_{i=1}^{N} I_{\omega_i}(\rr-\rr_i)+ \varepsilon, \quad \varepsilon~\sim\mathcal{N}(0,\sigma^2 I),
+Let $\II\in\RR^{M\times M}$ denote a micrograph. For this paper, we assume that the micrograph consists of shifted copies of projections and perturbed by additive white Gaussian noise:
+\begin{equation}\label{eq:micrograph_model}
+\II = \sum_{j=1}^{N} I_{\omega_j}\ast\delta_{\mb s_j}+ \varepsilon, \quad \varepsilon~\sim\mathcal{N}(0,\sigma^2 I),
 \end{equation}
-where $\rr$ is a vector in $\mathbb{R}^2$. \TODO{To write down the definition of projection}
-
-In this paper, we need the first three autocorrelations. In particular, it can be shown that 
+where the viewing directions $\omega_j$ are uniformly distributed over $\text{SO}(3)$, $\mb s_j$ denotes the location of the center of the $j$th projection in the micrograph, and we impose a separation condition similarly to Eq.~\TODO{2D}:
+\be\label{eq:sep_cond} ||\mb s_j - \mb s_i||_{\infty} \geq 2L. \ee
+\TODO{Say something about nonuniformity in practice? Remember that biologists will jump at this...}
+Define the $k$th autocorrelation of $\II$ as
+\be\label{eq:Kth_autocorrelation} 
+m_k[\II](\Delta \mb i_1,\ldots, \Delta \mb i_{k-1}) = \frac{1}{M^2}\sum_{i,j = 1}^M\II(\mb i)\II(\mb i+\Delta\mb i_1)\cdots \II(\mb i+\Delta \mb i_{k-1}),
+\ee
+where $\mb i = (i,j)$, $\Delta \mb i = (\Delta i, \Delta j)$, we require $||\Delta\mb i||_{\infty}\leq 2L-1$, and we set $\II(i,j)=0$ if either $i,j\notin\{1,\ldots, M\}$. In our procedure, we compute the first three autocorrelations, called the mean, power spectrum, and bispectrum, of the micrographs. \TODO{This definition and terminology should come earlier}. Because of the separation condition Eq.~(\ref{eq:sep_cond}), the autocorrelations of the micrograph are related to those of the projections by 
 \begin{align}
-m_k[\II]  \to \gamma\langle m_k[I_\omega]\rangle_{\omega}, 
+m_k[\II]  \to \gamma\langle m_k[I_\omega]\rangle_{\omega} + b_k, 
 \end{align}
-where $\langle\cdot\rangle$ denotes averaging. \TODO{Do we want to define a general moment?}
+where $\langle\cdot\rangle$ denotes averaging, $b_k$ is a bias term, and we take the limit as the number of projections $N$, and hence the dimensions of the micrograph $M$, tend to $\infty$. The mean is unbiased so $b_1 = 0$, the power spectrum has bias $b_2$ depending only on $\sigma^2$, the variance of the noise, and the bias of the bispectrum $b_3$ depends additionally on the mean of $\phi$, which can be accurately estimated from the mean of the micrograph. We can therefore estimate the quantities $\gamma\langle m_k[I_{\omega}]\rangle_{\omega}$ directly from the micrograph.
 
-In a standard SPR experiment, we expect the distribution of in-plane rotations to be uniform because .... 
-Therefore, based on~\cite{landa2017steerable}, we expand the each autocorrelation functions in Prolates .... as discussed in Appendix TKTK.
+Since we assume that the viewing directions $\omega_j$ are uniformly distributed over $\text{SO}(3)$, we would like to average over all in-plane rotations of the projections in the computation of the autocorrelations. To do so, we follow~\cite{landa2017steerable,zhao2016fast} and expand the second and third autocorrelations of the micrograph in Prolate Spheroidal Wave Functions (PSWFs). 
+It can then be shown that the expansion coefficients $\mathfrak{m}_k$ of the autocorrelations in PSWFs are related to the expansion coefficients of the volume by
 
-The next stage is to connect the Prolates coefficients of the moments with those of the volume.
-In Appendix TKTK we show that the volume is related to autocorrelations of the micrograph through 
-
-\begin{align}
-\langle m_1[I_\omega]\rangle_\omega  &= \frac{L}{\sqrt{4\pi}}\sum_sa_{0,0,s}j_{0,s}(0) \\ 
-\mathfrak{m}_2(q) &= \frac{\sqrt{2\pi}}{4\pi}\sum_{\substack{\ell,m\\s_1,s_2}}a_{\ell,m,s_1}\overline{a_{\ell,m,s_2}}
-\int_0^1j_{\ell,s_1}(k)j_{\ell,s_2}(k)R_{0,q}(k)k\, dk \\
-\mathfrak{m}_3(k,q_1,q_2) &= \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}C a_{\ell_1,m_1,s_1}a_{\ell_2,m_2,s_2}\overline{a_{\ell_3,m_1+m_2,s_3}}
+\begin{align}\label{eq:coeffs_to_moms}
+&\mathfrak{m}_1\{a_{\ell,m,s}\} = \frac{L}{\sqrt{4\pi}}\sum_sa_{0,0,s}j_{0,s}(0) \\ 
+&\mathfrak{m}_2\{a_{\ell,m,s}\}(q) = \frac{\sqrt{2\pi}}{4\pi}\sum_{\substack{\ell,m\\s_1,s_2}}C_2^{(q)}(\ell,s_1,s_2)a_{\ell,m,s_1}\overline{a_{\ell,m,s_2}}
+ \\
+&\mathfrak{m}_3\{a_{\ell,m,s}\}(k,q_1,q_2) = \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}C_3^{(k,q_1,q_2)}(\ell_1,m_1,s_1;\ell_2,m_2,s_2;\ell_3,s_3)a_{\ell_1,m_1,s_1}a_{\ell_2,m_2,s_2}\overline{a_{\ell_3,m_1+m_2,s_3}},
 \end{align}
-where
-\begin{align*}
-C&:= (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
-&\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N2\end{array}\right)\int_{\rr}\Psi_{\ell_1,N_1,s_1}(\rr)\rho_{\ell_2,N_2,s_2}^{(k,q_1)}(\rr)\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}(\rr)},
-\end{align*}
-and 
-\begin{align*}
-\rho_{\ell,N,s}^{(k,q)}&=\int_{\Delta\rr}\Psi_{\ell,N,s}(\rr+\Delta\rr)\overline{\psi_{k,q}(\Delta\rr)}.
-\end{align*}
+see Appendix TKTK for the definitions of $C_2,C_3$. 
 
-
-From the data we can estimate (see Appendix TKTK) 
-\begin{align*}
-\widetilde{\mathfrak{m}}_2(q) &= \mathfrak{m}_2(q) + \sigma^2\frac{1}{\sqrt{2\pi}}R_{0,q}(0) \\
-\widetilde{\mathfrak{m}}_3(k,q_1,q_2) &= \mathfrak{m}_3(k,q_1,q_2) +
-\sigma^2m_1[\II]\left[\delta_{q_1,q_2} + \delta_{k,0}\frac{1}{2\pi}(\alpha_{0,q_1}+\alpha_{0,q_2})R_{0,q_1}(0)R_{0,q_2}(0)\right].
-\end{align*} 
-
-
+To recover the expansion coefficients $\{a_{\ell,m,s}\}$ from the autocorrelation coefficients estimated from the micrograph $\mk m_k[\II]$, we minimize the weighted least-squares problem
+\be\label{eq:min_problem_cryo} \min_{\{a_{\ell,m,s}\}} \sum_{k=1}^3\frac{\Big|\Big|\mk m_k\{a_{\ell,m,s}\} - \mk m_k[\II]\Big|\Big|_F^2}{||\mk m_k[\II]||_F^2}.\ee
 
 \section*{Acknowledgment}
 Let's thank them all
@@ -741,14 +733,11 @@ Let's thank them all
 \section{Moments derivation}
 
 \TODO{To rewrite for the discrete case}
-We consider the moments of $\II$ in the limit $N\to\infty$. To take this limit, we shall assume that $N=\Omega(M^2)$ (so by the above argument, in fact $N=\Theta(M^2)$), so $\gamma = \lim_{N\to\infty}\frac{N}{M^2}\in(0,1)$. We also assume that the orientations of the projections in $\II$ are uniformly distributed over the sphere. For the first moment,
-\[ m_1[\II] =
-\frac{NL^2}{M^2}\cdot\frac{1}{N}\sum_{i=1}^N\frac{1}{L^2}\int_{\RR^2}I_{\omega_i}(\rr)\,
-d\rr \to \gamma\int_{\text{SO}(3)} L^2m_1[I_{\omega}]\, d\omega =
-\gamma L m_1[V],\]
-since $\int_{\RR^2} I_{\omega}(x,y)\, dx\, dy = \widehat I_{\omega}(\mathbf{0})=\widehat V(\mathbf{0})$ as the Fourier transform of any projection corresponds to a 2D slice of the Fourier transform of the volume passing through the origin.
 
-For the second and third moments, note that if $\rr\in S_i$ for some $i$, then $\rr+\Delta\rr\in S_i\cup Z$ whenever $||\Delta\rr||\leq 2L$ by the separation assumption $d> 2L$. Since $\RR^2=Z\sqcup\bigsqcup_{i=1}^NS_i$, and $\II(\rr)=0$ if $\rr\in Z$, we have for $||\Delta\rr||\leq 2L$
+We consider the moments of $\II$ in the limit $N\to\infty$. To take this limit, we shall assume that $N=\Omega(M^2)$, and that $\gamma = \lim_{N\to\infty}\frac{N}{M^2}\in(0,1)$ is a constant. 
+Because of the separation condition Eq.~(\ref{eq:sep_cond}), if $\mb i$ is in the support of the $j$th projection, then $\mb i + \Delta\mb i$ is either in the support of the same projection or outside the support of any projection. Formally, $\mb i$ is in the support of the $j$th projection if and only if $\mb 0\leq \mb i - \mb s_j < (L,L)^T$ where the inequalities apply to each coordinate. Then because of the separation condition, 
+
+note that if $\rr\in S_i$ for some $i$, then $\rr+\Delta\rr\in S_i\cup Z$ whenever $||\Delta\rr||\leq 2L$ by the separation assumption $d> 2L$. Since $\RR^2=Z\sqcup\bigsqcup_{i=1}^NS_i$, and $\II(\rr)=0$ if $\rr\in Z$, we have for $||\Delta\rr||\leq 2L$
 \[\begin{aligned} m_2[\II](\Delta \rr)  &= \frac{1}{M^2}\int_{\RR^2}\II(\rr)\II(\rr+\Delta\rr)\, d\rr\\ 
 &= \frac{1}{M^2}\int_Z\II(\rr)\II(\rr+\Delta\rr)\, d\rr + \frac{1}{M^2}\sum_{i=1}^N\int_{S_i}\II(\rr)\II(\rr+\Delta\rr)\, d\rr\\ 
 &= \frac{1}{M^2}\sum_{i=1}^N\int_{\RR^2}I_{\omega_i}(\rr)I_{\omega_i}(\rr+\Delta\rr)\, d\rr\\ 
@@ -822,7 +811,9 @@ We derive a relation between the steered bispectrum derived in Sect.~\ref{sec:st
 \[ \widehat V(c\kk) = \sum_{\ell,m,s}a_{\ell,m,s}j_{\ell,s}(k)Y_{\ell,m}(\kk/k),\]
 for $k\leq 1$ and zero otherwise, where $c$ is the assumed bandlimit, $Y_{\ell,m}$ may be taken to be either real or complex, and $j_{\ell,s}(r)$ is some radial basis function (in practice, either spherical bessel or the radial part of the 3D PSWFs as in [Lederman]). We work here with the complex spherical harmonics, given by
 \[ Y_{\ell,m}(\theta,\varphi) = \sqrt{\frac{2\ell+1}{4\pi}\cdot\frac{(\ell-m)!}{(\ell+m)!}}P_{\ell}^m(\cos\theta)e^{i m\varphi},\]
-where $P_{\ell}^m$ are the associated Legendre polynomials with the Condon-Shortley phase. 
+where $P_{\ell}^m$ are the associated Legendre polynomials with the Condon-Shortley phase, and $j_{\ell,s}$ are normalized spherical Bessel functions given by
+\[ j_{\ell, s}(k) = \frac{4}{|j_{\ell+1}(u_{\ell, s})|}j_{\ell}(2u_{\ell,s} k),\]
+where $j_{\ell}$ is the spherical Bessel function of order $\ell$, $u_{\ell,s}$ is the $s$th positive zero of $j_{\ell}$, and the radius satisfies $k\in[0,1/2]$ in Fourier space since $1/2$ is the Nyquist frequency [ISBI].
 
 Then
 \[ \widehat I_{\omega}(ck,\theta) = \sum_{\ell,m,m',s}a_{\ell,m,s}Y_{\ell,m'}(\pi/2,0)D_{m',m}^{\ell}(\omega)j_{\ell,s}(k)e^{im'\theta},\]
@@ -900,6 +891,16 @@ since $j_{\ell,s}(0)=0$ unless $\ell=0$, and since
 $Y_{0,0}(\theta,\varphi) = \frac{1}{\sqrt{4\pi}}$, we conclude that
 \[ m_1[V] = \widehat V(\mb 0) = \frac{1}{\sqrt{4\pi}}\sum_sa_{0,0,s}j_{0,s}(0).\]
 
+
+\begin{align*}
+&C_2^{(q)} = \int_0^1j_{\ell,s_1}(k)j_{\ell,s_2}(k)R_{0,q}(k)k\, dk\\
+&C_3^{(k,q_1,q_2)}\ell_1,m_1,s_1;\ell_2,m_2,s_2;\ell_3,s_3):= (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
+&\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N2\end{array}\right)\int_{\rr}\Psi_{\ell_1,N_1,s_1}(\rr)\rho_{\ell_2,N_2,s_2}^{(k,q_1)}(\rr)\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}(\rr)},
+\end{align*}
+and 
+\begin{align*}
+\rho_{\ell,N,s}^{(k,q)}&=\int_{\Delta\rr}\Psi_{\ell,N,s}(\rr+\Delta\rr)\overline{\psi_{k,q}(\Delta\rr)}.
+\end{align*}
 
 
 \subsection{Implementation details}

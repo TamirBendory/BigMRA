@@ -91,6 +91,11 @@ Lennart Ljung.
 \newblock In {\em Signal analysis and prediction}, pages 163--173. Springer,
   1998.
 
+\bibitem{natterer1986mathematics}
+Frank Natterer.
+\newblock {\em The mathematics of computerized tomography}, volume~32.
+\newblock SIAM, 1986.
+
 \bibitem{shatsky2009method}
 Maxim Shatsky, Richard~J Hall, Steven~E Brenner, and Robert~M Glaeser.
 \newblock A method for the alignment of heterogeneous macromolecules from
@@ -107,5 +112,10 @@ Marin van Heel.
 Marin van Heel, Michael Schatz, and Elena Orlova.
 \newblock Correlation functions revisited.
 \newblock {\em Ultramicroscopy}, 46(1--4):307--316, 1992.
+
+\bibitem{zhao2016fast}
+Zhizhen Zhao, Yoel Shkolnisky, and Amit Singer.
+\newblock Fast steerable principal component analysis.
+\newblock {\em IEEE transactions on computational imaging}, 2(1):1--12, 2016.
 
 \end{thebibliography}
