@@ -161,64 +161,6 @@ This problem is interesting of its own as it appears in other scientific applica
 
 
 
-%\TODO{Paragraph about bias; can also mention computational aspects (single pass, etc.)}
-
-%\TODO{Already mention challenges? I think it's a good place.} -- no, not here: in conclusion
-
-%\clearpage
-
-
-
-%\begin{figure}[h!]
-%	\centering
-%	\begin{subfigure}[h]{0.3\textwidth}
-%		\centering
-%		\includegraphics[scale=0.3]{Einstein}
-%		\caption{\label{fig:Einstein}Einstein image (template)}
-%	\end{subfigure}%
-%	\begin{subfigure}[h]{0.3\textwidth}
-%		\centering
-%		\includegraphics[scale=0.3]{Einstein_from_noise_n10}
-%		\caption{$n = 10$}
-%	\end{subfigure}
-%	\begin{subfigure}[h]{0.3\textwidth}
-%		\centering
-%		\includegraphics[scale=0.3]{Einstein_from_noise_n100}
-%		\caption{$n = 10^2$}
-%	\end{subfigure}
-
-%	\begin{subfigure}[h]{0.3\textwidth}
-%	\centering
-%	\includegraphics[scale=0.3]{Einstein_from_noise_n1000}
-%	\caption{$n = 10^3$}
-%\end{subfigure}%
-%\begin{subfigure}[h]{0.3\textwidth}
-%	\centering
-%	\includegraphics[scale=0.3]{Einstein_from_noise_n10000}
-%	\caption{$n = 10^4$}
-%\end{subfigure}
-%\begin{subfigure}[h]{0.3\textwidth}
-%	\centering
-%	\includegraphics[scale=0.3]{Einstein_from_noise_n100000}
-%	\caption{$n = 10^5$}
-%\end{subfigure}
-
-%\caption{\label{fig:EinsteinFromNoise} Einstein from noise experiment. As a template, we used Einstein's image of size $50\times 50$ pixels. We drawn $n$ images of the same size whose entries are composed of i.i.d.\ Gaussian entries with the same mean and variance as Einstein's image. Each noise image was aligned with respect to the template by the maximal value of their cross correlation. After the alignment, all the images were averaged. As can be seen, the more pure noise images we use, the closer the averaged image to the template.   }	
-%\end{figure}
-
-%Besides the model bias, particle pickers have several limitations due to the high noise level, in particular for small particles and in low contrast. 
-%As a result, the projections in the 2-D images are typically not centered; including the correct centers as parameters dramatically increases the complexity of reconstruction algorithms.
-%In addition, the information from particles that are too close to each other is usually neglected. Hence, valuable information that can be harnessed is omitted. 
-
-%\paragraph{Simplified model for SPR}
-
-%In this paper, we present a preliminary study that aims to show that estimating a particle 
-%directly from the micrograph, without identifying the location of individual particle images in the micrograph, might be possible. 
-
-%In particular, we consider the toy problem of estimating a set of signals $x_1,\ldots,x_K$ from their multiple occurrences in unknown  locations in a noisy data sequence $y$. Here, $y$ plays the role of the micrograph and the $K$ signals can be thought of as $K$ different viewing directions of the particle, each of which  appears multiple times in the micrograph. 
-%A precise mathematical formulation of the model and the estimation problem is provided in Section~\ref{sec:methods}.
-%To be clear, we do not consider here many prominent features of real SPR experiments and do not aim to reconstruct any 3-D structure; instead, we solve a simpler problem that we believe captures key elements of the true SPR problem. We also mention in passing that similar models emerge in different scientific fields, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
-
 \begin{figure}[t]
 	\centering
 	\begin{subfigure}[h]{0.33\textwidth}
@@ -240,46 +182,23 @@ This problem is interesting of its own as it appears in other scientific applica
 \end{figure}
 
 
-%\paragraph{Autocorrelation analysis.}
-%We now return to the general problem of estimating $x_1,\dots,x_K$ from the noisy observation $y$.
-%In order to recover the signals $x_1,\dots,x_K$ from the data, we use autocorrelation analysis.
-%In a nutshell, the method consists of two stages. First, we estimate a mixture (i.e., linear combination) of the low--order autocorrelation functions of the signals from the data. These quantities can be estimated, to any desired accuracy, if individual occurrences are separated by the maximum signal size and each signal appears sufficiently many times in the data. There is no need to detect individual occurrences.
-%In the second stage, the signals are estimated from the mixed autocorrelations using a nonconvex least-squares (LS) algorithm or a phase retrieval algorithm; see Section~\ref{sec:methods} for details.
-%This method requires only one pass over the data and can recover the signals in any $\SNR$, if the signals appear enough times in the data. As a side note, we mention that expectation-maximization---a popular framework in SPR---is intractable for this problem (see Appendix~\ref{sec:theory}  for more details). 
-
-
-%\paragraph{Model bias.} The significance of the model bias in cryo--EM was stressed in~\cite{shatsky2009method,henderson2013avoiding} and demonstrated by the ``Einstein from noise'' example.
-%In this experiment, the image of Einstein is correlated with multiple images of pure noise. The noisy images are aligned to Einstein's image using cross-correlation and then averaged. 
-%In~\cite{shatsky2009method}, it was shown that with merely  1000 noise images, the averaged image is remarkably similar to the template image of Einstein rather than to pure noise.
-%In Figure~\ref{fig:EinsteinFromNoise} we conducted this experiment with different number of noise images. With merely 1000 noise images, Einstein's face is clearly observed in the averaged image. With $10,000$  image, the output is remarkably similar to the template image of Einstein rather than to pure noise. Crucially, the more noisy images we use, the more severe the model bias towards the template. 
-%In the context of cryo--EM, this example demonstrates how our prior assumptions about the particle may influence the reconstructed structure.
-%This true in general to any method which is based on template matching.
-%\TODO{Do we have a nice experiment to exemplify the phenomenon?}
-
-
 \section{Results} \label{sec:results}
 
-We start this section by considering the simplified model of planted image. This experiment aims to recover a 2-D image from an increasing number of micrographs with high noise, similar to the rightmost panel of Figure~\ref{fig:micro_example}. This is done using moments of second order, as these are sufficient to recover a 2-D image up to elementary symmetries. 
-As outlined below, we find that it is indeed possible to recover accurate estimates of the ground truth signals from the highly corrupted micrographs, without particle picking. Furthermore, we find that the quality of estimation increases with the amount of data collected, despite the fact that particle picking remains challenging.
-Then, we  show that the same holds true for the 3-D reconstruction setup.
- The Methods section provides additional details. 
-%We conducted two experiments in the simplified image formation model described in the introduction:
-%\begin{enumerate}
-%	\item The first experiment aims to recover a 2-D image from an increasing number of micrographs with high noise, similar to the rightmost panel of Figure~\ref{fig:micro_example}. This is done using moments of second order, as these are sufficient to recover a 2-D image up to elementary symmetries;
-%	\item The second experiment aims to recover three distinct 1-D signals from an increasing number of 1-D micrographs with high noise. For this task, it is necessary to use moments up to third order.
-%\end{enumerate}
-%As outlined below, we find that it is indeed possible to recover accurate estimates of the ground truth signals from the highly corrupted micrographs, without particle picking. Furthermore, we find that the quality of estimation increases with the amount of data collected, despite the fact that particle picking remains challenging. The Methods section provides additional details. %In the discussion section, we outline how the general approach could be extended to full 3-D SPR.
+The techniques we advocate allow to recover a signal hidden in noisy micrographs without (even implicitly) detecting the location of signal repetitions in these micrographs. To illustrate the underlying principles of the method, we start with a toy model where the target signal is an unknown 2-D image. The latter appears several times in noisy micrographs, at unknown locations. Toward recovery, we first compute the second-order autocorrelation of the micrographs. We then establish that the autocorrelation of the target image can be recovered from the autocorrelation of the micrographs in a straightforward manner. The more micrographs we collect, the more accurate the estimate of the image's autocorrelation. 
+The target image is then estimated from its autocorrelation using a standard inversion algorithm (up to elementary symmetries).
+The same principles carry over to the more challenging task of 3-D reconstruction from micrographs.
+The Methods Section provides additional details. 
 
+In the  experiment, we estimated Einstein's image of size $50\times 50$ and mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. A micrograph contains, on average, 700 occurrences of the target image at random locations. 
+Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$ (this corresponds to $\SNR=1/20$). This high noise level is illustrated in TKTK. %In this first experiment, we assume knowledge of $\sigma$ and of the total number of signal occurrences across all micrographs.\TODO{Need to mention that in the 3-D reconstruction we do not make these assumptions.}
+To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction. The separation restriction is discussed in more details in the Methods Section.
 
-%In this section we describe  some numerical experiments and show results. The experimental details and the algorithms are discussed at length in Section~\ref{sec:methods}.
+We compute the average second-order autocorrelation of the micrographs. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform on GPUs. In the Methods Section, we show how, owing to separation of the occurrences, a determined portion of the averaged autocorrelation allows to estimate the autocorrelation of the unknown image itself. Mathematically, it can be shown that for any noise level, the quality of this estimate improves steadily as the amount of data grows~\cite{bendory2018estimation}. Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
 
-In the first experiment, we estimated Einstein's image of size $50\times 50$ and mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. A micrograph contains, on average, 700 occurrences of the target image at random locations. The latter are chosen so that two occurrences are always separated by at least 49 pixels in each direction. \TODO{it is not clear at this point why the separation is needed. Maybe comment about this, or at least mention that the separation condition is discussed later on.} Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$ (this corresponds to $\SNR=1/20$). This high noise level is illustrated in the right panel of Figure~\ref{fig:micro_example}. In this first experiment, we assume knowledge of $\sigma$ and of the total number of signal occurrences across all micrographs.\TODO{Need to mention that in the 3-D reconstruction we do not make these assumptions.}
-
-We compute the average autocorrelation of the micrographs (equivalently, the average of their power spectra). This is a particularly simple computation. In the methods section, we show how, owing to separation of the occurrences, a determined portion of the averaged autocorrelation allows to estimate the power spectrum of the unknown image itself. Mathematically, it is easy to show that the quality of this estimate improves steadily as the amount of data grows, regardless of noise level. Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}. % bauschke2004rrr,
-RRR is initialized far away from the ground truth, and it iterates to produce the estimate, up to a reflection ambiguity.
+%RRR is initialized far away from the ground truth, and it iterates to produce the estimate, up to a reflection ambiguity.
 
 Figure~\ref{fig:Einst_example} shows several estimated images for a growing number of micrographs, and a movie is available in \TODO{supplementary material}. Figure~\ref{fig:error_per_micro} presents the normalized recovery error as a function of the amount of data available. Error is measured as the ratio of the root mean square error (RMSE) to the norm of the ground truth (square root of the sum of squared pixel intensities.) This is computed after fixing elementary symmetries (see Methods.) As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many micrographs, without particle picking.
-
+\TODO{Tamir: I will rewrite it with the new experiment.}
 \TODO{Here the cryo-EM setup shows up}
 
 %defined as 

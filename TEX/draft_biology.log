@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.7.25)  26 JUL 2018 12:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.7.25)  26 JUL 2018 16:57
 entering extended mode
 **./draft_biology.tex
 (draft_biology.tex
@@ -411,42 +411,42 @@ File: t1cmss.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 File: micrograph_Einstein_example_clean.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_clean.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_clean.pdf  used on input l
-ine 226.
+ine 168.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 <micrograph_Einstein_example_s05.pdf, id=19, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_s05.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_s05.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s05.pdf  used on input lin
-e 231.
+e 173.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 <micrograph_Einstein_example_s3.pdf, id=20, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_s3.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_s3.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s3.pdf  used on input line
- 236.
+ 178.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
  [3 <./micrograph_Einstein_example_clean.pdf> <./micrograph_Einstein_example_s0
 5.pdf> <./micrograph_Einstein_example_s3.pdf>]
 <reconstruction1_cropped.pdf, id=41, 259.97125pt x 258.9675pt>
 File: reconstruction1_cropped.pdf Graphic file (type pdf)
 <use reconstruction1_cropped.pdf>
-Package pdftex.def Info: reconstruction1_cropped.pdf  used on input line 301.
+Package pdftex.def Info: reconstruction1_cropped.pdf  used on input line 220.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 <reconstruction10_cropped.pdf, id=42, 259.97125pt x 258.9675pt>
 File: reconstruction10_cropped.pdf Graphic file (type pdf)
 <use reconstruction10_cropped.pdf>
-Package pdftex.def Info: reconstruction10_cropped.pdf  used on input line 306.
+Package pdftex.def Info: reconstruction10_cropped.pdf  used on input line 225.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 <reconstruction100_cropped.pdf, id=43, 259.97125pt x 258.9675pt>
 File: reconstruction100_cropped.pdf Graphic file (type pdf)
 <use reconstruction100_cropped.pdf>
-Package pdftex.def Info: reconstruction100_cropped.pdf  used on input line 312.
+Package pdftex.def Info: reconstruction100_cropped.pdf  used on input line 231.
 
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 <reconstruction1000_cropped.pdf, id=44, 259.97125pt x 258.9675pt>
 File: reconstruction1000_cropped.pdf Graphic file (type pdf)
 <use reconstruction1000_cropped.pdf>
-Package pdftex.def Info: reconstruction1000_cropped.pdf  used on input line 317
+Package pdftex.def Info: reconstruction1000_cropped.pdf  used on input line 236
 .
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
@@ -456,7 +456,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <Einstein_progress.pdf, id=45, 421.575pt x 316.18124pt>
 File: Einstein_progress.pdf Graphic file (type pdf)
 <use Einstein_progress.pdf>
-Package pdftex.def Info: Einstein_progress.pdf  used on input line 359.
+Package pdftex.def Info: Einstein_progress.pdf  used on input line 278.
 (pdftex.def)             Requested size: 295.10048pt x 221.32535pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -466,52 +466,52 @@ nstruction100_cropped.pdf> <./reconstruction1000_cropped.pdf>] [6 <./Einstein_p
 rogress.pdf>] [7
 
 ] [8] [9] [10]
-LaTeX Font Info:    Try loading font information for U+euf on input line 729.
+LaTeX Font Info:    Try loading font information for U+euf on input line 648.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\ueuf.fd"
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
 )
-Overfull \hbox (60.49075pt too wide) detected at line 736
+Overfull \hbox (60.49075pt too wide) detected at line 655
 []
  []
 
 (draft_biology.bbl [11] [12])
-Overfull \hbox (33.73463pt too wide) detected at line 775
+Overfull \hbox (33.73463pt too wide) detected at line 694
 [][]
  []
 
 [13]
-Overfull \hbox (39.55347pt too wide) detected at line 788
+Overfull \hbox (39.55347pt too wide) detected at line 707
 [][]
  []
 
 [14] [15]
 
-LaTeX Warning: Reference `sec:PSWFs_props' on page 16 undefined on input line 8
-46.
+LaTeX Warning: Reference `sec:PSWFs_props' on page 16 undefined on input line 7
+65.
 
 
-Overfull \hbox (26.5999pt too wide) detected at line 851
+Overfull \hbox (26.5999pt too wide) detected at line 770
 [][]
  []
 
 [16]
-Overfull \hbox (9.89833pt too wide) detected at line 872
+Overfull \hbox (9.89833pt too wide) detected at line 791
 [][]
  []
 
 [17]
-Overfull \hbox (63.25395pt too wide) detected at line 881
+Overfull \hbox (63.25395pt too wide) detected at line 800
 [][]
  []
 
 [18]
-Overfull \hbox (6.53603pt too wide) detected at line 919
+Overfull \hbox (6.53603pt too wide) detected at line 838
 []
  []
 
 
-Overfull \hbox (58.74126pt too wide) detected at line 930
+Overfull \hbox (58.74126pt too wide) detected at line 849
 \OML/cmm/m/it/10.95 B[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 `[]; `[]; `[]; s
 []; s[]; s[]\OT1/cmr/m/n/10.95 ) = [] [] \OML/cmm/m/it/10.95 W\OT1/cmr/m/n/10.9
 5 (\OML/cmm/m/it/10.95 `[]; `[]; `[]; N[]; N[]\OT1/cmr/m/n/10.95 ) [][] 	[]([])
@@ -519,13 +519,13 @@ Overfull \hbox (58.74126pt too wide) detected at line 930
  []
 
 [19] [20]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 993.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 912.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 993.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 912.
  [21]
 [22] [23] (draft_biology.aux)
 
@@ -571,7 +571,7 @@ gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files
 /type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
 blic/amsfonts/euler/eufm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
 amsfonts/symbols/msbm10.pfb>
-Output written on draft_biology.pdf (23 pages, 1777523 bytes).
+Output written on draft_biology.pdf (23 pages, 1777478 bytes).
 PDF statistics:
  644 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
