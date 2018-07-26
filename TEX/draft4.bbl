@@ -1,0 +1,270 @@
+\begin{thebibliography}{10}
+
+\bibitem{nobel}
+\url{https://www.nobelprize.org/nobel_prizes/chemistry/laureates/2017/ }.
+
+\bibitem{abbe2017multireference}
+Emmanuel Abbe, Tamir Bendory, William Leeb, Jo{\~a}o Pereira, Nir Sharon, and
+  Amit Singer.
+\newblock Multireference alignment is easier with an aperiodic translation
+  distribution.
+\newblock {\em arXiv preprint arXiv:1710.02793}, 2017.
+
+\bibitem{abed1997blind}
+Karim Abed-Meraim, Wanzhi Qiu, and Yingbo Hua.
+\newblock Blind system identification.
+\newblock {\em Proceedings of the IEEE}, 85(8):1310--1322, 1997.
+
+\bibitem{aguerrebere2016fundamental}
+Cecilia Aguerrebere, Mauricio Delbracio, Alberto Bartesaghi, and Guillermo
+  Sapiro.
+\newblock Fundamental limits in multi-image alignment.
+\newblock {\em IEEE Transactions on Signal Processing}, 64(21):5707--5722,
+  2016.
+
+\bibitem{andrieu2001bayesian}
+Christophe Andrieu, {\'E}ric Barat, and Arnaud Doucet.
+\newblock Bayesian deconvolution of noisy filtered point processes.
+\newblock {\em IEEE Transactions on Signal Processing}, 49(1):134--146, 2001.
+
+\bibitem{ayers1988iterative}
+GR~Ayers and J~Christopher Dainty.
+\newblock Iterative blind deconvolution method and its applications.
+\newblock {\em Optics letters}, 13(7):547--549, 1988.
+
+\bibitem{azais2015spike}
+Jean-Marc Azais, Yohann De~Castro, and Fabrice Gamboa.
+\newblock Spike detection from inaccurate samplings.
+\newblock {\em Applied and Computational Harmonic Analysis}, 38(2):177--195,
+  2015.
+
+\bibitem{bartesaghi20152}
+Alberto Bartesaghi, Alan Merk, Soojay Banerjee, Doreen Matthies, Xiongwu Wu,
+  Jacqueline~LS Milne, and Sriram Subramaniam.
+\newblock 2.2 {\aa} resolution cryo-em structure of $\beta$-galactosidase in
+  complex with a cell-permeant inhibitor.
+\newblock {\em Science}, 348(6239):1147--1151, 2015.
+
+\bibitem{beinert2015ambiguities}
+Robert Beinert and Gerlind Plonka.
+\newblock Ambiguities in one-dimensional discrete phase retrieval from fourier
+  magnitudes.
+\newblock {\em Journal of Fourier Analysis and Applications}, 21(6):1169--1198,
+  2015.
+
+\bibitem{bendory2017robust}
+Tamir Bendory.
+\newblock Robust recovery of positive stream of pulses.
+\newblock {\em IEEE Transactions on Signal Processing}, 65(8):2114--2122, 2017.
+
+\bibitem{bendory2017fourier}
+Tamir Bendory, Robert Beinert, and Yonina~C Eldar.
+\newblock Fourier phase retrieval: Uniqueness and algorithms.
+\newblock In {\em Compressed Sensing and its Applications}, pages 55--91.
+  Springer, 2017.
+
+\bibitem{bendory2017bispectrum}
+Tamir Bendory, Nicolas Boumal, Chao Ma, Zhizhen Zhao, and Amit Singer.
+\newblock Bispectrum inversion with application to multireference alignment.
+\newblock {\em arXiv preprint arXiv:1705.00641}, 2017.
+
+\bibitem{bendory2016robust}
+Tamir Bendory, Shai Dekel, and Arie Feuer.
+\newblock Robust recovery of stream of pulses using convex optimization.
+\newblock {\em Journal of Mathematical Analysis and Applications},
+  442(2):511--536, 2016.
+
+\bibitem{benveniste1980robust}
+Albert Benveniste, Maurice Goursat, and Gabriel Ruget.
+\newblock Robust identification of a nonminimum phase system: Blind adjustment
+  of a linear equalizer in data communications.
+\newblock {\em IEEE Transactions on Automatic Control}, 25(3):385--399, 1980.
+
+\bibitem{bernstein2017deconvolution}
+Brett Bernstein and Carlos Fernandez-Granda.
+\newblock Deconvolution of point sources: A sampling theorem and robustness
+  guarantees.
+\newblock {\em arXiv preprint arXiv:1707.00808}, 2017.
+
+\bibitem{manopt}
+N.~Boumal, B.~Mishra, P.-A. Absil, and R.~Sepulchre.
+\newblock {M}anopt, a {M}atlab toolbox for optimization on manifolds.
+\newblock {\em Journal of Machine Learning Research}, 15:1455--1459, 2014.
+
+\bibitem{boumal2017heterogeneous}
+Nicolas Boumal, Tamir Bendory, Roy~R Lederman, and Amit Singer.
+\newblock Heterogeneous multireference alignment: a single pass approach.
+\newblock {\em arXiv preprint arXiv:1710.02590}, 2017.
+
+\bibitem{cappe1999simulation}
+Olivier Capp{\'e}, Arnaud Doucet, Marc Lavielle, and Eric Moulines.
+\newblock Simulation-based methods for blind maximum-likelihood filter
+  identification.
+\newblock {\em Signal processing}, 73(1-2):3--25, 1999.
+
+\bibitem{denoyelle2017support}
+Quentin Denoyelle, Vincent Duval, and Gabriel Peyr{\'e}.
+\newblock Support recovery for sparse super-resolution of positive measures.
+\newblock {\em Journal of Fourier Analysis and Applications}, 23(5):1153--1194,
+  2017.
+
+\bibitem{elser2017matrix}
+Veit Elser.
+\newblock Matrix product constraints by projection methods.
+\newblock {\em Journal of Global Optimization}, 68(2):329--355, 2017.
+
+\bibitem{frank1983automatic}
+Joachim Frank and Terence Wagenknecht.
+\newblock Automatic selection of molecular images from electron micrographs.
+\newblock {\em Ultramicroscopy}, 12(3):169--175, 1983.
+
+\bibitem{giannakis1989identification}
+Georgios~B Giannakis and Jerry~M Mendel.
+\newblock Identification of nonminimum phase systems using higher order
+  statistics.
+\newblock {\em IEEE Transactions on Acoustics, Speech, and Signal Processing},
+  37(3):360--377, 1989.
+
+\bibitem{gogineni2017passive}
+Sandeep Gogineni, Pawan Setlur, Muralidhar Rangaswamy, and Raj~Rao Nadakuditi.
+\newblock Passive radar detection with noisy reference channel using principal
+  subspace similarity.
+\newblock {\em IEEE Transactions on Aerospace and Electronic Systems}, 2017.
+
+\bibitem{harauz1989automatic}
+George Harauz and Amelia Fong-Lochovsky.
+\newblock Automatic selection of macromolecules from electron micrographs by
+  component labelling and symbolic processing.
+\newblock {\em Ultramicroscopy}, 31(4):333--344, 1989.
+
+\bibitem{hayes1982reconstruction}
+MHMH Hayes.
+\newblock The reconstruction of a multidimensional sequence from the phase or
+  magnitude of its fourier transform.
+\newblock {\em IEEE Transactions on Acoustics, Speech, and Signal Processing},
+  30(2):140--154, 1982.
+
+\bibitem{hayes1982reducible}
+Monson~H Hayes and James~H McClellan.
+\newblock Reducible polynomials in more than one variable.
+\newblock {\em Proceedings of the IEEE}, 70(2):197--198, 1982.
+
+\bibitem{heimowitz2018apple}
+Ayelet Heimowitz, Amit Singer, et~al.
+\newblock Apple picker: Automatic particle picking, a low-effort cryo-em
+  framework.
+\newblock {\em arXiv preprint arXiv:1802.00469}, 2018.
+
+\bibitem{henderson2013avoiding}
+Richard Henderson.
+\newblock Avoiding the pitfalls of single particle cryo-electron microscopy:
+  Einstein from noise.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  110(45):18037--18041, 2013.
+
+\bibitem{jefferies1993restoration}
+Stuart~M Jefferies and Julian~C Christou.
+\newblock Restoration of astronomical images by iterative blind deconvolution.
+\newblock {\em The Astrophysical Journal}, 415:862, 1993.
+
+\bibitem{kormylo1983identifiability}
+John Kormylo and J~Mendel.
+\newblock Identifiability of nonminimum phase linear stochastic systems.
+\newblock {\em IEEE transactions on automatic control}, 28(12):1081--1090,
+  1983.
+
+\bibitem{kuhlbrandt2014resolution}
+Werner K{\"u}hlbrandt.
+\newblock The resolution revolution.
+\newblock {\em Science}, 343(6178):1443--1444, 2014.
+
+\bibitem{langlois2014automated}
+Robert Langlois, Jesper Pallesen, Jordan~T Ash, Danny~Nam Ho, John~L
+  Rubinstein, and Joachim Frank.
+\newblock Automated particle picking for low-contrast macromolecules in
+  cryo-electron microscopy.
+\newblock {\em Journal of structural biology}, 186(1):1--7, 2014.
+
+\bibitem{lewicki1998review}
+Michael~S Lewicki.
+\newblock A review of methods for spike sorting: the detection and
+  classification of neural action potentials.
+\newblock {\em Network: Computation in Neural Systems}, 9(4):R53--R78, 1998.
+
+\bibitem{lii1982deconvolution}
+KS~Lii, M~Rosenblatt, et~al.
+\newblock Deconvolution and estimation of transfer function phase and
+  coefficients for nongaussian linear processes.
+\newblock {\em The annals of statistics}, 10(4):1195--1208, 1982.
+
+\bibitem{ljung1998system}
+Lennart Ljung.
+\newblock System identification.
+\newblock In {\em Signal analysis and prediction}, pages 163--173. Springer,
+  1998.
+
+\bibitem{ogura2004automatic}
+Toshihiko Ogura and Chikara Sato.
+\newblock Automatic particle pickup method using a neural network has high
+  accuracy by applying an initial weight derived from eigenimages: a new
+  reference free method for single-particle analysis.
+\newblock {\em Journal of structural biology}, 145(1-2):63--75, 2004.
+
+\bibitem{perry2017sample}
+Amelia Perry, Jonathan Weed, Afonso Bandeira, Philippe Rigollet, and Amit
+  Singer.
+\newblock The sample complexity of multi-reference alignment.
+\newblock {\em arXiv preprint arXiv:1707.00943}, 2017.
+
+\bibitem{rabiner1989tutorial}
+Lawrence~R Rabiner.
+\newblock A tutorial on hidden markov models and selected applications in
+  speech recognition.
+\newblock {\em Proceedings of the IEEE}, 77(2):257--286, 1989.
+
+\bibitem{scheres2015semi}
+Sjors~HW Scheres.
+\newblock Semi-automated selection of cryo-em particles in relion-1.3.
+\newblock {\em Journal of structural biology}, 189(2):114--122, 2015.
+
+\bibitem{shalvi1990new}
+Ofir Shalvi and Ehud Weinstein.
+\newblock New criteria for blind deconvolution of nonminimum phase systems
+  (channels).
+\newblock {\em IEEE Transactions on information theory}, 36(2):312--321, 1990.
+
+\bibitem{shatsky2009method}
+Maxim Shatsky, Richard~J Hall, Steven~E Brenner, and Robert~M Glaeser.
+\newblock A method for the alignment of heterogeneous macromolecules from
+  electron microscopy.
+\newblock {\em Journal of structural biology}, 166(1):67--78, 2009.
+
+\bibitem{smith2014beyond}
+Martin~TJ Smith and John~L Rubinstein.
+\newblock Beyond blob-ology.
+\newblock {\em Science}, 345(6197):617--619, 2014.
+
+\bibitem{tugnait1984identification}
+Jitendra Tugnait.
+\newblock Identification of nonminimum phase linear stochastic systems.
+\newblock In {\em The 23rd IEEE Conference on Decision and Control}, number~23,
+  pages 342--347, 1984.
+
+\bibitem{voss2009dog}
+NR~Voss, CK~Yoshioka, M~Radermacher, CS~Potter, and B~Carragher.
+\newblock Dog picker and tiltpicker: software tools to facilitate particle
+  selection in single particle electron microscopy.
+\newblock {\em Journal of structural biology}, 166(2):205--213, 2009.
+
+\bibitem{weinthesis}
+Alex Wein.
+\newblock {\em Statistical Estimation in the Presence of Group Actions}.
+\newblock PhD thesis, 2018.
+
+\bibitem{zhu2016deep}
+Yanan Zhu, Qi~Ouyang, and Youdong Mao.
+\newblock A deep learning approach to single-particle recognition in
+  cryo-electron microscopy.
+\newblock {\em arXiv preprint arXiv:1605.05543}, 2016.
+
+\end{thebibliography}

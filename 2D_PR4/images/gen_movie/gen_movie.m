@@ -10,7 +10,7 @@ open(v);
 fig = figure('position',[100 100 500 500]);
 
 % data parameters
-max_ind = 505;
+max_ind = 842;
 axisX = 512*(1:max_ind);
 L = 50;
 W = 2*L-1;
@@ -86,7 +86,7 @@ hf = figure;
 %set(hf, 'position', [150 150 w h]);
 set(hf, 'position', [150 50 600 600]);
 axis off
-fps = 4;
+fps = 10;
 %movie(Frame,1,fps);
 mplay(Frame)
 
