@@ -1,0 +1,139 @@
+\documentclass[english,11pt]{article}
+
+\pdfoutput=1
+
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{verbatim}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+%\usepackage{multirow}
+\usepackage{color}
+\usepackage{url}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{mathtools} 
+\usepackage[margin=1.2in]{geometry}
+
+
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GCD}{\mathbf{GCD}}
+\newcommand{\XX}{\mathcal{X}}
+\newcommand{\SUM}{\text{sum}}
+\newcommand{\1}{\mathbf{1}}
+
+
+\newcommand{\TODO}[1]{{\color{red}{[#1]}}}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+%\numberwithin{equation}{section}
+%\numberwithin{figure}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{\protect\definitionname}
+\theoremstyle{remark}
+\newtheorem{claim}[thm]{\protect\claimname}
+\theoremstyle{plain}
+\newtheorem{lem}[thm]{\protect\lemmaname}
+
+\newtheorem*{lem*}{Lemma}
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{\protect\remarkname}
+\theoremstyle{plain}
+\newtheorem{corollary}[thm]{\protect\corollaryname}
+\theoremstyle{plain}
+\newtheorem{proposition}[thm]{\protect\propositionname}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%\usepackage{slashbox}
+
+\usepackage{babel}
+\providecommand{\claimname}{Claim}
+\providecommand{\definitionname}{Definition}
+\providecommand{\lemmaname}{Lemma}
+\providecommand{\remarkname}{Remark}
+\providecommand{\theoremname}{Theorem}
+\providecommand{\corollaryname}{Corollary}
+\providecommand{\propositionname}{Proposition}
+
+
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\RL}{\mathbb{R}^L}
+\newcommand{\CL}{\mathbb{C}^L}
+\newcommand{\RN}{\mathbb{R}^N}
+\newcommand{\RNN}{\mathbb{R}^{N\times N}}
+\newcommand{\CNN}{\mathbb{C}^{N\times N}}
+\newcommand{\inner}[1]{\left\langle {#1} \right\rangle}
+\newcommand{\hx}{\hat{x}} 
+\newcommand{\one}{\mathbf{1}} 
+\newcommand{\SNR}{\ensuremath{\textsf{SNR}}}
+
+\begin{document}
+	
+	\title{The autocorrelation functions in cryo--EM}
+	
+	
+	\author{Tamir Bendory, Nicolas Boumal, William Leeb and Amit Singer}
+	\maketitle
+
+
+
+The 3-D Fourier transform of an L-bandlimited 3-D volume (e.g., particle) can be expanded into spherical harmonics:
+\begin{equation} \label{eq:volume}
+\hat{V}(k,\theta,\phi)  = \sum_{\ell=0}^{L} \sum_{m=-\ell}^{\ell} A_{\ell,m}(k)Y_\ell^{m}(\theta,\phi),
+\end{equation}
+where $\theta \in [0,\pi)$ is the polar angle, $\phi \in [0,2\pi)$ is the azimuthal angle, $k$ is the radial coordinate, $Y_{\ell}^m(\theta,\phi)$ is the spherical harmonic of degree $\ell$ and order $m$ and  $A_{\ell,m}(k)$ are the associated spherical harmonics coefficients. The goal is to estimate the functions $A_{l,m}$.
+A rotation of the volume by $\omega\in SO(3)$ can be described using the Wigner D-function $D_{m,m'}^{\ell}$:
+\begin{equation}
+\begin{split}
+(R_\omega \hat{V})(k,\theta,\phi)  &= \sum_{\ell=0}^{L} \sum_{m=-\ell}^{\ell} A_{\ell,m}(k)(R_\omega Y_\ell^{m})(\theta,\phi) \\
+&= \sum_{\ell=0}^{L} \sum_{m=-\ell}^{\ell} A_{\ell,m}(k) 
+\sum_{m'=-\ell}^{\ell}{D_{m,m'}^{\ell}(\omega)}Y_\ell^{m'}(\theta,\phi).
+\end{split}
+\end{equation}
+
+By the Fourier slice theorem, the Fourier transform of each cryo-EM measurement (that is, each projection) is a slice of $\hat V$, associated with $\theta= \pi/2$, after $\hat{V}$ was rotated by $\omega\in SO(3)$. Explicitly, the Fourier transform of a projection from the viewing direction $\omega$ is related to the spherical harmonic coefficients of the object through:
+\begin{equation} \label{eq:P}
+\begin{split}
+\hat P_\omega(k,\phi)  = \sum_{\ell=0}^{L} \sum_{m=-\ell}^{\ell} A_{\ell,m}(k) 
+\sum_{m'=-\ell}^{\ell}{D_{m,m'}^{\ell}(\omega)}Y_\ell^{m'}(\pi/2,\phi).
+\end{split}
+\end{equation}
+
+Next, we relate the projections $P_\omega$ to the mean and the autocorrelation functions, both computable from the observed micrographs.
+The mean of the micrograph is proportional to 
+\begin{equation}
+M_1 \propto \sum_{n=1}^N \sum_{x,y}P_{\omega_n}(x,y),
+\end{equation}
+where $\omega_n$ denotes the viewing direction of the $n$th projection. By taking $n\to\infty$, we get  
+\begin{equation}
+M_1 \propto \sum_{x,y}\int_{\omega}P_\omega(x,y)\rho(\omega) d\omega,
+\end{equation}
+where $\rho(\omega)$ denotes the (possibly unknown) viewing direction distribution over $SO(3)$.
+
+We assume the projections are sufficiently separated so that, in the limit $n\to\infty$, the $(\Delta_x,\Delta_y)$ entry of the second-order autocorrelation of the micrograph is proportional to:
+\begin{equation}
+M_2(\Delta_x,\Delta_y)\propto\sum_{x,y}\int_{\omega} P_\omega(x,y)P_\omega(x+\Delta_x,y+\Delta_y)\rho(\omega)d\omega  + \textrm{bias}.
+\end{equation}
+ The assumption here is that $(\Delta_x, \Delta_y)$ are small enough so that, in computing the auto-correlation, points $(x, y)$ and $(x+\Delta_x, y+\Delta_y)$ do not touch distinct particles. 
+In the same way and under the same conditions, the third moment is given by 
+\begin{equation} 
+M_3(\Delta_x^1,\Delta_y^1;\Delta_x^2,\Delta_y^2) \propto \sum_{x,y}\int_{\omega} P_\omega(x,y)P_\omega(x+\Delta_x^1,y+\Delta_y^1)P_\omega(x+\Delta_x^2,y+\Delta_y^2)\rho(\omega)d\omega + \textrm{bias}.
+\end{equation}
+
+In order to determine the particle, by~\eqref{eq:volume} one needs to estimate order of $L^3$ spherical harmonics coefficients. If the pixel size is proportional to $1/L$ (to match the volume's resolution), then $M_3$ provides order of $L^4$ equations involving triple products of $P_\omega$. 
+However, 
+since  the in-plane rotation of each particle image is usually uniformly distributed, $M_3$  depends on only three parameters: the length of the vector $(\Delta_x^1,\Delta_y^1)$, the length of the vector  $(\Delta_x^2,\Delta_y^2)$ and the  angle between the two vectors.  Therefore,  $M_3$  provides only $\sim L^3$ equations. 
+ Since $P_\omega$ depends (after coordinate transformation) linearly on the spherical harmonic coefficients through~\eqref{eq:P}, this means we have a system of $\sim L^3$ cubic equations in the $\sim L^3$ sought parameters. Importantly, the coefficients of these equations can be estimated from the micrographs directly, without particle picking.
+
+\end{document}

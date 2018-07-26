@@ -1,0 +1,7 @@
+*.mat
+*.slurm
+*.out
+*.mrc
+*~
+*.asv
+profile_results/*

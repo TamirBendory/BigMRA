@@ -1,0 +1,465 @@
+
+\documentclass{amsart}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{bm}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{xca}[theorem]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+%    Absolute value notation
+\newcommand{\abs}[1]{\lvert#1\rvert}
+
+%    Blank box placeholder for figures (to avoid requiring any
+%    particular graphics capabilities for printing this document).
+\newcommand{\blankbox}[2]{%
+  \parbox{\columnwidth}{\centering
+%    Set fboxsep to 0 so that the actual size of the box will match the
+%    given measurements more closely.
+    \setlength{\fboxsep}{0pt}%
+    \fbox{\raisebox{0pt}[#2]{\hspace{#1}}}%
+  }%
+}
+
+\newcommand{\rr}{\mathbf{r}}
+\newcommand{\cc}{\mathbf{c}}
+\newcommand{\kk}{\mathbf{k}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\II}{\mathcal{I}}
+\newcommand{\DD}{\mathbb{D}}
+\newcommand{\Ebb}{\mathbb{E}}
+\newcommand{\mb}{\mathbf}
+
+\begin{document}
+
+\title{Micrograph moments}
+
+\maketitle
+
+\section{Continuous case}
+Let $\II:\RR^2\to\RR$ be a micrograph, let $I_{\omega}:\RR^2\to\RR$ be a projection of a volume $V$ corresponding to orientation $\omega\in\text{SO}(3)$. Suppose that $\II$ contains $N$ translated instances of $I_{\omega}$ for different orientations $\omega$ and is zero outside of these instances, $\II(\rr)=0$ for $||\rr|| > M$, and that $I_{\omega}(\rr) = 0$ whenever $||\rr||> L$ for all $\omega$, and for any (fixed) norm $||\cdot||$. Let $S_i$ denote the support of the instance $I_{\omega_i}$ in $\II$, and let $Z = \RR^2-\bigcup_iS_i$, so $\II(\rr)=0$ if $\rr\in Z$. Also denote by $\cc_i$ the center of the instance of $I_{\omega_i}$ in $\II$, so $\II(\rr) = I_{\omega_i}(\rr-\cc_i)$ whenever $\rr\in S_i$. 
+
+We shall assume that the instances of $I_{\omega}$ in $\II$ are well-separated. Specifically, suppose 
+\[d = \min_{i,j}\inf_{\rr_i\in S_i,\ \rr_j\in S_j}||\mathbf{r_i}-\mathbf{r_j}|| > 2L,\] 
+i.e. the minimum separation between any two projections is at least the diameter of the support of the molecule. 
+
+For a general function $f:\RR^n\to\RR$ such that $f(\rr)=0$ for $||\rr||>L$, define its $k$th moment as
+\[ m_k[f](\Delta \rr_1,\ldots, \Delta\rr_k) = \frac{1}{L^n}\int_{||\rr||\leq L}f(\rr)f(\rr+\Delta\rr_1)\cdots f(\rr+\Delta\rr_k)\, d\rr\]
+where $m_k[f](\Delta\rr_1,\ldots,\Delta\rr_k) = 0$ if $||\Delta\rr_i|| > 2L$ for any $i$, as then $||\rr+\Delta\rr_i|| \geq ||\Delta\rr_i|| - ||\rr|| > 2L-L = L$, and hence $f(\rr+\Delta\rr_i)=0$ for all $||\rr|| \leq L$. Note also that if we take the Fourier transform of the $k$th moment, we get [Yellott and Iverson, 2017]
+\[ \widehat{m_k[f]}(\kk_1,\ldots, \kk_k) = \frac{1}{L^n}\overline{\widehat f\left(\sum_{i=1}^k\kk_i\right)}\prod_{i=1}^k\widehat f(\kk_i).\]
+Finally, for convenience we shall take the above integral to be over $\RR^2$, always possible as $f(\rr)=0$ whenever $||\rr||>L$.
+
+\begin{remark} The normalization $1/L^n$ above is necessary to make the moments of the micrograph finite. Specifically, the moments of the micrograph are shown below to be \emph{sums} of moments of the projections (because a micrograph can contain at most countably many projections - there's a point with rational coordinates in every $S_i$), and in the worst case $N=\Theta(M^2)$. To see this, note that $N$ is upper-bounded by the ratio of the area of the micrograph, proportional to $M^2$, by that of a projection, proportional to $L^2$, (so trivially $N=O(M^2)$), and in the worst case, equals that ratio (e.g., tile a square micrograph with square projections). \end{remark}
+
+We consider the moments of $\II$ in the limit $N\to\infty$. To take this limit, we shall assume that $N=\Omega(M^2)$ (so by the above argument, in fact $N=\Theta(M^2)$), so $\gamma = \lim_{N\to\infty}\frac{N}{M^2}\in(0,1)$. We also assume that the orientations of the projections in $\II$ are uniformly distributed over the sphere. For the first moment,
+\[ m_1[\II] =
+  \frac{NL^2}{M^2}\cdot\frac{1}{N}\sum_{i=1}^N\frac{1}{L^2}\int_{\RR^2}I_{\omega_i}(\rr)\,
+  d\rr \to \gamma\int_{\text{SO}(3)} L^2m_1[I_{\omega}]\, d\omega =
+  \gamma L m_1[V],\]
+since $\int_{\RR^2} I_{\omega}(x,y)\, dx\, dy = \widehat I_{\omega}(\mathbf{0})=\widehat V(\mathbf{0})$ as the Fourier transform of any projection corresponds to a 2D slice of the Fourier transform of the volume passing through the origin.
+
+For the second and third moments, note that if $\rr\in S_i$ for some $i$, then $\rr+\Delta\rr\in S_i\cup Z$ whenever $||\Delta\rr||\leq 2L$ by the separation assumption $d> 2L$. Since $\RR^2=Z\sqcup\bigsqcup_{i=1}^NS_i$, and $\II(\rr)=0$ if $\rr\in Z$, we have for $||\Delta\rr||\leq 2L$
+\[\begin{aligned} m_2[\II](\Delta \rr)  &= \frac{1}{M^2}\int_{\RR^2}\II(\rr)\II(\rr+\Delta\rr)\, d\rr\\ 
+&= \frac{1}{M^2}\int_Z\II(\rr)\II(\rr+\Delta\rr)\, d\rr + \frac{1}{M^2}\sum_{i=1}^N\int_{S_i}\II(\rr)\II(\rr+\Delta\rr)\, d\rr\\ 
+&= \frac{1}{M^2}\sum_{i=1}^N\int_{\RR^2}I_{\omega_i}(\rr)I_{\omega_i}(\rr+\Delta\rr)\, d\rr\\ 
+&= \frac{N}{M^2}\cdot\frac{1}{N}\sum_{i=1}^NL^2m_2[I_{\omega_i}](\Delta\rr)\\
+&\to \gamma\int_{\text{SO}(3)}L^2m_2[I_{\omega}](\Delta\rr)\, d\omega.\end{aligned}\]
+If we set $m_2(\Delta \rr) = 0$ for $||\Delta\rr||>2L$, the above equality holds for all $\Delta\rr$, and taking its Fourier transform (with respect to $\Delta\rr$) and interchanging the Fourier integral with the integral over SO(3) (which can \emph{always} be done), we get
+\[ \widehat{m_2[\II]}(\kk) \to \gamma\int_{\text{SO}(3)}L^2\widehat{m_2[I_{\omega}]}(\kk)\, d\omega = \gamma\langle|\widehat I_{\omega}(\kk)|^2\rangle_{\omega},\]
+where $\langle\cdot\rangle_{\omega}$ denotes average over the orientations, so over SO(3).
+
+Similarly, for the third moment if $\rr\in S_i$ for some $i$ then $\rr+\Delta\rr_1,\rr+\Delta\rr_2\in S_i\cup Z$, and hence we again get for $||\Delta\rr_1||\leq 2L$ and $||\Delta\rr_2||\leq 2L$ that
+\[\begin{aligned} m_3[\II](\Delta \rr_1,\Delta\rr_2)  &= \frac{1}{M^2}\int_{\RR^2}\II(\rr)\II(\rr+\Delta\rr_1)\II(\rr+\Delta\rr_2)\, d\rr\\ 
+&= \frac{1}{M^2}\int_Z\II(\rr)\II(\rr+\Delta\rr_1)\II(\rr+\Delta\rr_2)\, d\rr + \frac{1}{M^2}\sum_{i=1}^N\int_{S_i}\II(\rr)\II(\rr+\Delta\rr_1)\II(\rr+\Delta\rr_2)\, d\rr\\ 
+&= \frac{1}{M^2}\sum_{i=1}^N\int_{\RR^2}I_{\omega_i}(\rr)I_{\omega_i}(\rr+\Delta\rr_1)I_{\omega_i}(\rr+\Delta\rr_2)\, d\rr\\ 
+&= \frac{N}{M^2}\cdot\frac{1}{N}\sum_{i=1}^NL^2m_3[I_{\omega_i}](\Delta\rr_1,\Delta\rr_2)\\
+&\to \gamma\int_{\text{SO}(3)}L^2m_3[I_{\omega}](\Delta\rr_1,\Delta\rr_2)\, d\omega.\end{aligned}\]
+Again, setting $m_3(\Delta\rr_1,\Delta\rr_2)=0$ if either $||\Delta\rr_1||>2L$ or $||\Delta\rr_2||>2L$, we also get
+\[ \widehat{m_3[\II]}(\kk_1,\kk_2) = \gamma\langle\widehat I_{\omega}(\kk_1)\widehat I_{\omega}(\kk_2)\overline{\widehat I_{\omega}(\kk_1+\kk_2)}\rangle_{\omega}.\]
+
+\section{Discrete case}
+In the discrete case, assume $\II\in\RR^{M\times M}$ and $I_{\omega}\in\RR^{L\times L}$ (since $M,L$ denote the support of these signals in some norm, this is valid if for instance we restrict ourselves to $\ell_p$ norms, since then if $||\rr||_p\leq M$ then $||\rr||_{\infty}\leq M$, while $||(M,0,\ldots, 0)^T||_p=||(M,0,\ldots,0)^T||_{\infty}=1$). Once again, we shall assume $N = \Omega(M^2)$. 
+
+In the discrete case, we define the $k$th moment of a signal $x\in\RR^{L\times L}$ as
+\[ m_k[x][(\Delta i_1,\Delta j_1);\ldots;(\Delta i_k,\Delta j_k)] = \frac{1}{L^2}\sum_{i,j=1}^{L}x[i,j]x[i+\Delta i_1, j + \Delta j_1]\cdots x[i+\Delta i_k, j + \Delta j_k],\]
+where we set $x[i,j]=0$ if either $i>L$ or $j>L$. 
+
+The derivation is then identical as for the continuous case, with the exception that now $\gamma = \lim_{N\to\infty}\frac{NL^2}{M^2}\in(0,1)$ is the occupancy factor.
+
+\section{Steering}\label{sec:steering}
+The first two moments are cheap to compute and store - $m_1$ is a scalar and $m_2$ is radially symmetric (in the limit $N\to\infty$), so it suffices to compute a single ray of it. The third moment however is infeasible to store - it has $(2L-1)^4$ entries, and in modern microscopes we can easily have $L\geq 300$. In addition, the above scheme does not average over in-plane rotations, which can improve estimation in the precense of noise (and accelerate convergence to the population moments without noise). We therefore propose the following steering procedure:
+
+The third moment $m_3[\II](\Delta \rr_1,\Delta \rr_2)$ as defined above is compactly supported (at least numerically) with respect to each of its variables in both real and Fourier space, with support radii $2L$ and $1/2$ in real and Fourier space, respectively (see above formulas for $m_3$ in real and Fourier space). Therefore, we can expand it in a suitable product basis that is compactly supported in both real and Fourier space, e.g. Prolate Spheroidal Wave Functions (PSWFs) or Fourier-Bessel (FB):
+\[ m_3[\II](\Delta \rr_1, \Delta \rr_2) = \sum_{k_1,k_2=-\infty}^{\infty}\sum_{q_1,q_2=1}^{\infty}\mathfrak{m}_3(k_1,q_1;k_2,q_2)\psi_{k_1,q_1}(\Delta\rr_1)\overline{\psi_{k_2,q_2}(\Delta\rr_2)},\]
+where we conjugate the second set of basis functions for convenience, that will become apparent below (of course, the set of conjugates is also a basis, as $\overline{\psi_{k,q}}=\psi_{-k,q}$ for PSWFs and $\overline{\psi_{k,q}}=(-1)^k\psi_{-k,q}$ for FB). We shall assume that the basis $\{\psi_{k,q}(\rr)\}$ is orthonormal, so $\int_{\RR^2}\psi_{k_1,q_1}(\rr)\overline{\psi_{k_2,q_2}}(\rr) = \delta_{k_1,k_2}\delta_{q_1,q_2}$, valid for both PSWFs and FB. Then, the coefficients are given by
+\[\begin{aligned} \mathfrak{m}_3(k_1,q_1;k_2,q_2) &= \int_{||\Delta\rr_1||,||\Delta\rr_2||\leq 2L}m_3[\II](\Delta\rr_1,\Delta\rr_2)\overline{\psi_{k_1,q_1}}(\Delta\rr_1)\psi_{k_2,q_2}(\Delta\rr_2)\\
+&= \int_{\rr}\II(\rr)\left(\int_{||\Delta\rr_1||\leq 2L}\II(\rr+\Delta\rr_1)\overline{\psi_{k_1,q_1}}(\Delta\rr_1)\right)\left(\int_{||\Delta\rr_2||\leq 2L}\II(\rr+\Delta\rr_2)\psi_{k_2,q_2}(\Delta\rr_2)\right).\end{aligned}\]
+Note that if we expand $\II(\rr+\Delta\rr)$ in $\{\psi_{k,q}(\Delta\rr)\}$ for fixed $\rr$ and $||\Delta\rr||\leq 2L$, so
+\[ \II(\rr+\Delta\rr) = \sum_{k,q}a_{k,q}(\rr)\psi_{k,q}(\Delta\rr),\quad a_{k,q}(\rr)=\int_{||\Delta\rr||\leq 2L}\II(\rr+\Delta\rr)\overline{\psi_{k,q}}(\Delta\rr),\]
+and use the fact that $\II$ is real, our expression becomes
+\[ \mathfrak{m}_3(k_1,q_1;k_2,q_2) = \int_{\rr}\II(\rr)a_{k_1,q_1}(\rr)\overline{a_{k_2,q_2}}(\rr).\]
+
+We further assume that all in-plane rotations of the micrograph and its reflection, or equivalently, all in-plane rotations of each such disc of radius $2L$ and its reflection, are present in our dataset. Noting that rotations and reflections commute with the Fourier transform and using the derivation of [Zhao, Landa], the expansion of the disc about $\rr$ by an angle $\alpha$ is given by
+\[ \II^{\alpha,+}(\rr+\Delta\rr) = \sum_{k,q}a_{k,q}e^{-ik\alpha}\psi_{k,q}(\Delta\rr),\]
+and the expansion of the reflection of that disc rotated by an angle $\alpha$ by
+\[ \II^{\alpha,-}(\rr+\Delta\rr) = \sum_{k,q}\overline{a_{k,q}}e^{-ik\alpha}\psi_{k,q}(\Delta\rr),\]
+where we used the fact that for real-valued images we have $a_{-k,q}=\overline{a_{k,q}}$ for both PSWFs and FB. We thus have
+\[\begin{aligned} \mathfrak{m}_3(k_1,q_1;k_2,q_2) &= \int_{\rr}\II(\rr)\left(\frac{1}{4\pi}\int_0^{2\pi}\left[a_{k_1,q_1}(\rr)\overline{a_{k_2,q_2}}(\rr) + \overline{a_{k_1,q_1}}(\rr)a_{k_2,q_2}(\rr)\right]e^{-i(k_1-k_2)\alpha}d\alpha\right),\\
+&= \delta_{k_1,k_2}\int_{\rr}\II(\rr)\Re\{a_{k_1,q_1}(\rr)\overline{a_{k_2,q_2}}(\rr)\}\\
+&= \Re\left\{\delta_{k_1,k_2}\int_{\rr}\II(\rr)a_{k_1,q_1}(\rr)\overline{a_{k_2,q_2}}(\rr)\right\},\end{aligned}\]
+Thus, the bispectrum in our steerable basis $\mathfrak{m}_3(k_1,q_1;k_2,q_2)$ is block-diagonal, and is effectively a 3-tensor. 
+
+Similarly, the power spectrum is compactly supported in space (with
+support $2L-1$) and bandlimited as in Fourier space it is the average
+squared magnitude of the Fourier transform of the projections, each
+of which is supposedly bandlimited. Therefore, we may expand it as
+\[ m_2[\II](\Delta\rr) =
+  \sum_{k,q}\mathfrak{m}_2(k,q)\psi_{k,q}(\Delta\rr),\]
+and obtain the expansion coefficients as
+\[\begin{aligned} 
+\mathfrak{m}_2(k,q) &=
+\int_{\Delta\rr}m_2[\II](\Delta\rr)\overline{\psi_{k,q}(\Delta\rr)}\\
+&=
+\int_{\rr}\II(\rr)\int_{\Delta\rr}\II(\rr+\Delta\rr)\overline{\psi_{k,q}(\Delta\rr)}\\
+&= \int_{\rr}\II(\rr)a_{k,q}(\rr). \end{aligned}\]
+Taking all rotations of $\II$ and its reflection, we get
+\[\begin{aligned} 
+\mathfrak{m}_2(k,q) &= \int_{\rr}\II(\rr)\left(\frac{1}{4\pi}\int_0^{2\pi}[a_{k,q}(\rr) +
+    \overline{a_{k,q}}(\rr)]e^{-ik\alpha}\, d\alpha\right)\\ 
+&= \delta_{k,0} \int_{\rr}\II(\rr)a_{0,q}(\rr), \end{aligned}\]
+where in the last equality we dropped the real part since both
+$\II(\rr)$ and $\psi_{0,q}$ are real valued, and hence $a_{0,q}(\rr)=\int_{\Delta\rr}\II(\rr+\Delta\rr)\psi_{0,q}(\Delta\rr)$
+is real as well.
+Thus, the average power spectrum is effectively a vector.
+
+\begin{remark}
+In practice, we are going to expand many non-centered windows from the micrograph in our steerable basis. While we technically assume that these windows are zero outside, and hence compactly supported, because of the centering of PSWFs and FB this may require infinitely many terms in the summation to adequately approximate. In other words, while the above formulas are correct when expressed as integrals, we may be losing accuracy when we expand these non-centered images numerically.
+\end{remark}
+
+\begin{remark}
+The triple correlation is a 6-tensor and the bispectrum is a 4-tensor, so we lost two degrees of freedom to invariance under translations and one degree of freedom to invariance under in-plane rotations.
+\end{remark}
+
+\section{Connection to volume}
+
+We derive a relation between the steered bispectrum derived in Sect.~\ref{sec:steering} to the volume, expanded in a suitable basis. Specifically, expand the Fourier-transformed volume as
+\[ \widehat V(c\kk) = \sum_{\ell,m,s}a_{\ell,m,s}\Phi_{\ell,s}(k)Y_{\ell,m}(\kk/k),\]
+for $k\leq 1$ and zero otherwise, where $c$ is the assumed bandlimit, $Y_{\ell,m}$ may be taken to be either real or complex, and $\Phi_{\ell,s}(r)$ is some radial basis function (in practice, either spherical bessel or the radial part of the 3D PSWFs as in [Lederman]). We work here with the complex spherical harmonics, given by
+\[ Y_{\ell,m}(\theta,\varphi) = \sqrt{\frac{2\ell+1}{4\pi}\cdot\frac{(\ell-m)!}{(\ell+m)!}}P_{\ell}^m(\cos\theta)e^{i m\varphi},\]
+where $P_{\ell}^m$ are the associated Legendre polynomials with the Condon-Shortley phase. 
+\begin{remark}
+According to Nir and Joe, optimizing over $\mathbb{C}$ allows them to escape local minima they encountered in $\RR$.
+\end{remark}
+
+Then
+\[ \widehat I_{\omega}(ck,\theta) = \sum_{\ell,m,m',s}a_{\ell,m,s}Y_{\ell,m'}(\pi/2,0)D_{m',m}^{\ell}(\omega)\Phi_{\ell,s}(k)e^{im'\theta},\]
+whenever $k\leq 1$. Express this in 2D PSWFs so
+\[ \widehat I_{\omega}(ck,\theta) = \sum_{N,n}b_{N,n}\psi_{N,n}(k,\theta),\]
+where in papers the 2D PSWFs are defined as
+\[ \psi_{N,n}(k,\theta) = \frac{1}{\sqrt{2\pi}}R_{N,n}(k)e^{ik\theta},\]
+but in Boris' code the expansion is actually performed with respect to
+\[ \widetilde\psi_{N,n}(k,\theta) = \frac{1}{2\sqrt{2\pi}}\alpha_{N,n}R_{N,n}(k)e^{ik\theta},\]
+where $\alpha_{N,n}$ are the eigenvalues associated with $\psi_{N,n}$ - see Sect.~\ref{sec:PSWFs_props} below. 
+
+\begin{remark}
+The eigenvalues $\alpha_{N,n}$ decay with increasing radial frequency $n$ in a step-function manner (initially constant, then super-exponential decay - see Boris' paper). Additionally, although $\alpha_{N,0}$ seems to be the same for different $N$, the quick decay occurs earlier (smaller $n$) for larger $N$. The above normalization of $\psi_{N,n}$ seems to ensure that the expansion coefficients decay as well. From experience trying to expand a volume in 3D prolates, this normalization seems necessary (even though it is not mentioned in any of the papers I've seen) - without it coefficients for higher $N$ blow up. 
+\end{remark}
+
+We then get
+\[\begin{aligned} b_{N,n} &= \frac{1}{\sqrt{2\pi}}\int_0^{2\pi}\int_0^1\widehat I_{\omega}(ck,\theta)R_{N,n}(k)e^{-iN\theta}k\, dk\, d\theta,\\
+&= \sum_{\ell,m,m',s}a_{\ell,m,s}[\sqrt{2\pi}Y_{\ell,m'}(\pi/2,0)]D_{m',m}^{\ell}(\omega)\left(\int_0^1\Phi_{\ell,s}(k)R_{N,n}(k)k\, dk\right)\left(\frac{1}{2\pi}\int_0^{2\pi}e^{i(m'-N)\theta}\, d\theta\right),\\
+&= \sum_{\ell\geq |N|}\sum_{m,s}a_{\ell,m,s}D_{N,m}^{\ell}(\omega)\beta_{\ell,s;N,n},\end{aligned}\]
+where
+\[ \beta_{\ell,s;N,n} = \left\{\begin{array}{ll} \sqrt{2\pi}Y_{\ell,N}(\pi/2,0)\int_0^1\Phi_{\ell,s}(k)R_{N,n}(k)k\, dk, & \ell\geq |N|,\\ 0, & \ell<|N|\end{array}\right.,\]
+can be precomputed.
+
+Then, back in real space,
+\[\begin{aligned} I_{\omega}(r,\varphi) &= \sum_{N,n}\widehat{\alpha}_{N,n}b_{N,n}\psi_{N,n}(r,\varphi),\\
+&= \sum_{\ell=0}^L\sum_{N,m=-\ell}^{\ell}\sum_{n=0}^{n_{\text{max}}(N)}\sum_{s=1}^{S(\ell)}a_{\ell,m,s}\widehat\beta_{\ell,s;N,n}D_{N,m}^{\ell}(\omega)\psi_{N,n}(r,\varphi).
+\end{aligned}\]
+where $\alpha_{N,n}$ is the eigenvalue corresponding to the $(N,n)$th PSWF, $\widehat{\alpha}_{N,n} = (c/2\pi)^2\alpha_{N,n}$, and $\widehat\beta_{\ell,s;N,n}=\widehat\alpha_{N,n}\beta_{\ell,s;N,n}$. In this notation, we assumed $I_{\omega}$ has bandlimit $c$ and is concentrated in the unit ball in real space. We then consider the product
+\[\begin{aligned} m_3(\Delta\rr_1,\Delta\rr_2) &= \int_{\rr}\langle I_{\omega}(\rr)I_{\omega}(\rr+\Delta\rr_1)\overline{I_{\omega}(\rr+\Delta\rr_2)}\rangle_{\omega},\\
+&= \sum_{\substack{N_1,n_1\\N_2,n_2\\N_3,n_3}} \langle b_{N_1,n_1}b_{N_2,n_2}\overline{b_{N_3,n_3}}\rangle_{\omega}\int_{\rr}\psi_{N_1,n_1}(\rr)\psi_{N_2,n_2}(\rr+\Delta\rr_1)\overline{\psi_{N_3,n_3}(\rr+\Delta\rr_2)}.\end{aligned}\]
+Now,
+\[\begin{aligned} \langle b_{N_1,n_1}b_{N_2,n_2}\overline{b_{N_3,n_3}}\rangle_{\omega} &= \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\\ell_3,m_3,s_3}}a_{\ell_1,m_1,s_1}a_{\ell_2,m_2,s_2}\overline{a_{\ell_3,m_3,s_3}}\langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}\overline{D_{N_3,m_3}^{\ell_3}}\rangle_{\omega}\\
+&\times \beta_{\ell_1,s_1;N_1,n_1}\beta_{\ell_2,s_2;N_2,n_2}\overline{\beta_{\ell_3,s_3;N_3,n_3}},\end{aligned}\]
+and [Tamir's note on Kam's bispectrum]
+\[ \langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}\overline{D_{N_3,m_3}^{\ell_3}}\rangle_{\omega} = (-1)^{N_3+m_3}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_3\end{array}\right)\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_3\end{array}\right),\
+\]
+and since $\left(\begin{array}{ccc} \ell_1 & \ell_2 & \ell_3\\ m_1 & m_2 & m_3\end{array}\right) = 0$ unless $m_1+m_2+m_3=0$ and $|\ell_1-\ell_2|\leq \ell_3\leq \ell_1+\ell_2$, we conclude that 
+\[\begin{aligned} \langle b_{N_1,n_1}b_{N_2,n_2}\overline{b_{N_3,n_3}}\rangle_{\omega} &= \delta_{N_3,N_1+N_2}\sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}a_{\ell_1,m_1,s_1}a_{\ell_2,m_2,s_2}\overline{a_{\ell_3,m_1+m2,s_3}}\\
+&\times (-1)^{N_1+N_2+m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N_2\end{array}\right)\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
+&\times \beta_{\ell_1,s_1;N1,n_1}\beta_{\ell_2,s_2;N_2,n_2}\overline{\beta_{\ell_3,s_3;N_1+N2,n_3}}.\end{aligned}\]
+
+Finally, we expand
+\[ m_3(\Delta\rr_1,\Delta\rr_2) = \sum_{k,q_1,q_2}\mathfrak{m}_3(k,q_1,q_2)\psi_{k,q_1}(\Delta\rr_1)\overline{\psi_{k,q_2}(\Delta\rr_2)},\]
+where we only include the block-diagonal terms in the expansion. Defining
+\[ \Psi_{\ell,N,s}(\rr) = \sum_{n=0}^{n_{\text{max}}(N)}\beta_{\ell,s;N,n}\psi_{N,n}(\rr),\]
+the final formula reads
+\[\begin{aligned} \mathfrak{m}_3(k,q_1,q_2) &= \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}a_{\ell_1,m_1,s_1}a_{\ell_2,m_2,s_2}\overline{a_{\ell_3,m_1+m_2,s_3}}\\
+&\times (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
+&\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N2\end{array}\right)\int_{\rr}\Psi_{\ell_1,N_1,s_1}(\rr)\rho_{\ell_2,N_2,s_2}^{(k,q_1)}(\rr)\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}(\rr)}, \end{aligned}\]
+where
+\[ \rho_{\ell,N,s}^{(k,q)}=\int_{\Delta\rr}\Psi_{\ell,N,s}(\rr+\Delta\rr)\overline{\psi_{k,q}(\Delta\rr)}.\]
+In practice, the last line of the above expression for $\mathfrak{m}_3(k,q_1,q_2)$ is precomputed, and both the integration over $\rr$ and over $\Delta\rr$ is performed on the grid of the images in the dataset, to match the integration performed on the actual images.
+
+\subsection{Implementation}
+To implement the above formula, we precompute the quantities
+\[ W(\ell_1,\ell_2,\ell_3,m_1,m_2) = (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right),\]
+and
+\[ B^{(k,q_1,q_2)}(\ell_1,\ell_2,\ell_3,s_1,s_2,s_3) = \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}W(\ell_1,\ell_2,\ell_3,N_1,N_2)\int_{\rr}\Psi_{\ell_1,N_1,s_1}(\rr)\rho_{\ell_2,N_2,s_2}^{(k,q_1)}(\rr)\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}(\rr)},\]
+so in each iteration of the optimization we compute
+\[\begin{aligned} \mathfrak{m}_3(k,q_1,q_2) = \sum_{\substack{\ell_1,\ell_2,\ell_3\\m_1,m_2\\s_1,s_2,s_3}}& W(\ell_1,\ell_2,\ell_3,m_1,m_2)B^{(k,q_1,q_2)}(\ell_1,\ell_2,\ell_3,s_1,s_2,s_3)\times\\ &a_{\ell_1,m_1,s_1}a_{\ell_2,m_2,s_2}\overline{a_{\ell_3,m_1+m_2,s_3}} .\end{aligned}\]
+
+The Wigner 3$j$ symbols are computed from the Racah formula
+\[\begin{aligned} \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_3\end{array}\right) &= \delta_{m_3,m_1+m_2}(-1)^{\ell_1-\ell_2+m_3}\sqrt{\Delta(\ell_1,\ell_2,\ell_3)}\\ &\times \prod_{i=1}^3\sqrt{(\ell_i-m_i)!(\ell_i+m_i)!}\times \sum_{t}\frac{(-1)^t}{x(t)},\end{aligned}\]
+where
+\[ x(t) = t!(\ell_3-\ell_2+t+m_1)!(\ell_3-\ell_1+t-m_2)!(\ell_1+\ell_2-\ell_3+t)!(\ell_1-t-m_1)!(\ell_2-t+m_2)!,\]
+the sum is over all integer $t$ for which the arguments in the factorials in $x(t)$ are all nonnegative, and 
+\[ \Delta(\ell_1,\ell_2,\ell_3) = \frac{(\ell_1+\ell_2-\ell_3)!(\ell_1-\ell_2+\ell_3)!(-\ell_1+\ell_2+\ell_3)!}{(\ell_1+\ell_2+\ell_3+1)!}.\]
+In practice, the sum in the above expression is computed in infinite-precision arithmetic (in terms of \texttt{sym} objects in Matlab - compare for instance \texttt{factorial(171)} and \texttt{factorial(sym(171))}). All other terms are computed in standard double-precision.
+
+\subsection{The power spectrum}
+The power spectrum is easier to derive directly in Fourier space, to
+avoid integration of shifted prolates against centered ones. The
+average power spectrum in Fourier space can be derived from Kam's
+original formula [Kam, 1980; Eq. 10] by setting $\mb k_1 = \mb k_2$ to
+obtain
+\[ \langle |\widehat I_{\omega}(k,\theta)|^2\rangle_{\omega} =
+  \frac{1}{4\pi}\sum_{\ell,
+    m}\left|\sum_sa_{\ell,m,s}j_{\ell,s}(k)\right|^2 =
+  \frac{1}{4\pi}\sum_{\substack{\ell,m\\s_1,s2}}a_{\ell,m,s_1}\overline{a_{\ell,m,s_2}}j_{\ell,s_1}(k)j_{\ell,s_2}(k),\]
+where we used the fact that the normalized spherical Bessel functions
+$j_{\ell,s}$ are real. To expand the above in 2D PSWFs, we write
+\[ \langle |\widehat I_{\omega}(k,\theta)|^2\rangle_{\omega} =
+  \sum_{q}\mathfrak{m}_2(q)\psi_{0,q}(k),\]
+and conclude that
+\[ \mathfrak{m}_2(q) =
+  \frac{\sqrt{2\pi}}{4\pi}\sum_{\substack{\ell,m\\s_1,s_2}}a_{\ell,m,s_1}\overline{a_{\ell,m,s_2}}
+  \int_0^1j_{\ell,s_1}(k)j_{\ell,s_2}(k)R_{0,q}(k)k\, dk.\]
+
+\subsection{The mean}
+
+Since the Fourier transformed volume is given by
+\[ \widehat V(k,\theta,\varphi) =
+  \sum_{\ell,m,s}a_{\ell,m,s}Y_{\ell,m}(\theta,\varphi)j_{\ell,s}(k),\]
+since $j_{\ell,s}(0)=0$ unless $\ell=0$, and since
+$Y_{0,0}(\theta,\varphi) = \frac{1}{\sqrt{4\pi}}$, we conclude that
+\[ m_1[V] = \widehat V(\mb 0) = \frac{1}{\sqrt{4\pi}}\sum_sa_{0,0,s}j_{0,s}(0).\]
+
+\section{Properties of PSWFs}\label{sec:PSWFs_props}
+The $d$-dimensional PSWFs $\psi_{N,n,m}(\rr)$ are eigenfunctions of the truncated Fourier transform, so
+\[ \alpha_{N,n,m}\psi_{N,n,m}(\rr) = \int_{\DD}\psi_{N,n,m}(\bm\omega)e^{ic\bm{\omega}\cdot\rr}d\bm\omega,\]
+where $\DD=\{\rr\in\RR^d:\ ||\rr||_2\leq 1\}$ is the unit ball, and $c$ is the assumed bandlimit, and the Fourier transform is unfortunately written in terms of angular frequency $\bm\omega$ rather than the regular frequency denoted in previous sections by $\kk$ (we follow this convention here because the code does). Furthermore, $\psi_{N,n,m}$ form an orthonormal basis of both $L^2(\DD)$ and $L^2(\RR^d)$. For a $c$-bandlimited function $f$ with Fourier transform $\widehat f$, we can expand
+\[ \widehat f(c\bm\omega) = \sum_{N,n,m}a_{N,n,m}\psi_{N,n,m}(\bm\omega),\]
+so
+\[\begin{aligned} f(\rr) &= \frac{1}{(2\pi)^d}\int_{c\DD}\widehat f(\bm\omega)e^{i \bm\omega\cdot\rr}\,d\bm\omega = \left(\frac{c}{2\pi}\right)^d\int_{\DD}\widehat f(c\bm\omega)e^{i c\bm\omega\cdot\rr}d\bm\omega\\ 
+&= \left(\frac{c}{2\pi}\right)^d\sum_{N,n,m}a_{N,n,m}\int_{\DD}\psi_{N,n,m}(\bm\omega)e^{i c\bm\omega\cdot\rr}\, d\bm\omega = \left(\frac{c}{2\pi}\right)^d\sum_{N,n,m}\alpha_{N,n,m}a_{N,n,m}\psi_{N,n,m}(\rr),\end{aligned}\]
+so the expansion coefficients of $f(\rr)$ in $\{\psi_{N,n,m}\}$ are $\left(\frac{c}{2\pi}\right)^d\alpha_{N,n,m}a_{N,n,m}$. In polar form, they have a separable expression
+\[ \psi_{N,n,m}(\rr) = R_{N,n}(r)S_{N,m}(\rr/r),\]
+where $S_{N,m}(\rr/r)$ are the normalized spherical harmonics on $\mathbb{S}^{d-1}$, the unit sphere in $\RR^d$. We have the following orthogonality relations:
+\[ \int_{\mathbb{S}^{d-1}}S_{N,m}(\rr/r)S_{N',m'}(\rr/r) = \delta_{N,N'}\delta_{m,m'},\quad \int_0^1R_{N,n}(r)R_{N,n'}(r)r\, dr = \delta_{n,n'}.\]
+Note in particular that $\{R_{N,n}\}$ for different values of the angular frequency $N$ are not necessarily orthogonal.
+
+\begin{remark}
+Off-center slices of $m_3$ are not centered, but are also smaller in magnitude than the centered, central slices. We therefore expect to have a bigger error between the expansion in prolates and the actual moment off-center. This may be fixed by predicting the maximum of the off-center slices (say, under the assumption of a spherical object) and translating the prolates in the expnasion by that amout. However, this would introduce a dependence between the two basis functions in the expansion, making all the formulas harder to compute - the resulting product basis is likely not orthogonal.
+\end{remark}
+
+\begin{remark}
+In the code, we assume the images are sampled on the unit square with samples $\left\{\left(\frac{j}{L},\frac{k}{L}\right):\ j,k = -L,\ldots, L\right\}$, so the image has size $(2L+1)\times(2L+1)$ and bandlimit $c=\pi L$. In particular, this implies that the assumed bandlimit for the micrograph patches is twice as large as that assumed for the volume and its projections. Assuming a larger bandlimit for the latter leads to bad approximation errors: \begin{itemize}
+    \item Expanding the volume with a larger bandlimit, and using the resulting coefficients to generate projections from non-trivial directions results in nonsense.
+    \item Using the larger bandlimit in the formula for $\mathfrak{m}_3(k,q_1,q_2)$ (or equivalently, assuming such a bandlimit for the projections) results in nonsense.
+\end{itemize}
+\end{remark}
+
+\section{Debiasing the moments}
+\textbf{Key:} The derivation is exactly the same as in the 1D MRA
+case, only that instead of factoring out a common signal from an
+average of noise as in the current draft (which we can't do here as we have
+``continuous heterogeneity''), we consider the viewing directions as instances of a random
+variable independent of the noise, and use the law of total expectation.
+
+\subsection{Stats for Dummies}
+
+Claim: Suppose
+$\xi_i\overset{\text{iid}}{\sim}\mathcal{N}(0,\sigma^2)$, and $x_i$ is
+independently drawn from some distribution with finite first and
+second moments. Then 
+\[\frac{1}{N}\sum_{i=1}^N\xi_i^2x_i\overset{\text{as}}{\to} \sigma^2\mathbb{E}[x].\] 
+
+Proof: Let $X_{\xi} = \frac{1}{N}\sum_{i=1}^N\xi_i^2x_i$ be the random variable in question. Then $\mathbb{E}_{\xi}[X_{\xi}]=\frac{\sigma^2}{N}\sum_{i=1}^Nx_i$ trivially, and 
+\[ \text{var}(X_{\xi}) = \mathbb{E}_{\xi}\left[\left(\frac{1}{N}\sum_{i=1}^N(\xi_i^2-\sigma^2)x_i\right)^2\right] = \frac{1}{N^2}\sum_{i,j=1}^N\mathbb{E}_{\xi}[(\xi_i^2-\sigma^2)(\xi_j^2-\sigma^2)]x_ix_j = \frac{2\sigma^2}{N}\left(\frac{1}{N}\sum_{i=1}^Nx_i^2\right),\]
+as only terms with $i=j$ give nonzero expectation, so $\text{var}(X_{\xi})\to0$ as $N\to\infty$.
+
+Claim: Under the above assumptions, 
+\[\frac{1}{N}\sum_{i=1}^N\xi_ix_i\overset{\text{as}}{\to} 0.\]
+
+Proof: Let $Y_{\xi} = \frac{1}{N}\sum_{i=1}^N\xi_ix_i$. Then $\mathbb{E}_{\xi}[Y_{\xi}]=0$ and
+\[\text{var}(Y_{\xi}) =
+  \frac{1}{N^2}\sum_{i,j=1}^N\mathbb{E}_{\xi}[\xi_i\xi_j]x_ix_j =
+  \frac{\sigma^2}{N}\left(\frac{1}{N}\sum_{i=1}^Nx_i^2\right).\]
+
+Claim: Under the above assumptions, 
+\[ m_3[\xi](\Delta i_1, \Delta i_2) = \frac{1}{N}\sum_{i=1}^N\xi_i\xi_{i+\Delta
+    i_1}\xi_{i+\Delta i_2} \to 0,\]
+for all $\Delta i_1, \Delta i_2$, where it is understood that $\xi_i =
+0$ for $i\notin[1,N]$.
+
+Proof: We have
+\[ m_3[\xi](\Delta i_1, \Delta i_2) \to \mathbb{E}[\xi_i\xi_{i+\Delta
+    i_1}\xi_{i+\Delta i_2}],\]
+so if either $\Delta i_1 \neq \Delta i_2$ or $\Delta i_1 = \Delta i_2
+\neq 0$, the expectation vanishes as $\xi_i$ are independent, whereas
+if $\Delta i_1 = \Delta i_2 = 0$ then the expectation vanishes because
+the third moment of a Gaussian is zero.
+
+\subsection{Noisy micrograph moments}
+We now suppose that the micrograph is perturbed by additive white
+Gaussian noise, so we observe $\widetilde \II = \II + \xi$ where
+$\xi\overset{\text{iid}}{\sim}\mathcal{N}(0, \sigma^2I)$. We proceed
+to derive $\lim_{N\to\infty}m_2[\widetilde \II],\
+m_3[\widetilde\II]$. For simplicity of notation,
+we shall use vectorized indices $\mb i = (i,j)$.
+
+For the power spectrum:
+\[\begin{aligned}
+&m_2[\II + \xi](\Delta \mb i) =
+\frac{1}{M^2}\sum_{i,j=1}^M\widetilde\II(\mb i)\widetilde\II(\mb
+i+\Delta \mb i)\\
+&= \frac{1}{M^2}\sum_{i,j=1}^M\II(\mb i)\II(\mb i+\Delta \mb i) + \frac{1}{M^2}\sum_{i,j=1}^M\II(\mb i)\xi(\mb i + \Delta\mb i)\\ &+ \frac{1}{M^2}\sum_{i,j=1}^M\xi(\mb i)\II(\mb i + \Delta\mb i) + \frac{1}{M^2}\sum_{i,j=1}^M\xi(\mb i)\xi(\mb i + \Delta\mb i). 
+\end{aligned}\]
+Considering the terms one-by-one, the first term is independent of the
+noise, and as shown above converges to $\gamma \langle
+m_2[I_{\omega}]\rangle_{\omega}$ as $N\to\infty$. Denoting the center
+of the instance of $I_{\omega}$ in $\II$ by $\mb s_{\omega}$, the second term
+satisfies
+\[\begin{aligned} 
+\frac{1}{M^2}\sum_{\mb i}\II(\mb i)\xi(\mb i + \Delta\mb i) &=
+\frac{NL^2}{M^2}\cdot\frac{1}{NL^2}\sum_{\omega, \mb i}I_{\omega}(\mb
+i)\xi_{\omega}(\mb i + \Delta\mb i)\\
+&\to \gamma \mathbb{E}[\xi]\mathbb{E}[I_{\omega}] = 0, \end{aligned}\]
+where $\xi_{\omega}(\mb i) = \xi(\mb i + \mb s_{\omega})$ and
+$\mathbb{E}[I_{\omega}]$ is proportional to the mean of the
+volume. A similar argument applied to the third term shows that it
+also vanishes as $N\to\infty$. 
+For the fourth term,
+if $\Delta\mb i \neq \mb{0}$ then since the noise is zero mean and
+i.i.d. this term vanishes. If $\Delta\mb i = \mb0$ then
+\[ \frac{1}{m^2}\sum_{i,j=1}^m\xi(\mb i)^2 \to \sigma^2.\]
+Thus, we conclude
+\[ m_2[\II+\xi](\Delta\mb i) \to \gamma\langle m_2[I_{\omega}](\Delta\mb i)\rangle_{\omega} + \sigma^2\delta(\Delta\mb i).\]
+
+For the third moments, we get 8 terms:
+\[\begin{aligned} 
+&m_3[\II+\xi](\Delta\mb i_1, \Delta\mb i_2) =
+\underbrace{\frac{1}{M^2}\sum_{\mb i}\II(\mb i)\II(\mb i+\Delta\mb
+  i_1)\II(\mb i + \Delta\mb i_2)}_{(1)} +
+\underbrace{\frac{1}{M^2}\sum_{\mb i}\xi(\mb i)\xi(\mb i+\Delta\mb i_1)\xi(\mb i + \Delta\mb i_2)}_{(2)}\\ 
+&+ \underbrace{\frac{1}{M^2}\sum_{\mb i}\II(\mb i)\xi(\mb i + \Delta\mb i_1)\II(\mb i + \Delta\mb i_2)}_{(3)} +
+\underbrace{\frac{1}{M^2}\sum_{\mb i}\II(\mb i)\II(\mb i + \Delta\mb i_1)\xi(\mb i + \Delta\mb i_2)}_{(4)}\\
+&+ \underbrace{\frac{1}{M^2}\sum_{\mb i}\xi(\mb i)\II(\mb i + \Delta\mb i_1)\II(\mb i + \Delta\mb i_2)}_{(5)} +
+\underbrace{\frac{1}{M^2}\sum_{\mb i}\II(\mb i)\xi(\mb i + \Delta\mb i_1)\xi(\mb i + \Delta\mb i_2)}_{(6)}\\
+&+ \underbrace{\frac{1}{M^2}\sum_{\mb i}\xi(\mb i)\xi(\mb i + \Delta\mb i_1)\II(\mb i + \Delta\mb i_2)}_{(7)} +
+\underbrace{\frac{1}{M^2}\sum_{\mb i}\xi(\mb i)\II(\mb i + \Delta\mb i_1)\xi(\mb i + \Delta\mb i_2)}_{(8)}.
+\end{aligned}\]
+We address these terms one by one:
+\begin{itemize}
+    \item Term (1) is $m_3[\II]$, shown above to converge to
+    $\gamma\langle m_3[I_{\omega}]\rangle_{\omega}$.
+    \item Term (2) is $m_3[\xi]$, the bispectrum of pure noise, which
+      vanishes as shown above.
+    \item Terms (3)-(5) depend linearly on the noise and hence
+      converge to zero.
+    \item For term (6), if $\Delta\mb i_1\neq \Delta\mb i_2$ the term
+      vanishes as then $\xi(\mb i + \Delta\mb i_1)$ and $\xi(\mb i +
+      \Delta\mb i_2)$ are independent. If $\Delta\mb i_1 = \Delta\mb
+      i_2$ the term becomes
+      \[ \frac{1}{M^2}\sum_{\mb i}\II(\mb i)\xi(\mb i + \Delta\mb i_1)^2
+        = \frac{NL^2}{M^2}\cdot\frac{1}{NL^2}\sum_{\omega, \mb
+          i}I_{\omega}(\mb i)\xi_{\omega}(\mb i + \Delta\mb i)^2 \to
+        \gamma\sigma^2\mathbb{E}[I_{\omega}] =
+        \gamma\sigma^2Lm_1[V],\]
+      where $m_1[V]$ is the mean of the volume (and hence also the
+      mean of each projection $I_{\omega}$).
+    \item For term (7), if $\Delta\mb i_1 \neq \mb 0$ then once again
+      this term vanishes, whereas if $\Delta\mb i_2 = \mb 0$ then it becomes
+      \[ \frac{1}{M^2}\sum_{\mb i}\xi(\mb i)^2\II(\mb i + \Delta\mb
+        i_2) = \frac{NL^2}{M^2}\cdot\frac{1}{NL^2}\sum_{\omega,\mb
+          i}\xi_{\omega}(\mb i)^2I_{\omega}(\mb i + \Delta\mb i_2) \to
+        \gamma\sigma^2Lm_1[V].\]
+      Similarly, term (8) vanishes if $\Delta\mb i_2\neq \mb 0$ and
+      converges to $\gamma\sigma^2Lm_1[V]$ otherwise.
+\end{itemize}
+Thus, we conclude that
+\[ m_3[\II+\xi](\Delta\mb i_1, \Delta\mb i_2) \to \gamma\langle
+  m_3[I_{\omega}](\Delta\mb i_1, \Delta\mb i_2)\rangle_{\omega} +
+  \gamma\sigma^2Lm_1[V]\Big(\delta(\Delta\mb i_1 - \Delta\mb i_2) +
+    \delta(\Delta\mb i_1) + \delta(\Delta\mb i_2)\Big).\]
+Note that in practice, we have $m_1[\II+\xi] \to m_1[\II] \approx \gamma
+Lm_1[V]$ since the noise has zero mean, so we do not need prior knowledge of $\gamma$ to effectively
+debias the bispectrum.
+
+\subsection{Expansion in PSWFs}
+In practice, we compute the moments of our noisy micrograph in a
+product basis of 2D prolates, so we need to derive the expansion
+coefficients of the above bias terms in these functions for debiasing.
+
+To this end, writing (in the continuous case again)
+\[ \delta(\Delta\rr_1 - \Delta\rr_2) =
+  \sum_{k,q_1,q_2}\mathfrak{d}(k,q_1,q_2) \psi_{k,q_1}(\Delta\rr_1)
+  \overline{\psi_{k,q_2}(\Delta\rr_2)},\]
+we get
+\[\begin{aligned}
+\mathfrak{d}(k,q_1,q_2) &= \int_{\Delta\rr_1,
+  \Delta\rr_2}\delta(\Delta\rr_1-\Delta\rr_2)\overline{\psi_{k,q_1}(\Delta\rr_1)}\psi_{k,q_2}(\Delta\rr_2)\\
+&=
+\int_{\Delta\rr_2}\overline{\psi_{k,q_1}(\Delta\rr_2)}\psi_{k,q_2}(\Delta\rr_2)\\
+&= \delta_{q_1,q_2}.
+\end{aligned}\]
+
+Similarly, writing
+\[ \delta(\Delta\rr_1) =
+  \sum_{k,q_1,q_2}\mathfrak{d}^{(1)}(k,q_1,q_2)
+  \psi_{k,q_1}(\Delta\rr_1) \overline{\psi_{k,q_2}(\Delta\rr_2)},\]
+we get
+\[\begin{aligned} 
+\mathfrak{d}^{(1)}(k,q_1,q_2) &= \int_{\Delta\rr_1,
+  \Delta\rr_2}\delta(\Delta\rr_1)\overline{\psi_{k,q_1}(\Delta\rr_1)}
+\psi_{k,q_2}(\Delta\rr_2)\\
+&= \overline{\psi_{k,q_1}(\mb 0)}
+\int_{\Delta\rr_2}\psi_{k,q_2}(\Delta\rr_2)\\
+&= \delta_{k,0} R_{0,q_1}(0) \int_0^1R_{0,q_2}(r)r\, dr\\
+&= \delta_{k,0} \frac{\alpha_{0,q_2}}{2\pi}R_{0,q_1}(0)R_{0,q_2}(0),
+\end{aligned}\]
+where we used the fact that $R_{0,q}$ satisfies
+\[ \frac{\alpha_{0,q}}{2\pi}R_{0,q}(r) =
+  \int_0^1R_{0,q}(\rho)J_{0}(cr\rho)\rho\, d\rho,\]
+where $J_k$ is the Bessel function of the first kind, and that
+$J_0(0)=1$. 
+A similar derivation applies to $\delta(\Delta\rr_2)$. 
+
+Thus, in terms of the prolate expansion coefficients, our bias
+formulas become
+\[ \widetilde{\mathfrak{m}}_3(k,q_1,q_2) = \mathfrak{m}_3(k,q_1,q_2) +
+  \sigma^2m_1[\widetilde \II]\left[\delta_{q_1,q_2} + \delta_{k,0}\frac{1}{2\pi}(\alpha_{0,q_1}+\alpha_{0,q_2})R_{0,q_1}(0)R_{0,q_2}(0)\right].\]
+
+Similarly, for the power spectrum we get
+\[ \widetilde{\mathfrak{m}}_2(q) = \mathfrak{m}_2(q) + \sigma^2\frac{1}{\sqrt{2\pi}}R_{0,q}(0).\]
+\bibliographystyle{amsplain}
+
+\end{document}
+
+%------------------------------------------------------------------------------
+% End of journal.tex
+%------------------------------------------------------------------------------

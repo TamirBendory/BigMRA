@@ -22,6 +22,12 @@ Cecilia Aguerrebere, Mauricio Delbracio, Alberto Bartesaghi, and Guillermo
 \newblock {\em IEEE Transactions on Signal Processing}, 64(21):5707--5722,
   2016.
 
+\bibitem{ahmed2014blind}
+Ali Ahmed, Benjamin Recht, and Justin Romberg.
+\newblock Blind deconvolution using convex programming.
+\newblock {\em IEEE Transactions on Information Theory}, 60(3):1711--1732,
+  2014.
+
 \bibitem{andrieu2001bayesian}
 Christophe Andrieu, {\'E}ric Barat, and Arnaud Doucet.
 \newblock Bayesian deconvolution of noisy filtered point processes.
@@ -37,6 +43,12 @@ Jean-Marc Azais, Yohann De~Castro, and Fabrice Gamboa.
 \newblock Spike detection from inaccurate samplings.
 \newblock {\em Applied and Computational Harmonic Analysis}, 38(2):177--195,
   2015.
+
+\bibitem{bandeira2017estimation}
+Afonso~S Bandeira, Ben Blum-Smith, Amelia Perry, Jonathan Weed, and Alexander~S
+  Wein.
+\newblock Estimation under group actions: recovering orbits from invariants.
+\newblock {\em arXiv preprint arXiv:1712.10163}, 2017.
 
 \bibitem{bartesaghi20152}
 Alberto Bartesaghi, Alan Merk, Soojay Banerjee, Doreen Matthies, Xiongwu Wu,
@@ -102,16 +114,18 @@ Olivier Capp{\'e}, Arnaud Doucet, Marc Lavielle, and Eric Moulines.
   identification.
 \newblock {\em Signal processing}, 73(1-2):3--25, 1999.
 
+\bibitem{chi2016guaranteed}
+Yuejie Chi.
+\newblock Guaranteed blind sparse spikes deconvolution via lifting and convex
+  optimization.
+\newblock {\em IEEE Journal of Selected Topics in Signal Processing},
+  10(4):782--794, 2016.
+
 \bibitem{denoyelle2017support}
 Quentin Denoyelle, Vincent Duval, and Gabriel Peyr{\'e}.
 \newblock Support recovery for sparse super-resolution of positive measures.
 \newblock {\em Journal of Fourier Analysis and Applications}, 23(5):1153--1194,
   2017.
-
-\bibitem{elser2017matrix}
-Veit Elser.
-\newblock Matrix product constraints by projection methods.
-\newblock {\em Journal of Global Optimization}, 68(2):329--355, 2017.
 
 \bibitem{frank1983automatic}
 Joachim Frank and Terence Wagenknecht.
@@ -167,6 +181,12 @@ Stuart~M Jefferies and Julian~C Christou.
 \newblock Restoration of astronomical images by iterative blind deconvolution.
 \newblock {\em The Astrophysical Journal}, 415:862, 1993.
 
+\bibitem{kam1980reconstruction}
+Zvi Kam.
+\newblock The reconstruction of structure from electron micrographs of randomly
+  oriented particles.
+\newblock {\em Journal of Theoretical Biology}, 82(1):15--39, 1980.
+
 \bibitem{kormylo1983identifiability}
 John Kormylo and J~Mendel.
 \newblock Identifiability of nonminimum phase linear stochastic systems.
@@ -185,17 +205,47 @@ Robert Langlois, Jesper Pallesen, Jordan~T Ash, Danny~Nam Ho, John~L
   cryo-electron microscopy.
 \newblock {\em Journal of structural biology}, 186(1):1--7, 2014.
 
+\bibitem{levin20173d}
+Eitan Levin, Tamir Bendory, Nicolas Boumal, Joe Kileel, and Amit Singer.
+\newblock {3D} ab initio modeling in cryo-em by autocorrelation analysis.
+\newblock {\em arXiv preprint arXiv:1710.08076}, 2017.
+
 \bibitem{lewicki1998review}
 Michael~S Lewicki.
 \newblock A review of methods for spike sorting: the detection and
   classification of neural action potentials.
 \newblock {\em Network: Computation in Neural Systems}, 9(4):R53--R78, 1998.
 
+\bibitem{li2016rapid}
+Xiaodong Li, Shuyang Ling, Thomas Strohmer, and Ke~Wei.
+\newblock Rapid, robust, and reliable blind deconvolution via nonconvex
+  optimization.
+\newblock {\em arXiv preprint arXiv:1606.04933}, 2016.
+
+\bibitem{li2016identifiability}
+Yanjun Li, Kiryung Lee, and Yoram Bresler.
+\newblock Identifiability in blind deconvolution with subspace or sparsity
+  constraints.
+\newblock {\em IEEE Transactions on Information Theory}, 62(7):4266--4275,
+  2016.
+
 \bibitem{lii1982deconvolution}
 KS~Lii, M~Rosenblatt, et~al.
 \newblock Deconvolution and estimation of transfer function phase and
   coefficients for nongaussian linear processes.
 \newblock {\em The annals of statistics}, 10(4):1195--1208, 1982.
+
+\bibitem{ling2015self}
+Shuyang Ling and Thomas Strohmer.
+\newblock Self-calibration and biconvex compressive sensing.
+\newblock {\em Inverse Problems}, 31(11):115002, 2015.
+
+\bibitem{ling2017blind}
+Shuyang Ling and Thomas Strohmer.
+\newblock Blind deconvolution meets blind demixing: Algorithms and performance
+  bounds.
+\newblock {\em IEEE Transactions on Information Theory}, 63(7):4497--4520,
+  2017.
 
 \bibitem{ljung1998system}
 Lennart Ljung.
@@ -238,6 +288,11 @@ Maxim Shatsky, Richard~J Hall, Steven~E Brenner, and Robert~M Glaeser.
 \newblock A method for the alignment of heterogeneous macromolecules from
   electron microscopy.
 \newblock {\em Journal of structural biology}, 166(1):67--78, 2009.
+
+\bibitem{singer2018mathematics}
+Amit Singer.
+\newblock Mathematics for cryo-electron microscopy.
+\newblock {\em arXiv preprint arXiv:1803.06714}, 2018.
 
 \bibitem{smith2014beyond}
 Martin~TJ Smith and John~L Rubinstein.

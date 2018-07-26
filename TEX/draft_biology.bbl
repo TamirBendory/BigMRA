@@ -1,0 +1,121 @@
+\begin{thebibliography}{10}
+
+\bibitem{bendory2017fourier}
+Tamir Bendory, Robert Beinert, and Yonina~C Eldar.
+\newblock Fourier phase retrieval: Uniqueness and algorithms.
+\newblock In {\em Compressed Sensing and its Applications}, pages 55--91.
+  Springer, 2017.
+
+\bibitem{bendory2018estimation}
+Tamir Bendory, Nicolas Boumal, William Leeb, Eitan Levin, and Amit Singer.
+\newblock Estimation below the detection limit with application to cryo-em.
+\newblock {\em preprint}, 2018.
+
+\bibitem{elser2017rrr}
+Veit Elser.
+\newblock Matrix product constraints by projection methods.
+\newblock {\em Journal of Global Optimization}, 68(2):329--355, 2017.
+
+\bibitem{frank2018single}
+Joachim Frank.
+\newblock Single-particle reconstruction of biological molecules-story in a
+  sample (nobel lecture).
+\newblock {\em Angewandte Chemie International Edition}, 2018.
+
+\bibitem{glaeser1999electron}
+Robert~M Glaeser.
+\newblock Electron crystallography: present excitement, a nod to the past,
+  anticipating the future.
+\newblock {\em Journal of structural biology}, 128(1):3--14, 1999.
+
+\bibitem{gogineni2017passive}
+Sandeep Gogineni, Pawan Setlur, Muralidhar Rangaswamy, and Raj~Rao Nadakuditi.
+\newblock Passive radar detection with noisy reference channel using principal
+  subspace similarity.
+\newblock {\em IEEE Transactions on Aerospace and Electronic Systems}, 2017.
+
+\bibitem{hayes1982reconstruction}
+MHMH Hayes.
+\newblock The reconstruction of a multidimensional sequence from the phase or
+  magnitude of its fourier transform.
+\newblock {\em IEEE Transactions on Acoustics, Speech, and Signal Processing},
+  30(2):140--154, 1982.
+
+\bibitem{henderson1995limitations}
+Richard Henderson.
+\newblock The potential and limitations of neutrons, electrons and {X}-rays for
+  atomic resolution microscopy of unstained biological molecules.
+\newblock {\em Quarterly reviews of biophysics}, 28(2):171--193, 1995.
+
+\bibitem{henderson2013avoiding}
+Richard Henderson.
+\newblock Avoiding the pitfalls of single particle cryo-electron microscopy:
+  Einstein from noise.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  110(45):18037--18041, 2013.
+
+\bibitem{khoshouei2017cryo}
+Maryam Khoshouei, Mazdak Radjainia, Wolfgang Baumeister, and Radostin Danev.
+\newblock Cryo-{EM} structure of haemoglobin at 3.2 {\aa} determined with the
+  {V}olta phase plate.
+\newblock {\em Nature communications}, 8:16099, 2017.
+
+\bibitem{landa2017steerable}
+Boris Landa and Yoel Shkolnisky.
+\newblock Steerable principal components for space-frequency localized images.
+\newblock {\em SIAM journal on imaging sciences}, 10(2):508--534, 2017.
+
+\bibitem{lewicki1998review}
+Michael~S Lewicki.
+\newblock A review of methods for spike sorting: the detection and
+  classification of neural action potentials.
+\newblock {\em Network: Computation in Neural Systems}, 9(4):R53--R78, 1998.
+
+\bibitem{liang2017phase}
+Yi-Lynn Liang, Maryam Khoshouei, Mazdak Radjainia, Yan Zhang, Alisa Glukhova,
+  Jeffrey Tarrasch, David~M Thal, Sebastian~GB Furness, George Christopoulos,
+  Thomas Coudrat, et~al.
+\newblock Phase-plate cryo-{EM} structure of a class {B} {GPCR}--{G}-protein
+  complex.
+\newblock {\em Nature}, 546(7656):118, 2017.
+
+\bibitem{liu2018nearatomic}
+Yuxi Liu, Shane Gonen, Tamir Gonen, and Todd~O. Yeates.
+\newblock Near-atomic cryo-{EM} imaging of a small protein displayed on a
+  designed scaffolding system.
+\newblock {\em Proceedings of the National Academy of Sciences}, 2018.
+
+\bibitem{ljung1998system}
+Lennart Ljung.
+\newblock System identification.
+\newblock In {\em Signal analysis and prediction}, pages 163--173. Springer,
+  1998.
+
+\bibitem{natterer1986mathematics}
+Frank Natterer.
+\newblock {\em The mathematics of computerized tomography}, volume~32.
+\newblock SIAM, 1986.
+
+\bibitem{shatsky2009method}
+Maxim Shatsky, Richard~J Hall, Steven~E Brenner, and Robert~M Glaeser.
+\newblock A method for the alignment of heterogeneous macromolecules from
+  electron microscopy.
+\newblock {\em Journal of structural biology}, 166(1):67--78, 2009.
+
+\bibitem{vanheel2013finding}
+Marin van Heel.
+\newblock Finding trimeric {HIV}-1 envelope glycoproteins in random noise.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  110(45):E4175--E4177, 2013.
+
+\bibitem{vanheel1992correlation}
+Marin van Heel, Michael Schatz, and Elena Orlova.
+\newblock Correlation functions revisited.
+\newblock {\em Ultramicroscopy}, 46(1--4):307--316, 1992.
+
+\bibitem{zhao2016fast}
+Zhizhen Zhao, Yoel Shkolnisky, and Amit Singer.
+\newblock Fast steerable principal component analysis.
+\newblock {\em IEEE transactions on computational imaging}, 2(1):1--12, 2016.
+
+\end{thebibliography}
