@@ -338,11 +338,23 @@ Figure~\ref{fig:Einst_example} shows several estimated images for a growing numb
 
 \clearpage
 \section{Discussion}
-\TODO{I suggest starting the Discussion section with a summary statement highlighting the significance of the work. Something along the lines (this is not polished, just to give you a rough idea): 
-	"In this paper we illustrated that it is possible to determine the 3-D molecular structure in single particle cryo-EM directly from the micrographs without performing particle picking. Our work implies that it is possible to reconstruct arbitrarily small molecules, in particular, molecules that are too small to being detected and located in micrographs. Ultimately, this work significantly increases the range of molecules to which cryo-EM can be successfully applied." 
-	
+
+
+In the simplified model for cryo-EM we examined, we showed it is possible to estimate the 3-D structure of small volumes. 
+Our strategy is to compute autocorrelation functions of the micrographs and to relate these statistics to the unknown volume's parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations.
+Crucially, the outlined approach involves no particle picking, hence a fortiori no viewing direction estimation. Concerns for model bias are also greatly reduced since no template matching is involved.
+
+Looking towards applying the framework to encompass all important features of real cryo-EM experiments, our work implies that it might be possible to reconstruct small molecules, in particular, molecules that are too small to be detected in micrographs. 
+In pursuing this research direction, our goal is to significantly increase the range of molecules to which cryo-EM can be successfully applied.
+We recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. We discuss a few now.
+
+
+%As a result, it may not be limited to large molecules in the same way that particle picking approaches are. 
+%In this paper, we illustrated that it is possible to determine the 3-D molecular structure in single particle cryo-EM directly from the micrographs without performing particle picking, at least in controlled experiments. 
+
+
+\TODO{
 	We should also incorporate Alberto's comment that our technique also allows to use much lower defocus values. Lower defocus means lower contrast, but will maintain higher frequency information. From that perspective, we may be able to get high resolution reconstructions from fewer micrographs, just because we would be using lower defocus. }
-%\TODO{Discussion: What might the answer imply and why does it matter? How does it fit in with what other researchers have found? What are the perspectives for future research?}
 
 %All current algorithmic pipelines for SPR using cryo--EM start with a particle picking algorithm which is prone to model bias. 
 %Bypassing the particle picking stage and constructing a 3-D model directly from the data---without assuming prior knowledge on the particle to be estimated---can be used to reconstruct ab initio models to initialize a refinement algorithm.  Alternatively, it can be applied to generate templates for a particle picker which does not suffer from model bias.
@@ -350,10 +362,6 @@ Figure~\ref{fig:Einst_example} shows several estimated images for a growing numb
 
 %In the simplified model we examined, the aim is to estimate one, or possibly several, images from micrographs. Our strategy is to compute autocorrelation functions of the data and to relate these statistics to the unknown parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations. Depending on the scenario, we did so using either a phase retrieval algorithm or a nonlinear least-squares algorithm.
 %
-
-In the simplified model for cryo-EM we examined, we showed it is possible to estimate the 3-D structure of small volumes. 
-Our strategy is to compute autocorrelation functions of the data and to relate these statistics to the unknown parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations.
-Crucially, the outlined approach involves no particle picking, hence a fortiori no viewing direction estimation or conformation clustering. As a result, it may not be limited to large molecules in the same way that particle picking approaches are. Concerns for model bias would also greatly be reduced.
 
 
  %Depending on the scenario, we did so using either a phase retrieval algorithm or a nonlinear least-squares algorithm.
@@ -366,9 +374,7 @@ Crucially, the outlined approach involves no particle picking, hence a fortiori 
 
 %While the field is currently dominated by Bayesian methods such as EM, they are intractable for such problems. As an alternative, we propose to use autocorrelation analysis technique that shares some common lines (did you get the wordplay?)  with Kam's method for ab initio modeling~\cite{kam1980reconstruction,levin20173d,singer2018mathematics}. That being said, the SPR model is far more complicated than the model presented here. In a future research, we hope to bridge this gap.
 
-Of course, we recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. We discuss a few now.
-
-One possible concern is that the numerical experiments conducted here suggest a large amount of data may be necessary.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable $\SNR$ is an interesting research question.} Recent trends in high-throughput cryo-EM technology \TODO{?} give hope that this may be a lesser concern in the long term. Still, large amounts of data also imply large amounts of computations. On this front, we note that computing autocorrelations of low orders can be done efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one look at each micrograph is necessary. The output of this data processing stage is a succinct summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved meaningfully in practice. The proof-of-concept experiments above suggest they might.
+One possible concern is that the numerical experiments conducted here suggest a large amount of data may be necessary.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable $\SNR$ is an interesting research question.} Recent trends in high-throughput cryo-EM technology \TODO{?} give hope that this may be a lesser concern in the long term. Still, large amounts of data also imply large amounts of computations. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one look at each micrograph is necessary. The output of this data processing stage is a succinct summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved meaningfully in practice. The proof-of-concept experiments above suggest they might.
 
 %Insofar as the computational challenges are concerned, we note that expectation-maximization algorithms (EM) have, over time, become the norm in the cryo-EM community, as exemplified by the popular RELION package. The idea of using EM for cryo-EM can be traced back at least to~\TODO{Sigworth}. At the time, such approaches also seemed challenging.
 
@@ -377,12 +383,13 @@ One possible concern is that the numerical experiments conducted here suggest a 
 
 Beyond data acquisition and computational challenges, there are modeling issues to consider.
 As stated, our approach relies on two core assumptions that are not necessarily verified in SPR experiments.
-First, we assume an additive white noise model, while in practice the noise may be correlated or signal dependent. To address this point, it may be necessary to investigate better noise models and to extend the autocorrelation analysis accordingly. \TODO{another issue is that micrographs also contain contaminants such as carbon, ice crystals, etc.. }
-Second, we assume that any two signal occurrences are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the target signals. 
+First, we assume an additive white noise model, while in practice the noise may be correlated or signal dependent. To address this point, it may be necessary to investigate better noise models and to incorporate power spectrum estimation methods. % and to extend the autocorrelation analysis accordingly. 
+ Second, we assume that any two particles are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the 3-D volume. 
 Perhaps this separation could be induced by careful experimental design \TODO{?}.
-Alternatively, if the signals are not well separated, one can introduce new parameters which encode the distribution of the spacing between occurrences. Here as well, relations between autocorrelation functions of the data and of the signals can be derived.
+Alternatively, if the signals are not well separated, one can introduce new parameters which encode the distribution of the spacing between occurrences. Here as well, relations between autocorrelations of the micrographs and of the volume could be derived.
 
-We also admit several aspects of SPR experiments that were neglected in this paper, including power spectrum estimation, Contrast Transfer Function (CTF) correction and the non-uniformity of the viewing directions. All this aspects must be taken into account so the method could be applied on real data. We hope to take care of this issues in a future research, as well extending this method for the possibility to estimate several volumes simultaneously. 
+We also note several aspects of SPR experiments that were neglected in this paper, including Contrast Transfer Function (CTF) correction and the non-uniformity of the viewing directions. All these aspects must be taken into account so the method could be applied on real data. We hope to take care of these issues in future research, as well to extend the proposed method to conformational heterogeneity. 
+\TODO{another issue is that micrographs also contain contaminants such as carbon, ice crystals, etc.. }
 %
 %\TODO{Do we want to note here that EM used to be perceived as computationally out of reach back when it was proposed [cite Fred], yet is now the de facto standard method as exemplified by RELION? Do we also want to stress that models have been refined over decades? Both points are rather defensive in nature.	}
 
@@ -501,8 +508,7 @@ a^p_\II(\Bell_1,\ldots, \Bell_{p-1}) = \frac{1}{N^2}\sum_{\mb i}\II(\mb i)\II(\m
 where the summation is for $\mb i $ ranging over the $N^2$  pixels of the micrograph. %, $\Delta \mb i = (\Delta i, \Delta j)$.% and we set $\II(i,j)=0$ if either $i,j\notin\{1,\ldots, M\}$. 
 %In our procedure, we compute the first three autocorrelations. %, called the mean, power spectrum, and bispectrum, of the micrographs. \TODO{This definition and terminology should come earlier}. 
 Let $\II_1,\ldots\II_K$ denote a set of $K$ micrographs. 
-Under the specified conditions, we show in Appendix TKTK that the first three autocorrelations  of the micrographs are related to those of the projections by \TODO{To fix}
-\begin{align} \label{eq:ac_micrographs}
+Under the specified conditions, we show in Appendix TKTK that the first three autocorrelations  of the micrographs are related to those of the projections by \begin{align} \label{eq:ac_micrographs}
 \lim_{K\to\infty}\frac{1}{K}\sum_{i=1}^Ka^p_{\II_i}[\Bell_1,\ldots,\Bell_{p-1}]  &= \gamma\left\langle a^p_{I_\omega}[\Bell_1,\ldots,\Bell_{p-1}]\right\rangle_{\omega} + b_p[\Bell_1,\ldots,\Bell_{p-1}], \\ p=1,2,3,& \quad \Bell_1,\ldots,\Bell_{p-1}\in[0,P-1]^2, \nonumber
 \end{align}
 where $\langle\cdot\rangle_\omega$ denotes averaging over all possible viewing directions $\omega$ and $b_p$ is a bias term. %and we take the limit as the number of projections $N$, and hence the dimensions of the micrograph $M$, tend to $\infty$. 
@@ -512,7 +518,7 @@ Finally, the bias term of the third-order autocorrelation $b_3$ depends on the m
 In practice, we want to leverage one more feature of the 3-D reconstruction problem.
 Since all in-plane rotations of the micrographs are equally likely observations, 
 it is desirable in~\eqref{eq:ac_micrographs} to average over all in-plane rotations as well.
-This can be done efficiently using Prolate Spheroidal Wave Functions (PSWFs). 
+This can be done efficiently using Prolate Spheroidal Wave Functions (PSWFs).  We use autocorrelations up to and including the  third order since this is necessary to  determine the volume.
 The details are in the appendix. 
 
 % as follows. We scan the micrographs with a $P\times P$ window. We expand each window in Prolate Spheroidal Wave Functions (PSWFs) 
