@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.7.25)  27 JUL 2018 12:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.7.25)  27 JUL 2018 15:15
 entering extended mode
 **./draft_biology.tex
 (draft_biology.tex
@@ -465,57 +465,51 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 nstruction100_cropped.pdf> <./reconstruction1000_cropped.pdf>] [6 <./Einstein_p
 rogress.pdf>] [7
 
-] [8] [9]
-LaTeX Font Info:    Try loading font information for U+euf on input line 515.
+] [8] [9] (draft_biology.bbl [10] [11])
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\ueuf.fd"
-File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
-)
-Overfull \hbox (60.49075pt too wide) detected at line 522
-[]
- []
+LaTeX Warning: Reference `eq:sep_cond' on page 12 undefined on input line 548.
 
-[10] (draft_biology.bbl [11]) [12]
-
-LaTeX Warning: Reference `eq:sep_cond' on page 13 undefined on input line 544.
-
-
-Overfull \hbox (33.73463pt too wide) detected at line 561
+[12]
+Overfull \hbox (33.73463pt too wide) detected at line 565
 [][]
  []
 
 [13]
-Overfull \hbox (39.55347pt too wide) detected at line 574
+LaTeX Font Info:    Try loading font information for U+euf on input line 575.
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\ueuf.fd"
+File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
+)
+Overfull \hbox (39.55347pt too wide) detected at line 578
 [][]
  []
 
 [14] [15]
 
 LaTeX Warning: Reference `sec:PSWFs_props' on page 16 undefined on input line 6
-32.
+36.
 
 
-Overfull \hbox (26.5999pt too wide) detected at line 637
+Overfull \hbox (26.5999pt too wide) detected at line 641
 [][]
  []
 
 [16]
-Overfull \hbox (9.89833pt too wide) detected at line 658
+Overfull \hbox (9.89833pt too wide) detected at line 662
 [][]
  []
 
-[17]
-Overfull \hbox (63.25395pt too wide) detected at line 667
+
+Overfull \hbox (63.25395pt too wide) detected at line 671
 [][]
  []
 
-[18]
-Overfull \hbox (6.53603pt too wide) detected at line 705
+[17] [18]
+Overfull \hbox (6.53603pt too wide) detected at line 709
 []
  []
 
 
-Overfull \hbox (58.74126pt too wide) detected at line 716
+Overfull \hbox (58.74126pt too wide) detected at line 720
 \OML/cmm/m/it/10.95 B[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 `[]; `[]; `[]; s
 []; s[]; s[]\OT1/cmr/m/n/10.95 ) = [] [] \OML/cmm/m/it/10.95 W\OT1/cmr/m/n/10.9
 5 (\OML/cmm/m/it/10.95 `[]; `[]; `[]; N[]; N[]\OT1/cmr/m/n/10.95 ) [][] 	[]([])
@@ -523,13 +517,13 @@ Overfull \hbox (58.74126pt too wide) detected at line 716
  []
 
 [19] [20]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 779.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 783.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 779.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 783.
  [21]
 [22] (draft_biology.aux)
 
@@ -537,10 +531,10 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 5795 strings out of 492973
- 85452 string characters out of 3135932
- 169950 words of memory out of 3000000
- 9505 multiletter control sequences out of 15000+200000
+ 5794 strings out of 492973
+ 85431 string characters out of 3135932
+ 171936 words of memory out of 3000000
+ 9504 multiletter control sequences out of 15000+200000
  33431 words of font info for 86 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,15n,39p,1228b,530s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -576,9 +570,9 @@ ts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/am
 sfonts/euler/eufm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfont
 s/symbols/msbm10.pfb>
-Output written on draft_biology.pdf (22 pages, 1785058 bytes).
+Output written on draft_biology.pdf (22 pages, 1775513 bytes).
 PDF statistics:
- 644 PDF objects out of 1000 (max. 8388607)
+ 621 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
