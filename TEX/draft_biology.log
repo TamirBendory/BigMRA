@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.7.25)  26 JUL 2018 16:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6730 64-bit) (preloaded format=pdflatex 2018.7.25)  27 JUL 2018 12:28
 entering extended mode
 **./draft_biology.tex
 (draft_biology.tex
@@ -280,18 +280,18 @@ File: babel.def 2018/06/05 3.22 Babel common definitions
 (draft_biology.aux)
 \openout1 = `draft_biology.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
  ("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count114
@@ -390,16 +390,16 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 93.
+LaTeX Font Info:    Try loading font information for U+msa on input line 99.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 93.
+LaTeX Font Info:    Try loading font information for U+msb on input line 99.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for T1+cmss on input line 108.
+LaTeX Font Info:    Try loading font information for T1+cmss on input line 114.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\t1cmss.fd"
@@ -411,42 +411,42 @@ File: t1cmss.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 File: micrograph_Einstein_example_clean.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_clean.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_clean.pdf  used on input l
-ine 168.
+ine 174.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 <micrograph_Einstein_example_s05.pdf, id=19, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_s05.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_s05.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s05.pdf  used on input lin
-e 173.
+e 179.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
 <micrograph_Einstein_example_s3.pdf, id=20, 259.97125pt x 260.975pt>
 File: micrograph_Einstein_example_s3.pdf Graphic file (type pdf)
 <use micrograph_Einstein_example_s3.pdf>
 Package pdftex.def Info: micrograph_Einstein_example_s3.pdf  used on input line
- 178.
+ 184.
 (pdftex.def)             Requested size: 129.9853pt x 130.48718pt.
  [3 <./micrograph_Einstein_example_clean.pdf> <./micrograph_Einstein_example_s0
 5.pdf> <./micrograph_Einstein_example_s3.pdf>]
 <reconstruction1_cropped.pdf, id=41, 259.97125pt x 258.9675pt>
 File: reconstruction1_cropped.pdf Graphic file (type pdf)
 <use reconstruction1_cropped.pdf>
-Package pdftex.def Info: reconstruction1_cropped.pdf  used on input line 220.
+Package pdftex.def Info: reconstruction1_cropped.pdf  used on input line 226.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 <reconstruction10_cropped.pdf, id=42, 259.97125pt x 258.9675pt>
 File: reconstruction10_cropped.pdf Graphic file (type pdf)
 <use reconstruction10_cropped.pdf>
-Package pdftex.def Info: reconstruction10_cropped.pdf  used on input line 225.
+Package pdftex.def Info: reconstruction10_cropped.pdf  used on input line 231.
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 <reconstruction100_cropped.pdf, id=43, 259.97125pt x 258.9675pt>
 File: reconstruction100_cropped.pdf Graphic file (type pdf)
 <use reconstruction100_cropped.pdf>
-Package pdftex.def Info: reconstruction100_cropped.pdf  used on input line 231.
+Package pdftex.def Info: reconstruction100_cropped.pdf  used on input line 237.
 
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 <reconstruction1000_cropped.pdf, id=44, 259.97125pt x 258.9675pt>
 File: reconstruction1000_cropped.pdf Graphic file (type pdf)
 <use reconstruction1000_cropped.pdf>
-Package pdftex.def Info: reconstruction1000_cropped.pdf  used on input line 236
+Package pdftex.def Info: reconstruction1000_cropped.pdf  used on input line 242
 .
 (pdftex.def)             Requested size: 116.98598pt x 116.53429pt.
 
@@ -456,7 +456,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <Einstein_progress.pdf, id=45, 421.575pt x 316.18124pt>
 File: Einstein_progress.pdf Graphic file (type pdf)
 <use Einstein_progress.pdf>
-Package pdftex.def Info: Einstein_progress.pdf  used on input line 278.
+Package pdftex.def Info: Einstein_progress.pdf  used on input line 284.
 (pdftex.def)             Requested size: 295.10048pt x 221.32535pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -465,53 +465,57 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 nstruction100_cropped.pdf> <./reconstruction1000_cropped.pdf>] [6 <./Einstein_p
 rogress.pdf>] [7
 
-] [8] [9] [10]
-LaTeX Font Info:    Try loading font information for U+euf on input line 648.
+] [8] [9]
+LaTeX Font Info:    Try loading font information for U+euf on input line 515.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\ueuf.fd"
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
 )
-Overfull \hbox (60.49075pt too wide) detected at line 655
+Overfull \hbox (60.49075pt too wide) detected at line 522
 []
  []
 
-(draft_biology.bbl [11] [12])
-Overfull \hbox (33.73463pt too wide) detected at line 694
+[10] (draft_biology.bbl [11]) [12]
+
+LaTeX Warning: Reference `eq:sep_cond' on page 13 undefined on input line 544.
+
+
+Overfull \hbox (33.73463pt too wide) detected at line 561
 [][]
  []
 
 [13]
-Overfull \hbox (39.55347pt too wide) detected at line 707
+Overfull \hbox (39.55347pt too wide) detected at line 574
 [][]
  []
 
 [14] [15]
 
-LaTeX Warning: Reference `sec:PSWFs_props' on page 16 undefined on input line 7
-65.
+LaTeX Warning: Reference `sec:PSWFs_props' on page 16 undefined on input line 6
+32.
 
 
-Overfull \hbox (26.5999pt too wide) detected at line 770
+Overfull \hbox (26.5999pt too wide) detected at line 637
 [][]
  []
 
 [16]
-Overfull \hbox (9.89833pt too wide) detected at line 791
+Overfull \hbox (9.89833pt too wide) detected at line 658
 [][]
  []
 
 [17]
-Overfull \hbox (63.25395pt too wide) detected at line 800
+Overfull \hbox (63.25395pt too wide) detected at line 667
 [][]
  []
 
 [18]
-Overfull \hbox (6.53603pt too wide) detected at line 838
+Overfull \hbox (6.53603pt too wide) detected at line 705
 []
  []
 
 
-Overfull \hbox (58.74126pt too wide) detected at line 849
+Overfull \hbox (58.74126pt too wide) detected at line 716
 \OML/cmm/m/it/10.95 B[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 `[]; `[]; `[]; s
 []; s[]; s[]\OT1/cmr/m/n/10.95 ) = [] [] \OML/cmm/m/it/10.95 W\OT1/cmr/m/n/10.9
 5 (\OML/cmm/m/it/10.95 `[]; `[]; `[]; N[]; N[]\OT1/cmr/m/n/10.95 ) [][] 	[]([])
@@ -519,25 +523,25 @@ Overfull \hbox (58.74126pt too wide) detected at line 849
  []
 
 [19] [20]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 912.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 779.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 912.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 779.
  [21]
-[22] [23] (draft_biology.aux)
+[22] (draft_biology.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 5775 strings out of 492973
- 85278 string characters out of 3135932
- 171917 words of memory out of 3000000
- 9492 multiletter control sequences out of 15000+200000
- 30811 words of font info for 79 fonts, out of 3000000 for 9000
+ 5795 strings out of 492973
+ 85452 string characters out of 3135932
+ 169950 words of memory out of 3000000
+ 9505 multiletter control sequences out of 15000+200000
+ 33431 words of font info for 86 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,15n,39p,1228b,530s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Tamir\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
@@ -563,15 +567,16 @@ X 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/fo
 nts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
 1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
 amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.p
-fb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Pro
-gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
-blic/amsfonts/euler/eufm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
-amsfonts/symbols/msbm10.pfb>
-Output written on draft_biology.pdf (23 pages, 1777478 bytes).
+cm/cmmib10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/
+Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/am
+sfonts/euler/eufm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfont
+s/symbols/msbm10.pfb>
+Output written on draft_biology.pdf (22 pages, 1785058 bytes).
 PDF statistics:
  644 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
