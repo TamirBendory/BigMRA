@@ -499,7 +499,7 @@ Let $\II\in\RNN$ denote a micrograph. We assume it consists of shifted copies of
 \begin{equation}\label{eq:micrograph_model}
 \II = \sum_{t=1}^{M} I_{\omega_t}\ast\delta_{\mb s_t}+ \varepsilon, \quad \varepsilon~\sim\mathcal{N}(0,\sigma^2 I),
 \end{equation}
-where the viewing directions $\omega_t$ are assumed to be drawn from the uniform distribution over $\text{SO}(3)$ and $\mb s_t$ denotes the location of the center of the $t$th projection in the micrograph. Similarly to~\eqref{eq:spacing}, we impose a separation condition so that any two projections are separated by at least $2L-1$ \TODO{2L?} pixels in each direction.
+where the viewing directions $\omega_t$ are assumed to be drawn from the uniform distribution over $\text{SO}(3)$ and $\mb s_t$ denotes the location of the center of the $t$th projection in the micrograph. Similarly to~\eqref{eq:spacing}, we impose a separation condition so that any two projections are separated by at least $2P-1$ pixels between their upper left corners  in each direction.
 %similarly to~\eqref{eq:spacing}:
 %\be\label{eq:sep_cond} \ ||\mb s_j - \mb s_i||_{\infty} \geq 2L. \ee
 Note that~\eqref{eq:model} can be also written as a sum of $\delta$ functions as in~\eqref{eq:micrograph_model}. 
@@ -513,7 +513,7 @@ where the summation is for $\mb i $ ranging over the $N^2$  pixels of the microg
 %In our procedure, we compute the first three autocorrelations. %, called the mean, power spectrum, and bispectrum, of the micrographs. \TODO{This definition and terminology should come earlier}. 
 Let $\II_1,\ldots\II_K$ denote a set of $K$ micrographs. 
 Under the specified conditions, we show in Appendix~\ref{sec:moment_derivation} that the first three autocorrelations  of the micrographs are related to those of the projections by \begin{align} \label{eq:ac_micrographs}
-\lim_{K\to\infty}\frac{1}{K}\sum_{i=1}^Ka^p_{\II_i}[\Bell_1,\ldots,\Bell_{p-1}]  &= \gamma\left\langle a^p_{I_\omega}[\Bell_1,\ldots,\Bell_{p-1}]\right\rangle_{\omega} + b_p[\Bell_1,\ldots,\Bell_{p-1}], \\ p=1,2,3,& \quad \Bell_1,\ldots,\Bell_{p-1}\in[0,P-1]^2, \nonumber
+\lim_{K\to\infty}\frac{1}{K}\sum_{i=1}^Ka^p_{\II_i}[\Bell_1,\ldots,\Bell_{p-1}]  &= \gamma\left\langle a^p_{I_\omega}[\Bell_1,\ldots,\Bell_{p-1}]\right\rangle_{\omega} + b_p[\Bell_1,\ldots,\Bell_{p-1}], \\ p=1,2,3,& \quad \Bell_1,\ldots,\Bell_{p-1}\in[-(P-1),P-1]^2, \nonumber
 \end{align}
 where $\langle\cdot\rangle_\omega$ denotes averaging over all possible viewing directions $\omega$ and $b_p$ is a bias term. %and we take the limit as the number of projections $N$, and hence the dimensions of the micrograph $M$, tend to $\infty$. 
 Specifically,  $b_1 = 0$ and therefore the mean is unbiased. The bias term of the second-order autocorrelation  $b_2$ depends only on $\sigma^2$, the variance of the noise. Hence, if the noise level can be accurately estimated from the micrographs, this bias can be removed. 
@@ -552,7 +552,7 @@ Let's thank them all
 
 \section{Moments derivation} \label{sec:moment_derivation}
 In this section we prove relation~\eqref{eq:ac_micrographs}. We note that mathematically taking infinitely many micrographs is equivalent to take one infinitely large micrograph with fixed density $\gamma$~\eqref{eq:gamma}. Hence, we consider the moments of one micrograph $\II$ in the limit $N\to\infty$ and  $\gamma = \lim_{N\to\infty}\frac{MP^2}{N^2}\in(0,1)$. %To take this limit, we shall assume that $N=\Omega(M^2)$, and that $\gamma = \lim_{N\to\infty}\frac{NL^2}{M^2}\in(0,1)$ is a constant. 
-The separation condition guarantees that if $\mb i=(i,j)$ is in the support of some projection, then $\mb i + \mb \Bell$ for $\Bell\in[0,P-1]^2$ is either in the support of the same projection or outside the support of any projection. %Formally, $\mb i$ is in the support of the $j$th projection if and only if $0\leq \mb i - \mb s_j < L$ where the inequalities apply to each coordinate. Then for $||\Bell||_{\infty}\leq L-1$ we have
+The separation condition guarantees that if $\mb i=(i,j)$ is in the support of some projection, then $\mb i + \mb \Bell$ for $\Bell\in[-(P-1),P-1]^2$ is either in the support of the same projection or outside the support of any projection. %Formally, $\mb i$ is in the support of the $j$th projection if and only if $0\leq \mb i - \mb s_j < L$ where the inequalities apply to each coordinate. Then for $||\Bell||_{\infty}\leq L-1$ we have
 %\[-(L-1) \leq [\mb i+\Bell]-\mb s_j< 2L-1,\]
 %and because of the separation condition, given $\mb s_k$ we must either have $\mb s_k-\mb s_i\geq 2L-1$ in which case 
 %\[ \mb i + \Bell- \mb s_k \leq \mb i + \Bell- \mb s_j - (2L-1) < 0,\]
@@ -567,7 +567,7 @@ Denote by $\mc S_t$ the support of the $t$th particle. % and by $Z=\{1,\ldots, M
 \be\begin{aligned} \label{eq:general_moment}
 a^p_{\widetilde\II}[\Bell_1,\ldots, \Bell_{p-1}] &= \frac{1}{N^2}\sum_{\mb i}\widetilde\II[\mb i]\widetilde\II[\mb i + \Bell_1]\cdots \widetilde\II[\mb i + \Bell_{p-1}]\\
 &= \frac{1}{N^2}\sum_{t=1}^M\sum_{\mb i\in\mc S_t}\widetilde\II[\mb i]\widetilde\II[\mb i + \Bell_1]\cdots \widetilde\II[\mb i + \Bell_{p-1}] \\ %+ \frac{1}{N^2}\sum_{\mb i\in Z}\widetilde\II[\Bell]\widetilde\II[\mb i + \Bell]\cdots \widetilde\II(\mb i + \Bell_{p-1})\\
-&= \frac{MP^2}{N^2}\cdot\frac{1}{M}\sum_{t=1}^M\frac{1}{P^2}\sum_{i,j=0}^{P-1} I_{\omega_t}[\mb i]I_{\omega_t}[[\mb i+\Bell]_1]\cdots I_{\omega_t}[\mb i + \Bell_{p-1}]\\
+&= \frac{MP^2}{N^2}\cdot\frac{1}{M}\sum_{t=1}^M\frac{1}{P^2}\sum_{i,j=0}^{P-1} I_{\omega_t}[\mb i]I_{\omega_t}[\mb i+\Bell_1]\cdots I_{\omega_t}[\mb i + \Bell_{p-1}]\\
 &= \frac{MP^2}{N^2}\frac{1}{M}\sum_{t=1}^Ma^p_{I_{\omega_t}}[\Bell_1,\ldots, \Bell_{p-1}]\\
 &\to \gamma\langle a^p_{I_{\omega}}[\Bell_1,\ldots, \Bell_{p-1}]\rangle_{\omega}, \end{aligned}\ee
 where the average is taken over $\omega$ with respect to the distribution of viewing directions. Here, we assume it to be uniform.
@@ -578,7 +578,7 @@ In the presence of noise, we get additional bias terms denoted by $b_p$ in~\eqre
 a^2_\II[\Bell] &=
 \frac{1}{N^2}\sum_{\mb i }\II[\mb i]\II[\mb
 i+\Bell]\\
-&= \frac{1}{N^2}\sum_{\mb i }\widetilde\II[\mb i]\widetilde\II[[\mb i+\Bell]] + \frac{1}{N^2}\sum_{\mb i }\widetilde\II[\mb i]\varepsilon[\mb i + \Bell]\\ &+ \frac{1}{N^2}\sum_{\mb i }\varepsilon[\mb i]\widetilde\II[\mb i + \Bell] + \frac{1}{N^2}\sum_{\mb i }\varepsilon[\mb i]\varepsilon[\mb i + \Bell]. 
+&= \frac{1}{N^2}\sum_{\mb i }\widetilde\II[\mb i]\widetilde\II[\mb i+\Bell] + \frac{1}{N^2}\sum_{\mb i }\widetilde\II[\mb i]\varepsilon[\mb i + \Bell]\\ &+ \frac{1}{N^2}\sum_{\mb i }\varepsilon[\mb i]\widetilde\II[\mb i + \Bell] + \frac{1}{N^2}\sum_{\mb i }\varepsilon[\mb i]\varepsilon[\mb i + \Bell]. 
 \end{aligned}\]
 The first term is given by~\eqref{eq:general_moment} for $p=2$. 
 The cross terms vanish in the limit. 
@@ -654,71 +654,151 @@ debias the third-order autocorrelation.
 
 \section{Accounting for all in-plane rotations} \label{sec:steering}
 
+We represent our autocorrelations using Prolate Spheroidal Wave Functions (PSWFs) $\{\psi_{k,q}\}$ where $k \geq 0, q \geq 1$ are integers~\cite{landa2017steerable}. As we demonstrate below, this makes it easier to account for the fact that all in-plane rotations of the micrographs are equally likely observations. This is only a concern for the second and third order autocorrelations. Below, we start with $p=2$.
+The PSWFs are eigenfunctions of the truncated Fourier transform and are given in polar coordinates by
+\begin{align}
+	\psi_{k,q}(r,\varphi) & = \left\{\begin{array}{ll} \frac{1}{\sqrt{8\pi}}\alpha_{k,q}R_{k,q}(r)e^{\iota k\varphi}, & r\leq 1,\\ 0, & r>1,\end{array}\right. \label{eq:prolatesdef}
+\end{align}
+where the ${R_{k,q}}$ are a family of real, one-dimensional functions and the ${\alpha_{k,q}}$ are \TODO{real?} scaling factors which will be defined in the next section.
+The PSWFs are orthonormal on the unit disk.
+
+For $\Bell \in [-(P-1), P-1]^2$, let us define 
+\[\begin{aligned} 
+\mathfrak{a}^2[k, q] & =
+\sum_{\Bell}a^2_\II[\Bell]\overline{\psi_{k,q}[\Bell]}, \end{aligned}\]
+where $\psi_{k,q}[\Bell] \triangleq \psi_{k,q}(\Bell/P)$ \TODO{?} is a discretization of the PSWFs. \TODO{Range of $k,q$? need approx orthonormality in discrete...}
+Knowledge of these coefficients is essentially equivalent to knowledge of the second-order correlations owing to the following approximate identity:
+\begin{align}
+ a^2_\II[\mb i] & \approx \sum_{k,q}\mathfrak{a}^2[k,q]\psi_{k,q}[\Bell].
+ \label{eq:approxprolatesdiscrete}
+\end{align}
+We now proceed to show that the coefficients $\mathfrak{a}^2[k, q]$ can be computed from the micrographs directly.
+
+By definition,
+\begin{align}
+\mathfrak{a}^2[k,q] & =\sum_{\Bell} a^2_\II[\Bell] \overline{\psi_{k,q}[\Bell]} \nonumber\\
+	& = \frac{1}{N^2}\sum_{\mb i}\II[\mb i]\left(\sum_{\Bell}\II[\mb i+\Bell]\overline{\psi_{k,q}[\Bell]}\right) \nonumber \\
+	& = \frac{1}{N^2}\sum_{\mb i}\II[\mb i] a_{k,q}[\mb i], \label{eq:frakatwo}
+\end{align}
+where we defined
+\begin{align*}
+	a_{k,q}[\mb i] & = \sum_{\Bell}\II[\mb i+\Bell]\overline{\psi_{k,q}[\Bell]}.
+\end{align*}
+These coefficients can be computed efficiently. Indeed, consider a patch of the micrograph $\II$ centered around pixel $\mb i$ and of size $(2P-1) \times (2P-1)$. This is exactly the patch indexed in the sum above. Hence, using the same approximation as we did in~\eqref{eq:approxprolatesdiscrete}, a direct expansion of that patch in the discretized PSWFs yields the sought coefficients:
+\begin{align}
+	\II[\mb i+\Bell] & \approx \sum_{k,q} a_{k,q}[\mb i] \psi_{k,q}[\Bell]. \label{eq:itamar}
+\end{align}
+%Considering equation~\eqref{eq:frakatwo}, our main task is to compute the coefficients $a_{k,q}$, which from the equation above can be done as follows: 
+Thus, we proceed as follows:
+for each position $\mb i$ in the micrograph $\II$, we extract the corresponding patch of size $2P-1$, expand it in the discretized PSWFs as in~\eqref{eq:itamar}, and collect the $a_{k,q}$ as per~\eqref{eq:frakatwo} to constitute the second-order autocorrelation of the micrograph.
+
+Crucially, following this formalism, it is now straightforward to account for all in-plane rotations (and reflections) of the micrograph. Indeed, as can be seen from the definition of the (continuous) PSWFs~\eqref{eq:prolatesdef}, the effects of rotations and reflections on expansion coefficients of real images are, respectively, phase modulation and conjugation. By analogy in the discrete case, we have the following approximate expansions for a patch rotated about its center $\mb i$ by an angle $\alpha$:
+\[ \II^{\alpha,+}[\mb i+\Bell] = \sum_{k,q}a_{k,q}e^{-ik\alpha}\psi_{k,q}[\Bell],\]
+and the reflection followed by a rotation by angle $\alpha$:
+\[ \II^{\alpha,-}[\mb i+\Bell] = \sum_{k,q}\overline{a_{k,q}}e^{-ik\alpha}\psi_{k,q}[\Bell].\]
+%where we used the fact that for real-valued images we have $a_{-k,q}=\overline{a_{k,q}}$ for both PSWFs and FB.
+Averaging over all rotations of the patch $\II(\mb i + \Delta\mb i)$ and its reflection we get
+\[\begin{aligned} 
+\mathfrak{a}^2[k,q] &= \frac{1}{N^2}\sum_{\mb i}\II[\mb i]\left(\frac{1}{4\pi}\int_0^{2\pi}[a_{k,q}[\mb i] +
+\overline{a_{k,q}}[\mb i]]e^{-ik\alpha}\, d\alpha\right)\\ 
+&= \delta[k] \frac{1}{N^2}\sum_{\mb i}\II[\mb i]a_{0,q}[\mb i], \end{aligned}\]
+where in the last equality we used that both $\II$ and $\psi_{0,q}$ are real valued.
+Thus, the second-order autocorrelation, though two-dimensional, effectively only provides one-dimensional information.
+
+We now follow a similar approach to estimate the bias term $b_2$.
+Introduce the coefficients $\mathfrak{b}_2$ as: \TODO{We're using that $R$ functions are zero at the origin for $k\neq 0$, right? We didn't introduce that fact so far.}
+\[\begin{aligned} 
+\mathfrak{b}_2[k,q] & = \sigma^2\sum_{\Bell}\delta[\Bell]\overline{\psi_{k,q}}[\Bell]\\
+&= \sigma^2\overline{\psi_{k,q}}[\mb 0]\\
+&= \delta[k] \frac{\sigma^2}{\sqrt{2\pi}}R_{0,q}(0). \end{aligned}\]
+With this definition, we have the usual approximation:
+\[ b_2[\Bell] = \sigma^2\delta[\Bell] \approx \sum_{k,q}\mathfrak{b}_2[k,q]\psi_{k,q}[\Bell].\]
+
+
+We then estimate the expansion coefficients of the clean power spectrum as
+\[ \widetilde{\mk m_2}(k,q) = \mk m_2(k,q) - \mk b_2(k,q).\]
+
+\TODO{---------------------------------------------}
+
+
+, which we use to include all in-plane rotations of the projections in the micrograph to compute the autocorrelations, and compute only the blocks on the diagonal - see . 
+The PSWFs are eigenfunctions of the truncated Fourier transform and satisfy 
+\be\label{eq:PSWF_defn_eq}
+\alpha_{k,q}\psi_{k,q}(\mb k) = \sum_{\mb i}\psi_{k,q}(\mb i)e^{-2\pi \iota (\mb i\cdot\mb k)}
+\ee
+given in polar coordinates by
+\[ \psi_{k,q}(r,\varphi) = \left\{\begin{array}{ll} \frac{1}{2\sqrt{2\pi}}\alpha_{k,q}R_{k,q}(r)e^{\iota k\varphi}, & r\leq 1,\\ 0, & r>1,\end{array}\right. \quad k\geq 0,\ q\geq 1,\]
+and are orthonormal on the unit disc.\footnote{In \cite{landa2017steerable}, PSWFs are defined as $2\psi_{k,q}/\alpha_{k,q}$, but using the above definition simplifies the formula for the expansion coefficients.}
+
+
 The micrograph autocorrelations are given by an average over the particle orientations.
 Since the specific in-plane rotation of each projection is equally likely to appear, we would like to   consider all possible in-plane rotations. 
 This can be done efficiently using steerable bases , a basis in which an in-plane rotation corresponds to a phase shift of the expansion coefficients;  \cite{bhamre2016denoising,landa2017steerable,zhao2016fast}.
 
-%In particular, they are invariant under in-plane rotations of the projections, and can therefore be block-diagonalized in any steerable basis, a basis in which an in-plane rotation corresponds to a phase shift of the expansion coefficients - see \cite{bhamre2016denoising,landa2017steerable,zhao2016fast}. 
-For this paper, we represent our autocorrelations using Prolate Spheroidal Wave Functions (PSWFs) $\{\psi_{k,q}\}$, which we use to include all in-plane rotations of the projections in the micrograph to compute the autocorrelations, and compute only the blocks on the diagonal - see \cite{landa2017steerable}. The PSWFs are eigenfunctions of the truncated Fourier trasnform and satisfy
+The clean autocorrelations $\gamma\langle m_k[I_{\omega}]\rangle_{\omega}$ which we estimate from the micrograph are given by an average over the particule orientations. In particular, they are invariant under in-plane rotations of the projections, and can therefore be block-diagonalized in any steerable basis, a basis in which an in-plane rotation corresponds to a phase shift of the expansion coefficients - see \cite{bhamre2016denoising,landa2017steerable,zhao2016fast}. For this paper, we represent our autocorrelations using Prolate Spheroidal Wave Functions (PSWFs) $\{\psi_{k,q}\}$, which we use to include all in-plane rotations of the projections in the micrograph to compute the autocorrelations, and compute only the blocks on the diagonal - see \cite{landa2017steerable}. 
+
+The PSWFs are eigenfunctions of the truncated Fourier transform and satisfy \TODO{approximate} \TODO{generate the Gram matrix of the discrete approximation}
 \be\label{eq:PSWF_defn_eq}
-\alpha_{k,q}\psi_{k,q}(\mb k) = \sum_{\mb i}\psi_{k,q}[\Bell]e^{-2\pi i (\mb i-\mb 1)\cdot(\mb k - \mb 1)}
+\alpha_{k,q}\psi_{k,q}(\mb k) = \sum_{\mb i}\psi_{k,q}(\mb i)e^{-2\pi \iota (\mb i\cdot\mb k)}
 \ee
 given in polar coordinates by
-\[ \psi_{k,q}(r,\varphi) = \left\{\begin{array}{ll} \frac{1}{2\sqrt{2\pi}}\alpha_{k,q}R_{k,q}(r)e^{ik\varphi}, & r\leq 1,\\ 0, & r>1,\end{array}\right. \quad k\geq 0,\ q\geq 1,\]
+\[ \psi_{k,q}(r,\varphi) = \left\{\begin{array}{ll} \frac{1}{2\sqrt{2\pi}}\alpha_{k,q}R_{k,q}(r)e^{\iota k\varphi}, & r\leq 1,\\ 0, & r>1,\end{array}\right. \quad k\geq 0,\ q\geq 1,\]
 and are orthonormal on the unit disc.\footnote{In \cite{landa2017steerable}, PSWFs are defined as $2\psi_{k,q}/\alpha_{k,q}$, but using the above definition simplifies the formula for the expansion coefficients.}
 
 The mean is a scalar and is already invariant under in-plane rotations of the projections in the dataset, since all projections have the same mean $Lm_1[\phi]$, as explained above. For the power spectrum, we expand it as
-\[ m_2[\II](\Bell) =
-\sum_{k,q}\mathfrak{m}_2(k,q)\psi_{k,q}(\Bell),\]
-where the expansion is truncated according to the rule in \cite{landa2017steerable}, and obtain the expansion coefficients as
+\[ m_2[\II](\Delta\mb i) =
+\sum_{k,q}\mathfrak{m}_2(k,q)\psi_{k,q}(\Delta\mb i),\]
+where the expansion is truncated according to the rule in~\cite{landa2017steerable}, and obtain the expansion coefficients as
 \[\begin{aligned} 
 \mathfrak{m}_2(k,q) &=
-\sum_{\Bell}m_2[\II](\Bell)\overline{\psi_{k,q}(\Bell)}\\
+\sum_{\Delta\mb i}m_2[\II](\Delta\mb i)\overline{\psi_{k,q}(\Delta\mb i)}\\
 &=
-\frac{1}{L^2}\sum_{\mb i}\II[\Bell]\left(\sum_{\Bell}\II[\mb i+\Bell]\overline{\psi_{k,q}(\Bell)}\right)\\
-&= \frac{1}{L^2}\sum_{\mb i}\II[\Bell]a_{k,q}[\Bell], \end{aligned}\]
-where we note that if we expand a patch of size $(2L-1) \times (2L-1)$ centered about $\II[\Bell]$ in PSWFs as
-\[ \II[\mb i + \Bell] = \sum_{k,q}a_{k,q}[\Bell]\psi_{k,q}(\Bell),\quad ||\Bell||_{\infty}\leq L-1,\]
+\frac{1}{L^2}\sum_{\mb i}\II(\mb i)\left(\sum_{\Delta\mb i}\II(\mb i+\Delta\mb i)\overline{\psi_{k,q}(\Delta\mb i)}\right)\\
+&= \frac{1}{L^2}\sum_{\mb i}\II(\mb i)a_{k,q}(\mb i), \end{aligned}\]
+where we note that if we expand a patch of size $(2L-1) \times (2L-1)$ centered about $\II(\mb i)$ in PSWFs as
+\[ \II(\mb i + \Delta\mb i) = \sum_{k,q}a_{k,q}(\mb i)\psi_{k,q}(\Delta\mb i),\quad ||\Delta\mb i||_{\infty}\leq L-1,\]
 the expansion coefficients are given by the inner product
-\[ a_{k,q}[\Bell] = \sum_{\Bell}\II[\mb i + \Bell]\overline{\psi_{k,q}(\Bell)}.\]
+\[ a_{k,q}(\mb i) = \sum_{\Delta\mb i}\II(\mb i + \Delta\mb i)\overline{\psi_{k,q}(\Delta\mb i)}.\]
 As shown in \cite{landa2017steerable, zhao2016fast}, the rotation of the above patch by an angle $\alpha$ is given by
-\[ \II^{\alpha,+}[\mb i+\Bell] = \sum_{k,q}a_{k,q}e^{-ik\alpha}\psi_{k,q}(\Bell),\]
+\[ \II^{\alpha,+}(\mb i+\Delta\mb i) = \sum_{k,q}a_{k,q}e^{-ik\alpha}\psi_{k,q}(\Delta\mb i),\]
 and the reflection of that disc rotated by an angle $\alpha$ by
-\[ \II^{\alpha,-}[\mb i+\Bell] = \sum_{k,q}\overline{a_{k,q}}e^{-ik\alpha}\psi_{k,q}(\Bell),\]
-where we used the fact that for real-valued images we have $a_{-k,q}=\overline{a_{k,q}}$ for both PSWFs and FB. Averaging over all rotations of the patch $\II[\mb i + \Bell]$ and its reflection we get
+\[ \II^{\alpha,-}(\mb i+\Delta\mb i) = \sum_{k,q}\overline{a_{k,q}}e^{-ik\alpha}\psi_{k,q}(\Delta\mb i),\]
+where we used the fact that for real-valued images we have $a_{-k,q}=\overline{a_{k,q}}$ for both PSWFs and FB. Averaging over all rotations of the patch $\II(\mb i + \Delta\mb i)$ and its reflection we get
 \[\begin{aligned} 
-\mathfrak{m}_2(k,q) &= \frac{1}{L^2}\sum_{\mb i}\II[\Bell]\left(\frac{1}{4\pi}\int_0^{2\pi}[a_{k,q}[\Bell] +
-\overline{a_{k,q}}[\Bell]]e^{-ik\alpha}\, d\alpha\right)\\ 
-&= \delta_{k,0} \frac{1}{L^2}\sum_{\mb i}\II[\Bell]a_{0,q}[\Bell], \end{aligned}\]
+\mathfrak{m}_2(k,q) &= \frac{1}{L^2}\sum_{\mb i}\II(\mb i)\left(\frac{1}{4\pi}\int_0^{2\pi}[a_{k,q}(\mb i) +
+\overline{a_{k,q}}(\mb i)]e^{-ik\alpha}\, d\alpha\right)\\ 
+&= \delta_{k,0} \frac{1}{L^2}\sum_{\mb i}\II(\mb i)a_{0,q}(\mb i), \end{aligned}\]
 where in the last equality we dropped the real part since both
 $\II$ and $\psi_{0,q}$ are real valued.
 Thus, the average power spectrum is effectively a vector. To estimate the clean power spectrum coefficients, we also expand the bias term in PSWFs. Writing
-\[ b_2(\Bell) = \sigma^2\delta(\Bell) = \sum_{k,q}\mathfrak{b}_2(k,q)\psi_{k,q}(\Bell),\]
+\[ b_2(\Delta\mb i) = \sigma^2\delta(\Delta\mb i) = \sum_{k,q}\mathfrak{b}_2(k,q)\psi_{k,q}(\Delta\mb i),\]
 the coefficients are given by
 \[\begin{aligned} 
-\mathfrak{b}_2(k,q) &= \sigma^2\sum_{\Bell}\delta(\Bell)\overline{\psi_{k,q}(\Bell)}\\
+\mathfrak{b}_2(k,q) &= \sigma^2\sum_{\Delta\mb i}\delta(\Delta\mb i)\overline{\psi_{k,q}(\Delta\mb i)}\\
 &= \sigma^2\overline{\psi_{k,q}(\mb 0)}\\
 &= \frac{\sigma^2}{\sqrt{2\pi}}R_{0,q}(0). \end{aligned}\]
 We then estimate the expansion coefficients of the clean power spectrum as
 \[ \widetilde{\mk m_2}(k,q) = \mk m_2(k,q) - \mk b_2(k,q).\]
 
 We expand the bispectrum as
-\[ m_3[\II](\Bell_1, \Bell_2) = \sum_{\substack{k_1,q_1\\ k_2,q_2}}\mathfrak{m}_3(k_1,q_1;k_2,q_2)\psi_{k_1,q_1}(\Bell)\overline{\psi_{k_2,q_2}(\Bell_2)},\]
+\[ m_3[\II](\Delta \mb i_1, \Delta \mb i_2) = \sum_{\substack{k_1,q_1\\ k_2,q_2}}\mathfrak{m}_3(k_1,q_1;k_2,q_2)\psi_{k_1,q_1}(\Delta\mb i_1)\overline{\psi_{k_2,q_2}(\Delta\mb i_2)},\]
 The expansion coefficients are then given by
-\[\begin{aligned} \mathfrak{m}_3(k_1,q_1;k_2,q_2) &= \sum_{\Bell, \Bell_2}m_3[\II](\Bell,\Bell_2)\overline{\psi_{k_1,q_1}(\Bell)}\psi_{k_2,q_2}(\Bell_2)\\
-&= \frac{1}{L^2}\sum_{\mb i}\II[\Bell]\left(\sum_{\Bell}\II[\mb i+\Bell]\overline{\psi_{k_1,q_1}(\Bell)}\right)\left(\sum_{\Bell_2}\II([\mb i+\Bell]_2)\psi_{k_2,q_2}(\Bell_2)\right)\\
-&= \frac{1}{L^2}\sum_{\mb i}\II[\Bell] a_{k_1,q_1}[\Bell]\overline{a_{k_2,q_2}[\Bell]}.
+\[\begin{aligned} \mathfrak{m}_3(k_1,q_1;k_2,q_2) &= \sum_{\Delta\mb i_1, \Delta\mb i_2}m_3[\II](\Delta\mb i_1,\Delta\mb i_2)\overline{\psi_{k_1,q_1}(\Delta\mb i_1)}\psi_{k_2,q_2}(\Delta\mb i_2)\\
+&= \frac{1}{L^2}\sum_{\mb i}\II(\mb i)\left(\sum_{\Delta\mb i_1}\II(\mb i+\Delta\mb i_1)\overline{\psi_{k_1,q_1}(\Delta\mb i_1)}\right)\left(\sum_{\Delta\mb i_2}\II(\mb i+\Delta\mb i_2)\psi_{k_2,q_2}(\Delta\mb i_2)\right)\\
+&= \frac{1}{L^2}\sum_{\mb i}\II(\mb i) a_{k_1,q_1}(\mb i)\overline{a_{k_2,q_2}(\mb i)}.
 \end{aligned}\]
 Averaging over all rotations of $\II$ and its reflection, we obtain
-\[\begin{aligned} \mathfrak{m}_3(k_1,q_1;k_2,q_2) &= \frac{1}{L^2}\sum_{\mb i}\II[\Bell]\left(\frac{1}{4\pi}\int_0^{2\pi}\left[a_{k_1,q_1}[\Bell]\overline{a_{k_2,q_2}[\Bell]} + \overline{a_{k_1,q_1}[\Bell]}a_{k_2,q_2}[\Bell]\right]e^{-i(k_1-k_2)\alpha}d\alpha\right),\\
-&= \delta_{k_1,k_2}\frac{1}{L^2}\sum_{\mb i}\II[\Bell]\Re\{a_{k_1,q_1}[\Bell]\overline{a_{k_2,q_2}[\Bell]}\}.\end{aligned}\]
+\[\begin{aligned} \mathfrak{m}_3(k_1,q_1;k_2,q_2) &= \frac{1}{L^2}\sum_{\mb i}\II(\mb i)\left(\frac{1}{4\pi}\int_0^{2\pi}\left[a_{k_1,q_1}(\mb i)\overline{a_{k_2,q_2}(\mb i)} + \overline{a_{k_1,q_1}(\mb i)}a_{k_2,q_2}(\mb i)\right]e^{-i(k_1-k_2)\alpha}d\alpha\right),\\
+&= \delta_{k_1,k_2}\frac{1}{L^2}\sum_{\mb i}\II(\mb i)\Re\{a_{k_1,q_1}(\mb i)\overline{a_{k_2,q_2}(\mb i)}\}.\end{aligned}\]
 Thus, the bispectrum in our steerable basis $\mathfrak{m}_3(k_1,q_1;k_2,q_2)$ is block-diagonal, and is effectively a 3-tensor.
 Similarly to the power spectrum, we also expand the bias term in PSWFs as
-\[ b_3(\Bell, \Bell_2) =  \gamma\sigma^2Lm_1[\phi]\Big(\delta(\Bell - \Bell_2) +
-\delta(\Bell) + \delta(\Bell_2)\Big) = \sum_{\substack{k_1, q_1\\ k_2, q_2}} \mk 
-b_3(k_1,q_1; k_2, q_2)\psi_{k_1,q_1}(\Bell)\overline{\psi_{k_2,q_2}(\Bell_2)},\]
+\[ b_3(\Delta\mb i_1, \Delta\mb i_2) =  \gamma\sigma^2Lm_1[\phi]\Big(\delta(\Delta\mb i_1 - \Delta\mb i_2) +
+\delta(\Delta\mb i_1) + \delta(\Delta\mb i_2)\Big) = \sum_{\substack{k_1, q_1\\ k_2, q_2}} \mk 
+b_3(k_1,q_1; k_2, q_2)\psi_{k_1,q_1}(\Delta\mb i_1)\overline{\psi_{k_2,q_2}(\Delta\mb i_2)},\]
 where the coefficients are given by
-\[ \mk b_3(k_1,q_1; k_2,q_2) = \gamma\sigma^2 m_1[\phi]\delta_{k_1,k_2}\left[\delta_{q_1,q_2} + \delta_{k_1,0}\frac{1}{2\pi}(\alpha_{0,q_1} + \alpha_{0,q_2})R_{0,q_1}(0)R_{0,q_2}(0)\right]. \]
+\[ \mk b_3(k_1,q_1; k_2,q_2) = \gamma\sigma^2L m_1[\phi]\delta_{k_1,k_2}\left[\delta_{q_1,q_2} + \delta_{k_1,0}\frac{1}{2\pi}(\alpha_{0,q_1} + \alpha_{0,q_2})R_{0,q_1}(0)R_{0,q_2}(0)\right]. \]
+
+
 \section{Connection to volume}
 
 We derive a relation between the steered bispectrum derived in Sect.~\ref{sec:steering} to the volume, expanded in a suitable basis. Specifically, expand the Fourier-transformed volume as
