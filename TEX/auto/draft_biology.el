@@ -5,10 +5,10 @@
                      '(("article" "english" "11pt")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
                      '(("fontenc" "T1") ("inputenc" "latin9") ("geometry" "margin=1.2in")))
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
-   (add-to-list 'LaTeX-verbatim-macros-with-delims-local "url")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "path")
+   (add-to-list 'LaTeX-verbatim-macros-with-delims-local "url")
    (TeX-run-style-hooks
     "latex2e"
     "article"
@@ -40,11 +40,15 @@
     "XX"
     "SUM"
     "rr"
+    "ii"
+    "jj"
     "II"
     "kk"
     "RR"
     "mb"
     "mk"
+    "mc"
+    "Bell"
     "claimname"
     "definitionname"
     "lemmaname"
@@ -54,9 +58,11 @@
     "propositionname"
     "reals"
     "RL"
+    "tamir"
     "CL"
     "RN"
     "RNN"
+    "RPP"
     "CNN"
     "hx"
     "one"
@@ -71,14 +77,14 @@
     "sec:methods"
     "eq:model"
     "eq:spacing"
+    "eq:a2"
     "eq:volume_expansion"
     "eq:projection_model"
     "eq:micrograph_model"
-    "eq:sep_cond"
     "eq:Kth_autocorrelation"
-    "eq:coeffs_to_moms"
-    "eq:min_problem_cryo"
-    "sec:steering")
+    "eq:ac_micrographs"
+    "sec:steering"
+    "eq:PSWF_defn_eq")
    (LaTeX-add-environments
     "thm"
     "defn"

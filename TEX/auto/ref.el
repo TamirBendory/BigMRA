@@ -6,6 +6,7 @@
     "nobel"
     "abbe2017multireference"
     "bauschke2004rrr"
+    "bhamre2016denoising"
     "elser2017rrr"
     "abbe2017sample"
     "abbe2018estimation"
