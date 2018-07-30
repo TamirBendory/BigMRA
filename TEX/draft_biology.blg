@@ -1,3 +1,46 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: draft_biology.aux
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: draft_biology.aux
 The style file: plain.bst
 Database file #1: ref.bib
+You've used 20 entries,
+            2118 wiz_defined-function locations,
+            623 strings with 7595 characters,
+and the built_in function-call counts, 6629 in all, are:
+= -- 657
+> -- 315
+< -- 2
++ -- 131
+- -- 106
+* -- 501
+:= -- 1139
+add.period$ -- 61
+call.type$ -- 20
+change.case$ -- 111
+chr.to.int$ -- 0
+cite$ -- 20
+duplicate$ -- 230
+empty$ -- 501
+format.name$ -- 106
+if$ -- 1335
+int.to.chr$ -- 0
+int.to.str$ -- 20
+missing$ -- 21
+newline$ -- 103
+num.names$ -- 40
+pop$ -- 90
+preamble$ -- 1
+purify$ -- 92
+quote$ -- 0
+skip$ -- 152
+stack$ -- 0
+substring$ -- 455
+swap$ -- 30
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 78
+warning$ -- 0
+while$ -- 69
+width$ -- 22
+write$ -- 219

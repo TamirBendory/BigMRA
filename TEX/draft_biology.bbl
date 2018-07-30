@@ -1,15 +1,15 @@
 \begin{thebibliography}{10}
 
-\bibitem{bendory2017fourier}
-Tamir Bendory, Robert Beinert, and Yonina~C Eldar.
-\newblock Fourier phase retrieval: Uniqueness and algorithms.
-\newblock In {\em Compressed Sensing and its Applications}, pages 55--91.
-  Springer, 2017.
-
 \bibitem{bendory2018estimation}
 Tamir Bendory, Nicolas Boumal, William Leeb, Eitan Levin, and Amit Singer.
 \newblock Estimation below the detection limit with application to cryo-em.
 \newblock {\em preprint}, 2018.
+
+\bibitem{bhamre2016denoising}
+Tejal Bhamre, Teng Zhang, and Amit Singer.
+\newblock Denoising and covariance estimation of single particle cryo-em
+  images.
+\newblock {\em Journal of structural biology}, 195(1):72--81, 2016.
 
 \bibitem{elser2017rrr}
 Veit Elser.
