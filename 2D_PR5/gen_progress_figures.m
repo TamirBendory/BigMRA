@@ -1,18 +1,18 @@
 clear; close all; clc;
 % script to generate progress figures for the paper
 
-save_pdf = 0;
-ind = [1,100,100,393];
+save_pdf = 1;
+ind = [1,10,100,1000];
 %newton = rgb2gray(imread('newton.jpg'));
 X = double(rgb2gray(imread('Einstein5_small.jpg')));
 X = X - mean(X(:));
 X = X/max(abs(X(:)));
 X = imresize(X, [50, 50]);
 
-%figure(1); imagesc(newton); colormap gray; axis tight square off
-if save_pdf
-pdf_print_code(gcf, 'newton', 12)
-end
+% figure(1); imagesc(newton); colormap gray; axis tight square off
+% if save_pdf
+% pdf_print_code(gcf, 'newton', 12)
+% end
 
 figure; 
 
@@ -26,11 +26,16 @@ if err2<err1
     Xest_rrr = rot90(Xest_rrr,2);
 end
 subplot(2,2,i); imagesc(Xest_rrr); colormap gray; axis tight square off
-title(['# micrographs =', num2str(num2str(100*ind(i)))]);
-if save_pdf
-str = strcat('reconstruction',num2str(ind(i)));
-pdf_print_code(gcf, str, 12)
+title(['# micrographs = 10^', num2str(log10(100*ind(i)))]);
+% if save_pdf
+% str = strcat('reconstruction',num2str(ind(i)));
+% pdf_print_code(gcf, str, 12)
+% end
 end
+
+if save_pdf
+str = strcat('Einstien_progress_examples');
+pdf_print_code(gcf, str, 12)
 end
 
 %% progress
