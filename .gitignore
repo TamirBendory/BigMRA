@@ -67,3 +67,8 @@ patent provisional/~$vdiscrevwinstruc_example.doc
 patent provisional/~$vdiscrevwinstruc.doc
 *.mat
 *.avi
+TEX/draft_biology.synctex.gz
+TEX/draft_biology.pdf
+TEX/draft_biology.log
+TEX/draft_biology.bbl
+TEX/draft_biology.aux
