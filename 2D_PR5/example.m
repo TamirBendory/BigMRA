@@ -89,7 +89,8 @@ for iter = 1:epocs
     PS = fft2(M2/iter);
     err_PS(iter) = norm(PSX(:) - PS(:))/norm(PSX(:));
     fprintf('error PS = %.6g\n',err_PS(iter));
-    [Xest_rrr, discrepancy_norm,err,err1, err2] = RRR_with_err(sqrt(PS),L,th,X_init,X);
+    max_iter = 200;
+    [Xest_rrr, discrepancy_norm,err,err1, err2] = RRR_with_err(sqrt(PS),L,th,X_init,X,max_iter);
     [err_rrr(iter),min_iter] = min(err);
     fprintf('error RRR = %.4g\n',err_rrr(iter));
     save(strcat('Xest_',num2str(iter),'.mat'),'Xest_rrr');

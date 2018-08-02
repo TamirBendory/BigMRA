@@ -1,4 +1,4 @@
-function [X_out, discrepancy_norm,err,err1,err2] = RRR_with_err(Y,L,th,X_init,X_true)
+function [X_out, discrepancy_norm,err,err1,err2] = RRR_with_err(Y,L,th,X_init,X_true,max_iter)
 
 % The RRR algorithm estimates a WXW image X, supported on LXL pixels, from
 % the measured Fourier magnitudes Y
@@ -18,7 +18,7 @@ P1 = @(X) Mask.*X;
 % P2 - Fourier magnitude projection
 P2 = @(Z) Y.*sign(Z);
 
-max_iter = 500; 
+%max_iter = 500; 
 beta = 1;
 
 % initial guess

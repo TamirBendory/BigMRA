@@ -1,8 +1,8 @@
 clear; close all; clc;
 % script to generate progress figures for the paper
 
-save_pdf = 1;
-ind = [1,10,100,1000];
+save_pdf = 0;
+ind = [1,4,16,64];
 %newton = rgb2gray(imread('newton.jpg'));
 X = double(rgb2gray(imread('Einstein5_small.jpg')));
 X = X - mean(X(:));
@@ -18,8 +18,9 @@ figure;
 
 for i = 1:length(ind)
 %str = strcat('images2\Xest_',num2str(ind(i)),'.mat');
-str = strcat('Xest_',num2str(ind(i)),'.mat');
+str = strcat('image400\Xest_',num2str(ind(i)),'.mat');
 load(str);
+Xest_rrr = Xest_rrr(1:size(X,1),1:size(X,2));
 err1 = norm(Xest_rrr - X,'fro')/norm(X(:));
 err2 = norm(rot90(Xest_rrr,2) - X,'fro')/norm(X(:));
 if err2<err1
@@ -40,22 +41,28 @@ end
 
 %% progress
 
-load('err_rrr');
-load('err_PS');
+% load('err_rrr');
+% load('err_PS');
+load('image400\err_rrr');
+load('image400\err_PS');
+
 last_ind = max(find(err_rrr>0));
 
 figure(11); 
-subplot(121); loglog((1:last_ind)*100,err_PS(1:last_ind)); 
+subplot(121); loglog((1:last_ind)*100,err_PS(1:last_ind),'.b'); 
 ylabel('PS estimation error');
 xlabel('# micrographs')
 xlim([100,100*last_ind])
 axis square
 grid on
 
-subplot(122); loglog((1:last_ind)*100,err_rrr(1:last_ind)); 
+subplot(122); loglog((1:last_ind)*100,err_rrr(1:last_ind),'.b'); 
 ylabel('recovery error');
 xlabel('# micrographs')
 xlim([100,100*last_ind])
+%xlim([10^2,10^5])
+ylim([.2,.7])
+
 axis square
 grid on
 if save_pdf
