@@ -141,7 +141,8 @@ Indeed, the aim is only to reconstruct the molecule: estimating the locations of
 As a proof of concept, we study a simplified model for 3-D reconstruction directly from the micrograph on a simulated data. 
 In order to recover the 3-D volume, we use autocorrelation analysis. In a nutshell, we relate the autocorrelations of the micrographs to the autocorrelations of the volume.
 For any noise level, these autocorrelations can be estimated to any desired accuracy, provided the we get to observe sufficiently many particle projections and the latter are separated in the micrograph. Importantly, there is no need to detect the projections. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. These directly yield estimates for the autocorrelations of the volume. To estimate the volume itself from its estimated autocorrelations, we solve a nonlinear inverse problem via least-squares. In this controlled experiment, we make several simplified assumptions; see the Discussion Section for details. 
-As a side note, we mention that expectation-maximization (EM)---a popular framework in SPR---is intractable for this problem; see~\cite{bendory2018estimation} for the details. \TODO{Do we want to stress that we get only low-resolution of the volume?}
+%As a side note, we mention that expectation-maximization (EM)---a popular framework in SPR---is intractable for this problem; see~\cite{bendory2018estimation} for the details. 
+\TODO{Do we want to stress that we get only low-resolution of the volume?}
 
 
 Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates are required, thus significantly reducing concerns about model bias. \TODO{To add reference to our example.}
@@ -659,8 +660,9 @@ The PSWFs are eigenfunctions of the truncated Fourier transform and are given in
 \begin{align}
 	\psi_{k,q}(r,\varphi) & = \left\{\begin{array}{ll} \frac{1}{\sqrt{8\pi}}\alpha_{k,q}R_{k,q}(r)e^{\iota k\varphi}, & r\leq 1,\\ 0, & r>1,\end{array}\right. \label{eq:prolatesdef}
 \end{align}
-where the ${R_{k,q}}$ are a family of real, one-dimensional functions and the ${\alpha_{k,q}}$ are \TODO{real?} scaling factors which will be defined in the next section.
-The PSWFs are orthonormal \TODO{orthogonal?} on the unit disk.
+\TODO{Ref eq. 8 in Boris' paper}
+where the ${R_{k,q}}$ are a family of real, one-dimensional functions and the ${\alpha_{k,q}}$ are  scaling factors which will be defined in the next section.
+The PSWFs are orthogonal on the unit disk.
 
 For $\Bell \in [-(P-1), P-1]^2$, let us define 
 \[\begin{aligned} 
