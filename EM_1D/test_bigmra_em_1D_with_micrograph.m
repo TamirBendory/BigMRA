@@ -2,6 +2,8 @@
 % NB, Aug. 2, 2018
 clear all; close all; clc;
 
+rng(6875769);
+
 %%
 L = 21;             % Length of the true signal
 W = 1*L;            % Length of the observed windows (W >= L)
@@ -13,10 +15,20 @@ m = 1e4;   % Desired number of occurrences of x in the micrograph
 [y, placed] = generate_clean_micrograph_1D(x, W, N, m);
 y = y + sigma*randn(size(y));
 % Extract windows from the micrograph for EM
-y = [y ; zeros((W+L)-mod(numel(y), W+L), 1)]; % ensure length of y can be divided by W+L
-% y = y(1:(numel(y)-mod(numel(y), W+L)));
-Y = reshape(y, [W+L, numel(y)/(W+L)]);
-Y = Y(1:W, :);
+skip = L; %typical values: 0, L, -(W-1)
+if skip >= 0
+    y = [y ; zeros((W+skip)-mod(numel(y), W+skip), 1)]; % ensure length of y can be divided by W+skip
+    % y = y(1:(numel(y)-mod(numel(y), W+skip)));
+    Y = reshape(y, [W+skip, numel(y)/(W+skip)]);
+    Y = Y(1:W, :);
+else
+    num_windows = floor((length(y)-W)/(W+skip));
+    Y = zeros(W, num_windows);
+    for k = 1 : num_windows
+        Y(:, k) = y((1:W)+(k-1)*(W+skip));
+    end
+end
+fprintf('Done, with %d windows.\n', size(Y, 2));
 
 %% Pick initial guesses for the signal and for alpha
 x0 = randn(L, 1);
