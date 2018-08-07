@@ -92,6 +92,12 @@
 
 \section{Introduction}
 
+We consider the problem of estimating a signal from its multiple occurrences in a measurement. In the high SNR regime, the problem is easy. In the low SNR, it becomes interesting and that is the focus of this paper. 
+
+The problem can be posed as blind deconvolution between the signal and a sparse binary signal.
+We can also consider the extension for multiple signals. 
+
+
 \begin{figure}[t]
 	\centering
 	\begin{subfigure}[h]{0.33\textwidth}
@@ -112,57 +118,8 @@
 	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low $\SNR$, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}	
 \end{figure}
 
+\subsection{Model}
 
-
-\paragraph{System identification.}
-
-For $K=1$, our problem can be interpreted as a special case of the system identification problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
-%
-\begin{math}
-%
-y = x\ast w + \varepsilon,  
-%
-\end{math} 
-%
-where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
-%The problem has also been studied in the case of a known input $w$~\cite{pillonetto2010new,dinuzzo2015kernels,bottegal2016robust}. 
-The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w\in\{0,1\}^N$, satisfying the spacing requirement~\eqref{eq:spacing}, we obtain our model in the  case of a single signal ($K = 1$). The same observation model is used for blind deconvolution, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
-%\TODO{ref this by Giannakis: \cite{giannakis1989identification}}
-
-%%%To make the problem well-posed, we must  assume some prior knowledge or  structure.  In our case, the prior information is that $s$ is a binary signal that satisfies the separation constraint~\eqref{eq:spacing}.  Other settings of blind deconvolution problems have been analyzed recently, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi 016guaranteed} where the focus is on high $\SNR$ regimes. Importantly, in the system identification problem, the goal is only to recover $x$, not the sequence $w$, or in our case, the signal locations $s_i$. We refer to the $s_i$'s as \emph{nuisance parameters}.
-
-%%%An important feature of the problem under consideration is that while both $x_i$'s and $s_i$'s are unknown, the goal is merely to estimate the $x_i$'s. The  $s_i$'s  are referred to as \emph{nuisance  variables}. Indeed, in many blind deconvolution applications the sole purpose is to recover one of the unknown signals. For instance, in image deblurring, both the blurring kernel and the high-resolution image are unknown, but the primary goal is only to sharpen the image.
-
-
-\paragraph{Likelihood-based methods.}
-
-Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
-
-Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
-
-In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
-%
-%%%Interestingly, expectation-maximization (EM)---a popular algorithm for similar estimation problems, such as Gaussian mixture models and multireference alignment---is intractable for this problem. This is true even if  $K=1$ and the number of signal occurrences $M$ is known.
-%
-Indeed, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$.
-In total, even when excluding forbidden combinations due to the spacing constraint, there are $O(N^M)$ such combinations, and the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large.
-
-Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
-
-\TODO{The following was copied from the appendix of the old draft}
-
-Many automatic and semi-automatic methods for particle picking have been proposed, based on edge detection, template matching and deep learning; see for instance~\cite{harauz1989automatic,ogura2004automatic,zhu2016deep,frank1983automatic,scheres2015semi,heimowitz2018apple}. 
-However, most of these procedures are prone to \emph{model bias}. For instance, in the popular framework of RELION~\cite{scheres2015semi}, the user manually marks hundreds of spots on the micrograph, believed to contain projections. 
-Therefore, the algorithm's performance depends on the prior assumptions of the users about the particle's structure; the same holds true for deep learning based approaches which require constructing labeled sets of data.
-Other methods use disks or differences of Gaussians as templates~\cite{langlois2014automated,voss2009dog}.
-Nowadays, it also still popular to pick particles manually. This method, while it exploits the researcher's experience, is both tedious and subject to model bias.
-
-
-
-\section{Model} \label{sec:model}
-
-
-We derive algebraic relations between the autocorrelation functions of the micrographs and the autocorrelation functions of the target signals. For ease of exposition, we do so in the 1-D case. Extension to the 2-D case is straightforward. We also give additional technical details regarding the two experiments presented in Section~\ref{sec:results}.
 
 Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the observed micrograph (notice that it is equivalent to think of the data as being one long micrograph or multiple shorter micrographs concatenated into one.)
 The forward model (or ``image'' formation model) is as follows. For each target signal $x_k$, an unknown binary signal $s_k \in \{0, 1\}^{N-L+1}$ indicates (with 1's) the starting positions of all occurrences of $x_k$ in $y$, so that, with additive white Gaussian noise:
@@ -186,31 +143,58 @@ From $y$, we aim to recover $x_1, \ldots x_K$, and possibly also the number of o
 
 Considering~\eqref{eq:model}, one can think of this inverse problem as a mixture of blind deconvolution problems between binary signals and the target signals. Related literature is briefly surveyed in Appendix~\ref{sec:related_literature}.
 
-%In order to estimate the mixture of autocorrelations, we assume that the support of $s$ is not clustered. In particular, we assume that
-%\begin{align}
-%  \vert i-j \vert\geq 2L-1,   \quad \text{for all } i,j\in\mathcal{S} \text{ such that } i\neq j.
-%  \label{eq:spacing}
-%\end{align}
-%The goal is to estimate $x_1,\ldots,x_K$ from $y$.
+We derive algebraic relations between the autocorrelation functions of the micrographs and the autocorrelation functions of the target signals. For ease of exposition, we do so in the 1-D case. Extension to the 2-D case is straightforward. We also give additional technical details regarding the two experiments presented in Section~\ref{sec:results}.
 
 
+
+\subsection{Related work}
+
+For $K=1$, our problem can be interpreted as a special case of the system identification problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
 %
-%\section{Autocorrelation analysis}   \label{sec:autocorrelation}
+\begin{math}
 %
-%Our method for estimating the signals is composed of two stages. 
-%First, we use the autocorrelation functions of the data to estimate a mixture (i.e., linear combination) of the $K$ signal's autocorrelations. The mixed autocorrelation can be estimated to any accuracy, in any $\SNR$ level, if $M$ is large enough and the spacing condition~\eqref{eq:spacing} is met. Then, we  use a nonconvex LS  to estimate the signals from their mixed autocorrelations. 
-%In this section, we elaborate on the autocorrelation functions and their estimations, while the precise recovery procedure, based on nonconvex optimization, will be discussed in detail in the next section.
+y = x\ast w + \varepsilon,  
+%
+\end{math} 
+%
+where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
+%The problem has also been studied in the case of a known input $w$~\cite{pillonetto2010new,dinuzzo2015kernels,bottegal2016robust}. 
+The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w\in\{0,1\}^N$, satisfying the spacing requirement~\eqref{eq:spacing}, we obtain our model in the  case of a single signal ($K = 1$). The same observation model is used for blind deconvolution, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+%\TODO{ref this by Giannakis: \cite{giannakis1989identification}}
+
+%%%To make the problem well-posed, we must  assume some prior knowledge or  structure.  In our case, the prior information is that $s$ is a binary signal that satisfies the separation constraint~\eqref{eq:spacing}.  Other settings of blind deconvolution problems have been analyzed recently, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi 016guaranteed} where the focus is on high $\SNR$ regimes. Importantly, in the system identification problem, the goal is only to recover $x$, not the sequence $w$, or in our case, the signal locations $s_i$. We refer to the $s_i$'s as \emph{nuisance parameters}.
+
+%%%An important feature of the problem under consideration is that while both $x_i$'s and $s_i$'s are unknown, the goal is merely to estimate the $x_i$'s. The  $s_i$'s  are referred to as \emph{nuisance  variables}. Indeed, in many blind deconvolution applications the sole purpose is to recover one of the unknown signals. For instance, in image deblurring, both the blurring kernel and the high-resolution image are unknown, but the primary goal is only to sharpen the image.
+
+
+
+Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
+
+Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
+
+In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
+ 
+Indeed, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$.
+In total, even when excluding forbidden combinations due to the spacing constraint, there are $O(N^M)$ such combinations, and the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large.
+
+Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
+
+
+
+
+\subsection{Main motivation: The cryo-EM problem}
+
+\TODO{The following was copied from the appendix of the old draft}
+
+Many automatic and semi-automatic methods for particle picking have been proposed, based on edge detection, template matching and deep learning; see for instance~\cite{harauz1989automatic,ogura2004automatic,zhu2016deep,frank1983automatic,scheres2015semi,heimowitz2018apple}. 
+However, most of these procedures are prone to \emph{model bias}. For instance, in the popular framework of RELION~\cite{scheres2015semi}, the user manually marks hundreds of spots on the micrograph, believed to contain projections. 
+Therefore, the algorithm's performance depends on the prior assumptions of the users about the particle's structure; the same holds true for deep learning based approaches which require constructing labeled sets of data.
+Other methods use disks or differences of Gaussians as templates~\cite{langlois2014automated,voss2009dog}.
+Nowadays, it also still popular to pick particles manually. This method, while it exploits the researcher's experience, is both tedious and subject to model bias.
 
 
 \section{Autocorrelation analysis}
 
-
-
-
-\paragraph{Aperiodic autocorrelation functions}
-%\subsection{Aperiodic autocorrelation functions} \label{sec:aperiodic_ac}
-
-%\TODO{$L$ is a bad notation here since it could be L or n; and k is poor notation too because we use it to sum up to K.}
 
 In general, for a signal $z$ of length $m$, the autocorrelation of order $q \geq 1$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{align}
@@ -231,7 +215,7 @@ a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 \end{align*}
 %Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and $a_z^3$ contain \TODO{TKTK--I think it was commented in the latex} (respectively) non-trivial distinct real numbers, generically.
 
-\paragraph{Estimating the autocorrelation function of a single signal.}
+\subsection{The single signal case}
 
 For the special case $K = 1$ where a single signal $x = x_1$ must be recovered, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, so that we treat it first. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
 \begin{align}
@@ -262,7 +246,7 @@ Along the same lines, one can establish a relation for third-order autocorrelati
 for $\ell_1,\ell_2 = 0, \ldots, L-1$. Here too, few entries are affected by $\sigma$ in the limit.
 Detailed derivations for identities in this and the next part are given in Appendix~\ref{sec:autocorrelation_computation}.
 
-\paragraph{Estimating the autocorrelation function of multiple signals.}
+\subsection{The single signal case}
 
 Returning to the general case $K \geq 1$, let $M_1, \ldots, M_K$ denote the number of occurrences of signals $x_1, \ldots, x_K$ respectively, and define
 \begin{align}
@@ -278,18 +262,15 @@ Still under the spacing constraint~\eqref{eq:spacing}, similarly to the developm
 \end{align}
 where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightforward to estimate from data: it provides a succinct summary of it. The right hand side involves polynomial functions of unknowns $\gamma_1, \ldots, \gamma_K, x_1, \ldots, x_K$, and possibly $\sigma^2$. The task is to solve these polynomial equations in a robust way.
 
-
+\subsection{Poisson model (rename)}
 
 
 
 \section{Theory} \label{sec:theory}
 
-\paragraph{The impossibility of detection in low $\SNR$.}
 If $K=1$ and $x$ is known, then the locations $s_i$ can be estimated via linear programming  in the high $\SNR$ regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see this, suppose that an oracle provides us $M$ windows of length $W>L$, each containing exactly one copy of $x$. Suppose too that the oracle provides us with $x$ itself. That is to say, we get a series of windows of length $W$, each one containing a signal $x$ at an unknown location; and our only task is to estimate the locations. This is an easier problem than detecting the support of $s$. Nevertheless, even this simpler problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Consequently, detecting the nonzero values of $s$ is impossible in low $\SNR$.
 
 \TODO{Here we should give the Will's proposition for the impossibility of detection}
-
-\paragraph{Estimating a signal from its third-order autocorrelation.}
 
 A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, since $z[0]$ and $z[L-1]$ are non-zero by definition, we have the formula:
 %
@@ -381,8 +362,6 @@ Note too that the second-order autocorrelation is not by itself sufficient to de
 %%%Considering the third-order autocorrelation is also a necessary condition to determine a signal from its autocorrelations. Indeed, the second-order autocorrelation of a one-dimensional signal does not determine a signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}.
 However, for dimensions greater than one, almost all signals are determined uniquely up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 
-
-\paragraph{Identifiability of parameters from the moments of $y$.}
 
 The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately give the moments of the signal $x$, as seen by formula~\eqref{eq:data_ac_k1}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma = \lim_{N\to\infty}ML/N$, where $M=M_N$ grows with $N$. We will show, however, that $x$ is still identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
 
