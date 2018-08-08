@@ -2,7 +2,8 @@
 % NB, Aug. 2, 2018
 clear all; close all; clc;
 
-rng(6875769);
+%rng(6875769);
+rng(687);
 
 %%
 L = 21;             % Length of the true signal
@@ -15,7 +16,7 @@ m = 1e4;   % Desired number of occurrences of x in the micrograph
 [y, placed] = generate_clean_micrograph_1D(x, W, N, m);
 y = y + sigma*randn(size(y));
 % Extract windows from the micrograph for EM
-skip = L; %typical values: 0, L, -(W-1)
+skip = -(W-1); %typical values: 0, L, -(W-1)
 if skip >= 0
     y = [y ; zeros((W+skip)-mod(numel(y), W+skip), 1)]; % ensure length of y can be divided by W+skip
     % y = y(1:(numel(y)-mod(numel(y), W+skip)));
