@@ -83,7 +83,7 @@
 \title{Estimation below the detection limit with application to cryo-em}
 
 
-\author{Tamir Bendory, Nicolas Boumal, William Leeb and Amit Singer}
+\author{Tamir Bendory, Nicolas Boumal, William Leeb, Eitan Levin and Amit Singer}
 \maketitle
 
 \begin{abstract}
@@ -93,10 +93,12 @@
 \section{Introduction}
 
 We consider the problem of estimating a signal from its multiple occurrences in a measurement. In the high SNR regime, the problem is easy. In the low SNR, it becomes interesting and that is the focus of this paper. 
-
 The problem can be posed as blind deconvolution between the signal and a sparse binary signal.
 We can also consider the extension for multiple signals. 
 
+The main motivation for this paper arises from single particle reconstruction using cryo-electron microscopy (cryo-EM). In cryo-EM, multiple samples .....  
+
+in low SNR detection is impossible. This led to the belief in the cryo-EM community is reconstruction of small molecules is impossible. We claim that this argument is wrong. While this paper focused on the mathematical toy model, Section TKTK discusses the application to cryo-EM. A companion paper focused on this application and provides all the details~\cite{bendory2018toward}. 
 
 \begin{figure}[t]
 	\centering
@@ -133,6 +135,8 @@ where $\ast$ denotes linear convolution. The binary signals obey the following p
 \label{eq:spacing}
 \end{align}
 In words: the starting positions of any two occurrences (be it of the same signal or of two different signals) must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
+It can be also extended to Poison model; see Section TKTK.
+
 
 From $y$, we aim to recover $x_1, \ldots x_K$, and possibly also the number of occurrences of each. In contrast, particle picking is the task of estimating the binary signal $s = s_1 + \cdots + s_K$, while clustering is the task of separating $s$ into its components $s_1, \ldots, s_K$. Neither of the latter can be performed reliably if $\sigma$ is large (that is, at low $\SNR$.)
 
@@ -141,7 +145,7 @@ From $y$, we aim to recover $x_1, \ldots x_K$, and possibly also the number of o
 %By assuming that all $\mathcal{S}_i$'s are disjoint,  we let $s = \sum_{i=1}^Ks_i$, $\mathcal{S} = \bigcup_{i=1}^{K} \mathcal{S}_i$ and  $\vert \mathcal{S}\vert :=M =  \sum_{i=1}^{K}M_i$.  %Neither the $M_i$'s nor $M$ are assumed to be known.
 
 
-Considering~\eqref{eq:model}, one can think of this inverse problem as a mixture of blind deconvolution problems between binary signals and the target signals. Related literature is briefly surveyed in Appendix~\ref{sec:related_literature}.
+Considering~\eqref{eq:model}, one can think of this inverse problem as a mixture of blind deconvolution problems between binary signals and the target signals. %Related literature is briefly surveyed in Appendix~\ref{sec:related_literature}.
 
 We derive algebraic relations between the autocorrelation functions of the micrographs and the autocorrelation functions of the target signals. For ease of exposition, we do so in the 1-D case. Extension to the 2-D case is straightforward. We also give additional technical details regarding the two experiments presented in Section~\ref{sec:results}.
 
@@ -268,9 +272,13 @@ where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightfor
 
 \section{Theory} \label{sec:theory}
 
-If $K=1$ and $x$ is known, then the locations $s_i$ can be estimated via linear programming  in the high $\SNR$ regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. To see this, suppose that an oracle provides us $M$ windows of length $W>L$, each containing exactly one copy of $x$. Suppose too that the oracle provides us with $x$ itself. That is to say, we get a series of windows of length $W$, each one containing a signal $x$ at an unknown location; and our only task is to estimate the locations. This is an easier problem than detecting the support of $s$. Nevertheless, even this simpler problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Consequently, detecting the nonzero values of $s$ is impossible in low $\SNR$.
+If $K=1$ and $x$ is known, then the locations $s_i$ can be estimated via linear programming  in the high $\SNR$ regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low $\SNR$ regime, estimating the binary sparse signal $s$ is impossible. We have few evidences for that\cite{aguerrebere2016fundamental}, but we will provide Will's argument here.
+%
+%To see this, suppose that an oracle provides us $M$ windows of length $W>L$, each containing exactly one copy of $x$. Suppose too that the oracle provides us with $x$ itself. That is to say, we get a series of windows of length $W$, each one containing a signal $x$ at an unknown location; and our only task is to estimate the locations. This is an easier problem than detecting the support of $s$. Nevertheless, even this simpler problem is impossible in the low $\SNR$ regime~\cite{aguerrebere2016fundamental}. Consequently, detecting the nonzero values of $s$ is impossible in low $\SNR$.
 
-\TODO{Here we should give the Will's proposition for the impossibility of detection}
+%\TODO{Here we should give the Will's proposition for the impossibility of detection}
+
+Therefor, we need to consider a different approach. In this paper, we consider autocorrelation analysis. In what follows, we present several results on properties of autocorrelations. For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions. 
 
 A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, since $z[0]$ and $z[L-1]$ are non-zero by definition, we have the formula:
 %
