@@ -28,7 +28,10 @@
 \newcommand{\XX}{\mathcal{X}}
 \newcommand{\SUM}{\text{sum}}
 \newcommand{\1}{\mathbf{1}}
-
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\Poisson}{\text{Poisson}}
+%\renewcommand{\P}{\mathbb{P}}
+%\renewcommand{\L}{\mathcal{L}}
 
 \newcommand{\TODO}[1]{{\color{red}{[#1]}}}
 
@@ -67,7 +70,8 @@
 \providecommand{\propositionname}{Proposition}
 
 
-\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\mathbb{R}}
+
 \newcommand{\RL}{\mathbb{R}^L}
 \newcommand{\CL}{\mathbb{C}^L}
 \newcommand{\RN}{\mathbb{R}^N}
@@ -129,13 +133,31 @@ The forward model (or ``image'' formation model) is as follows. For each target 
 y & = \sum_{k=1}^K x_k \ast s_k + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{align}
-where $\ast$ denotes linear convolution. The binary signals obey the following property:
+where $\ast$ denotes linear convolution. 
+We consider two models for the generative process of the sparse signal:
+
+\paragraph{The well separated support model.}
+The binary signals obey the following property:
 \begin{align}
 \textrm{If } s_k[i] = 1 \textrm{ and } s_{k'}[j] = 1 \textrm{ but } (k, i) \neq (k', j), \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
 \end{align}
 In words: the starting positions of any two occurrences (be it of the same signal or of two different signals) must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
-It can be also extended to Poison model; see Section TKTK.
+
+
+\paragraph{Poisson process model.} In this model, points are chosen in $\{1,\dots,n\}$ according to a Poisson process with parameter $\gamma n$. For each point $i$ that is chosen from $1$ to $n$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. 
+
+If $M_i$ denotes the number of hits at location $i$, $1 \le i \le n$, then by definition of the Poission process $M_i$'s are i.i.d.\
+ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
+
+
+With this notation, if $Y \in \R^{n+L}$ is the observed vector, we can write each entry as:
+%
+\begin{align}
+%
+Y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
+%
+\end{align}
 
 
 From $y$, we aim to recover $x_1, \ldots x_K$, and possibly also the number of occurrences of each. In contrast, particle picking is the task of estimating the binary signal $s = s_1 + \cdots + s_K$, while clustering is the task of separating $s$ into its components $s_1, \ldots, s_K$. Neither of the latter can be performed reliably if $\sigma$ is large (that is, at low $\SNR$.)
@@ -266,8 +288,13 @@ Still under the spacing constraint~\eqref{eq:spacing}, similarly to the developm
 \end{align}
 where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightforward to estimate from data: it provides a succinct summary of it. The right hand side involves polynomial functions of unknowns $\gamma_1, \ldots, \gamma_K, x_1, \ldots, x_K$, and possibly $\sigma^2$. The task is to solve these polynomial equations in a robust way.
 
-\subsection{Poisson model (rename)}
+\subsection{Autocorrelations of the Poisson process model}
 
+From the first three autocorrelations of the Poisson model one can compute the first three autocorrelations of the well-separated model. 
+
+\begin{proposition} \label{prop:poisson_model}
+Under the Poisson process model, the first autocorrelation  is $\gamma \LL_1$, the second moment vector is $(\gamma \LL_1)^2 + \gamma \LL_2(\Delta)$, and the third moment matrix is $(\gamma \LL_1)^3 + \gamma \LL_1  \cdot ( \gamma\LL_2(\Delta_1) + \gamma\LL_2(\Delta_2) + \gamma\LL_2(\Delta_2-\Delta_1)) + \gamma \LL_3(\Delta_1,\Delta_2) $. In particular, from the first three moments of the Poisson process model, once can recover the first three moments from the strongly-separated model, with the Poisson rate $\gamma$ playing the role of the ``occupancy factor''. So if recovery is possible for the strongly-separated model, it is also possible for the Poisson process model.
+\end{proposition}
 
 
 \section{Theory} \label{sec:theory}
@@ -519,7 +546,7 @@ In practice, the autocorrelations are computed on disjoint segments of $y$ of le
 
 Having computed the moments of interest, we now estimate signals $x_1, \ldots, x_K$ and coefficients $\gamma_1, \ldots, \gamma_K$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear least-squares problem:
 \begin{multline}
-\min_{\substack{\hat x_1, \ldots, \hat x_K \in \reals^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2,
+\min_{\substack{\hat x_1, \ldots, \hat x_K \in \R^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2,
 \label{eq:optim1D}
 \end{multline}
 where $W \geq L$ is the length of the sought signals and the weights are set to $w_1 = 1/2, w_2 = 1/2n_2, w_3 = 1/2n_3$, where $n_2, n_3$ are the number of moments used: $n_2 = L-1$, $n_3 = \frac{(L-1)(L-2)}{2}$ (weights could also be set in accordance with variance estimates as in~\cite{boumal2017heterogeneous}).
@@ -842,6 +869,428 @@ More than that, for any nonzero $x$, $(a_x^1)^2 >\sum_{i=1}^{L-1} a_x^2[i]$. The
 \beta \geq \frac{1}{4(L-1)},
 \end{equation*}
 the condition~\eqref{eq:cond} cannot be satisfied for any signal. 
+
+
+\section{Proof of Proposition~\ref{prop:poisson_model}}
+
+
+
+%\section{Setup}
+%
+%We consider the following observation model. $X = (X[0],\dots,X[L-1])$ is a random vector of length $L$, drawn from some fixed distribution. For fixed $n$, we observe a random vector $Y$ of length $n+L$, generated as follows. Points are chosen in $\{1,\dots,n\}$ according to a Poisson process with parameter $\gamma n$. For each point $i$ that is chosen from $1$ to $n$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. 
+%
+%If $M_i$ denotes the number of hits at location $i$, $1 \le i \le n$, then by definition of the Poission process $M_i$'s are iid and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
+%
+%With this notation, if $Y \in \R^{n+L}$ is the observed vector, we can write each entry as:
+%%
+%\begin{align}
+%%
+%Y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
+%%
+%\end{align}
+
+We will denote by $\M_l$ the moments of $X$:
+%
+\begin{align}
+%
+\M_1[i] = \E X[i], \quad 0 \le i \le L-1,
+%
+\end{align}
+%
+\begin{align}
+%
+\M_2[i,j] = \E X[i] X[j], \quad 0 \le i,j \le L-1,
+%
+\end{align}
+%
+and
+%
+\begin{align}
+%
+\M_3[i,j,k] = \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1.
+%
+\end{align}
+
+We will also denote by $\L_l$ the autocorrelations of $X$:
+%
+\begin{align}
+%
+\LL_1 = \sum_{i=0}^{L-1} \M_1[i],
+%
+\end{align}
+%
+\begin{align}
+%
+\LL_2(\Delta) = \sum_{i=0}^{L-1} \M_2[i,i+\Delta],
+%
+\end{align}
+%
+and
+%
+\begin{align}
+%
+\LL_3(\Delta_1,\Delta_2) = \sum_{i=0}^{L-1} \M_3[i,i+\Delta_1,i+\Delta_2].
+%
+\end{align}
+
+
+Note that in the strongly-separated model, the first three observed moments are, respectively, $\LL_1$, $\LL_2(\Delta)$, and $\LL_3(\Delta_1,\Delta_2)$.
+
+%
+
+In this notation, we will show that the first moment of the data is $\gamma \LL_1$, the second moment vector is $(\gamma \LL_1)^2 + \gamma \LL_2(\Delta)$, and the third moment matrix is $(\gamma \LL_1)^3 + \gamma \LL_1  \cdot ( \gamma\LL_2(\Delta_1) + \gamma\LL_2(\Delta_2) + \gamma\LL_2(\Delta_2-\Delta_1)) + \gamma \LL_3(\Delta_1,\Delta_2) $. In particular, from the first three moments of the Poisson process model, once can recover the first three moments from the strongly-separated model, with the Poisson rate $\gamma$ playing the role of the ``occupancy factor''. So if recovery is possible for the strongly-separated model, it is also possible for the Poisson process model.
+
+
+%
+
+
+\section{The first moment of $Y$}
+
+To compute the first moment of $Y$, we will first condition on $M = (M_1,\dots,M_n)$, and then average over $M$. We have:
+%
+\begin{align}
+%
+\E[Y[i] | M] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} \E X_k^{i-j}[j]
+= \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} \M_1[j]
+= M_{i-j} \sum_{j=0}^{L-1} \M_1[j].
+%
+\end{align}
+%
+Now taking expectations over $M$ we see:
+%
+\begin{align}
+%
+\E Y[i] = \gamma \sum_{j=0}^{L-1} \M_1[j] = \gamma \LL_1.
+%
+\end{align}
+
+
+%
+
+
+\section{The second moment of $Y$}
+
+Again, we will condition on $M$ first, and then take the expectation over $M$. Fix $i_1 \ne i_2$, and let $\Delta = i_2 - i_1$. Then:
+%
+\begin{align}
+%
+Y_{i_1} Y_{i_2} 
+&= \sum_{j_1=0}^{L-1} \sum_{j_2=0}^{L-1} 
+\sum_{k_1=1}^{M_{i_1-j_1}}\sum_{k_2=1}^{M_{i_2-j_2}}
+X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_2 - j_2}[j_2].
+%
+\end{align}
+
+We break up the double sum over $j_1$ and $j_2$ into two terms: one where $j_2 \ne j_1 + \Delta$, and one where $j_2 = j_1 + \Delta$ or equivalently $i_1-j_1 = i_2-j_2$. In the first case, all the terms are independent, and so the expectation factors. In the second case, when $k_1 \ne k_2$ we have independence, but otherwise not. This gives (all expectations are conditional on $M$):
+
+\begin{align}
+%
+\E Y_{i_1} Y_{i_2}
+=& \sum_{j_1=0}^{L-1} \sum_{j_2=0}^{L-1} 
+\sum_{k_1=1}^{M_{i_1-j_1}}\sum_{k_2=1}^{M_{i_2-j_2}}
+\E X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_2 - j_2}[j_2]
+\nonumber \\
+=& \sum_{j_1 - j_2 \ne \Delta} \sum_{k_1} 
+\sum_{k_2} \E X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_2 - j_2}[j_2]
+\nonumber \\
+& + \sum_{j_1 = 0}^{L-1} \sum_{k_1 \ne k_2} 
+\E X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_1 - j_1}[j_1+\Delta]
+\nonumber \\
+& + \sum_{j_1 = 0}^{L-1} \sum_{k_1=1}^{M_{i_1-j_1}} 
+\E X_{k_1}^{i_1-j_1}[j_1] X_{k_1}^{i_1-j_1}[j_1 + \Delta] 
+\nonumber \\
+=& \sum_{j_1 - j_2 \ne \Delta} M_{i_1-j_1} M_{i_2 - j_2} \M_1[j_1] \M_1[j_2]
+\nonumber \\
+& + \sum_{j_1 = 0}^{L-1} M_{i_1-j_1}(M_{i_1-j_1} - 1) \M_1[j_1] \M_1[j_1 + \Delta]
+\nonumber \\
+& + \sum_{j_1 = 0}^{L-1} M_{i_1-j_1} \M_2[j_1,j_1 + \Delta] .
+%
+\end{align}
+%
+Now take expectations over the Poisson random variables, using this fact:
+%
+\begin{lem} \label{lem-choose}
+	If $M \sim \Poisson(\gamma)$, then 
+	\begin{align}
+	%
+	\E {M\choose k} = \frac{\gamma^k}{k!}.
+	%
+	\end{align}
+\end{lem}
+
+
+We get (now the expectation is over $M$ and $X$):
+%
+\begin{align}
+%
+\E Y_{i_1} Y_{i_2} 
+=& \sum_{j_1 - j_2 \ne \Delta} \E M_{i_1-j_1} M_{i_2 - j_2} \M_1[j_1] \M_1[j_2]
+\nonumber \\
+& + \sum_{j_1 = 0}^{L-1} \E M_{i_1-j_1}(M_{i_1-j_1} - 1) \M_1[j_1] \M_1[j_1 + \Delta]
+\nonumber \\
+& + \sum_{j_1 = 0}^{L-1} \E M_{i_1-j_1} \M_2[j_1,j_1 + \Delta]
+\nonumber \\
+=& \sum_{j_1 - j_2 \ne \Delta} \gamma^2 \M_1[j_1] \M_1[j_2]
++ \sum_{j_1 = 0}^{L-1} \gamma^2 \M_1[j_1] \M_1[j_1 + \Delta]
+\nonumber \\
+& + \sum_{j_1 = 0}^{L-1} \gamma \M_2[j_1,j_1 + \Delta]
+\nonumber \\
+=&  \bigg(\gamma \sum_{j = 0}^{L-1} \M_1[j] \bigg)^2
++ \gamma \sum_{j = 0}^{L-1} \M_2[j,j + \Delta]
+\nonumber \\
+=&  (\gamma \LL_1)^2 + \gamma \LL_2(\Delta).
+%
+\end{align}
+
+But the first term in the sum is just the square of the first moment of $Y$; so from the first two moments we can recover $\gamma \LL_2(\Delta)$, which is just the expected power spectrum of the random vector $X$, i.e.\ the usual second moment we have been working with.
+
+
+%
+
+
+\section{The third moment of $Y$}
+
+For three distinct $i_1$, $i_2$ and $i_3$, we let $\Delta_1 = i_2 - i_1$ and $\Delta_2 = i_3 - i_1$. We have:
+%
+\begin{align}
+%
+&Y_{i_1} Y_{i_2} Y_{i_3}
+\nonumber \\
+&= \sum_{j_1=0}^{L-1} \sum_{j_2=0}^{L-1} \sum_{j_3=0}^{L-1} 
+\sum_{k_1=1}^{M_{i_1-j_1}}\sum_{k_2=1}^{M_{i_2-j_2}} \sum_{k_3=1}^{M_{i_3-j_3}}
+X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_2 - j_2}[j_2] X_{k_3}^{i_3 - j_3}[j_3].
+\end{align}
+%
+We will break up the outer three sums into disjoint sums with the following ranges of indices:
+%
+\begin{enumerate}
+	
+	\item \label{case1}
+	$j_2 = j_1 + \Delta_1$ and $j_3 = j_2 + \Delta_2 - \Delta_1$.
+	
+	\item \label{case2}
+	$j_2 = j_1 + \Delta_1$ and $j_3 \ne j_2 + \Delta_2 - \Delta_1$.
+	
+	\item \label{case3}
+	$j_2 \ne j_1 + \Delta_1$ and $j_3 = j_1 + \Delta_2$.
+	
+	\item \label{case4}
+	$j_2 \ne j_1 + \Delta_1$ and $j_3 \ne j_1 + \Delta_2$ and $j_3 = j_2 + \Delta_2 - \Delta_1$.
+	
+	\item \label{case5}
+	$j_2 \ne j_1 + \Delta_1$ and $j_3 \ne j_1 + \Delta_2$ and $j_3 \ne j_2 + \Delta_2 - \Delta_1$.
+	
+\end{enumerate}
+
+
+For Case \ref{case1}, we have $\ell \equiv i_1 - j_1 = i_2 - j_2 = i_3 - j_3$. We further break up the sum:
+%
+\begin{align}
+%
+&\sum_{j=0}^{L-1} \sum_{k_1=1}^{M_\ell} \sum_{k_2=1}^{M_\ell} \sum_{k_3=1}^{M_\ell} 
+X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+\nonumber \\
+=& \underbrace{ \sum_{j=0}^{L-1} \sum_{k_i \text{distinct}} 
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+}_{\text{(a)}}
+\nonumber \\
+&+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_2\ne k_3} 
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+}_{\text{(b)}}
+\nonumber \\
+&+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_3\ne k_2} 
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+}_{\text{(c)}}
+\nonumber \\
+&+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_2=k_3\ne k_1} 
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+}_{\text{(d)}}
+\nonumber \\
+&+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_2=k_3} 
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+}_{\text{(e)}}.
+%
+\end{align}
+
+For term (a), the expectation conditional on $M$ is:
+%
+\begin{align}
+%
+\sum_{j=0}^{L-1} M_\ell(M_\ell-1)(M_\ell-2)\M[j] \M[j+\Delta_1] \M[j+\Delta_2].
+%
+\end{align}
+%
+Using Lemma \ref{lem-choose}, the unconditional expectation of (a) is then:
+%
+\begin{align} \label{aaaa}
+%
+\gamma^3 \sum_{j=0}^{L-1} \M_1[j] \M_1[j+\Delta_1] \M_1[j+\Delta_2].
+%
+\end{align}
+
+
+For term (b), the expectation conditional on $M$ is:
+%
+\begin{align}
+%
+\sum_{j=0}^{L-1} M_\ell (M_\ell - 1) \M_2[j,j+\Delta_1] \M_1[j + \Delta_2]
+%
+\end{align}
+%
+and then again using Lemma \ref{lem-choose} we get the expected value:
+%
+\begin{align} \label{bbbb}
+%
+\gamma^2 \sum_{j=0}^{L-1} \M_2[j,j+\Delta_1] \M_1[j+\Delta_2].
+%
+\end{align}
+
+Similarly, the expected values of terms (c) and (d) are:
+%
+\begin{align} \label{cccc}
+%
+\gamma^2 \sum_{j=0}^{L-1} \M_2[j,j+\Delta_2] \M_1[j+\Delta_1].
+%
+\end{align}
+%
+and
+%
+\begin{align} \label{dddd}
+%
+\gamma^2 \sum_{j=0}^{L-1} \M_2[j+\Delta_1,j+\Delta_2] \M_1[j].
+%
+\end{align}
+
+Finally, the expected value of term (e) is easily shown to be:
+%
+\begin{align} \label{eeee}
+%
+\gamma \sum_{j=0}^{L-1} \M_3[j,j+\Delta_1,j+\Delta_2].
+%
+\end{align}
+%
+This concludes the computation for Case \ref{case1}.
+
+Moving onto Case \ref{case2}, we have $\ell_1 \equiv i_1 - j_1 = i_2 - j_2$, and also define $\ell_2 \equiv i_3 - j_3$. By definition, $\ell_1 \ne \ell_2$. The sum is:
+%
+\begin{align}
+%
+& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2}
+\sum_{1 \le k_1,k_2 \le M_{\ell_1}} \sum_{k_3=1}^{M_{\ell_2}}
+X_{k_1}^{\ell_1}[j_1] X_{k_2}^{\ell_1}[j_1 + \Delta_1] X_{k_3}^{\ell_2}[j_3]   
+\nonumber \\
+=& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2} \sum_{k_3=1}^{M_{\ell_2}}
+\Bigg\{
+\sum_{1 \le k_1 \ne k_2 \le M_{\ell_1}} 
+X_{k_1}^{\ell_1}[j_1] X_{k_2}^{\ell_1}[j_1 + \Delta_1] X_{k_3}^{\ell_2}[j_3]
+\nonumber \\
+&       + \sum_{k_1=1}^{M_{\ell_1}} X_{k_1}^{\ell_1}[j_1] X_{k_1}^{\ell_1}[j_1 + \Delta_1] 
+X_{k_3}^{\ell_2}[j_3]  \Bigg\}.
+%
+\end{align}
+%
+Taking expectations conditional on $M$, we then get:
+%
+\begin{align}
+%
+& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2} 
+\Bigg(M_{\ell_1} (M_{\ell_1}-1) M_{\ell_2} \M_1[j_1] \M_1[j_1 + \Delta_1] \M_1[j_3]
+\nonumber \\
+&       + M_{\ell_1} M_{\ell_2} \M_2[j_1,j_1+\Delta_1] \M_1[j_3] \Bigg).
+%
+\end{align}
+
+Taking expectations over $M$ and using Lemma \ref{lem-choose} then gives:
+%
+\begin{align}
+%
+& \gamma^3 \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2} 
+\M_1[j_1] \M_1[j_1 + \Delta_1] \M_1[j_3]
+\label{ffff} \\
+& + \gamma^2 \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2}  
+\M_2[j_1,j_1+\Delta_1] \M_1[j_3].
+\label{gggg}
+%
+\end{align}
+
+
+Similarly, Cases \ref{case3} and \ref{case4} give the expressions:
+%
+\begin{align}
+%
+& \gamma^3 \sum_{j_1=0}^{L-1} \sum_{j_2 \ne j_1 + \Delta_1} 
+\M_1[j_1] \M_1[j_1 + \Delta_2] \M_1[j_2]
+\label{hhhh} \\
+& + \gamma^2 \sum_{j_1=0}^{L-1} \sum_{j_2 \ne j_1 + \Delta_1}  
+\M_2[j_1,j_1+\Delta_2] \M_1[j_2]
+\label{iiii}
+%
+\end{align}
+%
+and
+%
+\begin{align}
+%
+& \gamma^3 \sum_{j_2=0}^{L-1} \sum_{j_1 \ne j_2} 
+\M_1[j_1] \M_1[j_2 + \Delta_1] \M_1[j_2 + \Delta_2]
+\label{jjjj}\\
+& + \gamma^2 \sum_{j_2=0}^{L-1} \sum_{j_1 \ne j_2}  
+\M_2[j_2+\Delta_1,j_2+\Delta_2] \M_1[j_1].
+\label{kkkk}
+%
+\end{align}
+
+Finally, in Case \ref{case5} we have $i_1 - j_1$, $i_2 - j_2$, and $i_3 - j_3$ are all pairwise distinct. Consequently, the $X$ variables are always independent, and the expectation conditional on $M$ (letting $\ell_q = i_q - j_q$, $q=1,2,3$),
+%
+\begin{align}
+%
+\sum_{j_1,j_2,j_3} M_{\ell_1} M_{\ell_2} M_{\ell_3} \M_1[j_1] \M_1[j_2] \M_1[j_3];
+%
+\end{align}
+%
+since the $M_{\ell_q}$'s are pairwise independent, $q=1,2,3$, the expectation over $M$ then yields:
+%
+\begin{align} \label{llll}
+%
+\gamma^3 \sum_{j_1,j_2,j_3} \M_1[j_1] \M_1[j_2] \M_1[j_3].
+%
+\end{align}
+
+Now we add all the terms from Cases \ref{case1} to \ref{case5}. Expressions \eqref{aaaa}, \eqref{ffff}, \eqref{hhhh}, \eqref{jjjj}, and \eqref{llll} sum to the expression:
+%
+\begin{align}
+%
+(\gamma \LL_1)^3.
+%
+\end{align}
+
+Note that this is obtained directly from the first moment. Expressions \eqref{bbbb}, \eqref{cccc}, \eqref{dddd}, \eqref{gggg},\eqref{iiii}, and \eqref{kkkk} sum to the expression:
+%
+\begin{align}
+%
+\gamma \LL_1  \cdot 
+( \gamma\LL_2(\Delta_1) + \gamma\LL_2(\Delta_2) + \gamma\LL_2(\Delta_2-\Delta_1)).
+%
+\end{align}
+%
+Again, note that this is obtained directly from the first two moments. Finally, expression \eqref{eeee} is simply:
+%
+\begin{align}
+%
+\gamma \LL_3(\Delta_1,\Delta_2)
+%
+\end{align}
+%
+which is the usual third-order auto-correlation.
+
+
+%
+
+\section{Signal plus noise}
+
+The expected values of the non-zero (for second moment) and off-diagonal (for third moment) terms are the same as without noise, as is true for the strongly-separated case. The same proof of almost sure convergence from my notes for the strongly-separated case also goes through verbatim.
+
+
 
 
 \end{document}
