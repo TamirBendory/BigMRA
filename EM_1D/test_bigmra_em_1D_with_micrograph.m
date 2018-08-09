@@ -8,7 +8,7 @@ clear all; clf; clc;
 L = 21;             % Length of the true signal
 W = 1*L;            % Length of the observed windows (W >= L)
 x = 1+randn(L, 1);  % True signal
-sigma = 1.0;        % Standard deviation of the additive white Gaussian noise
+sigma = 2.0;        % Standard deviation of the additive white Gaussian noise
 
 N = 1e6;   % Length of the micrograph
 m = 1e4;   % Desired number of occurrences of x in the micrograph
@@ -46,14 +46,14 @@ xs(:, L) = x_est;
 alphas = zeros(2*L-1, 1);
 alphas(L) = alpha_est;
 
-fprintf('Sliding right:  ');
+fprintf('Sliding right: ');
 for right = L-1 : -1 : 1
     x0 = [randn(1); xs(1:end-1, right+1)];
     alpha0 = alphas(right+1);
     [xs(:, right), alphas(right)] = bigmra_em_1D(Y, sigma, x0, alpha0);
     fprintf('.');
 end
-fprintf('\nSliding left: ');
+fprintf('\nSliding left:  ');
 for left = L+1 : +1 : 2*L-1
     x0 = [xs(2:end, left-1) ; randn(1)];
     alpha0 = alphas(left-1);
