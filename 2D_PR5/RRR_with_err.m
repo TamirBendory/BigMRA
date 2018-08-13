@@ -41,7 +41,7 @@ for k = 1:max_iter
     err2(k) = norm(rot90(X1(1:L,1:L),2) - X_true,'fro')/norm(X_true(:));
     err(k) = min(err1(k),err2(k));
  %   if and(err(k) < min(err(1:k-1)),k > 1) 
-        X_out = X1(1:L,1:L); 
+ %       X_out = X1(1:L,1:L); 
  %   end
     X2 = real(ifft2(P2(fft2(2*X1 - X)))); % Fourier magnitude projection
     discrepancy = X2 - X1;
@@ -57,13 +57,22 @@ for k = 1:max_iter
 end
 
 X = P1(X);
-X(X<-1) = 1;
+X(X<-1) = -1;
 X(X>1) = 1;
 err1(k) = norm(X(1:L,1:L) - X_true,'fro')/norm(X_true(:));
 err2(k) = norm(rot90(X(1:L,1:L),2) - X_true,'fro')/norm(X_true(:));
 err(k) = min(err1(k),err2(k));
+
+X_out = zeros(W);
+
+if err(k) == err1(k)
+X_out = X;
+else
+X_out(1:L,1:L) = rot90(X(1:L,1:L),2);
+end
+
 %if err(k) < min(err(1:k-1)) 
-       X_out = X(1:L,1:L); 
+%       X_out = X(1:L,1:L); 
 %end
 
 %if k == max_iter

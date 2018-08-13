@@ -1,4 +1,4 @@
-function [Y, placed] = generate_clean_micrograph_2D(X, W, N, m)
+function [Y, placed] = generate_clean_micrograph_2D(X, param)
 % Inputs:
 %   X: signal of size LxL
 %   W: separation zone has size WxW: any square of that size can only touch
@@ -20,6 +20,9 @@ function [Y, placed] = generate_clean_micrograph_2D(X, W, N, m)
 %        'It may be difficult to get this many repetitions...');
 %end
 
+W = param.W;
+N = param.N;
+m = param.m_want;
 rangeW = 0:(W-1);
 
 % The mask has the same size as the micrograph. Each pixel in the mask

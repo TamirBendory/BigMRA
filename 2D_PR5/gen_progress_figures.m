@@ -2,23 +2,17 @@ clear; close all; clc;
 % script to generate progress figures for the paper
 
 save_pdf = 0;
-ind = [1,4,16,64];
+ind = [1,10,100,600];
 %newton = rgb2gray(imread('newton.jpg'));
 X = double(rgb2gray(imread('Einstein5_small.jpg')));
 X = X - mean(X(:));
 X = X/max(abs(X(:)));
 X = imresize(X, [50, 50]);
 
-% figure(1); imagesc(newton); colormap gray; axis tight square off
-% if save_pdf
-% pdf_print_code(gcf, 'newton', 12)
-% end
-
 figure; 
 
 for i = 1:length(ind)
-%str = strcat('images2\Xest_',num2str(ind(i)),'.mat');
-str = strcat('image400\Xest_',num2str(ind(i)),'.mat');
+str = strcat('images\Xest_',num2str(ind(i)),'.mat');
 load(str);
 Xest_rrr = Xest_rrr(1:size(X,1),1:size(X,2));
 err1 = norm(Xest_rrr - X,'fro')/norm(X(:));
@@ -43,10 +37,10 @@ end
 
 % load('err_rrr');
 % load('err_PS');
-load('image400\err_rrr');
-load('image400\err_PS');
+load('images\err_rrr');
+load('images\err_PS');
 
-last_ind = max(find(err_rrr>0));
+last_ind = max(find(err_rrr(:,end)>0));
 
 figure(11); 
 subplot(121); loglog((1:last_ind)*100,err_PS(1:last_ind),'.b'); 

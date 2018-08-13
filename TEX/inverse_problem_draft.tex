@@ -84,7 +84,7 @@
 
 \begin{document}
 
-\title{Estimation below the detection limit with application to cryo-em}
+\title{Estimation below the detection limit with application to cryo-EM}
 
 
 \author{Tamir Bendory, Nicolas Boumal, William Leeb, Eitan Levin and Amit Singer}
@@ -96,13 +96,58 @@
 
 \section{Introduction}
 
-We consider the problem of estimating a signal from its multiple occurrences in a measurement. In the high SNR regime, the problem is easy. In the low SNR, it becomes interesting and that is the focus of this paper. 
-The problem can be posed as blind deconvolution between the signal and a sparse binary signal.
-We can also consider the extension for multiple signals. 
 
-The main motivation for this paper arises from single particle reconstruction using cryo-electron microscopy (cryo-EM). In cryo-EM, multiple samples .....  
+\subsection{Model}
 
-in low SNR detection is impossible. This led to the belief in the cryo-EM community is reconstruction of small molecules is impossible. We claim that this argument is wrong. While this paper focused on the mathematical toy model, Section TKTK discusses the application to cryo-EM. A companion paper focused on this application and provides all the details~\cite{bendory2018toward}. 
+%
+%We consider the problem of estimating a signal from its multiple occurrences in a noisy measurement. If the signal-to-noise ratio (SNR) in the measurement is high, then one can try to detect the signal's occurrences and average. However, in a low SNR, detecting the individual occurrences becomes challenging. In this paper, we propose a method to estimate the signal, or even multiple signals, in a low SNR environment using autocorrelation analysis. We show that under two models specified below, the signal can be estimated to any desired accuracy, if it appears sufficiently many times.
+%We can also consider the extension for multiple signals. 
+
+Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
+\begin{align}
+y & =  x \ast s + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
+\label{eq:model}
+\end{align}
+where $\ast$ denotes linear convolution. 
+While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in the low signal-to-noise ratio (SNR) environment, estimating $s$ is impossible, where estimating $x$ is tractable under some conditions on $s$. 
+
+The model can be extended to multiple signals. In this setup,  $x_1,\ldots,x_K\in\RL$ are the sought signals and the data is give by
+\begin{align}
+y & = \sum_{k=1}^K x_k \ast s_k + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
+\label{eq:model_heterogeneity}
+\end{align}
+where  $s_k \in \{0, 1\}^{N-L+1}$. 
+From $y$, we aim to recover $x_1, \ldots x_K$, and possibly also the number of occurrences of each.
+Considering~\eqref{eq:model}, one can think of this inverse problem as a mixture of \emph{blind deconvolution} problems between binary signals and the target signals.
+
+The generative model of the support signals play a crucial role in the ability to estimate the signals in low SNR. In this paper, we consider two models: one deterministic and one probabilistic. 
+
+\paragraph{Deterministic well separated support.}
+The binary signals obey the following property:
+\begin{align}
+\textrm{If } s_k[i] = 1 \textrm{ and } s_{k'}[j] = 1 \textrm{ but } (k, i) \neq (k', j), \textrm{ then } |i - j| \geq 2L-1.
+\label{eq:spacing}
+\end{align}
+In words: the starting positions of any two occurrences (be it of the same signal or of two different signals) must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
+
+\paragraph{Probabilistic Poisson  model.} In this model, points are chosen in $\{1,\dots,N\}$ according to a Poisson process with parameter $\gamma n$. For each point $i$ that is chosen from $1$ to $n$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. The single signal case fits a Delta distribution, while the heterogeneous case with $K>1$ implies a sum of Delta distribution on $X$.
+
+If $M_i$ denotes the number of hits at location $i$, $1 \le i \le M$, then by definition of the Poisson process $M_i$'s are i.i.d.\
+ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
+
+
+With this notation, if $Y \in \R^{n+L}$ is the observed vector, we can write each entry as:
+%
+\begin{align}
+%
+Y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
+%
+\end{align}
+
+
+We derive algebraic relations between the autocorrelation functions of the micrographs and the autocorrelation functions of the target signals. For ease of exposition, we do so in the 1-D case. Extension to the 2-D case is straightforward. We also give additional technical details regarding the two experiments presented in Section~\ref{sec:results}.
+
+
 
 \begin{figure}[t]
 	\centering
@@ -124,54 +169,6 @@ in low SNR detection is impossible. This led to the belief in the cryo-EM commun
 	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low $\SNR$, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}	
 \end{figure}
 
-\subsection{Model}
-
-
-Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the observed micrograph (notice that it is equivalent to think of the data as being one long micrograph or multiple shorter micrographs concatenated into one.)
-The forward model (or ``image'' formation model) is as follows. For each target signal $x_k$, an unknown binary signal $s_k \in \{0, 1\}^{N-L+1}$ indicates (with 1's) the starting positions of all occurrences of $x_k$ in $y$, so that, with additive white Gaussian noise:
-\begin{align}
-y & = \sum_{k=1}^K x_k \ast s_k + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
-\label{eq:model}
-\end{align}
-where $\ast$ denotes linear convolution. 
-We consider two models for the generative process of the sparse signal:
-
-\paragraph{The well separated support model.}
-The binary signals obey the following property:
-\begin{align}
-\textrm{If } s_k[i] = 1 \textrm{ and } s_{k'}[j] = 1 \textrm{ but } (k, i) \neq (k', j), \textrm{ then } |i - j| \geq 2L-1.
-\label{eq:spacing}
-\end{align}
-In words: the starting positions of any two occurrences (be it of the same signal or of two different signals) must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
-
-
-\paragraph{Poisson process model.} In this model, points are chosen in $\{1,\dots,n\}$ according to a Poisson process with parameter $\gamma n$. For each point $i$ that is chosen from $1$ to $n$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. 
-
-If $M_i$ denotes the number of hits at location $i$, $1 \le i \le n$, then by definition of the Poission process $M_i$'s are i.i.d.\
- and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
-
-
-With this notation, if $Y \in \R^{n+L}$ is the observed vector, we can write each entry as:
-%
-\begin{align}
-%
-Y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
-%
-\end{align}
-
-
-From $y$, we aim to recover $x_1, \ldots x_K$, and possibly also the number of occurrences of each. In contrast, particle picking is the task of estimating the binary signal $s = s_1 + \cdots + s_K$, while clustering is the task of separating $s$ into its components $s_1, \ldots, s_K$. Neither of the latter can be performed reliably if $\sigma$ is large (that is, at low $\SNR$.)
-
-%We denote the set of these nonzero values by 
-% $\mathcal{S}_i$ and its cardinality by $\vert \mathcal{S}_i\vert = M_i$. 
-%By assuming that all $\mathcal{S}_i$'s are disjoint,  we let $s = \sum_{i=1}^Ks_i$, $\mathcal{S} = \bigcup_{i=1}^{K} \mathcal{S}_i$ and  $\vert \mathcal{S}\vert :=M =  \sum_{i=1}^{K}M_i$.  %Neither the $M_i$'s nor $M$ are assumed to be known.
-
-
-Considering~\eqref{eq:model}, one can think of this inverse problem as a mixture of blind deconvolution problems between binary signals and the target signals. %Related literature is briefly surveyed in Appendix~\ref{sec:related_literature}.
-
-We derive algebraic relations between the autocorrelation functions of the micrographs and the autocorrelation functions of the target signals. For ease of exposition, we do so in the 1-D case. Extension to the 2-D case is straightforward. We also give additional technical details regarding the two experiments presented in Section~\ref{sec:results}.
-
-
 
 \subsection{Related work}
 
@@ -185,7 +182,7 @@ y = x\ast w + \varepsilon,
 %
 where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
 %The problem has also been studied in the case of a known input $w$~\cite{pillonetto2010new,dinuzzo2015kernels,bottegal2016robust}. 
-The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w\in\{0,1\}^N$, satisfying the spacing requirement~\eqref{eq:spacing}, we obtain our model in the  case of a single signal ($K = 1$). The same observation model is used for blind deconvolution, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$, satisfying one of the generative models above, we obtain our model in the  case of a single signal ($K = 1$). The same observation model is used for blind deconvolution, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 %\TODO{ref this by Giannakis: \cite{giannakis1989identification}}
 
 %%%To make the problem well-posed, we must  assume some prior knowledge or  structure.  In our case, the prior information is that $s$ is a binary signal that satisfies the separation constraint~\eqref{eq:spacing}.  Other settings of blind deconvolution problems have been analyzed recently, see for instance~\cite{ahmed2014blind,li2016identifiability,li2016rapid,ling2015self,ling2017blind,chi 016guaranteed} where the focus is on high $\SNR$ regimes. Importantly, in the system identification problem, the goal is only to recover $x$, not the sequence $w$, or in our case, the signal locations $s_i$. We refer to the $s_i$'s as \emph{nuisance parameters}.
@@ -198,10 +195,11 @@ Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y
 
 Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
 
-In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
+In special cases, including the case where $w$ is binary, EM has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
+Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation constraint on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
  
-Indeed, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$.
-In total, even when excluding forbidden combinations due to the spacing constraint, there are $O(N^M)$ such combinations, and the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large.
+
+\TODO{Need to refer to this paper https://arxiv.org/abs/1806.00338}
 
 Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
@@ -210,13 +208,28 @@ Because likelihood methods are computationally expensive, methods based on recov
 
 \subsection{Main motivation: The cryo-EM problem}
 
-\TODO{The following was copied from the appendix of the old draft}
 
+The main motivation for this paper arises from single particle reconstruction using cryo-electron microscopy (cryo-EM).
+In a cryo-EM experiment, multiple samples of a molecule are frozen in a thin layer of ice. The microscope is then generates a tomographic image of the ice layer (with the molecules) called micrograph. The goal is to reconstruct the 3-D structure of the molecule from the several micrographs. 
+Importantly, the electron dosage transmitted by the microscope must kept low to avoid destruction of the molecules' structure. This, in turn, induces high noise level on the micrograph.
+
+
+The standard algorithmic pipeline in cryo-EM begins by detecting the projections of the samples in the micrograph. This procedure is called \emph{particle picking}. Then, the 3-D structure of the molecule is constructed from the projections, usually using different variations of expectation-maximization (EM). 
 Many automatic and semi-automatic methods for particle picking have been proposed, based on edge detection, template matching and deep learning; see for instance~\cite{harauz1989automatic,ogura2004automatic,zhu2016deep,frank1983automatic,scheres2015semi,heimowitz2018apple}. 
-However, most of these procedures are prone to \emph{model bias}. For instance, in the popular framework of RELION~\cite{scheres2015semi}, the user manually marks hundreds of spots on the micrograph, believed to contain projections. 
+
+If the molecule to be reconstructed is small, then the SNR might be very low. 
+As been recognized by cryo-EM scientists, particle picking is impossible in low SNR and thus for small particles. 
+This led to the belief in the cryo-EM community is reconstruction of small molecules is impossible. We claim that this argument is wrong. While this paper focused on a mathematical toy model, Section TKTK discusses the application to cryo-EM. A companion paper focused on this application and provides all the details~\cite{bendory2018toward}. 
+
+In addition, most of the particle picking procedures are prone to \emph{model bias}. For instance, in the popular framework of RELION~\cite{scheres2015semi}, the user manually marks hundreds of spots on the micrograph, believed to contain projections. 
 Therefore, the algorithm's performance depends on the prior assumptions of the users about the particle's structure; the same holds true for deep learning based approaches which require constructing labeled sets of data.
 Other methods use disks or differences of Gaussians as templates~\cite{langlois2014automated,voss2009dog}.
 Nowadays, it also still popular to pick particles manually. This method, while it exploits the researcher's experience, is both tedious and subject to model bias.
+
+
+
+
+
 
 
 \section{Autocorrelation analysis}
@@ -261,12 +274,12 @@ Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$.
 
 The spacing constraint~\eqref{eq:spacing} gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
 \begin{align*}
-\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
+\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\ell[\ell]
 \end{align*}
-for $\ell = 0, \ldots, L-1$, where $\delta$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
+for $\ell = 0, \ldots, L-1$, where $\ell$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
 Along the same lines, one can establish a relation for third-order autocorrelations:
 \begin{align}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big),
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] + \sigma^2\gamma a_{x}^1 \cdot \big(\ell[\ell_1,0]+\ell[0,\ell_2]+\ell[\ell_1,\ell_2]\big),
 \label{eq:data_ac_k1}
 \end{align}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$. Here too, few entries are affected by $\sigma$ in the limit.
@@ -283,8 +296,8 @@ As above, we consider the asymptotic regime where $M_1,\ldots,M_K,N\to\infty$ wh
 Still under the spacing constraint~\eqref{eq:spacing}, similarly to the developments above, one can estimate a mixture of the autocorrelations of the $K$ target signals from the autocorrelations of the micrograph:
 \begin{align}
 \lim_{N\to\infty} a_y^1 & = \sum_{k=1}^K\gamma_k a_{x_k}^1, \nonumber\\
-\lim_{N\to\infty} a_y^2[\ell] & = \sum_{k=1}^K\gamma_k a_{x_k}^2[\ell] +\sigma^2\delta[\ell],  \label{eq:data_ac}\\
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \sum_{k=1}^K\gamma_k a_{x_k}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{k=1}^K\gamma_k a_{x_k}^1\right)(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]), \nonumber
+\lim_{N\to\infty} a_y^2[\ell] & = \sum_{k=1}^K\gamma_k a_{x_k}^2[\ell] +\sigma^2\ell[\ell],  \label{eq:data_ac}\\
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \sum_{k=1}^K\gamma_k a_{x_k}^3[\ell_1,\ell_2] + \sigma^2\left(\sum_{k=1}^K\gamma_k a_{x_k}^1\right)(\ell[\ell_1,0]+\ell[0,\ell_2]+\ell[\ell_1,\ell_2]), \nonumber
 \end{align}
 where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightforward to estimate from data: it provides a succinct summary of it. The right hand side involves polynomial functions of unknowns $\gamma_1, \ldots, \gamma_K, x_1, \ldots, x_K$, and possibly $\sigma^2$. The task is to solve these polynomial equations in a robust way.
 
@@ -293,7 +306,7 @@ where $\ell, \ell_1, \ell_2 = 0, \ldots, L-1$. The left hand side is straightfor
 From the first three autocorrelations of the Poisson model one can compute the first three autocorrelations of the well-separated model. 
 
 \begin{proposition} \label{prop:poisson_model}
-Under the Poisson process model, the first autocorrelation  is $\gamma \LL_1$, the second moment vector is $(\gamma \LL_1)^2 + \gamma \LL_2(\Delta)$, and the third moment matrix is $(\gamma \LL_1)^3 + \gamma \LL_1  \cdot ( \gamma\LL_2(\Delta_1) + \gamma\LL_2(\Delta_2) + \gamma\LL_2(\Delta_2-\Delta_1)) + \gamma \LL_3(\Delta_1,\Delta_2) $. In particular, from the first three moments of the Poisson process model, once can recover the first three moments from the strongly-separated model, with the Poisson rate $\gamma$ playing the role of the ``occupancy factor''. So if recovery is possible for the strongly-separated model, it is also possible for the Poisson process model.
+Under the Poisson process model, the first autocorrelation  is $\gamma a_y^1$, the second moment vector is $(\gamma a_y^1)^2 + \gamma a_y^2[\ell]$, and the third moment matrix is $(\gamma a_y^1)^3 + \gamma a_y^1  \cdot ( \gamma a_y^2[\ell_1] + \gamma a_y^2[\ell_2] + \gamma a_y^2[\ell_2-\ell_1]) + \gamma a_y^3(\ell_1,\ell_2) $. In particular, from the first three moments of the Poisson process model, once can recover the first three moments from the strongly-separated model, with the Poisson rate $\gamma$ playing the role of the ``occupancy factor''. So if recovery is possible for the strongly-separated model, it is also possible for the Poisson process model.
 \end{proposition}
 
 
@@ -352,8 +365,8 @@ as proven in the following simple proposition.
 %
 \begin{proposition} \label{prop:uniqueness}
 %
-Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then $z$ is determined uniquely from  $a_z^2$ and $a_z^3$. More precisely, suppose we can measure $\tilde{a}_z^3[k,L-1] = a_z^3[k,L-1]+\upsilon$ and that $\vert z[0]z[L-1]\vert \geq \delta>0$.
-Then,  $\hat{z}[k] =\frac{\tilde{a}_z^3[k,L-1]}{a_z^2[L-1]} $ satisfies $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\delta}$. 
+Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then $z$ is determined uniquely from  $a_z^2$ and $a_z^3$. More precisely, suppose we can measure $\tilde{a}_z^3[k,L-1] = a_z^3[k,L-1]+\upsilon$ and that $\vert z[0]z[L-1]\vert \geq \ell>0$.
+Then,  $\hat{z}[k] =\frac{\tilde{a}_z^3[k,L-1]}{a_z^2[L-1]} $ satisfies $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\ell}$. 
 
 \end{proposition}
 
@@ -373,7 +386,7 @@ In addition,
 %
 \begin{equation*}
 %
-\hat{z}[k] = \frac{\tilde{a}_z^3[k,L-1]}{a_z^2[L-1]} = z[k]+\frac{\upsilon}{a_z^2[L-1]} \quad \Rightarrow \quad \vert \hat{z}[k] - {z}[k]\vert \leq \frac{\vert\upsilon\vert}{\delta}.
+\hat{z}[k] = \frac{\tilde{a}_z^3[k,L-1]}{a_z^2[L-1]} = z[k]+\frac{\upsilon}{a_z^2[L-1]} \quad \Rightarrow \quad \vert \hat{z}[k] - {z}[k]\vert \leq \frac{\vert\upsilon\vert}{\ell}.
 %
 \end{equation*} 
 %
@@ -540,8 +553,7 @@ coefficients in total. Since we aim to estimate $KL$ parameters (for the $K$ sig
 \begin{align*}
 K(L+1) \leq \frac{1}{2} L (L-1) + 1.
 \end{align*}
-Thus, $(L-1)/2$ (up to a small approximation) is an absolute upper limit on $K$. \TODO{We may want to cite MRA literature here.}
-
+Thus, $(L-1)/2$ (up to a small approximation) is an absolute upper limit on $K$ (compare with~\cite{boumal2017heterogeneous,bandeira2017estimation}). 
 In practice, the autocorrelations are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
 
 Having computed the moments of interest, we now estimate signals $x_1, \ldots, x_K$ and coefficients $\gamma_1, \ldots, \gamma_K$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear least-squares problem:
@@ -608,13 +620,9 @@ Second, we assume that any two signal occurrences are sufficiently separated, an
 Perhaps this separation could be induced by careful experimental design \TODO{?}.
 Alternatively, if the signals are not well separated, one can introduce new parameters which encode the distribution of the spacing between occurrences. Here as well, relations between autocorrelation functions of the data and of the signals can be derived.
 
-\TODO{Should we discuss CTF? Where, and to what extent?}
 
 \TODO{Where and how do we cite Kam? Fred?}
 
-
-
-\paragraph{Open theoretical questions.}
 
 Our method of estimating $x$ uses the third-order moments of the observations. These empirical moments are used to obtain consistent estimators of population parameters related to the the mean and second- and third-order autocorrelations of $x$, to which we fit the signal $x$. Consequently, the number of signal occurrences $M$ should grow at least as fast as $1/\SNR^3$ to achieve a constant estimation error in the low $\SNR$ regime. In the related problem of multireference alignment~\cite{perry2017sample,abbe2017multireference}, this is optimal in the low $\SNR$ regime; we conjecture that the same is true for our problem.
 
@@ -921,7 +929,7 @@ We will also denote by $\L_l$ the autocorrelations of $X$:
 %
 \begin{align}
 %
-\LL_2(\Delta) = \sum_{i=0}^{L-1} \M_2[i,i+\Delta],
+\LL_2(\ell) = \sum_{i=0}^{L-1} \M_2[i,i+\ell],
 %
 \end{align}
 %
@@ -929,22 +937,22 @@ and
 %
 \begin{align}
 %
-\LL_3(\Delta_1,\Delta_2) = \sum_{i=0}^{L-1} \M_3[i,i+\Delta_1,i+\Delta_2].
+\LL_3(\ell_1,\ell_2) = \sum_{i=0}^{L-1} \M_3[i,i+\ell_1,i+\ell_2].
 %
 \end{align}
 
-
-Note that in the strongly-separated model, the first three observed moments are, respectively, $\LL_1$, $\LL_2(\Delta)$, and $\LL_3(\Delta_1,\Delta_2)$.
+%
+%Note that in the strongly-separated model, the first three observed moments are, respectively, $\LL_1$, $\LL_2(\ell)$, and $\LL_3(\ell_1,\ell_2)$.
 
 %
 
-In this notation, we will show that the first moment of the data is $\gamma \LL_1$, the second moment vector is $(\gamma \LL_1)^2 + \gamma \LL_2(\Delta)$, and the third moment matrix is $(\gamma \LL_1)^3 + \gamma \LL_1  \cdot ( \gamma\LL_2(\Delta_1) + \gamma\LL_2(\Delta_2) + \gamma\LL_2(\Delta_2-\Delta_1)) + \gamma \LL_3(\Delta_1,\Delta_2) $. In particular, from the first three moments of the Poisson process model, once can recover the first three moments from the strongly-separated model, with the Poisson rate $\gamma$ playing the role of the ``occupancy factor''. So if recovery is possible for the strongly-separated model, it is also possible for the Poisson process model.
+In this notation, we will show that the first moment of the data is $\gamma \LL_1$, the second moment vector is $(\gamma \LL_1)^2 + \gamma \LL_2(\ell)$, and the third moment matrix is $(\gamma \LL_1)^3 + \gamma \LL_1  \cdot ( \gamma\LL_2(\ell_1) + \gamma\LL_2(\ell_2) + \gamma\LL_2(\ell_2-\ell_1)) + \gamma \LL_3(\ell_1,\ell_2) $. In particular, from the first three moments of the Poisson process model, once can recover the first three moments from the well-separated model, with the Poisson rate $\gamma$ playing the role of the ``occupancy factor''. So if recovery is possible for the well-separated model, it is also possible for the Poisson process model.
 
 
 %
 
 
-\section{The first moment of $Y$}
+\paragraph{The first moment of $Y$.}
 
 To compute the first moment of $Y$, we will first condition on $M = (M_1,\dots,M_n)$, and then average over $M$. We have:
 %
@@ -968,9 +976,9 @@ Now taking expectations over $M$ we see:
 %
 
 
-\section{The second moment of $Y$}
+\paragraph{The second moment of $Y$}
 
-Again, we will condition on $M$ first, and then take the expectation over $M$. Fix $i_1 \ne i_2$, and let $\Delta = i_2 - i_1$. Then:
+Again, we will condition on $M$ first, and then take the expectation over $M$. Fix $i_1 \ne i_2$, and let $\ell = i_2 - i_1$. Then:
 %
 \begin{align}
 %
@@ -981,7 +989,7 @@ X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_2 - j_2}[j_2].
 %
 \end{align}
 
-We break up the double sum over $j_1$ and $j_2$ into two terms: one where $j_2 \ne j_1 + \Delta$, and one where $j_2 = j_1 + \Delta$ or equivalently $i_1-j_1 = i_2-j_2$. In the first case, all the terms are independent, and so the expectation factors. In the second case, when $k_1 \ne k_2$ we have independence, but otherwise not. This gives (all expectations are conditional on $M$):
+We break up the double sum over $j_1$ and $j_2$ into two terms: one where $j_2 \ne j_1 + \ell$, and one where $j_2 = j_1 + \ell$ or equivalently $i_1-j_1 = i_2-j_2$. In the first case, all the terms are independent, and so the expectation factors. In the second case, when $k_1 \ne k_2$ we have independence, but otherwise not. This gives (all expectations are conditional on $M$):
 
 \begin{align}
 %
@@ -990,20 +998,20 @@ We break up the double sum over $j_1$ and $j_2$ into two terms: one where $j_2 \
 \sum_{k_1=1}^{M_{i_1-j_1}}\sum_{k_2=1}^{M_{i_2-j_2}}
 \E X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_2 - j_2}[j_2]
 \nonumber \\
-=& \sum_{j_1 - j_2 \ne \Delta} \sum_{k_1} 
+=& \sum_{j_1 - j_2 \ne \ell} \sum_{k_1} 
 \sum_{k_2} \E X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_2 - j_2}[j_2]
 \nonumber \\
 & + \sum_{j_1 = 0}^{L-1} \sum_{k_1 \ne k_2} 
-\E X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_1 - j_1}[j_1+\Delta]
+\E X_{k_1}^{i_1-j_1}[j_1] X_{k_2}^{i_1 - j_1}[j_1+\ell]
 \nonumber \\
 & + \sum_{j_1 = 0}^{L-1} \sum_{k_1=1}^{M_{i_1-j_1}} 
-\E X_{k_1}^{i_1-j_1}[j_1] X_{k_1}^{i_1-j_1}[j_1 + \Delta] 
+\E X_{k_1}^{i_1-j_1}[j_1] X_{k_1}^{i_1-j_1}[j_1 + \ell] 
 \nonumber \\
-=& \sum_{j_1 - j_2 \ne \Delta} M_{i_1-j_1} M_{i_2 - j_2} \M_1[j_1] \M_1[j_2]
+=& \sum_{j_1 - j_2 \ne \ell} M_{i_1-j_1} M_{i_2 - j_2} \M_1[j_1] \M_1[j_2]
 \nonumber \\
-& + \sum_{j_1 = 0}^{L-1} M_{i_1-j_1}(M_{i_1-j_1} - 1) \M_1[j_1] \M_1[j_1 + \Delta]
+& + \sum_{j_1 = 0}^{L-1} M_{i_1-j_1}(M_{i_1-j_1} - 1) \M_1[j_1] \M_1[j_1 + \ell]
 \nonumber \\
-& + \sum_{j_1 = 0}^{L-1} M_{i_1-j_1} \M_2[j_1,j_1 + \Delta] .
+& + \sum_{j_1 = 0}^{L-1} M_{i_1-j_1} \M_2[j_1,j_1 + \ell] .
 %
 \end{align}
 %
@@ -1024,33 +1032,33 @@ We get (now the expectation is over $M$ and $X$):
 \begin{align}
 %
 \E Y_{i_1} Y_{i_2} 
-=& \sum_{j_1 - j_2 \ne \Delta} \E M_{i_1-j_1} M_{i_2 - j_2} \M_1[j_1] \M_1[j_2]
+=& \sum_{j_1 - j_2 \ne \ell} \E M_{i_1-j_1} M_{i_2 - j_2} \M_1[j_1] \M_1[j_2]
 \nonumber \\
-& + \sum_{j_1 = 0}^{L-1} \E M_{i_1-j_1}(M_{i_1-j_1} - 1) \M_1[j_1] \M_1[j_1 + \Delta]
+& + \sum_{j_1 = 0}^{L-1} \E M_{i_1-j_1}(M_{i_1-j_1} - 1) \M_1[j_1] \M_1[j_1 + \ell]
 \nonumber \\
-& + \sum_{j_1 = 0}^{L-1} \E M_{i_1-j_1} \M_2[j_1,j_1 + \Delta]
+& + \sum_{j_1 = 0}^{L-1} \E M_{i_1-j_1} \M_2[j_1,j_1 + \ell]
 \nonumber \\
-=& \sum_{j_1 - j_2 \ne \Delta} \gamma^2 \M_1[j_1] \M_1[j_2]
-+ \sum_{j_1 = 0}^{L-1} \gamma^2 \M_1[j_1] \M_1[j_1 + \Delta]
+=& \sum_{j_1 - j_2 \ne \ell} \gamma^2 \M_1[j_1] \M_1[j_2]
++ \sum_{j_1 = 0}^{L-1} \gamma^2 \M_1[j_1] \M_1[j_1 + \ell]
 \nonumber \\
-& + \sum_{j_1 = 0}^{L-1} \gamma \M_2[j_1,j_1 + \Delta]
+& + \sum_{j_1 = 0}^{L-1} \gamma \M_2[j_1,j_1 + \ell]
 \nonumber \\
 =&  \bigg(\gamma \sum_{j = 0}^{L-1} \M_1[j] \bigg)^2
-+ \gamma \sum_{j = 0}^{L-1} \M_2[j,j + \Delta]
++ \gamma \sum_{j = 0}^{L-1} \M_2[j,j + \ell]
 \nonumber \\
-=&  (\gamma \LL_1)^2 + \gamma \LL_2(\Delta).
+=&  (\gamma \LL_1)^2 + \gamma \LL_2(\ell).
 %
 \end{align}
 
-But the first term in the sum is just the square of the first moment of $Y$; so from the first two moments we can recover $\gamma \LL_2(\Delta)$, which is just the expected power spectrum of the random vector $X$, i.e.\ the usual second moment we have been working with.
+But the first term in the sum is just the square of the first moment of $Y$; so from the first two moments we can recover $\gamma \LL_2(\ell)$, which is just the expected power spectrum of the random vector $X$, i.e.\ the usual second moment we have been working with.
 
 
 %
 
 
-\section{The third moment of $Y$}
+\paragraph{The third moment of $Y$}
 
-For three distinct $i_1$, $i_2$ and $i_3$, we let $\Delta_1 = i_2 - i_1$ and $\Delta_2 = i_3 - i_1$. We have:
+For three distinct $i_1$, $i_2$ and $i_3$, we let $\ell_1 = i_2 - i_1$ and $\ell_2 = i_3 - i_1$. We have:
 %
 \begin{align}
 %
@@ -1066,19 +1074,19 @@ We will break up the outer three sums into disjoint sums with the following rang
 \begin{enumerate}
 	
 	\item \label{case1}
-	$j_2 = j_1 + \Delta_1$ and $j_3 = j_2 + \Delta_2 - \Delta_1$.
+	$j_2 = j_1 + \ell_1$ and $j_3 = j_2 + \ell_2 - \ell_1$.
 	
 	\item \label{case2}
-	$j_2 = j_1 + \Delta_1$ and $j_3 \ne j_2 + \Delta_2 - \Delta_1$.
+	$j_2 = j_1 + \ell_1$ and $j_3 \ne j_2 + \ell_2 - \ell_1$.
 	
 	\item \label{case3}
-	$j_2 \ne j_1 + \Delta_1$ and $j_3 = j_1 + \Delta_2$.
+	$j_2 \ne j_1 + \ell_1$ and $j_3 = j_1 + \ell_2$.
 	
 	\item \label{case4}
-	$j_2 \ne j_1 + \Delta_1$ and $j_3 \ne j_1 + \Delta_2$ and $j_3 = j_2 + \Delta_2 - \Delta_1$.
+	$j_2 \ne j_1 + \ell_1$ and $j_3 \ne j_1 + \ell_2$ and $j_3 = j_2 + \ell_2 - \ell_1$.
 	
 	\item \label{case5}
-	$j_2 \ne j_1 + \Delta_1$ and $j_3 \ne j_1 + \Delta_2$ and $j_3 \ne j_2 + \Delta_2 - \Delta_1$.
+	$j_2 \ne j_1 + \ell_1$ and $j_3 \ne j_1 + \ell_2$ and $j_3 \ne j_2 + \ell_2 - \ell_1$.
 	
 \end{enumerate}
 
@@ -1088,26 +1096,26 @@ For Case \ref{case1}, we have $\ell \equiv i_1 - j_1 = i_2 - j_2 = i_3 - j_3$. W
 \begin{align}
 %
 &\sum_{j=0}^{L-1} \sum_{k_1=1}^{M_\ell} \sum_{k_2=1}^{M_\ell} \sum_{k_3=1}^{M_\ell} 
-X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \ell_1] X_{k_3}^{\ell}[j + \ell_2]
 \nonumber \\
 =& \underbrace{ \sum_{j=0}^{L-1} \sum_{k_i \text{distinct}} 
-	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \ell_1] X_{k_3}^{\ell}[j + \ell_2]
 }_{\text{(a)}}
 \nonumber \\
 &+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_2\ne k_3} 
-	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \ell_1] X_{k_3}^{\ell}[j + \ell_2]
 }_{\text{(b)}}
 \nonumber \\
 &+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_3\ne k_2} 
-	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \ell_1] X_{k_3}^{\ell}[j + \ell_2]
 }_{\text{(c)}}
 \nonumber \\
 &+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_2=k_3\ne k_1} 
-	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \ell_1] X_{k_3}^{\ell}[j + \ell_2]
 }_{\text{(d)}}
 \nonumber \\
 &+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_2=k_3} 
-	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \Delta_1] X_{k_3}^{\ell}[j + \Delta_2]
+	X_{k_1}^{\ell}[j] X_{k_2}^{\ell}[j + \ell_1] X_{k_3}^{\ell}[j + \ell_2]
 }_{\text{(e)}}.
 %
 \end{align}
@@ -1116,7 +1124,7 @@ For term (a), the expectation conditional on $M$ is:
 %
 \begin{align}
 %
-\sum_{j=0}^{L-1} M_\ell(M_\ell-1)(M_\ell-2)\M[j] \M[j+\Delta_1] \M[j+\Delta_2].
+\sum_{j=0}^{L-1} M_\ell(M_\ell-1)(M_\ell-2)\M[j] \M[j+\ell_1] \M[j+\ell_2].
 %
 \end{align}
 %
@@ -1124,7 +1132,7 @@ Using Lemma \ref{lem-choose}, the unconditional expectation of (a) is then:
 %
 \begin{align} \label{aaaa}
 %
-\gamma^3 \sum_{j=0}^{L-1} \M_1[j] \M_1[j+\Delta_1] \M_1[j+\Delta_2].
+\gamma^3 \sum_{j=0}^{L-1} \M_1[j] \M_1[j+\ell_1] \M_1[j+\ell_2].
 %
 \end{align}
 
@@ -1133,7 +1141,7 @@ For term (b), the expectation conditional on $M$ is:
 %
 \begin{align}
 %
-\sum_{j=0}^{L-1} M_\ell (M_\ell - 1) \M_2[j,j+\Delta_1] \M_1[j + \Delta_2]
+\sum_{j=0}^{L-1} M_\ell (M_\ell - 1) \M_2[j,j+\ell_1] \M_1[j + \ell_2]
 %
 \end{align}
 %
@@ -1141,7 +1149,7 @@ and then again using Lemma \ref{lem-choose} we get the expected value:
 %
 \begin{align} \label{bbbb}
 %
-\gamma^2 \sum_{j=0}^{L-1} \M_2[j,j+\Delta_1] \M_1[j+\Delta_2].
+\gamma^2 \sum_{j=0}^{L-1} \M_2[j,j+\ell_1] \M_1[j+\ell_2].
 %
 \end{align}
 
@@ -1149,7 +1157,7 @@ Similarly, the expected values of terms (c) and (d) are:
 %
 \begin{align} \label{cccc}
 %
-\gamma^2 \sum_{j=0}^{L-1} \M_2[j,j+\Delta_2] \M_1[j+\Delta_1].
+\gamma^2 \sum_{j=0}^{L-1} \M_2[j,j+\ell_2] \M_1[j+\ell_1].
 %
 \end{align}
 %
@@ -1157,7 +1165,7 @@ and
 %
 \begin{align} \label{dddd}
 %
-\gamma^2 \sum_{j=0}^{L-1} \M_2[j+\Delta_1,j+\Delta_2] \M_1[j].
+\gamma^2 \sum_{j=0}^{L-1} \M_2[j+\ell_1,j+\ell_2] \M_1[j].
 %
 \end{align}
 
@@ -1165,7 +1173,7 @@ Finally, the expected value of term (e) is easily shown to be:
 %
 \begin{align} \label{eeee}
 %
-\gamma \sum_{j=0}^{L-1} \M_3[j,j+\Delta_1,j+\Delta_2].
+\gamma \sum_{j=0}^{L-1} \M_3[j,j+\ell_1,j+\ell_2].
 %
 \end{align}
 %
@@ -1175,16 +1183,16 @@ Moving onto Case \ref{case2}, we have $\ell_1 \equiv i_1 - j_1 = i_2 - j_2$, and
 %
 \begin{align}
 %
-& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2}
+& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2}
 \sum_{1 \le k_1,k_2 \le M_{\ell_1}} \sum_{k_3=1}^{M_{\ell_2}}
-X_{k_1}^{\ell_1}[j_1] X_{k_2}^{\ell_1}[j_1 + \Delta_1] X_{k_3}^{\ell_2}[j_3]   
+X_{k_1}^{\ell_1}[j_1] X_{k_2}^{\ell_1}[j_1 + \ell_1] X_{k_3}^{\ell_2}[j_3]   
 \nonumber \\
-=& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2} \sum_{k_3=1}^{M_{\ell_2}}
+=& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2} \sum_{k_3=1}^{M_{\ell_2}}
 \Bigg\{
 \sum_{1 \le k_1 \ne k_2 \le M_{\ell_1}} 
-X_{k_1}^{\ell_1}[j_1] X_{k_2}^{\ell_1}[j_1 + \Delta_1] X_{k_3}^{\ell_2}[j_3]
+X_{k_1}^{\ell_1}[j_1] X_{k_2}^{\ell_1}[j_1 + \ell_1] X_{k_3}^{\ell_2}[j_3]
 \nonumber \\
-&       + \sum_{k_1=1}^{M_{\ell_1}} X_{k_1}^{\ell_1}[j_1] X_{k_1}^{\ell_1}[j_1 + \Delta_1] 
+&       + \sum_{k_1=1}^{M_{\ell_1}} X_{k_1}^{\ell_1}[j_1] X_{k_1}^{\ell_1}[j_1 + \ell_1] 
 X_{k_3}^{\ell_2}[j_3]  \Bigg\}.
 %
 \end{align}
@@ -1193,10 +1201,10 @@ Taking expectations conditional on $M$, we then get:
 %
 \begin{align}
 %
-& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2} 
-\Bigg(M_{\ell_1} (M_{\ell_1}-1) M_{\ell_2} \M_1[j_1] \M_1[j_1 + \Delta_1] \M_1[j_3]
+& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2} 
+\Bigg(M_{\ell_1} (M_{\ell_1}-1) M_{\ell_2} \M_1[j_1] \M_1[j_1 + \ell_1] \M_1[j_3]
 \nonumber \\
-&       + M_{\ell_1} M_{\ell_2} \M_2[j_1,j_1+\Delta_1] \M_1[j_3] \Bigg).
+&       + M_{\ell_1} M_{\ell_2} \M_2[j_1,j_1+\ell_1] \M_1[j_3] \Bigg).
 %
 \end{align}
 
@@ -1204,11 +1212,11 @@ Taking expectations over $M$ and using Lemma \ref{lem-choose} then gives:
 %
 \begin{align}
 %
-& \gamma^3 \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2} 
-\M_1[j_1] \M_1[j_1 + \Delta_1] \M_1[j_3]
+& \gamma^3 \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2} 
+\M_1[j_1] \M_1[j_1 + \ell_1] \M_1[j_3]
 \label{ffff} \\
-& + \gamma^2 \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \Delta_2}  
-\M_2[j_1,j_1+\Delta_1] \M_1[j_3].
+& + \gamma^2 \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2}  
+\M_2[j_1,j_1+\ell_1] \M_1[j_3].
 \label{gggg}
 %
 \end{align}
@@ -1218,11 +1226,11 @@ Similarly, Cases \ref{case3} and \ref{case4} give the expressions:
 %
 \begin{align}
 %
-& \gamma^3 \sum_{j_1=0}^{L-1} \sum_{j_2 \ne j_1 + \Delta_1} 
-\M_1[j_1] \M_1[j_1 + \Delta_2] \M_1[j_2]
+& \gamma^3 \sum_{j_1=0}^{L-1} \sum_{j_2 \ne j_1 + \ell_1} 
+\M_1[j_1] \M_1[j_1 + \ell_2] \M_1[j_2]
 \label{hhhh} \\
-& + \gamma^2 \sum_{j_1=0}^{L-1} \sum_{j_2 \ne j_1 + \Delta_1}  
-\M_2[j_1,j_1+\Delta_2] \M_1[j_2]
+& + \gamma^2 \sum_{j_1=0}^{L-1} \sum_{j_2 \ne j_1 + \ell_1}  
+\M_2[j_1,j_1+\ell_2] \M_1[j_2]
 \label{iiii}
 %
 \end{align}
@@ -1232,10 +1240,10 @@ and
 \begin{align}
 %
 & \gamma^3 \sum_{j_2=0}^{L-1} \sum_{j_1 \ne j_2} 
-\M_1[j_1] \M_1[j_2 + \Delta_1] \M_1[j_2 + \Delta_2]
+\M_1[j_1] \M_1[j_2 + \ell_1] \M_1[j_2 + \ell_2]
 \label{jjjj}\\
 & + \gamma^2 \sum_{j_2=0}^{L-1} \sum_{j_1 \ne j_2}  
-\M_2[j_2+\Delta_1,j_2+\Delta_2] \M_1[j_1].
+\M_2[j_2+\ell_1,j_2+\ell_2] \M_1[j_1].
 \label{kkkk}
 %
 \end{align}
@@ -1269,7 +1277,7 @@ Note that this is obtained directly from the first moment. Expressions \eqref{bb
 \begin{align}
 %
 \gamma \LL_1  \cdot 
-( \gamma\LL_2(\Delta_1) + \gamma\LL_2(\Delta_2) + \gamma\LL_2(\Delta_2-\Delta_1)).
+( \gamma\LL_2(\ell_1) + \gamma\LL_2(\ell_2) + \gamma\LL_2(\ell_2-\ell_1)).
 %
 \end{align}
 %
@@ -1277,7 +1285,7 @@ Again, note that this is obtained directly from the first two moments. Finally, 
 %
 \begin{align}
 %
-\gamma \LL_3(\Delta_1,\Delta_2)
+\gamma \LL_3(\ell_1,\ell_2)
 %
 \end{align}
 %
@@ -1285,8 +1293,8 @@ which is the usual third-order auto-correlation.
 
 
 %
-
-\section{Signal plus noise}
+%
+%\paragraph{Signal plus noise.}
 
 The expected values of the non-zero (for second moment) and off-diagonal (for third moment) terms are the same as without noise, as is true for the strongly-separated case. The same proof of almost sure convergence from my notes for the strongly-separated case also goes through verbatim.
 
