@@ -7,11 +7,11 @@ clear all; clf; clc;
 %%
 L = 21;             % Length of the true signal
 W = 1*L;            % Length of the observed windows (W >= L)
-x = 1+randn(L, 1);  % True signal
-sigma = 2.0;        % Standard deviation of the additive white Gaussian noise
+x = 0+randn(L, 1);  % True signal
+sigma = 3.0;        % Standard deviation of the additive white Gaussian noise
 
-N = 1e6;   % Length of the micrograph
-m = 1e4;   % Desired number of occurrences of x in the micrograph
+N = 3e6;   % Length of the micrograph
+m = 3e4;   % Desired number of occurrences of x in the micrograph
 [y, placed] = generate_clean_micrograph_1D(x, W, N, m);
 y = y + sigma*randn(size(y));
 % Extract windows from the micrograph for EM
@@ -39,6 +39,47 @@ alpha0 = rand(1);
 [x_est, alpha_est] = bigmra_em_1D(Y, sigma, x0, alpha0);
 fprintf('Initial EM done.\n');
 
+%% Compute some kind of log-likelihood for each cyclic shift of x_est, and
+%  use the most promising one to warm-start a second EM run.
+shiftQs = zeros(L, 1);
+for k = 0 : L-1
+    x_shifted = circshift(x_est, k);
+    shiftQs(k+1) = bigmra_1D_likelihood_proxy(Y, sigma, x_shifted, alpha_est);
+end
+
+% this forces us to pick a non-trivial shift
+shiftQs(1+0) = -inf;
+
+[a, b] = max(shiftQs);
+
+% Assuming odd L
+subplot(2, 1, 1);
+plot((0:L-1)-(L-1)/2, fftshift(shiftQs), '.-');
+hold all;
+plot([-10, 10], (.95*(max(shiftQs)-min(shiftQs))+min(shiftQs))*[1, 1], 'r--');
+hold off;
+
+fprintf('Attempting a shift of %d.\n', b-1);
+
+[x_est2, alpha_est2] = bigmra_em_1D(Y, sigma, circshift(x_est, b-1), alpha_est);
+fprintf('Secondary EM done.\n');
+
+Q1 = bigmra_1D_likelihood_proxy(Y, sigma, x_est, alpha_est);
+Q2 = bigmra_1D_likelihood_proxy(Y, sigma, x_est2, alpha_est2);
+
+% This Q2 > Q1 criterion does not work ... I saw it fail pretty obviously.
+% if Q2 > Q1
+if norm(x_est2) > norm(x_est)
+    x_est = x_est2;
+    alpha_est = alpha_est2;
+    fprintf('Picked the second one.\n');
+else
+    fprintf('Picked the first one.\n');
+end
+
+%%
+
+%{
 % Now, we're going to slide the first estimate L-1 times to the left and
 % L-1 times to the right, and re-run EM everytime, with warm starts.
 xs = zeros(L, 2*L-1);
@@ -61,9 +102,10 @@ for left = L+1 : +1 : 2*L-1
     fprintf('.');
 end
 fprintf('\n');
+%}
 
 %%
-
+%{
 clf;
 
 for plt = 1 : 2*L-1
@@ -78,10 +120,10 @@ fprintf('Relative error of the best estimator of x: %g\n', err/norm(x));
 subplot(12, 7, (43):(12*7));
 plot(0:L-1, x, 'o-', 0:L-1, xs(:, best), '.-');
 legend('true x', 'estimated x');
-
+%}
 
 %% Display the results (older code)
-%{
+
 [~, shift] = max(real(ifft(conj(fft(x)).*fft(x_est))));
 shift = rem(shift, L);
 if shift > L/2
@@ -89,7 +131,7 @@ if shift > L/2
 end
 I = 0:(L-1);
 shifted = I - shift + 1;
+subplot(2, 1, 2);
 plot(I, x, '.-', shifted, x_est, 'o-');
 legend('true x', 'estimated x');
 title(sprintf('Estimated alpha: %g', alpha_est));
-%}
