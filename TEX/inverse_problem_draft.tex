@@ -170,9 +170,33 @@ We derive algebraic relations between the autocorrelation functions of the micro
 \end{figure}
 
 
+
+
+\subsection{Main motivation: The cryo-EM problem}
+
+
+The main motivation for this paper arises from single particle reconstruction using cryo-electron microscopy (cryo-EM).
+In a cryo-EM experiment, multiple samples of a molecule are frozen in a thin layer of ice. The microscope is then generates a tomographic image of the ice layer (with the molecules) called micrograph. The goal is to reconstruct the 3-D structure of the molecule from the several micrographs. 
+Importantly, the electron dosage transmitted by the microscope must kept low to avoid destruction of the molecules' structure. This, in turn, induces high noise level on the micrograph.
+
+
+The standard algorithmic pipeline in cryo-EM begins by detecting the projections of the samples in the micrograph. This procedure is called \emph{particle picking}. Then, the 3-D structure of the molecule is constructed from the projections, usually using different variations of expectation-maximization (EM). 
+Many automatic and semi-automatic methods for particle picking have been proposed, based on edge detection, template matching and deep learning; see for instance~\cite{harauz1989automatic,ogura2004automatic,zhu2016deep,frank1983automatic,scheres2015semi,heimowitz2018apple}. 
+
+If the molecule to be reconstructed is small, then the SNR might be very low. 
+As been recognized by cryo-EM scientists, particle picking is impossible in low SNR and thus for small particles. 
+This led to the belief in the cryo-EM community is reconstruction of small molecules is impossible. We claim that this argument is wrong. While this paper focused on a mathematical toy model, Section TKTK discusses the application to cryo-EM. A companion paper focused on this application and provides all the details~\cite{bendory2018toward}. 
+
+In addition, most of the particle picking procedures are prone to \emph{model bias}. For instance, in the popular framework of RELION~\cite{scheres2015semi}, the user manually marks hundreds of spots on the micrograph, believed to contain projections. 
+Therefore, the algorithm's performance depends on the prior assumptions of the users about the particle's structure; the same holds true for deep learning based approaches which require constructing labeled sets of data.
+Other methods use disks or differences of Gaussians as templates~\cite{langlois2014automated,voss2009dog}.
+Nowadays, it also still popular to pick particles manually. This method, while it exploits the researcher's experience, is both tedious and subject to model bias.
+
+
+
 \subsection{Related work}
 
-For $K=1$, our problem can be interpreted as a special case of the system identification problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
+For $K=1$, our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
 %
 \begin{math}
 %
@@ -202,30 +226,6 @@ Indeed, for a general support signal $s$, on each iteration of EM, a probability
 \TODO{Need to refer to this paper https://arxiv.org/abs/1806.00338}
 
 Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
-
-
-
-
-\subsection{Main motivation: The cryo-EM problem}
-
-
-The main motivation for this paper arises from single particle reconstruction using cryo-electron microscopy (cryo-EM).
-In a cryo-EM experiment, multiple samples of a molecule are frozen in a thin layer of ice. The microscope is then generates a tomographic image of the ice layer (with the molecules) called micrograph. The goal is to reconstruct the 3-D structure of the molecule from the several micrographs. 
-Importantly, the electron dosage transmitted by the microscope must kept low to avoid destruction of the molecules' structure. This, in turn, induces high noise level on the micrograph.
-
-
-The standard algorithmic pipeline in cryo-EM begins by detecting the projections of the samples in the micrograph. This procedure is called \emph{particle picking}. Then, the 3-D structure of the molecule is constructed from the projections, usually using different variations of expectation-maximization (EM). 
-Many automatic and semi-automatic methods for particle picking have been proposed, based on edge detection, template matching and deep learning; see for instance~\cite{harauz1989automatic,ogura2004automatic,zhu2016deep,frank1983automatic,scheres2015semi,heimowitz2018apple}. 
-
-If the molecule to be reconstructed is small, then the SNR might be very low. 
-As been recognized by cryo-EM scientists, particle picking is impossible in low SNR and thus for small particles. 
-This led to the belief in the cryo-EM community is reconstruction of small molecules is impossible. We claim that this argument is wrong. While this paper focused on a mathematical toy model, Section TKTK discusses the application to cryo-EM. A companion paper focused on this application and provides all the details~\cite{bendory2018toward}. 
-
-In addition, most of the particle picking procedures are prone to \emph{model bias}. For instance, in the popular framework of RELION~\cite{scheres2015semi}, the user manually marks hundreds of spots on the micrograph, believed to contain projections. 
-Therefore, the algorithm's performance depends on the prior assumptions of the users about the particle's structure; the same holds true for deep learning based approaches which require constructing labeled sets of data.
-Other methods use disks or differences of Gaussians as templates~\cite{langlois2014automated,voss2009dog}.
-Nowadays, it also still popular to pick particles manually. This method, while it exploits the researcher's experience, is both tedious and subject to model bias.
-
 
 
 
@@ -285,7 +285,7 @@ Along the same lines, one can establish a relation for third-order autocorrelati
 for $\ell_1,\ell_2 = 0, \ldots, L-1$. Here too, few entries are affected by $\sigma$ in the limit.
 Detailed derivations for identities in this and the next part are given in Appendix~\ref{sec:autocorrelation_computation}.
 
-\subsection{The single signal case}
+\subsection{The multiple signals case}
 
 Returning to the general case $K \geq 1$, let $M_1, \ldots, M_K$ denote the number of occurrences of signals $x_1, \ldots, x_K$ respectively, and define
 \begin{align}
@@ -451,7 +451,17 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 
 \section{Expectation-maximization}
 
-Should we devote a whole section for EM or merge it with the next one?
+Suppose we extract a set of windows $y_1,\ldots,y_q$ windows of $y$. If the signal's occurrences are sufficiently separated, then we can model each window as 
+\begin{equation} \label{eq:EM}
+y_i = PR_{r_i}Zx + \varepsilon,
+\end{equation}
+where $Zx = (0,\ldots 0,x[0],\ldots,x[L-1])\in\mathbb{R}^{2L}$, $R_r$ shifts a signal cyclically by $r$ entries  and $P$ restricts a signal to its first $L$ entries. We assume the distribution of $R_r$ to be of the form $\rho = (\alpha,\frac{1-\alpha}{2L-1},\ldots,\frac{1-\alpha}{2L-1})\in\Delta^{2L}$. Namely, the probability to see no signal (only noise) is $\alpha$, whereas there is equal probability to observe each one of the possible signal fractions. 
+
+If each window was drawn independently from this model, then it is straight-forward to derive the EM formulation, similarly to~\cite{bendory2017bispectrum,abbe2017multireference}. In particular, ....
+
+
+Indeed, the formulation~\eqref{eq:EM} does not follow the EM recipe since, in order to keep the separation constraint, the random shifts $R_r$ are correlated across windows. Nonetheless, numerically it seems that the EM method works well; see Section TKTK for numerical demonstrations.
+
 
 
 \section{Results} \label{sec:results}
@@ -528,8 +538,6 @@ Figure~\ref{fig:1Dheterosignals} shows how the estimates improve as we see a lar
 	\label{fig:1Dheterosignals}
 \end{figure}
 
-
-\TODO{The following was copying from the Methods section}
 
 
 \paragraph{Numerical experiment with three 1-D signals.}
