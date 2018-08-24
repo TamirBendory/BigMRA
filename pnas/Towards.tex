@@ -121,20 +121,23 @@ Another interesting feature of the described approach pertains to model bias, wh
 
 \section{Proof of concept: A mathematical toy model}
 
+In this section, we present a toy model which is studied in the next sections. 
+The role of this model is to introduce the mathematical principles enabling to estimate a signal in a low SNR regime, although its detection might be impossible. Later, we discuss how these principles can be carried through for the SPR problem. The model is formulated for 1-D signals to ease exposition.   
+
 Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
 \begin{align}
 y & =  x \ast s + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{align}
 where $\ast$ denotes linear convolution. 
-While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in the low signal-to-noise ratio (SNR) environment, estimating $s$ is impossible, where estimating $x$ is tractable under some conditions on $s$. 
+While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in the low SNR environment, estimating $s$ is impossible, where estimating $x$ is tractable under some conditions on $s$. 
 
 The binary signals obey the following property:
 \begin{align}
-\textrm{If } s_k[i] = 1 \textrm{ and } s_{k'}[j] = 1 \textrm{ but } (k, i) \neq (k', j), \textrm{ then } |i - j| \geq 2L-1.
+\textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
 \end{align}
-In words: the starting positions of any two occurrences (be it of the same signal or of two different signals) must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
+In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
 
 \subsection{Related work}
 
