@@ -133,15 +133,13 @@ where $\ast$ denotes linear convolution.
 While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in the low SNR environment, estimating $s$ is impossible, where estimating $x$ is tractable under some conditions on $s$. 
 
 The binary signals obey the following property:
-\begin{align}
+\begin{align} 
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
 \end{align}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
 
-\subsection{Related work}
-
-For $K=1$, our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
+Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
 %
 \begin{math}
 %
@@ -150,18 +148,13 @@ y = x\ast w + \varepsilon,
 \end{math} 
 %
 where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
-%The problem has also been studied in the case of a known input $w$~\cite{pillonetto2010new,dinuzzo2015kernels,bottegal2016robust}. 
-The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$, satisfying one of the generative models above, we obtain our model in the  case of a single signal ($K = 1$). The same observation model is used for blind deconvolution, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$, satisfying the condition of~\eqref{eq:spacing}, we obtain our model. The same observation model is used for \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 
-Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
-
-Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
-
-In special cases, including the case where $w$ is binary, EM has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
-Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation constraint on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
-
-\TODO{Need to refer to this paper https://arxiv.org/abs/1806.00338}
-
+Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. %For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). 
+If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
+Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. %Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
+In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
+%Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation constraint on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
 Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
 \section{Autocorrelation analysis}
@@ -351,12 +344,16 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 	\end{itemize}
 \end{corollary}
 
+\section{Numerical experiments}
 
+\TODO{Need to refer to this paper https://arxiv.org/abs/1806.00338}
 
 The techniques we advocate allow to recover a signal hidden in noisy micrographs without (even implicitly) detecting the location of signal repetitions in these micrographs. To illustrate the underlying principles of the method, it is instructive to start with a toy model where the target signal is an unknown 2-D image. The latter appears several times in noisy micrographs, at unknown locations. Toward recovery, we first compute the second-order autocorrelation of the micrographs. We then establish that the autocorrelation of the target image can be recovered from the autocorrelation of the micrographs in a straightforward manner. The more micrographs we collect, the more accurate the estimate of the image's autocorrelation. 
 The target image is then estimated from its autocorrelation using a standard inversion algorithm (up to elementary symmetries).
 The same principles carry over to the more challenging task of 3-D reconstruction from micrographs.
 The Methods Section provides additional details. 
+
+
 
 In the  experiment, we estimated Einstein's image of size $50\times 50$ and mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. A micrograph contains, on average, 700 occurrences of the target image at random locations. 
 Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$ (this corresponds to SNR$=1/20$). This high noise level is illustrated in TKTK. %In this first experiment, we assume knowledge of $\sigma$ and of the total number of signal occurrences across all micrographs.\TODO{Need to mention that in the 3-D reconstruction we do not make these assumptions.}
