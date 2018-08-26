@@ -155,9 +155,12 @@ If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior 
 Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. %Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
 In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
 %Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation constraint on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
-Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
+%
+%Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
-\section{Autocorrelation analysis}
+Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Following this approach, in the next section we present an autocorrelation analysis for~\eqref{eq:model} and analyze it in Section~\ref{sec:theory}.  
+
+\section{Autocorrelation analysis} \label{sec:AC_analysis}
 
 
 In general, for a signal $z$ of length $m$, the autocorrelation of order $q \geq 1$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
@@ -166,7 +169,7 @@ a_z^q[\ell_1,\ldots,\ell_{k-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]
 \label{eq:ac_general}
 \end{align}
 where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
-For our purposes, this will be applied both to $x_k$'s (each of length $L$) and to $y$ (of length $N$).
+For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
 Explicitly, the first-, second- and third-order autocorrelations are given by
 \begin{align} 
 a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} z[i], \nonumber\\
@@ -174,12 +177,20 @@ a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}}
 a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]. \label{eq:ac_special}
 \end{align}
 The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^2[-\ell]$, and
-\begin{align*}
-a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
-\end{align*}
+$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
+$
+%\begin{align*}
+%a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
+%\end{align*}
 %Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and $a_z^3$ contain \TODO{TKTK--I think it was commented in the latex} (respectively) non-trivial distinct real numbers, generically.
+%
+%For the special case $K = 1$ where a single signal $x = x_1$ must be recovered, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, so that we treat it first. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
+%\begin{align}
+%\gamma & = \frac{M L}{N}
+%\end{align}
+%denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint~\eqref{eq:spacing} imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
-For the special case $K = 1$ where a single signal $x = x_1$ must be recovered, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, so that we treat it first. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
+Under the space constraint~\eqref{eq:spacing}, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
 \begin{align}
 \gamma & = \frac{M L}{N}
 \end{align}
@@ -194,16 +205,17 @@ We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains 
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
 \end{align*}
 Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
+\TODO{TB: I think that this paragraph can be much shorter and it is sufficient to show only the second equation and remove footnote. Nicolas thinks otherwise. Need to be decided. }
 
 The spacing constraint~\eqref{eq:spacing} gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
 \begin{align*}
-\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\ell[\ell]
+\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
 \end{align*}
-for $\ell = 0, \ldots, L-1$, where $\ell$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
+for $\ell = 0, \ldots, L-1$, where $\delta$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
 Along the same lines, one can establish a relation for third-order autocorrelations:
-\begin{align}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] + \sigma^2\gamma a_{x}^1 \cdot \big(\ell[\ell_1,0]+\ell[0,\ell_2]+\ell[\ell_1,\ell_2]\big),
-\label{eq:data_ac_k1}
+\begin{align} \label{eq:data_ac_k1}
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] \\& + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), 
+ \nonumber
 \end{align}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$. Here too, few entries are affected by $\sigma$ in the limit.
 Detailed derivations for identities in this and the next part are given in Appendix~\ref{sec:autocorrelation_computation}.
@@ -460,7 +472,7 @@ We also note several aspects of SPR experiments that were neglected in this pape
 
 
 
-\section{Proof of \eqref{eq:data_ac}} \label{sec:autocorrelation_computation}
+\section{Derivation of identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
 
 Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
 
