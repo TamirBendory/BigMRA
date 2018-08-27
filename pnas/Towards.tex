@@ -201,19 +201,19 @@ One simple observation is that the first-order autocorrelation of $y$ (its mean)
 \E\{ a_y^1 \} & = \gamma a_x^1.
 \end{align*}
 We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density.) In that regime, the law of large numbers gives meaning to the following statement:
-\begin{align*}
+\begin{align} \label{eq:mean_micrograph}
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
-\end{align*}
+\end{align}
 Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
 \TODO{TB: I think that this paragraph can be much shorter and it is sufficient to show only the second equation and remove footnote. Nicolas thinks otherwise. Need to be decided. }
 
 The spacing constraint~\eqref{eq:spacing} gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
-\begin{align*}
+\begin{align} \label{eq:ac2_micrograph}
 \lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
-\end{align*}
+\end{align}
 for $\ell = 0, \ldots, L-1$, where $\delta$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
 Along the same lines, one can establish a relation for third-order autocorrelations:
-\begin{align} \label{eq:data_ac_k1}
+\begin{align} \label{eq:ac3_micrograph}
 \lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] \\& + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), 
  \nonumber
 \end{align}
@@ -224,107 +224,42 @@ Detailed derivations for identities in this and the next part are given in Appen
 
 \section{Theory} \label{sec:theory}
 
-If $K=1$ and $x$ is known, then the locations $s_i$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low SNR regime, estimating the binary sparse signal $s$ is impossible. We have few evidences for that\cite{aguerrebere2016fundamental}, but we will provide Will's argument here.
+If $x$ is known, then the support signal $s$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible. 
+\TODO{Here we need to provide Will's argument as a proposition}
 
-Therefor, we need to consider a different approach. In this paper, we consider autocorrelation analysis. In what follows, we present several results on properties of autocorrelations. For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions. 
+%We have few evidences for that\cite{aguerrebere2016fundamental}, but we will provide Will's argument here.
 
-A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, since $z[0]$ and $z[L-1]$ are non-zero by definition, we have the formula:
+Accordingly, we must consider methods that aim to estimate the signal directly, without estimating the nuisance variables as an intermediate step. 
+ %we need to consider a different approach. In this paper, we consider autocorrelation analysis.
+  In what follows, we present several results on properties of autocorrelations. For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions. 
+
+A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, since $z[0]$ and $z[L-1]$ are nonzero by definition, we have the formula:
 %
 \begin{align} \label{eq-uniqueness}
 %
 z[k] = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
 %
 \end{align}
-
 In particular, we have proven the following proposition:
-
 \begin{proposition} \label{prop:uniqueness}
 	%
 	Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then $z$ is determined uniquely from  $a_z^2$ and $a_z^3$.
 \end{proposition}
 
-Some remarks are in order. First, formula \eqref{eq-uniqueness} is not numerically stable if $z[0]$ and/or $z[L-1]$ are close to 0. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares procedures, which is empirically more robust to additive noise; we have seen similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous}.
-
+Some remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable if $z[0]$ or $z[L-1]$ are close to 0. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares procedures, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
 Second, if the spacing condition~\eqref{eq:spacing} holds, then the length of the signal can be determined from the autocorrelations.
 %%%and therefore the assumption that the first and last entries are nonzero is met.
 In particular, if~\eqref{eq:spacing} holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
+Third, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
+However, for dimensions greater than one, almost all signals are determined uniquely up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case). %~\cite{hayes1982reconstruction,hayes1982reducible}. 
+The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 
+The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately give the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma = \lim_{N\to\infty}ML/N$, where $M=M_N$ grows with $N$. We will show, however, that $x$ is still identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
 
-
-\begin{comment}
-
-%%%Finally, computing the $d$th autocorrelation amplifies the variance of the noise by a factor $d$ in the low SNR regime. Therefore, if we can estimate $a_z^3$ up to small perturbation, it implies that we can estimate $a_z^2$ accurately as the proposition assumes. 
-
-
-First, the second result of Proposition~\ref{prop:uniqueness} shows that there exists a very simple estimator that has finite sensitivity. In the next numerical experiments we use an estimator based on nonconvex LS that shows empirical robustness to additive noise, in accordance with related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous}. 
-Second, these results carry through to signals of any dimension.
-Third, if the spacing condition~\eqref{eq:spacing} holds, then the length of the signal can be determined from the autocorrelations and 
-therefore the assumption that the first and last entries are nonzero is met. In particular, if~\eqref{eq:spacing} holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
-Finally, computing the $d$th autocorrelation amplifies the variance of the noise by a factor $d$ in the low SNR regime. Therefore, if we can estimate $a_z^3$ up to small perturbation, it implies that we can estimate $a_z^2$ accurately as the proposition assumes. 
-
-
-
-
-, this uniqueness result holds for signals of any dimension. Third
-
-
-Furthermore,
-as proven in the following simple proposition.
-%
-\begin{proposition} \label{prop:uniqueness}
-%
-Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then $z$ is determined uniquely from  $a_z^2$ and $a_z^3$. More precisely, suppose we can measure $\tilde{a}_z^3[k,L-1] = a_z^3[k,L-1]+\upsilon$ and that $\vert z[0]z[L-1]\vert \geq \ell>0$.
-Then,  $\hat{z}[k] =\frac{\tilde{a}_z^3[k,L-1]}{a_z^2[L-1]} $ satisfies $\vert \hat{z}[k] - z[k]\vert\leq \frac{\vert \upsilon\vert }{\ell}$. 
-
-\end{proposition}
-
-
-\begin{proof}
-%
-By assumption $a_z^2[L-1] = z[0]z[L-1]\neq 0$.
-Then, the uniqueness results, for all $k=0,\ldots L-1$,  follows from:
-%
-\begin{equation*}
-%
-a_z^3[k,L-1] = z[0]z[k]z[L-1].
-%
-\end{equation*}
-%
-In addition, 
-%
-\begin{equation*}
-%
-\hat{z}[k] = \frac{\tilde{a}_z^3[k,L-1]}{a_z^2[L-1]} = z[k]+\frac{\upsilon}{a_z^2[L-1]} \quad \Rightarrow \quad \vert \hat{z}[k] - {z}[k]\vert \leq \frac{\vert\upsilon\vert}{\ell}.
-%
-\end{equation*} 
-%
-\end{proof}
-
-
-
-
-A few remarks are in order. 
-First, the second result of Proposition~\ref{prop:uniqueness} shows that there exists a very simple estimator that has finite sensitivity. In the next numerical experiments we use an estimator based on nonconvex LS that shows empirical robustness to additive noise, in accordance with related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous}. 
-Second, these results carry through to signals of any dimension.
-Third, if the spacing condition~\eqref{eq:spacing} holds, then the length of the signal can be determined from the autocorrelations and 
-therefore the assumption that the first and last entries are nonzero is met. In particular, if~\eqref{eq:spacing} holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
-Finally, computing the $d$th autocorrelation amplifies the variance of the noise by a factor $d$ in the low SNR regime. Therefore, if we can estimate $a_z^3$ up to small perturbation, it implies that we can estimate $a_z^2$ accurately as the proposition assumes. 
-
-
-\end{comment}
-
-
-Note too that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely~\cite{beinert2015ambiguities,bendory2017fourier}.
-%%%Considering the third-order autocorrelation is also a necessary condition to determine a signal from its autocorrelations. Indeed, the second-order autocorrelation of a one-dimensional signal does not determine a signals uniquely~\cite{beinert2015ambiguities,bendory2017fourier}.
-However, for dimensions greater than one, almost all signals are determined uniquely up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction,hayes1982reducible}. The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
-
-
-The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately give the moments of the signal $x$, as seen by formula~\eqref{eq:data_ac_k1}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma = \lim_{N\to\infty}ML/N$, where $M=M_N$ grows with $N$. We will show, however, that $x$ is still identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
-
-First, we observe that if the noise level $\sigma$ is known, one can estimate $\gamma$ from the first two moments of the observed vector $y$.
+First, we observe that if the noise level $\sigma$ is known, one can estimate $\gamma$ from the first two moments of the observed vector.
 %
 \begin{proposition} \label{prop:gamma}
-	Let $K=1$ and $\sigma > 0$ be fixed. If the mean of $x$ is nonzero, then 
+	Let $\sigma > 0$ be fixed. If the mean of $x$ is nonzero, then 
 	%
 	\begin{equation*}
 	%
@@ -334,14 +269,20 @@ First, we observe that if the noise level $\sigma$ is known, one can estimate $\
 	%
 \end{proposition}
 \begin{proof}
-	The proof follows from plugging the explicit expressions of~\eqref{eq:data_ac_k1} into the right hand side of the equality.
+	The proof follows from plugging the explicit expressions of~\eqref{eq:mean_micrograph} and~\eqref{eq:ac2_micrograph} into the right hand side of the equality.
 \end{proof}
 
-Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are identifiable. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that it holds for all $x$ inside a set $\Omega \subset \RL$, whose complement $\RL \setminus \Omega$ has Lebesgue measure zero.
-
+Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are identifiable. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
+lies in the vanishing locus of a nonzero polynomial\footnote{Given a  nonzero polynomial $f$ in $T$ variables (real or complex), the vanishing locus of $f$ is the set 
+	$V(f) = \{(x_1, \ldots, x_T) \in \mathbb{R}^T (\text{resp. } \mathbb{C}^T) \vert f(x_1,\ldots x_T)=0\}$. By a general result in algebraic geometry $\dim V(f) < T$. As a consequence the complement of $V(f)$ in $\mathbb{R}^T$ (resp. $\mathbb{C}^T$) is dense.}. In particular, this means that we can recover
+almost all signals with the given measurements.
+%
+%we mean that it holds for all $x$ inside a set $\Omega \subset \RL$, whose complement $\RL \setminus \Omega$ has Lebesgue measure zero.
+%
 \begin{proposition} \label{prop:gamma_sigma}
 	%
-	Let $K=1$, and $\sigma > 0$ be fixed. Then, $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma\geq\frac{1}{4L(L-1)}$, then this holds for any signal $x$ with nonzero mean. 
+	%Let $\sigma > 0$ be fixed. 
+	The observed autocorrelations $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma\geq\frac{L}{4(L-1)}\approx \frac{1}{4}$, then this holds for any signal $x$ with nonzero mean. 
 	\begin{proof}
 		See Appendix~\ref{sec:proof_prop_gamma_sigma}.
 	\end{proof}
@@ -349,10 +290,11 @@ Using third-order autocorrelation information of $y$, both the ratio $\gamma$ an
 
 From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can directly deduce the following:
 \begin{corollary}
-	Let $K=1$ and $\sigma > 0$ be fixed. Then the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are identifiable from the first three autocorrelation functions of $y$ if:
+	%Let $K=1$ and $\sigma > 0$ be fixed.
+	 The signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are identifiable from the first three autocorrelation functions of $y$ if:
 	\begin{itemize}
 		\item Either the signal $x$ is generic; or
-		\item  Both $x[0]$  and $x[L-1]$ are nonzero, $x$ has nonzero mean, and $\gamma\geq\frac{1}{4L(L-1)}$.
+		\item  Both $x[0]$  and $x[L-1]$ are nonzero, $x$ has nonzero mean, and $\gamma\geq\frac{L}{4(L-1)}$.
 	\end{itemize}
 \end{corollary}
 
@@ -364,8 +306,6 @@ The techniques we advocate allow to recover a signal hidden in noisy micrographs
 The target image is then estimated from its autocorrelation using a standard inversion algorithm (up to elementary symmetries).
 The same principles carry over to the more challenging task of 3-D reconstruction from micrographs.
 The Methods Section provides additional details. 
-
-
 
 In the  experiment, we estimated Einstein's image of size $50\times 50$ and mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. A micrograph contains, on average, 700 occurrences of the target image at random locations. 
 Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$ (this corresponds to SNR$=1/20$). This high noise level is illustrated in TKTK. %In this first experiment, we assume knowledge of $\sigma$ and of the total number of signal occurrences across all micrographs.\TODO{Need to mention that in the 3-D reconstruction we do not make these assumptions.}
@@ -472,7 +412,7 @@ We also note several aspects of SPR experiments that were neglected in this pape
 
 
 
-\section{Derivation of identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
+\section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
 
 Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
 
