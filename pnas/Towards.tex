@@ -120,21 +120,21 @@ Another interesting feature of the described approach pertains to model bias, wh
 \section{Proof of concept: A mathematical toy model}
 
 In this section, we present a toy model which is studied in the next sections. 
-The role of this model is to introduce the mathematical principles enabling to estimate a signal in a low SNR regime, although its detection might be impossible. Later, we discuss how these principles can be carried through for the SPR problem. The model is formulated for 1-D signals to ease exposition.   
+The role of this model is to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles can be carried through for the SPR problem. The model is formulated for 1-D signals to ease exposition.   
 
-Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
+Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data, where $N \gg L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
 \begin{align}
 y & =  x \ast s + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{align}
 where $\ast$ denotes linear convolution. 
-While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in the low SNR environment, estimating $s$ is impossible, where estimating $x$ is tractable under some conditions on $s$. 
+While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in the low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
 
-The binary signals obey the following property:
-\begin{align} 
-\textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
-\label{eq:spacing}
-\end{align}
+We assume that the binary signals $s$ obey the following \emph{separation condition}: If $s[i] = 1$ and $s[j] = 1$  for  $i \neq j$, then $\vert i - j\vert \geq 2L-1$.
+%\begin{align} 
+%\textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
+%\label{eq:spacing}
+%\end{align}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
 
 Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
@@ -146,7 +146,7 @@ y = x\ast w + \varepsilon,
 \end{math} 
 %
 where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
-The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$, satisfying the condition of~\eqref{eq:spacing}, we obtain our model. The same observation model is used for \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$, satisfying the separation condition, we obtain our model. The same observation model is used for \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 
 Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. %For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). 
 If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
@@ -189,24 +189,27 @@ $
 %\end{align}
 %denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint~\eqref{eq:spacing} imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
-Under the space constraint~\eqref{eq:spacing}, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
+Under the spacing constraint, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{align}
 \gamma & = \frac{M L}{N}
 \end{align}
-denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint~\eqref{eq:spacing} imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
+denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint%~\eqref{eq:spacing} 
+imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
-One simple observation is that the first-order autocorrelation of $y$ (its mean) is independent of the locations of $x$. Since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:\footnote{We did not fully specify a random generating model for the location vector $s$. The expectation is still well defined specifically because the quantity under consideration is independent of $s$ under the assumptions.}
+One simple observation is that the first-order\TODO{Will: I suggest making this statement about all the autocorrelations here, instead of singling out the mean first. I understand that the mean can be estimated without the separation condition, but this distinction is not very critical to highlight, and it's a little confusing to have this sentence (upon first reading, it might be interpreted to mean that the other autocorrelations do depend on s). I'd say something like: Under the separation condition on $s$, the autocorrelation functions of $y$ can be shown to depend only on the corresponding autocorrelations of $x$ and the parameter $gamma$, defined by... 
+Then go into the details.} autocorrelation of $y$ (its mean) is independent of the locations of $x$. Since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:\TODO{Will: Instead of the footnote, just specify here that the randomness is over the Gaussian noise.
+s can be deterministic. The only thing we assume about s is that the associated parameter gamma is constant (you might also note that this can be relaxed, so long as the sequence of $\gamma_N$'s converges to gamma, but this point is not critical).}\footnote{We did not fully specify a random generating model for the location vector $s$. The expectation is still well defined specifically because the quantity under consideration is independent of $s$ under the assumptions.}
 \begin{align*}
 \E\{ a_y^1 \} & = \gamma a_x^1.
 \end{align*}
-We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density.) In that regime, the law of large numbers gives meaning to the following statement:
+We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density.) In that regime, the law of large numbers can be used to show the following statement:
 \begin{align} \label{eq:mean_micrograph}
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
 \end{align}
 Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
 \TODO{TB: I think that this paragraph can be much shorter and it is sufficient to show only the second equation and remove footnote. Nicolas thinks otherwise. Need to be decided. }
 
-The spacing constraint~\eqref{eq:spacing} gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
+The spacing condition gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
 \begin{align} \label{eq:ac2_micrograph}
 \lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
 \end{align}
@@ -246,9 +249,9 @@ In particular, we have proven the following proposition:
 \end{proposition}
 
 Some remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable if $z[0]$ or $z[L-1]$ are close to 0. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedures, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
-Second, if the spacing condition~\eqref{eq:spacing} holds, then the length of the signal can be determined from the autocorrelations.
+Second, if the separation condition holds, then the length of the signal can be determined from the autocorrelations.
 %%%and therefore the assumption that the first and last entries are nonzero is met.
-In particular, if~\eqref{eq:spacing} holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
+In particular, if the separation condition holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
 Third, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
 However, for dimensions greater than one, almost all signals are determined uniquely up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case). %~\cite{hayes1982reconstruction,hayes1982reducible}. 
 The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
@@ -310,7 +313,7 @@ The technique we advocate allow to recover a signal hidden in noisy micrographs 
 
 In the first experiment, we estimated Einstein's image of size $50\times 50$ and mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. A micrograph contains, on average, 700 occurrences of the target image at random locations. 
 Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$ (this corresponds to SNR$\approx1/375$). This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
-To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with~\eqref{eq:spacing}. %The separation restriction is discussed in more details in the Methods Section.
+To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition. %~\eqref{eq:spacing}. %The separation restriction is discussed in more details in the Methods Section.
 
 We compute the average second-order autocorrelation of the micrographs. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform (FFT) on GPUs. Given the noise level and number of image repetitions, the second-order autocorrelation of the image can be easily deduced from~\eqref{eq:ac2_micrograph}.  Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
 
@@ -319,7 +322,7 @@ Figure~\ref{fig:Einst_example} shows several estimated images for a growing numb
 
 In practice, we do not expect to know $\gamma$ and maybe not even $\sigma$.
 Figure~\ref{fig:1D_example} shows recovery of a 1-D signal from the first three autocorrelations of the data.
-The autocorrelations are computed from noisy micrographs with $\sigma=3$ that obey the separation condition of~\eqref{eq:spacing}.
+The autocorrelations are computed from noisy micrographs with $\sigma=3$ that obey the separation condition.% of~\eqref{eq:spacing}.
  Both the signal  and $\gamma$ are estimated simultaneously from the observed autocorrelations by LS fitting; more details are given in Appendix~\ref{sec:numeric_details}. Crucially, the LS does not require the knowledge of $\sigma$. 
 
 \begin{figure*}[h!]
@@ -460,7 +463,7 @@ We also note several aspects of SPR experiments that were neglected in this pape
 \paragraph{2-D experiment.}
 
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generate $P$ micrographs of size $4096\times 4096$ pixels. 
-In each micrograph, we place Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition~\eqref{eq:spacing}.  
+In each micrograph, we place Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition.%~\eqref{eq:spacing}.  
 This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
 an accept/reject rule based on the separation constraint and locations picked so far.
 On average, $700$ images are placed in each micrograph.   
@@ -488,7 +491,7 @@ The map is designed so that, if the estimated power spectrum is exact, then fixe
 
 \paragraph{1-D experiment.}
 For the 1-D experiment depicted in Figure~\ref{fig:1D_example}, we used a signal of length $L=21$ and generated an observation $y$ of length $N = 10(2L-1)M$, where $M$ is the number of repetitions. 
-The observation was generated by randomly selecting placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far until reaching the desried number of signal occurences. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$ is about $1/175$.
+The observation was generated by randomly selecting placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far until reaching the desired number of signal occurrences. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$ is about $1/175$.
 %	 fix $K = 3$ signals of length $L = 21$. Following the forward model described at the beginning of this section, we generate an observation $y$ of length $12.3 \cdot 10^9$. Each of the three signals appears, respectively (and approximately), $30.0 \cdot 10^6$, $20.0 \cdot 10^6$ and $10.0 \cdot 10^6$ times in $y$ for a total of exactly $60 \cdot 10^6$ occurrences, such that at least $L-1$ zeros separate any two occurrences of any signals. 
 %This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far. For each placement, one of the three signals is picked at random according to the proportions $1/2, 1/3, 1/6$. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$
 %% sqrt((m_want*sum(X.^2)')/(sigma^2*n))
@@ -532,9 +535,19 @@ Setting $W = L$ (as is a priori desired) is problematic because the above optimi
 Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
 
 \paragraph{3-D experiments.}
-For the experiment in Figure~TKTK, we computed the analytical first three autocorrelations of the volume according to~TKTK.   
 
+For the experiment in Figure~TKTK, we computed the analytical first three autocorrelations of the volume according to~TKTK. To estimate the coefficients of the volume itself, we solve the LS problem
+\begin{equation} \label{eq:LS_cryo}
+\min_{\hat{x},\hat{\gamma}} w_1 \vert \mathfrak{a}_x^1 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^1 \vert^2 + w_2\| \mathfrak{a}_x^2 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^2 \|_2^2 + w_3\| \mathfrak{a}_x^3 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^3 \|_F^2, 
+\end{equation}  
+where the explicit expressions of $\mathfrak{a}_x^1$, $\mathfrak{a}_x^2$ and $\mathfrak{a}_x^3$ are given in~\eqref{eq:ac_1_prolates},~\eqref{eq:ac_2_prolates} and~\eqref{eq:ac_3_prolates}, respectively.  
+In the experiments, we set $w_1=w_2=w_3=1$. 
 
+The LS was solved by TKTK. The expected $\hat \gamma$ is one.
+
+In the first experiment, we used \TODO{Bla bla bla, real valued volume}
+
+The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows \TODO{separation, etc. }. Then, the LS~\eqref{eq:LS_cryo} was solved with $L=0$ (low-resolution estimate).
 
 \section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
 
@@ -762,7 +775,8 @@ Let $\II\in\RNN$ denote a micrograph. We assume it consists of shifted copies of
 \begin{equation}\label{eq:micrograph_model}
 \II = \sum_{t=1}^{M} I_{\omega_t}\ast\delta_{\mb s_t}+ \varepsilon, \quad \varepsilon~\sim\mathcal{N}(0,\sigma^2 I),
 \end{equation}
-where the viewing directions $\omega_t$ are assumed to be drawn from the uniform distribution over $\text{SO}(3)$ and $\mb s_t$ denotes the location of the center of the $t$th projection in the micrograph. Similarly to~\eqref{eq:spacing}, we impose a separation condition so that any two projections are separated by at least $2P-1$ pixels between their upper left corners  in each direction.
+where the viewing directions $\omega_t$ are assumed to be drawn from the uniform distribution over $\text{SO}(3)$ and $\mb s_t$ denotes the location of the center of the $t$th projection in the micrograph. %Similarly to~\eqref{eq:spacing}, 
+Again, we impose a separation condition so that any two projections are separated by at least $2P-1$ pixels between their upper left corners  in each direction.
 Note that~\eqref{eq:model} can be also written as a sum of $\delta$ functions as in~\eqref{eq:micrograph_model}. 
 
 Define the $p$th autocorrelation of $\II$ as
@@ -1048,7 +1062,7 @@ Notably, these terms are zero unless $m_1+m_2+m_3=0$ and $|\ell_1-\ell_2|\leq \e
 Combining~\eqref{eq:b_average} with~\eqref{eq:third_order_ac_volume} provides the explicit relation between the third-order autocorrelation and the volume.   
 
 Recall that we obtain the autocorrelations of the volume in PSWFs coefficients; see~\eqref{eq:third_order_ac_pswf}. Hence, to conclude the derivation we expand
-\[ \langle a^3_{I_{\omega}}[\Bell_1, \Bell_2]\rangle_{\omega}= \sum_{k,q_1,q_2}\mathfrak{a}^3[k,q_1,q_2]\psi_{k,q_1}[\Bell_1]\overline{\psi_{k,q_2}[\Bell_2]},\]
+\[ \langle a^3_{I_{\omega}}[\Bell_1, \Bell_2]\rangle_{\omega}= \sum_{k,q_1,q_2}\mathfrak{a}_x^3[k,q_1,q_2]\psi_{k,q_1}[\Bell_1]\overline{\psi_{k,q_2}[\Bell_2]},\]
 where we only include the block-diagonal terms in the expansion; the rest are equal to zero. Let
 \begin{align*}
 \Psi_{\ell,N,s}[\Bell] &:= \sum_{n=0}^{n_{\text{max}}(N)}\beta_{\ell,s;N,n}\psi_{N,n}[\Bell],\\ 
@@ -1056,10 +1070,16 @@ where we only include the block-diagonal terms in the expansion; the rest are eq
 \end{align*}
 Then, 
 the final formula reads
-\[\begin{aligned} &\mathfrak{a}^3[k,q_1,q_2] = \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_1+m_2,s_3}}\\
+\begin{align} \label{eq:ac_3_prolates}
+ &\mathfrak{a}_x^3[k,q_1,q_2] = \sum_{\substack{\ell_1,m_1,s_1\nonumber \\ \ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_1+m_2,s_3}}\\
 &\times (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
-&\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N2\end{array}\right)\\&\times\frac{1}{L^2}\sum_{\mb i}\Psi_{\ell_1,N_1,s_1}[\mb i]\rho_{\ell_2,N_2,s_2}^{(k,q_1)}[\mb i]\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}[\mb i]}. \end{aligned}\]
-In practice, the last two lines of the above expression for $\mathfrak{a}^3[k,q_1,q_2]$ is precomputed, and both the integration over $\mb i$ and over $\Bell$ is performed on the grid of the images in the dataset, to match the integration performed on the actual images.
+&\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\nonumber\\ N_1 & N_2 & -N_1-N2\end{array}\right)\nonumber\\&\times\frac{1}{L^2}\sum_{\mb i}\Psi_{\ell_1,N_1,s_1}[\mb i]\rho_{\ell_2,N_2,s_2}^{(k,q_1)}[\mb i]\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}[\mb i]}. \nonumber
+\end{align}
+%
+%\[\begin{aligned} \label{eq:ac_3_prolates} &\mathfrak{a}_x^3[k,q_1,q_2] = \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_1+m_2,s_3}}\\
+%&\times (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
+%&\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N2\end{array}\right)\\&\times\frac{1}{L^2}\sum_{\mb i}\Psi_{\ell_1,N_1,s_1}[\mb i]\rho_{\ell_2,N_2,s_2}^{(k,q_1)}[\mb i]\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}[\mb i]}. \end{aligned}\]
+In practice, the last two lines of the above expression for $\mathfrak{a}_x^3[k,q_1,q_2]$ is precomputed, and both the integration over $\mb i$ and over $\Bell$ is performed on the grid of the images in the dataset, to match the integration performed on the actual images.
 
 %\subsection{The power spectrum}
 \paragraph{Second-order autocorrelation.}
@@ -1079,12 +1099,14 @@ $j_{\ell,s}$ are real.
 
 As before, we want to derive the relation with respect to the PSWF coefficients of the autocorrelation. Hence,  we expand the above in 2-D PSWFs by
 \[\left\langle a^2_{\hat{I}_{\omega}}(k,\theta)\right\rangle_{\omega} =
-\sum_{q}\mathfrak{a}_2(q)\psi_{0,q}(k),\]
-and conclude that
-\[ \mathfrak{a}^2[q] =
+\sum_{q}\mathfrak{a}_x^2(q)\psi_{0,q}(k),\]
+and conclude that 
+\begin{equation} \label{eq:ac_2_prolates}
+\mathfrak{a}_x^2[q] =
 \frac{1}{\sqrt{8\pi}}\sum_{\substack{\ell,m\\s_1,s_2}}\tamir_{\ell,m,s_1}\overline{\tamir_{\ell,m,s_2}}
-\int_0^1j_{\ell,s_1}(k)j_{\ell,s_2}(k)R_{0,q}(k)k\, dk.\]
-The integral on $k$ is precomputed.
+\int_0^1j_{\ell,s_1}(k)j_{\ell,s_2}(k)R_{0,q}(k)k\, dk.
+\end{equation}
+The integral on $k$ is precomputed. 
 
 \paragraph{The mean.}
 
@@ -1093,8 +1115,11 @@ The integral on $k$ is precomputed.
 %\sum_{\ell,m,s}a_{\ell,m,s}Y_{\ell,m}(\theta,\varphi)j_{\ell,s}(k),\]
 Since $j_{\ell,s}(0) = 0$ unless $\ell=0$, and since
 $Y_{0,0}(\theta,\varphi) = \frac{1}{\sqrt{4\pi}}$, we conclude from~\eqref{eq:volume_expansion_app} that
-\[ \langle
-a^1_{I_{\omega}}\rangle_{\omega} = \widehat \phi(\mb 0) = \frac{1}{\sqrt{4\pi}}\sum_s\tamir_{0,0,s}j_{0,s}(0).\]
+\begin{equation} \label{eq:ac_1_prolates}
+\mathfrak{a}_x^1 = \langle
+a^1_{I_{\omega}}\rangle_{\omega}  = \widehat  \phi(\mb 0) = \frac{1}{\sqrt{4\pi}}\sum_s\tamir_{0,0,s}j_{0,s}(0).
+\end{equation}
+
 
 
 %\TODO{=========== Tamir: Stopped here ===============}
