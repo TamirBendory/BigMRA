@@ -207,7 +207,7 @@ We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains 
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
 \end{align}
 Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
-\TODO{TB: I think that this paragraph can be much shorter and it is sufficient to show only the second equation and remove footnote. Nicolas thinks otherwise. Need to be decided. }
+\TODO{TB: I think that this paragraph can be much shorter and it is sufficient to show only the second equation and remove footnote. Nicolas thinks otherwise. Need to be decided. Will: I agree the footnote is unnecessary and actually confusing, since s need not be random.}
 
 The spacing condition gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
 \begin{align} \label{eq:ac2_micrograph}
@@ -226,7 +226,7 @@ Detailed derivations for identities in this and the next part are given in Appen
 
 \section{Theory} \label{sec:theory}
 
-If $x$ is known, then the support signal $s$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust,bernstein2017deconvolution}. However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible. 
+If $x$ is known, then the support signal $s$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible. 
 \TODO{Here we need to provide Will's argument as a proposition}
 
 %We have few evidences for that\cite{aguerrebere2016fundamental}, but we will provide Will's argument here.
@@ -245,10 +245,10 @@ z[k] = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
 In particular, we have proven the following proposition:
 \begin{proposition} \label{prop:uniqueness}
 	%
-	Let $z\in\RL$ and suppose that $z[0]$ and $z[L-1]$ are nonzero. Then $z$ is determined uniquely from  $a_z^2$ and $a_z^3$.
+	 A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$.
 \end{proposition}
 
-Some remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable if $z[0]$ or $z[L-1]$ are close to 0. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedures, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
+Some remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable if $z[0]$ or $z[L-1]$ are close to 0. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
 Second, if the separation condition holds, then the length of the signal can be determined from the autocorrelations.
 %%%and therefore the assumption that the first and last entries are nonzero is met.
 In particular, if the separation condition holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
@@ -256,7 +256,7 @@ Third, note that the second-order autocorrelation is not by itself sufficient to
 However, for dimensions greater than one, almost all signals are determined uniquely up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case). %~\cite{hayes1982reconstruction,hayes1982reducible}. 
 The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 
-The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately give the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma = \lim_{N\to\infty}ML/N$, where $M=M_N$ grows with $N$. We will show, however, that $x$ is still identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
+The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately give the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma = \lim_{N\to\infty}ML/N$, \TODO{Will: Earlier, you defined gamma in the finite sample case; now it's the limit. These should be made consistent.} where $M=M_N$ grows with $N$. We will show, however, that $x$ is still identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
 
 First, we observe that if the noise level $\sigma$ is known, one can estimate $\gamma$ from the first two moments of the observed vector.
 %
@@ -275,10 +275,12 @@ First, we observe that if the noise level $\sigma$ is known, one can estimate $\
 \end{proof}
 
 Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are identifiable. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
-lies in the vanishing locus of a nonzero polynomial\footnote{Given a  nonzero polynomial $f$ in $T$ variables (real or complex), the vanishing locus of $f$ is the set 
-	$V(f) = \{(x_1, \ldots, x_T) \in \mathbb{R}^T (\text{resp. } \mathbb{C}^T) \vert f(x_1,\ldots x_T)=0\}$. By a general result in algebraic geometry $\dim V(f) < T$. As a consequence the complement of $V(f)$ in $\mathbb{R}^T$ (resp. $\mathbb{C}^T$) is dense.}. In particular, this means that we can recover
+lies in a set with Lebesgue measure zero. 
+%in the vanishing locus of a nonzero polynomial\footnote{Given a  nonzero polynomial $f$ in $T$ variables (real or complex), the vanishing locus of $f$ is the set 
+%	$V(f) = \{(x_1, \ldots, x_T) \in \mathbb{R}^T (\text{resp. } \mathbb{C}^T) \vert f(x_1,\ldots x_T)=0\}$. By a general result in algebraic geometry $\dim V(f) < T$. As a consequence the complement of $V(f)$ in $\mathbb{R}^T$ (resp. $\mathbb{C}^T$) is dense.}. 
+In particular, this means that we can recover
 almost all signals with the given measurements.
-%
+%%
 %we mean that it holds for all $x$ inside a set $\Omega \subset \RL$, whose complement $\RL \setminus \Omega$ has Lebesgue measure zero.
 %
 \begin{proposition} \label{prop:gamma_sigma}
@@ -296,7 +298,7 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 	 The signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are identifiable from the first three autocorrelation functions of $y$ if:
 	\begin{itemize}
 		\item Either the signal $x$ is generic; or
-		\item  Both $x[0]$  and $x[L-1]$ are nonzero, $x$ has nonzero mean, and $\gamma\geq\frac{L}{4(L-1)}$.
+		\item   $x$ has nonzero mean  and $\gamma\geq\frac{L}{4(L-1)}$.
 	\end{itemize}
 \end{corollary}
 
@@ -304,15 +306,11 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 
 
 
-The technique we advocate allow to recover a signal hidden in noisy micrographs without (even implicitly) detecting the location of signal repetitions in these micrographs. To illustrate the underlying principles of the method, we present several numerical examples for the toy model~\eqref{eq:model} and a simple proof of concept for a simulated cryo-EM data.  Appendix~\ref{sec:numeric_details} provides additional details on the experiments.
+The technique we advocate allows recovery of a signal hidden in noisy micrographs without (even implicitly) \TODO{Will: What does this mean?} detecting the location  of the signals embedded in these micrographs. To illustrate the underlying principles of the method, we present several numerical examples for the toy model~\eqref{eq:model} and a simple proof of concept for simulated cryo-EM data.  Appendix~\ref{sec:numeric_details} provides additional details on the experiments.
 
-%it is instructive to start with a toy model where the target signal is an unknown 2-D image. The latter appears several times in noisy micrographs, at unknown locations. Toward recovery, we first compute the second-order autocorrelation of the micrographs. We then establish that the autocorrelation of the target image can be recovered from the autocorrelation of the micrographs in a straightforward manner. The more micrographs we collect, the more accurate the estimate of the image's autocorrelation. 
-%The target image is then estimated from its autocorrelation using a standard inversion algorithm (up to elementary symmetries).
-%The same principles carry over to the more challenging task of 3-D reconstruction from micrographs.
-%The Methods Section provides additional details. 
-
-In the first experiment, we estimated Einstein's image of size $50\times 50$ and mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. A micrograph contains, on average, 700 occurrences of the target image at random locations. 
-Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$ (this corresponds to SNR$\approx1/375$). This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
+In the first experiment, we estimated 
+an 50-by-50 pixel image of Einstein with mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. Each micrograph contains, on average, 700 occurrences of the target image at random locations. 
+Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$,  corresponding  to SNR = $\frac{M\|x\|_F^2} {\sigma^2N} \approx1/370$. This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
 To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition. %~\eqref{eq:spacing}. %The separation restriction is discussed in more details in the Methods Section.
 
 We compute the average second-order autocorrelation of the micrographs. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform (FFT) on GPUs. Given the noise level and number of image repetitions, the second-order autocorrelation of the image can be easily deduced from~\eqref{eq:ac2_micrograph}.  Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
@@ -395,12 +393,12 @@ On the hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise microg
 In the simplified mathematical model we examined, we showed it is possible to estimate a signal without detecting its appearances.  
 Our strategy is to compute autocorrelation functions of the micrographs and to relate these statistics to the unknown signal's parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations. 
 
-We also showed how this technique can be, in principle, applied to cryo-EM.
+We also showed how this technique can, in principle, be applied to cryo-EM.
 Crucially, the outlined approach involves no particle picking, hence a fortiori no viewing direction estimation. Concerns for model bias are also greatly reduced since no template matching is involved.
-Additionally,  our technique also allows to use much lower defocus values. Lower defocus means lower contrast, but will maintain  higher frequency information. From that perspective, we may be able to get high resolution reconstructions from fewer micrographs. %, just because we would be using lower defocus. 
+Additionally,  our technique also allows the use of much lower defocus values. Lower defocus means lower contrast, but will maintain  higher frequency information. Consequently, we may be able to get high resolution reconstructions from fewer micrographs.
 
 
-Looking towards applying the framework to encompass all important features of real cryo-EM experiments, our work implies that it might be possible to reconstruct small molecules, in particular, molecules that are too small to be detected in micrographs. 
+Looking towards applying the framework to encompass all important features of real cryo-EM experiments, our work implies that it might be possible to reconstruct small molecules, particularly, molecules that are too small to be detected in micrographs. 
 In pursuing this research direction, our goal is to significantly increase the range of molecules to which cryo-EM can be successfully applied.
 We recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. We discuss a few now.
 
@@ -430,23 +428,16 @@ We recognize that significant challenges lay ahead for the implementation of the
 
 %While the field is currently dominated by Bayesian methods such as EM, they are intractable for such problems. As an alternative, we propose to use autocorrelation analysis technique that shares some common lines (did you get the wordplay?)  with Kam's method for ab initio modeling~\cite{kam1980reconstruction,levin20173d,singer2018mathematics}. That being said, the SPR model is far more complicated than the model presented here. In a future research, we hope to bridge this gap.
 
-One possible concern is that the numerical experiments conducted here suggest a large amount of data may be necessary.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable SNR is an interesting research question.} Recent trends in high-throughput cryo-EM technology \TODO{?} give hope that this may be a lesser concern in the long term. Still, large amounts of data also imply large amounts of computations. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one look at each micrograph is necessary. The output of this data processing stage is a succinct summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved meaningfully in practice. The proof-of-concept experiments above suggest they might. \TODO{Is it?}
-
-%Insofar as the computational challenges are concerned, we note that expectation-maximization algorithms (EM) have, over time, become the norm in the cryo-EM community, as exemplified by the popular RELION package. The idea of using EM for cryo-EM can be traced back at least to~\TODO{Sigworth}. At the time, such approaches also seemed challenging.
-
-
-%\TODO{Do we want to say something about the number of images that we need? Specifically, do we want to address the fact that the numerical experiments suggest we may need a gigantic number of them for cryo, and mention trends in cryo technology that are encouraging in that regard? (Of course, we can't compare to RELION etc.\ in SNRs so low that one can't particle pick; that's not the point here.)}
+One possible concern is that the numerical experiments conducted here suggest a large amount of data may be necessary.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable SNR remains an open question.} Recent trends in high-throughput cryo-EM technology \TODO{?} give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a succinct summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved meaningfully in practice. The proof-of-concept experiments above suggest they might. \TODO{Is it?}
 
 Beyond data acquisition and computational challenges, there are modeling issues to consider.
 As stated, our approach relies on two core assumptions that are not necessarily verified in SPR experiments.
 First, we assume an additive white noise model, while in practice the noise may be correlated or signal dependent. To address this point, it may be necessary to investigate better noise models and to incorporate power spectrum estimation methods. % and to extend the autocorrelation analysis accordingly. 
 Second, we assume that any two particles are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the 3-D volume. 
-We believe that this constraint could be replaced by a probabilistic condition on the average number of projections per micrograph. 
+We believe that this constraint could be replaced by a probabilistic condition on the average number of projections per micrograph.\TODO{Will: Is this really enough? I think the main issue is what happens when particles can collide (or maybe even overlap), since this introduces additional cross-terms for the moment-fitting problem.} 
 Such a condition can be met in practice by careful experimental design.
 
-%Alternatively, if the signals are not well separated, one can introduce new parameters which encode the distribution of the spacing between occurrences. Here as well, relations between autocorrelations of the micrographs and of the volume could be derived.
-
-We also note several aspects of SPR experiments that were neglected in this paper, including Contrast Transfer Function (CTF) correction, non-uniformity of the viewing directions and other contaminants in the micrographs, such as ice crystals.
+We also note several aspects of SPR experiments that were neglected in this paper, including contrast transfer function (CTF), non-uniformity of the viewing directions \TODO{We never talk about viewing directions at all, so it's strange to mention that non-uniformity is an issue. I think this is confusing. I'd say something like: "relating the observed autocorrelations to the autocorrelations of the 3-D volume" or something like that.} and other contaminants in the micrographs, such as ice crystals.
  All these aspects must be taken into account so the method could be applied on real data. We hope to take care of these issues in future research, as well to extend the proposed method to conformational heterogeneity. 
 %\TODO{another issue is that micrographs also contain contaminants such as carbon, ice crystals, etc.. }
 
