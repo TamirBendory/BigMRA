@@ -59,7 +59,7 @@ All contemporary methods in the field split the reconstruction procedure into se
 The first stage consists in extracting the various particle projections from the micrographs. This stage is called \emph{particle picking}. Later stages aim to construct a 3-D model of the molecule from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. Figure~\ref{fig:micro_example} illustrates how particle picking becomes increasingly challenging as the SNR degrades.
 
 
-Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR \TODO{the impossibility result should be in the theory section}. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Henderson~\cite{henderson1995limitations} investigates the following questions:
+Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Henderson~\cite{henderson1995limitations} investigates the following questions:
 \begin{quote}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{quote}
@@ -73,25 +73,22 @@ We note that nuclear magnetic resonance (NMR) spectroscopy and X-ray crystallogr
 
 In this paper, we argue that there is a gap between the two questions in Henderson's quoted excerpt above, and that one may be able to exploit it to design better reconstruction algorithms.
 Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction.
-Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle picking imposes on molecule size do not translate into limits on particle reconstruction.
+Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
 
 As a proof of concept, we study a toy model for which it is easier to convey the mathematical principles. 
-In this toy model, an unknown image appears numerous times at unknown locations in several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
-The goal is to estimate the planted image. The task is interesting in particular when the SNR is low enough that particle picking cannot be done reliably. 
+In this toy model, an unknown image appears multiple times at unknown locations in each of several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
+The goal is to estimate the planted image. The task is challenging in particular when the SNR is low enough that particle picking (identifying the locations of each image in each micrograph) cannot be done reliably. 
 This problem is interesting of its own as it appears in other scientific applications, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
  
-In order to recover the image, we use autocorrelation analysis. In a nutshell, we relate the autocorrelations of the micrographs to the autocorrelations of the image.
-For any noise level, these autocorrelations can be estimated to any desired accuracy, provided that we get to observe sufficiently many image occurrences and the latter are separated in the micrograph. Importantly, there is no need to detect individual image occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. These directly yield estimates for the autocorrelations of the image. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem. 
+In order to recover the image, we use autocorrelation analysis. Specifically, we relate the autocorrelations of the micrographs to the autocorrelations of the image.
+For any noise level, these autocorrelations can be estimated to any desired accuracy, provided that we  observe sufficiently many image occurrences and the latter are separated in the micrograph. Importantly, there is no need to detect individual image occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. These directly yield estimates for the autocorrelations of the image \TODO{Will: This is not quite true, because of the gamma parameter}. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem. 
 
 Autocorrelation analysis for 3-D reconstruction, under the assumption of perfect particle picking,  was first proposed by Zvi Kam~\cite{kam1980reconstruction}. 
 In this work, we derive the mathematical relation between the autocorrelations of the micrographs and the 3-D volume under some simplifying conditions.
-We show a few numerical examples and draw the future developments required to make this method applicable on real data. \TODO{This paragraph would be changed according to the final results we will show}
+We show a few numerical examples and outline the future developments required to make this method applicable on real data. \TODO{This paragraph would be changed according to the final results we will show}
 
 Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
-%To illustrate the possibility to estimate a signal without detecting its locations, we first discuss a toy model for which it is easier to convey the mathematical principles. 
-%In this toy model, an unknown image appears numerous times at unknown locations in several micrographs, each affected by additive Gaussian noise---see Figure~TKTK for an illustration.
-%The goal is to estimate the planted image. The task is interesting in particular when the SNR is low enough that particle picking cannot be done reliably. 
-%This problem is interesting of its own as it appears in other scientific applications, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}. We study it in more details, including an extension to multiple planted images, in a companion paper~\cite{bendory2018estimation}.
+
 
 \TODO{Need to cite \cite{scapin2018cryo}. Discusses cryo-em for drug discovery and mentions small molecule}
 %
@@ -172,7 +169,7 @@ a_z^q[\ell_1,\ldots,\ell_{k-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]
 \end{align}
 where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
 For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
-Explicitly, the first-, second- and third-order autocorrelations are given by
+Explicitly, the first-, second- and third-order autocorrelations are given by \TODO{we may want to remove these explicit formulas}
 \begin{align} 
 a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} z[i], \nonumber\\
 a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} z[i]z[i+\ell], \nonumber\\
@@ -325,8 +322,6 @@ Figure~\ref{fig:1D_example} shows recovery of a 1-D signal from the first three 
 The autocorrelations are computed from noisy micrographs with $\sigma=3$ that obey the separation condition of~\eqref{eq:spacing}.
  Both the signal  and $\gamma$ are estimated simultaneously from the observed autocorrelations by LS fitting; more details are given in Appendix~\ref{sec:numeric_details}. Crucially, the LS does not require the knowledge of $\sigma$. 
 
-\TODO{Here the cryo-EM setup shows up}
-
 \begin{figure*}[h!]
 	\centering
 	\includegraphics[scale=0.7]{Einstein_progress_examples}
@@ -339,7 +334,7 @@ The autocorrelations are computed from noisy micrographs with $\sigma=3$ that ob
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=.68]{Einstein_progress} (left) power spectrum estimation error (right) RRR error after fixed number of 1000 iterations.
+	\includegraphics[scale=.55]{Einstein_progress} (left) power spectrum estimation error (right) RRR error after fixed number of 1000 iterations.
 	\caption{\label{fig:error_per_micro} Relative root mean square error of the estimate of Einstein's image as a function of the number of observed micrographs (logarithmic scale along both axes.)}
 \end{figure}
 
@@ -353,6 +348,42 @@ The autocorrelations are computed from noisy micrographs with $\sigma=3$ that ob
 		   The relative errors of $\gamma$ for the three panels are: $27.1\%,4\%,1.2\%$. The right panel shows the relative error as a function of $M$.
 	}
 \end{figure*}
+
+The application of autocorrelation analysis to cryo-EM follows the same mathematical principles.
+The derivation of the first three autocorrelations of the micrographs and their relations to the volume itself are provided in Appendix~\ref{sec:ac_cryo}.
+In particular, numerical evidence suggests that the third-order autocorrelation uniquely determines the 3-D volume. Figure~TKTK shows recovery of the 3-D volume from the clean autocorrelations. The details of the reconstruction algorithm are given in Appendix~\ref{sec:numeric_details}.
+Unfortunately, the mapping between the autocorrelations and volume seems to be ill-conditioned, preventing recovery from noisy data. 
+In the next section, we outline how we suggest to overcome the ill-conditioning in future work. 
+
+While we cannot provide a 3-D reconstruction from noisy data with the current algorithm, our method can be easily applied to the problem of deciding whether a micrograph contains projections or merely pure noise---a problem considered in classical works in statistics (e.g.,~\cite{donoho2004higher}) and debates in the cryo-EM community~\cite{henderson2013avoiding}.
+This task can be performed by considering solely the recovered $\gamma$ (the fraction of pixels occupied by projections in the micrograph), estimated as part of the recovery algorithm.
+Figure~\ref{fig:cryo_detection} presents excerpts \TODO{sections?} of two noisy micrographs, only one of which contains projections.
+In the presence of projections, the estimated $\gamma$ was $0.12$, corresponding to approximately $6784$ projections. 
+On the hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise micrograph, corresponding to less than one projection.
+%
+%Under the experimental parameters (see Section~\ref{sec:numeric_details}), such values of $\gamma$ predict  in the informative micrograph and less than one projection in the pure noise scenario.  
+
+\begin{figure*}[h]
+	\centering
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{pure_noise_micrograph_cutout.eps}
+		\caption{An excerpt of the pure noise micrograph}
+	\end{subfigure} \hspace{2pt}
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{noisy_micrograph_cutout.eps}
+		\caption{An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.}
+	\end{subfigure} \hspace{2pt}
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{clean_micrograph_cutout.eps}
+		\caption{An excerpt of the clean micrograph}
+	\end{subfigure}
+	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from a volume of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
+		The noise realization is identical in both micrographs. }	
+\end{figure*}
+
 
 
 \section{Discussion}
@@ -501,6 +532,8 @@ Setting $W = L$ (as is a priori desired) is problematic because the above optimi
 Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
 
 \paragraph{3-D experiments.}
+For the experiment in Figure~TKTK, we computed the analytical first three autocorrelations of the volume according to~TKTK.   
+
 
 
 \section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
@@ -603,7 +636,7 @@ Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge 
 \sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]
 \nonumber \\
 &= \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-1}x[i] \frac{1}{M}\sum_{j=1}^{M} \ep[s_j+i-\ell_1]^2
-\xrightarrow{N\to\infty} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2.
+\\& \xrightarrow{N\to\infty} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2. \nonumber
 %
 \end{align}
 
@@ -611,8 +644,7 @@ Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge 
 
 {\bf Case 4:} $0=\ell_2 = \ell_1$. The same argument as for term (4) in Case 2 shows that terms (3), (4) and (5) all converge to $\gamma a_x^1 \sigma^2$. Term (2) is an average of $\ep[i]^3$, which is mean zero; consequently, it converges to 0.
 
-This completes the proof of \eqref{eq:data_ac}.
-
+This completes the proof.
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
@@ -699,7 +731,7 @@ In addition, using~\eqref{eq:E3}
 
 Now, suppose that the quadratics are dependent. Then, $\frac{\mathcal{B}}{\mathcal{C}} =\frac{\mathcal{E}}{\mathcal{F}} $, or, 	
 \begin{equation*}
-La_y^2[0] - (2L+1)(a_y^1)^2 - La_y^2 = (a_y^1)^2(3-6L)
+La_y^2[0] - (2L+1)(a_y^1)^2 - La_y^2 = (a_y^1)^2(3-6L).
 \end{equation*}
 Rearranging the equation and writing in terms of $x$ we get 
 \begin{equation} \label{eq:cond}
@@ -712,7 +744,7 @@ More than that, for any nonzero $x$, $(a_x^1)^2 >\sum_{i=1}^{L-1} a_x^2[i]$. The
 \end{equation*}
 the condition~\eqref{eq:cond} cannot be satisfied for any signal. 
 
-\section{Autocorrelations of the cryo-EM problem}
+\section{Autocorrelations of the cryo-EM problem} \label{sec:ac_cryo}
 
 \subsection{Model and autocorrelation functions}
 
@@ -791,8 +823,8 @@ where the  bias term $b_2[\Bell] = \sigma^2\delta[\Bell]$   depends only on the 
 
 For the third moments, we get 8 terms:
 \[\begin{aligned} 
-&a^3_\II[\Bell_1, \Bell_2] =
-\underbrace{\frac{1}{N^2}\sum_{\mb i}\widetilde\II[\mb i]\widetilde\II[\mb i+\Bell_1]\widetilde\II[\mb i + \Bell_2]}_{(1)} +
+&a^3_\II[\Bell_1, \Bell_2]  \\&
+ = \underbrace{\frac{1}{N^2}\sum_{\mb i}\widetilde\II[\mb i]\widetilde\II[\mb i+\Bell_1]\widetilde\II[\mb i + \Bell_2]}_{(1)} +
 \underbrace{\frac{1}{N^2}\sum_{\mb i}\varepsilon[\mb i]\varepsilon[\mb i+\Bell_1]\varepsilon[\mb i + \Bell_2]}_{(2)}\\ 
 &+ \underbrace{\frac{1}{N^2}\sum_{\mb i}\widetilde\II[\mb i]\varepsilon[\mb i + \Bell_1]\widetilde\II[\mb i + \Bell_2]}_{(3)} +
 \underbrace{\frac{1}{N^2}\sum_{\mb i}\widetilde\II[\mb i]\widetilde\II[\mb i + \Bell_1]\varepsilon[\mb i + \Bell_2]}_{(4)}\\
@@ -997,20 +1029,20 @@ The third-order autocorrelation of the volume can be expressed in terms of~\eqre
 \begin{align} \label{eq:third_order_ac_volume}
 \langle
 a^3_{I_{\omega}}[\Bell_1, \Bell_2]\rangle_{\omega} &= \frac{1}{L^2}\sum_{\mb i}\langle I_{\omega}[\mb i]I_{\omega}[\mb i+\Bell_1]\overline{I_{\omega}([\mb i+\Bell_2])}\rangle_{\omega},\\
-&\approx \sum_{\substack{N_1,n_1\\N_2,n_2\\N_3,n_3}} \langle b_{N_1,n_1}(\omega)b_{N_2,n_2}(\omega)\overline{b_{N_3,n_3}}(\omega)\rangle_{\omega}\\&\times \frac{1}{L^2}\sum_{\mb i}\psi_{N_1,n_1}[\mb i]\psi_{N_2,n_2}[\mb i+\Bell_1]\overline{\psi_{N_3,n_3}([\mb i+\Bell_2])},\nonumber\end{align}
+&\approx \sum_{\substack{N_1,n_1\\N_2,n_2\\N_3,n_3}} \langle b_{N_1,n_1}(\omega)b_{N_2,n_2}(\omega)\overline{b_{N_3,n_3}}(\omega)\rangle_{\omega}\nonumber\\&\times \frac{1}{L^2}\sum_{\mb i}\psi_{N_1,n_1}[\mb i]\psi_{N_2,n_2}[\mb i+\Bell_1]\overline{\psi_{N_3,n_3}([\mb i+\Bell_2])},\nonumber\end{align}
 where the approximation is due to discretization. 
 Now,
 \[\begin{aligned} \langle &b_{N_1,n_1}(\omega)b_{N_2,n_2}(\omega)\overline{b_{N_3,n_3}}(\omega)\rangle_{\omega} \\&= \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\\ell_3,m_3,s_3}}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_3,s_3}}\\&\times \langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}(\omega)\overline{D_{N_3,m_3}^{\ell_3}}(\omega)\rangle_{\omega}\\
 &\times \beta_{\ell_1,s_1;N_1,n_1}\beta_{\ell_2,s_2;N_2,n_2}\overline{\beta_{\ell_3,s_3;N_3,n_3}},\end{aligned},\]
 where the latter coefficients are given explicitly in~\eqref{eq:beta}. Using standard properties of D-Wigner functions, we obtain  
 \begin{align}
-&\left\langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}\overline{D_{N_3,m_3}^{\ell_3}}\right\rangle_{\omega} = (-1)^{N_3+m_3}\\&\times \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_3\end{array}\right)\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_3\end{array}\right),\
+&\left\langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}\overline{D_{N_3,m_3}^{\ell_3}}\right\rangle_{\omega} = (-1)^{N_3+m_3}\\&\times \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_3\end{array}\right)\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_3\end{array}\right),\nonumber
 \end{align}
 where  $\left(\begin{array}{ccc} \ell_1 & \ell_2 & \ell_3\\ m_1 & m_2 & m_3\end{array}\right)$ are called Wigner 3-j symbols. 
 Notably, these terms are zero unless $m_1+m_2+m_3=0$ and $|\ell_1-\ell_2|\leq \ell_3\leq \ell_1+\ell_2$. Thus,  we conclude that 
 \begin{align} \label{eq:b_average}
 &\langle b_{N_1,n_1}(\omega)b_{N_2,n_2}(\omega)\overline{b_{N_3,n_3}}(\omega)\rangle_{\omega} = \delta_{N_3,N_1+N_2}\\&\times \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_1+m2,s_3}}\nonumber\\
-&\times (-1)^{N_1+N_2+m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N_2\end{array}\right)\\&\times \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
+&\times (-1)^{N_1+N_2+m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N_2\end{array}\right)\nonumber\\&\times \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\nonumber\\
 &\times \beta_{\ell_1,s_1;N1,n_1}\beta_{\ell_2,s_2;N_2,n_2}\overline{\beta_{\ell_3,s_3;N_1+N2,n_3}}. \nonumber
 \end{align}
 Combining~\eqref{eq:b_average} with~\eqref{eq:third_order_ac_volume} provides the explicit relation between the third-order autocorrelation and the volume.   
@@ -1024,7 +1056,7 @@ where we only include the block-diagonal terms in the expansion; the rest are eq
 \end{align*}
 Then, 
 the final formula reads
-\[\begin{aligned} \mathfrak{a}^3[k,q_1,q_2] &= \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_1+m_2,s_3}}\\
+\[\begin{aligned} &\mathfrak{a}^3[k,q_1,q_2] = \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_1+m_2,s_3}}\\
 &\times (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
 &\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N2\end{array}\right)\\&\times\frac{1}{L^2}\sum_{\mb i}\Psi_{\ell_1,N_1,s_1}[\mb i]\rho_{\ell_2,N_2,s_2}^{(k,q_1)}[\mb i]\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}[\mb i]}. \end{aligned}\]
 In practice, the last two lines of the above expression for $\mathfrak{a}^3[k,q_1,q_2]$ is precomputed, and both the integration over $\mb i$ and over $\Bell$ is performed on the grid of the images in the dataset, to match the integration performed on the actual images.
@@ -1065,91 +1097,91 @@ $Y_{0,0}(\theta,\varphi) = \frac{1}{\sqrt{4\pi}}$, we conclude from~\eqref{eq:vo
 a^1_{I_{\omega}}\rangle_{\omega} = \widehat \phi(\mb 0) = \frac{1}{\sqrt{4\pi}}\sum_s\tamir_{0,0,s}j_{0,s}(0).\]
 
 
-\TODO{=========== Tamir: Stopped here ===============}
+%\TODO{=========== Tamir: Stopped here ===============}
 
-\TODO{=========== NOT SURE WHAT IS THAT ===============}
-\begin{align*}
-&C_2^{(q)} = \int_0^1j_{\ell,s_1}(k)j_{\ell,s_2}(k)R_{0,q}(k)k\, dk\\
-&C_3^{(k,q_1,q_2)}\ell_1,m_1,s_1;\ell_2,m_2,s_2;\ell_3,s_3):= (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
-&\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N2\end{array}\right)\frac{1}{L^2}\sum_{\mb i}\Psi_{\ell_1,N_1,s_1}[\Bell]\rho_{\ell_2,N_2,s_2}^{(k,q_1)}[\Bell]\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}[\Bell]},
-\end{align*}
-and 
-\begin{align*}
-\rho_{\ell,N,s}^{(k,q)}&=\int_{\Bell}\Psi_{\ell,N,s}([\mb i+\Bell])\overline{\psi_{k,q}(\Bell)}.
-\end{align*}
-
-
-\subsection{Implementation details}
-To implement the above formula, we precompute the quantities
-\[ W(\ell_1,\ell_2,\ell_3,m_1,m_2) = (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right),\]
-and
-\[ B^{(k,q_1,q_2)}(\ell_1,\ell_2,\ell_3,s_1,s_2,s_3) = \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}W(\ell_1,\ell_2,\ell_3,N_1,N_2)\frac{1}{L^2}\sum_{\mb i}\Psi_{\ell_1,N_1,s_1}[\Bell]\rho_{\ell_2,N_2,s_2}^{(k,q_1)}[\Bell]\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}[\Bell]},\]
-so in each iteration of the optimization we compute
-\[\begin{aligned} \mathfrak{m}_3(k,q_1,q_2) = \sum_{\substack{\ell_1,\ell_2,\ell_3\\m_1,m_2\\s_1,s_2,s_3}}& W(\ell_1,\ell_2,\ell_3,m_1,m_2)B^{(k,q_1,q_2)}(\ell_1,\ell_2,\ell_3,s_1,s_2,s_3)\times\\ &a_{\ell_1,m_1,s_1}a_{\ell_2,m_2,s_2}\overline{a_{\ell_3,m_1+m_2,s_3}} .\end{aligned}\]
-
-The Wigner 3$j$ symbols are computed from the Racah formula
-\[\begin{aligned} \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_3\end{array}\right) &= \delta_{m_3,m_1+m_2}(-1)^{\ell_1-\ell_2+m_3}\sqrt{\Delta(\ell_1,\ell_2,\ell_3)}\\ &\times \prod_{i=1}^3\sqrt{(\ell_i-m_i)!(\ell_i+m_i)!}\times \sum_{t}\frac{(-1)^t}{x(t)},\end{aligned}\]
-where
-\[ x(t) = t!(\ell_3-\ell_2+t+m_1)!(\ell_3-\ell_1+t-m_2)!(\ell_1+\ell_2-\ell_3+t)!(\ell_1-t-m_1)!(\ell_2-t+m_2)!,\]
-the sum is over all integer $t$ for which the arguments in the factorials in $x(t)$ are all nonnegative, and 
-\[ \Delta(\ell_1,\ell_2,\ell_3) = \frac{(\ell_1+\ell_2-\ell_3)!(\ell_1-\ell_2+\ell_3)!(-\ell_1+\ell_2+\ell_3)!}{(\ell_1+\ell_2+\ell_3+1)!}.\]
+%\TODO{=========== NOT SURE WHAT IS THAT ===============}
+%\begin{align*}
+%&C_2^{(q)} = \int_0^1j_{\ell,s_1}(k)j_{\ell,s_2}(k)R_{0,q}(k)k\, dk\\
+%&C_3^{(k,q_1,q_2)}\ell_1,m_1,s_1;\ell_2,m_2,s_2;\ell_3,s_3):= (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\\
+%&\times \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}(-1)^{N_1+N_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N2\end{array}\right)\frac{1}{L^2}\sum_{\mb i}\Psi_{\ell_1,N_1,s_1}[\Bell]\rho_{\ell_2,N_2,s_2}^{(k,q_1)}[\Bell]\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}[\Bell]},
+%\end{align*}
+%and 
+%\begin{align*}
+%\rho_{\ell,N,s}^{(k,q)}&=\int_{\Bell}\Psi_{\ell,N,s}([\mb i+\Bell])\overline{\psi_{k,q}(\Bell)}.
+%\end{align*}
 
 
-\section{Noisy micrograph moments}
-We now suppose that the micrograph is perturbed by additive white
-Gaussian noise, so we observe $\widetilde \II = \II + \varepsilon$ where
-$\varepsilon\overset{\text{iid}}{\sim}\mathcal{N}(0, \sigma^2I)$. We proceed
-to derive $\lim_{N\to\infty}m_2[\widetilde \II],\
-m_3[\widetilde\II]$. For simplicity of notation,
-we shall use vectorized indices $\mb i = (i,j)$.
+%\subsection{Implementation details}
+%To implement the above formula, we precompute the quantities
+%\[ W(\ell_1,\ell_2,\ell_3,m_1,m_2) = (-1)^{m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right),\]
+%and
+%\[ B^{(k,q_1,q_2)}(\ell_1,\ell_2,\ell_3,s_1,s_2,s_3) = \sum_{N_1=-\ell_1}^{\ell_1}\sum_{N_2=-\ell_2}^{\ell_2}W(\ell_1,\ell_2,\ell_3,N_1,N_2)\frac{1}{L^2}\sum_{\mb i}\Psi_{\ell_1,N_1,s_1}[\Bell]\rho_{\ell_2,N_2,s_2}^{(k,q_1)}[\Bell]\overline{\rho_{\ell_3,N_1+N_2,s_3}^{(k,q_2)}[\Bell]},\]
+%so in each iteration of the optimization we compute
+%\[\begin{aligned} \mathfrak{m}_3(k,q_1,q_2) = \sum_{\substack{\ell_1,\ell_2,\ell_3\\m_1,m_2\\s_1,s_2,s_3}}& W(\ell_1,\ell_2,\ell_3,m_1,m_2)B^{(k,q_1,q_2)}(\ell_1,\ell_2,\ell_3,s_1,s_2,s_3)\times\\ &a_{\ell_1,m_1,s_1}a_{\ell_2,m_2,s_2}\overline{a_{\ell_3,m_1+m_2,s_3}} .\end{aligned}\]
+%
+%The Wigner 3$j$ symbols are computed from the Racah formula
+%\[\begin{aligned} \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_3\end{array}\right) &= \delta_{m_3,m_1+m_2}(-1)^{\ell_1-\ell_2+m_3}\sqrt{\Delta(\ell_1,\ell_2,\ell_3)}\\ &\times \prod_{i=1}^3\sqrt{(\ell_i-m_i)!(\ell_i+m_i)!}\times \sum_{t}\frac{(-1)^t}{x(t)},\end{aligned}\]
+%where
+%\[ x(t) = t!(\ell_3-\ell_2+t+m_1)!(\ell_3-\ell_1+t-m_2)!(\ell_1+\ell_2-\ell_3+t)!(\ell_1-t-m_1)!(\ell_2-t+m_2)!,\]
+%the sum is over all integer $t$ for which the arguments in the factorials in $x(t)$ are all nonnegative, and 
+%\[ \Delta(\ell_1,\ell_2,\ell_3) = \frac{(\ell_1+\ell_2-\ell_3)!(\ell_1-\ell_2+\ell_3)!(-\ell_1+\ell_2+\ell_3)!}{(\ell_1+\ell_2+\ell_3+1)!}.\]
+%
 
-
-\subsection{Expansion in PSWFs}
-In practice, we compute the moments of our noisy micrograph in a
-product basis of 2D prolates, so we need to derive the expansion
-coefficients of the above bias terms in these functions for debiasing.
-
-To this end, writing (in the continuous case again)
-\[ \delta(\Bell - \Bell_2) =
-\sum_{k,q_1,q_2}\mathfrak{d}(k,q_1,q_2) \psi_{k,q_1}(\Bell)
-\overline{\psi_{k,q_2}(\Bell_2)},\]
-we get
-\[\begin{aligned}
-\mathfrak{d}(k,q_1,q_2) &= \int_{\Bell,
-	\Bell_2}\delta(\Bell-\Bell_2)\overline{\psi_{k,q_1}(\Bell_1)}\psi_{k,q_2}(\Bell_2)\\
-&=
-\int_{\Bell_2}\overline{\psi_{k,q_1}(\Bell_2)}\psi_{k,q_2}(\Bell_2)\\
-&= \delta_{q_1,q_2}.
-\end{aligned}\]
-
-Similarly, writing
-\[ \delta(\Bell_1) =
-\sum_{k,q_1,q_2}\mathfrak{d}^{(1)}(k,q_1,q_2)
-\psi_{k,q_1}(\Bell_1) \overline{\psi_{k,q_2}(\Bell_2)},\]
-we get
-\[\begin{aligned} 
-\mathfrak{d}^{(1)}(k,q_1,q_2) &= \int_{\Bell_1,
-	\Bell_2}\delta(\Bell_1)\overline{\psi_{k,q_1}(\Bell_1)}
-\psi_{k,q_2}(\Bell_2)\\
-&= \overline{\psi_{k,q_1}(\mb 0)}
-\int_{\Bell_2}\psi_{k,q_2}(\Bell_2)\\
-&= \delta_{k,0} R_{0,q_1}(0) \int_0^1R_{0,q_2}(r)r\, dr\\
-&= \delta_{k,0} \frac{\alpha_{0,q_2}}{2\pi}R_{0,q_1}(0)R_{0,q_2}(0),
-\end{aligned}\]
-where we used the fact that $R_{0,q}$ satisfies
-\[ \frac{\alpha_{0,q}}{2\pi}R_{0,q}(r) =
-\int_0^1R_{0,q}(\rho)J_{0}(cr\rho)\rho\, d\rho,\]
-where $J_k$ is the Bessel function of the first kind, and that
-$J_0(0)=1$. 
-A similar derivation applies to $\delta(\Bell_2)$. 
-
-Thus, in terms of the prolate expansion coefficients, our bias
-formulas become
-\[ \widetilde{\mathfrak{m}}_3(k,q_1,q_2) = \mathfrak{m}_3(k,q_1,q_2) +
-\sigma^2m_1[\widetilde \II]\left[\delta_{q_1,q_2} + \delta_{k,0}\frac{1}{2\pi}(\alpha_{0,q_1}+\alpha_{0,q_2})R_{0,q_1}(0)R_{0,q_2}(0)\right].\]
-
-Similarly, for the power spectrum we get
-\[ \widetilde{\mathfrak{m}}_2(q) = \mathfrak{m}_2(q) + \sigma^2\frac{1}{\sqrt{2\pi}}R_{0,q}(0).\]
+%\section{Noisy micrograph moments}
+%We now suppose that the micrograph is perturbed by additive white
+%Gaussian noise, so we observe $\widetilde \II = \II + \varepsilon$ where
+%$\varepsilon\overset{\text{iid}}{\sim}\mathcal{N}(0, \sigma^2I)$. We proceed
+%to derive $\lim_{N\to\infty}m_2[\widetilde \II],\
+%m_3[\widetilde\II]$. For simplicity of notation,
+%we shall use vectorized indices $\mb i = (i,j)$.
+%
+%
+%\subsection{Expansion in PSWFs}
+%In practice, we compute the moments of our noisy micrograph in a
+%product basis of 2D prolates, so we need to derive the expansion
+%coefficients of the above bias terms in these functions for debiasing.
+%
+%To this end, writing (in the continuous case again)
+%\[ \delta(\Bell - \Bell_2) =
+%\sum_{k,q_1,q_2}\mathfrak{d}(k,q_1,q_2) \psi_{k,q_1}(\Bell)
+%\overline{\psi_{k,q_2}(\Bell_2)},\]
+%we get
+%\[\begin{aligned}
+%\mathfrak{d}(k,q_1,q_2) &= \int_{\Bell,
+%	\Bell_2}\delta(\Bell-\Bell_2)\overline{\psi_{k,q_1}(\Bell_1)}\psi_{k,q_2}(\Bell_2)\\
+%&=
+%\int_{\Bell_2}\overline{\psi_{k,q_1}(\Bell_2)}\psi_{k,q_2}(\Bell_2)\\
+%&= \delta_{q_1,q_2}.
+%\end{aligned}\]
+%
+%Similarly, writing
+%\[ \delta(\Bell_1) =
+%\sum_{k,q_1,q_2}\mathfrak{d}^{(1)}(k,q_1,q_2)
+%\psi_{k,q_1}(\Bell_1) \overline{\psi_{k,q_2}(\Bell_2)},\]
+%we get
+%\[\begin{aligned} 
+%\mathfrak{d}^{(1)}(k,q_1,q_2) &= \int_{\Bell_1,
+%	\Bell_2}\delta(\Bell_1)\overline{\psi_{k,q_1}(\Bell_1)}
+%\psi_{k,q_2}(\Bell_2)\\
+%&= \overline{\psi_{k,q_1}(\mb 0)}
+%\int_{\Bell_2}\psi_{k,q_2}(\Bell_2)\\
+%&= \delta_{k,0} R_{0,q_1}(0) \int_0^1R_{0,q_2}(r)r\, dr\\
+%&= \delta_{k,0} \frac{\alpha_{0,q_2}}{2\pi}R_{0,q_1}(0)R_{0,q_2}(0),
+%\end{aligned}\]
+%where we used the fact that $R_{0,q}$ satisfies
+%\[ \frac{\alpha_{0,q}}{2\pi}R_{0,q}(r) =
+%\int_0^1R_{0,q}(\rho)J_{0}(cr\rho)\rho\, d\rho,\]
+%where $J_k$ is the Bessel function of the first kind, and that
+%$J_0(0)=1$. 
+%A similar derivation applies to $\delta(\Bell_2)$. 
+%
+%Thus, in terms of the prolate expansion coefficients, our bias
+%formulas become
+%\[ \widetilde{\mathfrak{m}}_3(k,q_1,q_2) = \mathfrak{m}_3(k,q_1,q_2) +
+%\sigma^2m_1[\widetilde \II]\left[\delta_{q_1,q_2} + \delta_{k,0}\frac{1}{2\pi}(\alpha_{0,q_1}+\alpha_{0,q_2})R_{0,q_1}(0)R_{0,q_2}(0)\right].\]
+%
+%Similarly, for the power spectrum we get
+%\[ \widetilde{\mathfrak{m}}_2(q) = \mathfrak{m}_2(q) + \sigma^2\frac{1}{\sqrt{2\pi}}R_{0,q}(0).\]
 
 
 \end{document}
