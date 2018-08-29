@@ -1,5 +1,5 @@
 function M = positivefactory(m, n)
-% Manifold of m-by-n matrices with positive entries and bi-invariant metric
+% Manifold of m-by-n matrices with positive entries and scale invariant metric
 %
 % function M = positivefactory(m)
 % function M = positivefactory(m, n)
@@ -44,8 +44,7 @@ function M = positivefactory(m, n)
     
     M.dim = @() m*n;
     	
-    % Choice of the metric on the orthonormal space is motivated by  [Please clarify]
-    % the positive definite cone is its natural bi-invariant metric. [Please clarify]
+    % The metric is the scale invariant metric for scalars.
     M.inner = @myinner;
     function innerproduct = myinner(X, eta, zeta)
         innerproduct = (eta(:)./X(:))'*(zeta(:)./X(:));
@@ -53,7 +52,7 @@ function M = positivefactory(m, n)
    
     M.norm = @(X, eta) sqrt(myinner(X, eta, eta));
     
-    M.dist = @(X, Y) M.norm(X, log(Y./X), log(Y./X));
+    M.dist = @(X, Y) M.norm(X, log(Y./X));
     
     M.typicaldist = @() sqrt(m*n);
     
