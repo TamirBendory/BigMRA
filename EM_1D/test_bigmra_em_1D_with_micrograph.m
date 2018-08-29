@@ -8,10 +8,10 @@ clear all; clf; clc;
 L = 21;             % Length of the true signal
 W = 1*L;            % Length of the observed windows (W >= L)
 x = 0+randn(L, 1);  % True signal
-sigma = 3.0;        % Standard deviation of the additive white Gaussian noise
+sigma = 2.0;        % Standard deviation of the additive white Gaussian noise
 
-N = 3e6;   % Length of the micrograph
-m = 3e4;   % Desired number of occurrences of x in the micrograph
+N = 3e7;   % Length of the micrograph
+m = 3e5;   % Desired number of occurrences of x in the micrograph
 [y, placed] = generate_clean_micrograph_1D(x, W, N, m);
 y = y + sigma*randn(size(y));
 % Extract windows from the micrograph for EM
@@ -39,6 +39,12 @@ alpha0 = rand(1);
 [x_est, alpha_est] = bigmra_em_1D(Y, sigma, x0, alpha0);
 fprintf('Initial EM done.\n');
 
+figure;
+subplot(211);
+plot((0:L-1), x, '.-', (0:L-1), x_est, 'o-');
+legend('true x', 'estimated x');
+
+if 0
 %% Compute some kind of log-likelihood for each cyclic shift of x_est, and
 %  use the most promising one to warm-start a second EM run.
 shiftQs = zeros(L, 1);
@@ -59,9 +65,33 @@ hold all;
 plot([-10, 10], (.95*(max(shiftQs)-min(shiftQs))+min(shiftQs))*[1, 1], 'r--');
 hold off;
 
-fprintf('Attempting a shift of %d.\n', b-1);
+end
 
-[x_est2, alpha_est2] = bigmra_em_1D(Y, sigma, circshift(x_est, b-1), alpha_est);
+%% Instead of using ML-based estimate, let's try to identify the shift by the zeros
+Thresh_factor = 1/100;
+Thresh = norm(x_est)^2*Thresh_factor.*(1:L)'; 
+xr = cumsum(x_est.^2);
+xl = cumsum(flipud(x_est).^2);
+indr = find(xr<Thresh, 1, 'last' );
+indl = find(xl<Thresh, 1, 'last' );
+
+if isempty(indr) + isempty(indl) == 2
+    b = 0;
+elseif isempty(indl)
+    b = -indr;
+elseif indr > indl
+    b = -indr;
+else
+    b =  indl;  
+end
+
+%% EM with a warm start
+%fprintf('Attempting a shift of %d.\n', b-1);
+fprintf('Attempting a shift of %d.\n', b);
+
+%[x_est2, alpha_est2] = bigmra_em_1D(Y, sigma, circshift(x_est, b-1), alpha_est);
+[x_est2, alpha_est2] = bigmra_em_1D(Y, sigma, circshift(x_est, b), alpha_est);
+
 fprintf('Secondary EM done.\n');
 
 Q1 = bigmra_1D_likelihood_proxy(Y, sigma, x_est, alpha_est);
@@ -132,6 +162,6 @@ end
 I = 0:(L-1);
 shifted = I - shift + 1;
 subplot(2, 1, 2);
-plot(I, x, '.-', shifted, x_est, 'o-');
+plot(I, x, '.-', I, x_est, 'o-');
 legend('true x', 'estimated x');
 title(sprintf('Estimated alpha: %g', alpha_est));

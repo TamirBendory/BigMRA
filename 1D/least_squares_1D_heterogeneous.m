@@ -84,7 +84,7 @@ function [X_est, gamma_est, problem, stats, loss] = least_squares_1D_heterogeneo
     
     %% Call an optimization algorithm
     opts = struct();
-    opts.tolgradnorm = 1e-12;
+    opts.tolgradnorm = 1e-8; %1e-12;
     opts.maxiter = 1000;
     
     warning('off', 'manopt:getHessian:approx');

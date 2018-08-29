@@ -7,13 +7,13 @@ clc;
 % Pick a signal of length L and the size W of the separation window
 L = 6;
 W = 2*L-1;
-x = rand(L, 1); % rand, not randn (to be discussed)
+x = randn(L, 1); % rand, not randn (to be discussed)
 
 % Pick a noise level
 sigma = 0;
 
 % Desired number of occurrences of the signal x in each micrograph
-m_want = 100;
+m_want = 1000;
 % Number of micrographs to generate
 n_micrographs = 1;
 % Each micrograph has length N

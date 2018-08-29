@@ -59,7 +59,9 @@ function [x_est, m_est, problem, stats] = least_squares_1D_params(M1, M2, M3, W,
     X0.m_var = m0;
     
     opts = struct();
-    opts.tolgradnorm = 1e-5;
+%    opts.tolgradnorm = 1e-5;
+    opts.tolgradnorm = 1e-3;
+
     opts.maxiter = 1000;
     warning('off', 'manopt:getHessian:approx');
     [X_est, loss, stats] = trustregions(problem, X0, opts); %#ok<ASGLU>

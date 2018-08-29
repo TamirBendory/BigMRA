@@ -10,8 +10,8 @@ L = 21;
 W = 2*L-1;
 X = zeros(L, K);
 X(:, 1) = [ones(ceil(L/2), 1) ; -ones(floor(L/2), 1)];
-X(:, 2) = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
-X(:, 3) = randn(L, 1);
+%X(:, 2) = [linspace(0, 2, ceil(L/2))' ; linspace(2, 0, floor(L/2))'];
+%X(:, 3) = randn(L, 1);
 
 % Pick a noise level
 sigma = 3;
