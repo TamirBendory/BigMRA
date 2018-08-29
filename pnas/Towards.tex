@@ -227,18 +227,19 @@ The decision problem for a single interval can be abstracted as follows: We have
 if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$ (that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$), and if $\eta = 1$, then $X \sim N(\theta_1,\sigma^2)$.
 %If $\theta_1=0$, then the latter corresponds to pure noise interval.
 
-We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? We prove that, as $\sigma \to \infty$, the answer is no.
+We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? We prove that, as $\sigma \to \infty$, the answer is no:
 \begin{proposition} \label{prop:two_gauss}
-	Let $\hat{\eta }$ be any estimator of $\eta$; then:
+	For any deterministic estimator $\hat{\eta }$ of $\eta$,
 	\begin{align*}
-		\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] & \leq \max(q, 1-q).
+		\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] & \leq \max(q, 1-q),
 	\end{align*}
+	that is: the probability of success is no better than random chance in the limit of infinitely poor SNR.
 \end{proposition}
 \noindent The result is proved in Appendix~\ref{sec:proof_two_gauss}.
 
 Proposition~\ref{prop:two_gauss} implies that in order to estimate the signal in low SNR  we must consider methods that aim to estimate the signal directly, without estimating the nuisance variables as an intermediate step. 
  %we need to consider a different approach. In this paper, we consider autocorrelation analysis.
-  In what follows, we present several results on properties of autocorrelations. For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions. 
+  In what follows, we present several results on properties of autocorrelations. \TODO{For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions.---need to keep this sentence in red until the very end to make sure it's correct.}
 
 A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, since $z[0]$ and $z[L-1]$ are nonzero by definition, we have the formula:
 %
