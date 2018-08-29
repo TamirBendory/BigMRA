@@ -188,33 +188,30 @@ Under the separation condition, the relation between autocorrelations of the mic
 denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
 imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
-One simple observation is that the first-order\TODO{Will: I suggest making this statement about all the autocorrelations here, instead of singling out the mean first. I understand that the mean can be estimated without the separation condition, but this distinction is not very critical to highlight, and it's a little confusing to have this sentence (upon first reading, it might be interpreted to mean that the other autocorrelations do depend on s). I'd say something like: Under the separation condition on $s$, the autocorrelation functions of $y$ can be shown to depend only on the corresponding autocorrelations of $x$ and the parameter $gamma$, defined by... 
-Then go into the details.} autocorrelation of $y$ (its mean) is independent of the locations of $x$. Since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:\TODO{Will: Instead of the footnote, just specify here that the randomness is over the Gaussian noise.
-s can be deterministic. The only thing we assume about s is that the associated parameter gamma is constant (you might also note that this can be relaxed, so long as the sequence of $\gamma_N$'s converges to gamma, but this point is not critical).}\footnote{We did not fully specify a random generating model for the location vector $s$. The expectation is still well defined specifically because the quantity under consideration is independent of $s$ under the assumptions.}
+Under the separation condition on $s$,  for shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend only on the corresponding autocorrelations of $x$ and the parameter $\gamma$. In particular, for the first-order autocorrelation (that is, the mean), since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:
 \begin{align*}
 \E\{ a_y^1 \} & = \gamma a_x^1.
 \end{align*}
+(The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic: under the conditions, the quantity under consideration depends on $s$ only through $\gamma$.)
 We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density.) In that regime, the law of large numbers can be used to show the following statement:
 \begin{align} \label{eq:mean_micrograph}
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
 \end{align}
-Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
-\TODO{TB: I think that this paragraph can be much shorter and it is sufficient to show only the second equation and remove footnote. Nicolas thinks otherwise. Need to be decided. Will: I agree the footnote is unnecessary and actually confusing, since s need not be random.}
-
-The separation condition gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
-\begin{align} \label{eq:ac2_micrograph}
-\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
+Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.) We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
+\begin{align}
+	\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
+	\label{eq:ac2_micrograph}
 \end{align}
 for $\ell = 0, \ldots, L-1$, where $\delta$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
 Along the same lines, one can establish a relation for third-order autocorrelations:
-\begin{align} \label{eq:ac3_micrograph}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] \\& + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), 
+\begin{align}
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] \label{eq:ac3_micrograph}\\ & \quad + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), 
  \nonumber
 \end{align}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$. Here too, few entries are affected by $\sigma$ in the limit.
 Detailed derivations for identities in this and the next part are given in Appendix~\ref{sec:autocorrelation_computation}.
 
-
+\TODO{Nico: At this point in the paper, the reader will want to here about recovering $x$ from its moments. That's not what happens: the next section is called theory (a bit too vague); it discusses two things: one is the impossibility of getting $s$, another is whether we can get $x$, $\gamma$, $\sigma$. I propose to split that section in two, and to lead with the recovery part (which is interesting to more people, I expect.)}
 
 \section{Theory} \label{sec:theory}
 
