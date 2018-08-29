@@ -132,11 +132,13 @@ y & =  x \ast s + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
 where $\ast$ denotes linear convolution. 
 While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$ (this is a key difference with other works on sparse blind deconvolution, e.g.~\cite{zhang2018structured}). The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
 
-We assume that the binary signals $s$ obey the following \emph{separation condition}: If $s[i] = 1$ and $s[j] = 1$  for  $i \neq j$, then $\vert i - j\vert \geq 2L-1$.
-%\begin{align} 
-%\textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
-%\label{eq:spacing}
-%\end{align}
+We assume the binary signal $s$ obeys a \emph{separation condition}:
+%% Nicolas: this is too important: it must stand out
+% If $s[i] = 1$ and $s[j] = 1$  for  $i \neq j$, then $\vert i - j\vert \geq 2L-1$.
+\begin{align} 
+\textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
+\label{eq:spacing}
+\end{align}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
 
 Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the
@@ -161,7 +163,38 @@ In special cases, including the case where $w$ is binary, expectation maximizati
 %
 %Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
-Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Building on such ideas, in the next section we present an autocorrelation analysis for~\eqref{eq:model} and study it in Section~\ref{sec:theory}.  
+Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Building on such ideas, we focus on an autocorrelation analysis for~\eqref{eq:model}. % and study it in Section~\ref{sec:recovery}.  
+
+\section{The detection limit} \label{sec:detectionlimit}
+
+At high SNR, if $x$ is known, the support signal $s$ in~\eqref{eq:model} can be estimated via linear programming~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. 
+However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible, that is, one cannot reliably detect occurrences of $x$ in the micrograph $y$.
+
+To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us intervals of length $L$ in the micrograph that either contain a full signal occurrence (plus noise), or contain just noise. Our task is to determine which intervals contain signal, that is, to determine whether the corresponding entries of $s$ are 0 or 1.
+The oracle further provides the signal $x$, the probability $q$ that one of the intervals contains signal, and the noise variance $\sigma^2$. \TODO{Nico: I don't see how the next sentence is relevant for the task of estimating $s$---Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.---I would just write this: Since the intervals are independent of each other, it is sufficient to consider a single interval.}
+
+The decision problem for a single interval can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution:
+% $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words,
+if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$ (that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$), and if $\eta = 1$, then $X \sim N(\theta_1,\sigma^2)$.
+%If $\theta_1=0$, then the latter corresponds to pure noise interval.
+
+We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? We prove that, as $\sigma \to \infty$, the answer is no:
+\begin{proposition} \label{prop:two_gauss}
+	For any deterministic estimator $\hat{\eta }$ of $\eta$,
+	\begin{align*}
+	\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] & \leq \max(q, 1-q);
+	\end{align*}
+	that is: as the SNR deteriorates, the probability of success is no better than random chance.
+\end{proposition}
+\noindent The result is proved in Appendix~\ref{sec:proof_two_gauss}.
+
+Proposition~\ref{prop:two_gauss} implies that in order to estimate the signal at low SNR we must consider methods that aim to estimate the signal $x$ directly, without estimating the nuisance variable $s$ as an intermediate step.
+%we need to consider a different approach.
+In the next sections, % Nicolas: sections is plural on purpose
+we consider autocorrelation analysis for that purpose.
+%In what follows, we present several results on properties of autocorrelations. 
+
+
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
@@ -173,7 +206,7 @@ a_z^q[\ell_1,\ldots,\ell_{q-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]
 \end{align}
 where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
 For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
-Explicitly, the first-, second- and third-order autocorrelations are given by \TODO{we may want to remove these explicit formulas}
+Explicitly, the first-, second- and third-order autocorrelations are given by: \TODO{we may want to remove these explicit formulas}
 \begin{align} 
 a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} z[i], \nonumber\\
 a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} z[i]z[i+\ell], \nonumber\\
@@ -185,102 +218,85 @@ $
 
 Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{align}
-\gamma & = \frac{M L}{N}
+	\gamma & = \frac{M L}{N}
+	\label{eq:gamma}
 \end{align}
 denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
 imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
-Under the separation condition on $s$,  for shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend only on the corresponding autocorrelations of $x$ and the parameter $\gamma$. In particular, for the first-order autocorrelation (that is, the mean), since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:
+Under the separation condition on $s$,  for shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend only on the corresponding autocorrelations of $x$, the density $\gamma$ and the noise level $\sigma$. In particular, for the first-order autocorrelation (that is, the mean), since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:
 \begin{align*}
 \E\{ a_y^1 \} & = \gamma a_x^1.
 \end{align*}
 (The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic: under the conditions, the quantity under consideration depends on $s$ only through $\gamma$.)
+
 We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density.) In that regime, the law of large numbers can be used to show the following statement:
 \begin{align} \label{eq:mean_micrograph}
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
 \end{align}
-Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.) We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
+Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
+
+We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
 \begin{align}
 	\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
 	\label{eq:ac2_micrograph}
 \end{align}
 for $\ell = 0, \ldots, L-1$, where $\delta$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
+
 Along the same lines, one can establish a relation for third-order autocorrelations:
-\begin{align}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] \label{eq:ac3_micrograph}\\ & \quad + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), 
- \nonumber
-\end{align}
+\begin{multline}
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] = \gamma a_{x}^3[\ell_1,\ell_2] \label{eq:ac3_micrograph} \\ + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big),
+\end{multline}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$. Here too, few entries are affected by $\sigma$ in the limit.
 Detailed derivations for identities in this and the next part are given in Appendix~\ref{sec:autocorrelation_computation}.
 
-\TODO{Nico: At this point in the paper, the reader will want to here about recovering $x$ from its moments. That's not what happens: the next section is called theory (a bit too vague); it discusses two things: one is the impossibility of getting $s$, another is whether we can get $x$, $\gamma$, $\sigma$. I propose to split that section in two, and to lead with the recovery part (which is interesting to more people, I expect.)}
+Computing the autocorrelations of the micrograph is straightforward. The natural question, treated next, is whether one can recover $x$ from them.
 
-\section{Theory} \label{sec:theory}
+\section{Recovering a signal from autocorrelations} \label{sec:recovery}
 
-If $x$ is known, then the support signal $s$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. 
-However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible. 
-To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us intervals of length $L$ in the micrograph that either contain a full signal occurrence (plus noise), or contain just noise. Our task is to determine which intervals contain signal, that is, to determine whether the corresponding entries of $s$ are 0 or 1.
-The oracle further provides the signal $x$, the probability $q$ that one of the intervals contains signal, and the noise variance $\sigma^2$. \TODO{Nico: I don't see how the next sentence is relevant for the task of estimating $s$---Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.---I would just write this: Since the intervals are independent of each other, it is sufficient to consider a single interval.}
 
-The decision problem for a single interval can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an interval) with the following distribution:
-% $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words,
-if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$ (that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$), and if $\eta = 1$, then $X \sim N(\theta_1,\sigma^2)$.
-%If $\theta_1=0$, then the latter corresponds to pure noise interval.
-
-We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? We prove that, as $\sigma \to \infty$, the answer is no:
-\begin{proposition} \label{prop:two_gauss}
-	For any deterministic estimator $\hat{\eta }$ of $\eta$,
-	\begin{align*}
-		\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] & \leq \max(q, 1-q),
-	\end{align*}
-	that is: the probability of success is no better than random chance in the limit of infinitely poor SNR.
-\end{proposition}
-\noindent The result is proved in Appendix~\ref{sec:proof_two_gauss}.
-
-Proposition~\ref{prop:two_gauss} implies that in order to estimate the signal in low SNR  we must consider methods that aim to estimate the signal directly, without estimating the nuisance variables as an intermediate step. 
- %we need to consider a different approach. In this paper, we consider autocorrelation analysis.
-  In what follows, we present several results on properties of autocorrelations. \TODO{For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions.---need to keep this sentence in red until the very end to make sure it's correct.}
-
-A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, since $z[0]$ and $z[L-1]$ are nonzero by definition, we have the formula:
+A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
 %
-\begin{align} \label{eq-uniqueness}
+\begin{align}
 %
-z[k] = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
+z[k] & = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
+\label{eq-uniqueness}
 %
 \end{align}
-In particular, we have proven the following proposition:
+This proves the following useful fact:
 \begin{proposition} \label{prop:uniqueness}
 	%
 	 A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$.
 \end{proposition}
 
-Some remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable if $z[0]$ or $z[L-1]$ are close to 0. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
+Some remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
 Second, if the separation condition holds, then the length of the signal can be determined from the autocorrelations.
-In particular, if the separation condition holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
+In particular, if the separation condition holds \TODO{for some spacing $W\geq L$---Nico: what is this?}, then $a_z^2[i] = 0$ for all $i > L-1$.
 Third, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
-However, for dimensions greater than one, almost all signals are determined uniquely up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case). %~\cite{hayes1982reconstruction,hayes1982reducible}. 
+However, for dimensions greater than one, almost all signals are determined uniquely up to sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case). %~\cite{hayes1982reconstruction,hayes1982reducible}. 
 The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 
-The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately give the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma = \lim_{N\to\infty}ML/N$, \TODO{Will: Earlier, you defined gamma in the finite sample case; now it's the limit. These should be made consistent.} where $M=M_N$ grows with $N$. We will show, however, that $x$ is still identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
+The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that $x$ is still identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
 
-First, we observe that if the noise level $\sigma$ is known, one can estimate $\gamma$ from the first two moments of the observed vector.
+First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph.
 %
 \begin{proposition} \label{prop:gamma}
-	Let $\sigma > 0$ be fixed. If the mean of $x$ is nonzero, then 
+	Let $\sigma > 0$ be fixed. If the mean of $x$ is nonzero, then  \TODO{Where does the `almost surely' come from?}
 	%
-	\begin{equation*}
+	\begin{align*}
 	%
-	\gamma = \lim_{N \to \infty}\frac{(a^1_y)^2}{\sum_{j=0}^{L-1}a_y^2[j]-\sigma^2} \quad \text{a.s.}
+	\gamma & = \lim_{N \to \infty}\frac{(a^1_y)^2}{\sum_{\ell = 0}^{L-1}a_y^2[\ell]-\sigma^2}, \quad \text{almost surely.}
 	%
-	\end{equation*}
+	\end{align*}
+	\TODO{Nico: I do not get the same formula when I plug things in.}
 	%
 \end{proposition}
 \begin{proof}
-	The proof follows from plugging the explicit expressions of~\eqref{eq:mean_micrograph} and~\eqref{eq:ac2_micrograph} into the right hand side of the equality.
+	Plug in the explicit expressions of~\eqref{eq:mean_micrograph} and~\eqref{eq:ac2_micrograph} into the right hand side of the equality.
 \end{proof}
 
 Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are identifiable. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
-lies in a set with Lebesgue measure zero. 
+lies in a set \TODO{with Lebesgue measure zero.---Nico: I don't think we should use such words in a PNAS paper.}
 In particular, this means that we can recover
 almost all signals with the given measurements.
 
@@ -303,6 +319,8 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 	\end{itemize}
 \end{corollary}
 
+
+\TODO{Similar results hold for signals in higher dimensions.---need to keep this sentence in red until the very end to make sure it's correct.}
 
 \section{Numerical experiments}
 
@@ -390,7 +408,7 @@ The autocorrelations are computed from noisy micrographs with $\sigma=3$ that ob
 	\includegraphics[scale=0.7]{1D_example}
 	\caption{\label{fig:1D_example} Recovery of a 1-D signal of length $L=21$ at noise level $\sigma = 3$ from $M$ repetitions. The length of the micrograph was set to be $N = 410*M$. The first three panels (left to right) show reconstruction with different $M$ values compared to the ground truth signal (in blue).
 		The true value of $\gamma$ is $0.0512$.
-		   The relative errors of $\gamma$ for the three panels are: $27.1\%,4\%,1.2\%$. The right panel shows the relative error as a function of $M$.
+		   The relative errors of $\gamma$ for the three panels are: $27.1\%,4\%,1.2\%$. The right panel shows the relative error as a function of $M$.  \TODO{Nico: relative error should be logscale? Also, let's pick other colors; if we're running this again anyway, let's also aim for M being powers of 10 in all displayed cases?}
 	}
 \end{figure*}
 
@@ -426,7 +444,7 @@ On the hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise microg
 		\caption{An excerpt of the clean micrograph}
 	\end{subfigure}
 	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from a volume of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
-		The noise realization is identical in both micrographs. }	
+		The noise realization is identical in both micrographs. \TODO{The excerpts should be squares: use `axis equal;' -- also, what's going on with the diagonal line on the right panel?}}
 \end{figure*}
 
 
@@ -585,7 +603,7 @@ The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} 
 
 Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
 
-We will let the number of instances of the signal $M$ grow with $N$, and write $M=M_N$ to emphasize this. We assume $M_N$ grows proportionally with $N$, and define:
+We will let the number of instances of the signal $M$ grow with $N$, and write $M=M_N$ to emphasize this. We assume $M_N$ grows proportionally with $N$, and define: \TODO{---Nico: the paper now no longer references $M_N$ and defines $\gamma$ 'as is' for given $M$ and $N$; may want to adapt things here as a result. It wouldn't make sense to make $M_N$ appear in the paper I think, as it just makes things more complicated. In a sense, much of this beginning of appendix is just repeating things we already said cleanly in the paper: let's just follow up from that.}
 %
 \begin{equation}
 \gamma = \lim_{N\to\infty} \frac{M_NL}{N}<1.
@@ -990,7 +1008,7 @@ The details are in the appendix.
 
 \subsection{Moments derivation} \label{sec:moment_derivation}
 
-In this section we prove relation~\eqref{eq:ac_micrographs}. We note that mathematically taking infinitely many micrographs is equivalent to take one infinitely large micrograph with fixed density $\gamma$~\eqref{eq:gamma}. Hence, we consider the moments of one micrograph $\II$ in the limit $N\to\infty$ and  $\gamma = \lim_{N\to\infty}\frac{MP^2}{N^2}\in(0,1)$. 
+In this section we prove relation~\eqref{eq:ac_micrographs}. We note that mathematically taking infinitely many micrographs is equivalent to taking one infinitely large micrograph with fixed density $\gamma$~\eqref{eq:gamma}. Hence, we consider the moments of one micrograph $\II$ in the limit $N\to\infty$ and  $\gamma = \lim_{N\to\infty}\frac{MP^2}{N^2}\in(0,1)$. 
 The separation condition guarantees that if $\mb i=(i,j)$ is in the support of some projection, then $\mb i + \mb \Bell$ for $\Bell\in[-(P-1),P-1]^2$ is either in the support of the same projection or outside the support of any projection. 
 
 We begin by calculating the relation between the $p$th autocorrelation of the clean micrograph and the  averaged autocorrelation of the projections.
