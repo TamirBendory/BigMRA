@@ -49,22 +49,22 @@ Please provide an abstract of no more than 250 words in a single paragraph. Abst
 \thispagestyle{firststyle}
 \ifthenelse{\boolean{shortarticle}}{\ifthenelse{\boolean{singlecolumn}}{\abscontentformatted}{\abscontent}}{}
 
-\dropcap{C}ryo--electron microscopy (cryo--EM) is an innovative technology for single particle reconstruction (SPR) of macromolecules. \TODO{revise first sentence}
+\dropcap{C}ryo--electron microscopy (cryo--EM) is an leading technology for single particle reconstruction (SPR) of macromolecules. \TODO{revise first sentence}
 In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice. %Within the ice, the molecules are randomly oriented and positioned.
  The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecules from the micrographs.
 
-The signal to noise ratio (SNR) of the projections in the micrographs is a function of two dominating factors. On the one hand, the SNR is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the SNR is a function of the molecule size. The smaller the molecules, the fewer detected electrons carry information about them.
+The signal to noise ratio (SNR) of the projections in the micrographs is a function of two dominating factors. On the one hand, the SNR is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the SNR is a function of the molecule size. The smaller the molecules, the fewer detected electrons carry information about them. \TODO{This isn't quite accurate: it's about the density of particles in the image; but we want to make a point about size; how do we reconcile this?}
 
 All contemporary methods in the field split the reconstruction procedure into several stages.
 The first stage consists in extracting the various particle projections from the micrographs. This stage is called \emph{particle picking}. Later stages aim to construct a 3-D model of the molecule from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. Figure~\ref{fig:micro_example} illustrates how particle picking becomes increasingly challenging as the SNR degrades.
 
 
-Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Henderson~\cite{henderson1995limitations} investigates the following questions:
+Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following questions:
 \begin{quote}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{quote}
 In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
-Joachim Frank voices a similar observation in his Nobel prize lecture: ``\emph{Using the ribosome as an example, it became clear from the formula we obtained that the single-particle approach to structure research was indeed feasible for molecules of sufficient size: Particle Size > 3/[Contrast$^2\times $  Resolution (as length) $\times$ Critical Electron Dose]}''~\cite{frank2018single}. 
+Joachim Frank voices a similar observation in his 2017 Nobel prize lecture: ``\emph{Using the ribosome as an example, it became clear from the formula we obtained that the single-particle approach to structure research was indeed feasible for molecules of sufficient size: Particle Size > 3/[Contrast$^2$ $\times$ Resolution (as length) $\times$ Critical Electron Dose]}''~\cite{frank2018single}. 
 \TODO{As these two leaders of the cryo-EM community point out,} it is impossible to reconstruct small molecules by any of the existing computational pipelines for single particle analysis in cryo--EM, because the particles themselves cannot be picked from the micrographs.
 
 The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
@@ -75,17 +75,18 @@ In this paper, we argue that there is a gap between the two questions in Henders
 Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction.
 Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
 
-As a proof of concept, we study a toy model for which it is easier to convey the mathematical principles. 
+As a proof of concept, we study
+\TODO{This sentence beginning makes it sound like what follows is our main point; should the main point be the 3D recovery, even if low-res?}
+a toy model for which it is easier to convey the mathematical principles. 
 In this toy model, an unknown image appears multiple times at unknown locations in each of several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
 The goal is to estimate the planted image. The task is challenging in particular when the SNR is low enough that particle picking (identifying the locations of each image in each micrograph) cannot be done reliably. 
-This problem is interesting of its own as it appears in other scientific applications, such as spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
+This problem is interesting of its own as it appears in other scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
  
 In order to recover the image, we use autocorrelation analysis. Specifically, we relate the autocorrelations of the micrographs to the autocorrelations of the image.
-For any noise level, these autocorrelations can be estimated to any desired accuracy, provided that we  observe sufficiently many image occurrences and the latter are separated in the micrograph. Importantly, there is no need to detect individual image occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. These directly yield estimates for the autocorrelations of the image \TODO{Will: This is not quite true, because of the gamma parameter}. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem. 
+For any noise level, these autocorrelations can be estimated to any desired accuracy, provided that we  observe sufficiently many image occurrences and the latter are separated in the micrograph. Importantly, there is no need to detect individual image occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the autocorrelations of the target image itself. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem.
 
-Autocorrelation analysis for 3-D reconstruction, under the assumption of perfect particle picking,  was first proposed by Zvi Kam~\cite{kam1980reconstruction}. 
-In this work, we derive the mathematical relation between the autocorrelations of the micrographs and the 3-D volume under some simplifying conditions.
-We show a few numerical examples and outline the future developments required to make this method applicable on real data. \TODO{This paragraph would be changed according to the final results we will show}
+Beyond this 2-D proof of concept, we look toward \mbox{3-D} reconstruction as well. Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked particles. In contrast, we derive the mathematical relation between the autocorrelations of the micrographs as a whole and the \mbox{3-D} volume, under some simplifying conditions.
+We show a few numerical examples and outline the future developments required to make this method applicable on real data. \TODO{This paragraph will be changed according to the final results we will show}
 
 Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
@@ -119,8 +120,7 @@ Another interesting feature of the described approach pertains to model bias, wh
 
 \section{Proof of concept: A mathematical toy model}
 
-In this section, we present a toy model which is studied in the next sections. 
-The role of this model is to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles can be carried through for the SPR problem. The model is formulated for 1-D signals to ease exposition.   
+In this section, we present a toy model in order to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles carry through for the SPR problem. We here formulate the model for 1-D signals to ease exposition.
 
 Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data, where $N \gg L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
 \begin{align}
