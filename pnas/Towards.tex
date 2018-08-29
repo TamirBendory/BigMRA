@@ -155,7 +155,7 @@ If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior 
 Methods based on such formulations are popular nowadays in cryo-EM; see for instance~\cite{sigworth1998maximum,scheres2012relion}. 
 Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. %Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
 In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based on a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is superlinear in $N$, and therefore its usage is limited for big data sets. 
-%Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation constraint on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
+%Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation condition on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
 %
 %Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
@@ -164,9 +164,9 @@ Because likelihood methods are computationally expensive, methods based on recov
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
 
-In general, for a signal $z$ of length $m$, the autocorrelation of order $q \geq 1$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
+In general, for a signal $z$ of length $m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{align}
-a_z^q[\ell_1,\ldots,\ell_{k-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
+a_z^q[\ell_1,\ldots,\ell_{q-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
 \label{eq:ac_general}
 \end{align}
 where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
@@ -181,11 +181,11 @@ The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^
 $a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $
 
-Under the spacing constraint, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
+Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{align}
 \gamma & = \frac{M L}{N}
 \end{align}
-denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint%~\eqref{eq:spacing} 
+denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
 imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
 One simple observation is that the first-order\TODO{Will: I suggest making this statement about all the autocorrelations here, instead of singling out the mean first. I understand that the mean can be estimated without the separation condition, but this distinction is not very critical to highlight, and it's a little confusing to have this sentence (upon first reading, it might be interpreted to mean that the other autocorrelations do depend on s). I'd say something like: Under the separation condition on $s$, the autocorrelation functions of $y$ can be shown to depend only on the corresponding autocorrelations of $x$ and the parameter $gamma$, defined by... 
@@ -201,7 +201,7 @@ We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains 
 Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
 \TODO{TB: I think that this paragraph can be much shorter and it is sufficient to show only the second equation and remove footnote. Nicolas thinks otherwise. Need to be decided. Will: I agree the footnote is unnecessary and actually confusing, since s need not be random.}
 
-The spacing condition gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
+The separation condition gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
 \begin{align} \label{eq:ac2_micrograph}
 \lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
 \end{align}
@@ -497,7 +497,7 @@ We also note several aspects of SPR experiments that were neglected in this pape
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generate $P$ micrographs of size $4096\times 4096$ pixels. 
 In each micrograph, we place Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition.%~\eqref{eq:spacing}.  
 This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
-an accept/reject rule based on the separation constraint and locations picked so far.
+an accept/reject rule based on the separation condition and locations picked so far.
 On average, $700$ images are placed in each micrograph.   
 Then, i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ is added, inducing an SNR of approximately $1/375$.
 An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
@@ -523,9 +523,9 @@ The map is designed so that, if the estimated power spectrum is exact, then fixe
 
 \paragraph{1-D experiment.}
 For the 1-D experiment depicted in Figure~\ref{fig:1D_example}, we used a signal of length $L=21$ and generated an observation $y$ of length $N = 10(2L-1)M$, where $M$ is the number of repetitions. 
-The observation was generated by randomly selecting placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far until reaching the desired number of signal occurrences. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$ is about $1/175$.
+The observation was generated by randomly selecting placements in $y$, one at a time with an accept/reject rule based on the separation condition and locations picked so far until reaching the desired number of signal occurrences. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$ is about $1/175$.
 %	 fix $K = 3$ signals of length $L = 21$. Following the forward model described at the beginning of this section, we generate an observation $y$ of length $12.3 \cdot 10^9$. Each of the three signals appears, respectively (and approximately), $30.0 \cdot 10^6$, $20.0 \cdot 10^6$ and $10.0 \cdot 10^6$ times in $y$ for a total of exactly $60 \cdot 10^6$ occurrences, such that at least $L-1$ zeros separate any two occurrences of any signals. 
-%This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far. For each placement, one of the three signals is picked at random according to the proportions $1/2, 1/3, 1/6$. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$
+%This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation condition and locations picked so far. For each placement, one of the three signals is picked at random according to the proportions $1/2, 1/3, 1/6$. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$
 %% sqrt((m_want*sum(X.^2)')/(sigma^2*n))
 %is about 1/9.
 
