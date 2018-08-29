@@ -36,6 +36,8 @@
 % Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
 \keywords{Keyword 1 $|$ Keyword 2 $|$ Keyword 3 $|$ ...} 
 
+\renewcommand{\P}{\mathrm{Prob}}
+
 \begin{abstract}
 Please provide an abstract of no more than 250 words in a single paragraph. Abstracts should explain to the general reader the major contributions of the article. References in the abstract must be cited in full within the abstract itself and cited in the text.
 \end{abstract}
@@ -120,15 +122,15 @@ Another interesting feature of the described approach pertains to model bias, wh
 
 \section{Proof of concept: A mathematical toy model}
 
-In this section, we present a toy model in order to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles carry through for the SPR problem. We here formulate the model for 1-D signals to ease exposition.
+In this section, we present a toy model in order to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles carry through for the SPR problem. We first formulate the model for 1-D signals to ease exposition.
 
-Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data, where $N \gg L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
+Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data, where $N$ is assumed far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
 \begin{align}
 y & =  x \ast s + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{align}
 where $\ast$ denotes linear convolution. 
-While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in the low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
+While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$ (this is a key difference with other works on sparse blind deconvolution, e.g.~\cite{zhang2018structured}). The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
 
 We assume that the binary signals $s$ obey the following \emph{separation condition}: If $s[i] = 1$ and $s[j] = 1$  for  $i \neq j$, then $\vert i - j\vert \geq 2L-1$.
 %\begin{align} 
@@ -137,7 +139,9 @@ We assume that the binary signals $s$ obey the following \emph{separation condit
 %\end{align}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
 
-Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
+Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the
+%system identification
+forward model takes the form
 %
 \begin{math}
 %
@@ -145,26 +149,26 @@ y = x\ast w + \varepsilon,
 %
 \end{math} 
 %
-where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
-The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$, satisfying the separation condition, we obtain our model. The same observation model is used for \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+where $x$ is the unknown signal (the system's impulse response), $w$ is an unknown (often random) input sequence, and $\varepsilon$ is an additive noise.
+The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$ is binary and satisfies our separation condition, we recover our model. The same observation model is used for \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 
 Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. %For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). 
 If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
 Methods based on such formulations are popular nowadays in cryo-EM; see for instance~\cite{sigworth1998maximum,scheres2012relion}. 
 Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. %Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
-In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
-%Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation constraint on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
+In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based on a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is superlinear in $N$, and therefore its usage is limited for big data sets. 
+%Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation condition on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
 %
 %Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
-Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Following this approach, in the next section we present an autocorrelation analysis for~\eqref{eq:model} and study it in Section~\ref{sec:theory}.  
+Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Building on such ideas, in the next section we present an autocorrelation analysis for~\eqref{eq:model} and study it in Section~\ref{sec:theory}.  
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
 
-In general, for a signal $z$ of length $m$, the autocorrelation of order $q \geq 1$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
+In general, for a signal $z$ of length $m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{align}
-a_z^q[\ell_1,\ldots,\ell_{k-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
+a_z^q[\ell_1,\ldots,\ell_{q-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
 \label{eq:ac_general}
 \end{align}
 where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
@@ -179,65 +183,63 @@ The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^
 $a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $
 
-Under the spacing constraint, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
+Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{align}
 \gamma & = \frac{M L}{N}
 \end{align}
-denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint%~\eqref{eq:spacing} 
+denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
 imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
-One simple observation is that the first-order\TODO{Will: I suggest making this statement about all the autocorrelations here, instead of singling out the mean first. I understand that the mean can be estimated without the separation condition, but this distinction is not very critical to highlight, and it's a little confusing to have this sentence (upon first reading, it might be interpreted to mean that the other autocorrelations do depend on s). I'd say something like: Under the separation condition on $s$, the autocorrelation functions of $y$ can be shown to depend only on the corresponding autocorrelations of $x$ and the parameter $gamma$, defined by... 
-Then go into the details.} autocorrelation of $y$ (its mean) is independent of the locations of $x$. Since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:\TODO{Will: Instead of the footnote, just specify here that the randomness is over the Gaussian noise.
-s can be deterministic. The only thing we assume about s is that the associated parameter gamma is constant (you might also note that this can be relaxed, so long as the sequence of $\gamma_N$'s converges to gamma, but this point is not critical).}\footnote{We did not fully specify a random generating model for the location vector $s$. The expectation is still well defined specifically because the quantity under consideration is independent of $s$ under the assumptions.}
+Under the separation condition on $s$,  for shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend only on the corresponding autocorrelations of $x$ and the parameter $\gamma$. In particular, for the first-order autocorrelation (that is, the mean), since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:
 \begin{align*}
 \E\{ a_y^1 \} & = \gamma a_x^1.
 \end{align*}
+(The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic: under the conditions, the quantity under consideration depends on $s$ only through $\gamma$.)
 We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density.) In that regime, the law of large numbers can be used to show the following statement:
 \begin{align} \label{eq:mean_micrograph}
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
 \end{align}
-Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
-\TODO{TB: I think that this paragraph can be much shorter and it is sufficient to show only the second equation and remove footnote. Nicolas thinks otherwise. Need to be decided. Will: I agree the footnote is unnecessary and actually confusing, since s need not be random.}
-
-The spacing condition gives rise to more powerful observations. Consider the second-order autocorrelation in particular: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
-\begin{align} \label{eq:ac2_micrograph}
-\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
+Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.) We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
+\begin{align}
+	\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
+	\label{eq:ac2_micrograph}
 \end{align}
 for $\ell = 0, \ldots, L-1$, where $\delta$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
 Along the same lines, one can establish a relation for third-order autocorrelations:
-\begin{align} \label{eq:ac3_micrograph}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] \\& + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), 
+\begin{align}
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2] \label{eq:ac3_micrograph}\\ & \quad + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big), 
  \nonumber
 \end{align}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$. Here too, few entries are affected by $\sigma$ in the limit.
 Detailed derivations for identities in this and the next part are given in Appendix~\ref{sec:autocorrelation_computation}.
 
-
+\TODO{Nico: At this point in the paper, the reader will want to here about recovering $x$ from its moments. That's not what happens: the next section is called theory (a bit too vague); it discusses two things: one is the impossibility of getting $s$, another is whether we can get $x$, $\gamma$, $\sigma$. I propose to split that section in two, and to lead with the recovery part (which is interesting to more people, I expect.)}
 
 \section{Theory} \label{sec:theory}
 
 If $x$ is known, then the support signal $s$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. 
 However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible. 
-To prove this argument, we consider an even easier problem, in which someone hands us intervals of length $L$ that either contain the full signal plus noise, or contain just noise, and we are asked to determine which intervals contain signal. 
-Let us assume too that we know the signal $x$, that we know the probability $q$ that one of the intervals contains a signal, and that we know the noise variance $\sigma^2$. Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.
+To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us intervals of length $L$ in the micrograph that either contain a full signal occurrence (plus noise), or contain just noise. Our task is to determine which intervals contain signal, that is, to determine whether the corresponding entries of $s$ are 0 or 1.
+The oracle further provides the signal $x$, the probability $q$ that one of the intervals contains signal, and the noise variance $\sigma^2$. \TODO{Nico: I don't see how the next sentence is relevant for the task of estimating $s$---Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.---I would just write this: Since the intervals are independent of each other, it is sufficient to consider a single interval.}
 
-Let us abstract this problem. We have two known vectors $\theta_0$ and $\theta_1$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ with the following distribution: $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words, if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$, and if $\varepsilon  = 1$, then $X \sim N(\theta_1,\sigma^2)$. If $\theta_1=0$, then the latter corresponds to pure noise interval.
+The decision problem for a single interval can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an interval) with the following distribution:
+% $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words,
+if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$ (that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$), and if $\eta = 1$, then $X \sim N(\theta_1,\sigma^2)$.
+%If $\theta_1=0$, then the latter corresponds to pure noise interval.
 
-We observe $X$, and our task is to predict $\eta$. How well can we do it? First, let us assume without loss of generality that $q \ge 1/2$. Then, if we make the constant prediction $\hat{\eta } \equiv 0$, we will be correct with probability $q$. So the question is, can we do better than this? We will prove that as $\sigma \to \infty$, the answer is no. More precisely:
+We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? We prove that, as $\sigma \to \infty$, the answer is no:
 \begin{proposition} \label{prop:two_gauss}
-	Let $\hat{\eta }$ be any predictor of $\eta$.
-	%
+	For any deterministic estimator $\hat{\eta }$ of $\eta$,
 	\begin{align*}
-	%
-	\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] \le q.
-	%
+		\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] & \leq \max(q, 1-q),
 	\end{align*}
+	that is: the probability of success is no better than random chance in the limit of infinitely poor SNR.
 \end{proposition}
 \noindent The result is proved in Appendix~\ref{sec:proof_two_gauss}.
 
 Proposition~\ref{prop:two_gauss} implies that in order to estimate the signal in low SNR  we must consider methods that aim to estimate the signal directly, without estimating the nuisance variables as an intermediate step. 
  %we need to consider a different approach. In this paper, we consider autocorrelation analysis.
-  In what follows, we present several results on properties of autocorrelations. For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions. 
+  In what follows, we present several results on properties of autocorrelations. \TODO{For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions.---need to keep this sentence in red until the very end to make sure it's correct.}
 
 A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, since $z[0]$ and $z[L-1]$ are nonzero by definition, we have the formula:
 %
@@ -495,7 +497,7 @@ We also note several aspects of SPR experiments that were neglected in this pape
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generate $P$ micrographs of size $4096\times 4096$ pixels. 
 In each micrograph, we place Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition.%~\eqref{eq:spacing}.  
 This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
-an accept/reject rule based on the separation constraint and locations picked so far.
+an accept/reject rule based on the separation condition and locations picked so far.
 On average, $700$ images are placed in each micrograph.   
 Then, i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ is added, inducing an SNR of approximately $1/375$.
 An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
@@ -521,9 +523,9 @@ The map is designed so that, if the estimated power spectrum is exact, then fixe
 
 \paragraph{1-D experiment.}
 For the 1-D experiment depicted in Figure~\ref{fig:1D_example}, we used a signal of length $L=21$ and generated an observation $y$ of length $N = 10(2L-1)M$, where $M$ is the number of repetitions. 
-The observation was generated by randomly selecting placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far until reaching the desired number of signal occurrences. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$ is about $1/175$.
+The observation was generated by randomly selecting placements in $y$, one at a time with an accept/reject rule based on the separation condition and locations picked so far until reaching the desired number of signal occurrences. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$ is about $1/175$.
 %	 fix $K = 3$ signals of length $L = 21$. Following the forward model described at the beginning of this section, we generate an observation $y$ of length $12.3 \cdot 10^9$. Each of the three signals appears, respectively (and approximately), $30.0 \cdot 10^6$, $20.0 \cdot 10^6$ and $10.0 \cdot 10^6$ times in $y$ for a total of exactly $60 \cdot 10^6$ occurrences, such that at least $L-1$ zeros separate any two occurrences of any signals. 
-%This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far. For each placement, one of the three signals is picked at random according to the proportions $1/2, 1/3, 1/6$. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$
+%This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation condition and locations picked so far. For each placement, one of the three signals is picked at random according to the proportions $1/2, 1/3, 1/6$. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$
 %% sqrt((m_want*sum(X.^2)')/(sigma^2*n))
 %is about 1/9.
 
@@ -691,7 +693,7 @@ This completes the proof.
 
 \section{Proof of Proposition~\ref{prop:two_gauss}} \label{sec:proof_two_gauss}
 
-The proof is based on  a variant of the Neyman-Pearson Lemma to derive the best (deterministic) predictor $\hat{\eta}$. We take any predictor $\hat{\eta}$, and we let $S$ be the set of $X$'s where $\hat{\eta} = 1$. Then the probability that $\hat{\eta}$ fails is:
+The proof is based on  a variant of the Neyman--Pearson Lemma to derive the best (deterministic) estimator $\hat{\eta}$. We take any estimator $\hat{\eta}$, and we let $S$ be the set of $X$'s where $\hat{\eta} = 1$. We write $\P_i$ to mean the probability conditional on the event $\eta = i$; that is, $\P_i[A] = \P[A | \eta = i]$. Then, the probability that $\hat{\eta}$ fails is:
 %
 \begin{align}
 \label{eq:neyman-pearson}
@@ -707,31 +709,28 @@ The proof is based on  a variant of the Neyman-Pearson Lemma to derive the best 
 %
 \end{align}
 %
-where $f_i(x)$ is the normal density with mean $\theta_i$ and variance $\sigma^2$, and the notation $\P_i$ means probability conditional on the event $\eta = \theta_i$; that is, $\P_i[A] = \P[A | \eta=i]$. 
-Let $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$,
-The best predictor of $\eta$ based on $X$ will minimize the integral~\eqref{eq:neyman-pearson} and thus \TODO{Tamir: Are we sure this is the best?}
-%
-% is minimized by taking $S$ to be the set:
-%%
-%\begin{align}
-%%
-%S = \left\{x : \frac{f_0(x)}{f_1(x)} \le \frac{1-q}{q} \right\}.
-%%
-%\end{align}
-%%
-%In other words, if $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, then the best predictor of $\eta$ based on $X$ is:
-%
+where $f_i(x)$ is the normal density with mean $\theta_i$ and variance $\sigma^2$. 
+The best estimator of $\eta$ based on $X$ minimizes the failure probability; hence, it minimizes the integral in~\eqref{eq:neyman-pearson} through an appropriate choice of the set $S$. This is achieved as follows:
 \begin{align}
 %
-\eta = 
-\begin{cases}
-1,  \text{ if } \Lambda(x) \le b \\
-0,  \text{ if } \Lambda(x) \ge b
-\end{cases}.
+%S & = \left\{x : \frac{f_0(x)}{f_1(x)} \leq \frac{1-q}{q} \right\}.
+S & = \left\{x : qf_0(x) \leq (1-q)f_1(x) \right\}.
 %
 \end{align}
-
-Taking logarithms, the set $S$ can be rewritten as the set of $x$ where:
+%
+%In other words, if $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, then the best estimator of $\eta$ based on $X$ is:
+%
+With $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, the corresponding estimator is:
+\begin{align}
+%
+\hat{\eta} = 
+\begin{cases}
+1  \text{ if } \Lambda(x) \leq b, \\
+0  \text{ if } \Lambda(x) > b.
+\end{cases}
+%
+\end{align}
+Taking logarithms, the set $S$ can be rewritten as the set of $x$'s where:
 \begin{align*}
 %
 -\| x - \theta_0\|^2 \le - \|x - \theta_1\|^2 + 2 \sigma^2 \log(b),
@@ -747,8 +746,7 @@ or equivalently
 %
 \end{align*}
 %
-
-Now let us compute the probability of failure conditional on the event $\eta = 0$. In this case, failure occurs when $X \in S$. Since $X|(\eta=0) \sim N(\theta_0,\sigma^2)$, we can write $X | (\eta=0) = \sigma Z + \theta_0$, where $Z \sim N(0,1)$. Consequently,
+Now let us compute the probability of failure conditional on the event $\eta = 0$. In this case, failure occurs when $X \in S$. Since $X|(\eta=0) \sim N(\theta_0,\sigma^2)$, we can write $X | (\eta=0) = \sigma Z + \theta_0$, where $Z \sim N(0,1)$. On that condition,
 %
 \begin{align*}
 %
@@ -769,24 +767,24 @@ and failure occurs when
 &\ge \frac{\|\theta_1\|^2 + \|\theta_0\|^2}{2} - \langle \theta_0,\theta_1 \rangle
 - \sigma^2 \log(b)
 \nonumber \\
-&= \frac{1}{2} \|\theta_1 - \theta_0\|^2 - \sigma^2 \log(b)
+&= \frac{1}{2} \|\theta_1 - \theta_0\|^2 - \sigma^2 \log(b).
 %
 \end{align}
 %
-or equivalently
+Define $Y = \langle Z , \theta_1 - \theta_0 \rangle \sim N(0,\|\theta_1 - \theta_0\|^2)$ and divide through by $\sigma$. The above event is equivalent to:
 %
 \begin{align*}
 %
-Y \ge \frac{c}{\sigma} - \sigma^2 \log(b)
+Y \ge \frac{c}{\sigma} - \sigma \log(b),
 %
 \end{align*}
 %
-where $c = \|\theta_1 - \theta_0\|^2 / 2$ and $Y = \langle Z , \theta_1 - \theta_0 \rangle \sim N(0,\|\theta_1 - \theta_0\|^2)$. 
-Just for simplicity let us assume $\| \theta_1 - \theta_0\| = 1$, so that $Y \sim N(0,1)$. So:
+where $c = \|\theta_1 - \theta_0\|^2 / 2$. 
+For simplicity, let us assume $\| \theta_1 - \theta_0\| = 1$, so that $Y \sim N(0,1)$. Then, 
 %
 \begin{align*}
 %
-\P_0[\hat{\eta} = 1] = \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right],
+\P_0[\hat{\eta} = 1] = \P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right],
 \quad Y \sim N(0,1).
 %
 \end{align*}
@@ -795,20 +793,19 @@ Similarly,
 %
 \begin{align*}
 %
-\P_1[\hat{\eta} = 0] = \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right],
+\P_1[\hat{\eta} = 0] = \P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right],
 \quad Y \sim N(0,1).
 %
 \end{align*}
 %
-So the overall probability of failure is:
+Thus, the overall probability of failure is:
 %
-\begin{align*}
+\begin{multline*}
 %
-\P[\hat{\eta} \ne \eta]
-&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
-\\&+ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right].
+\P[\hat{\eta} \ne \eta] = q \P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right] \\
+  + (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right].
 %
-\end{align*}
+\end{multline*}
 %
 Now, if $q = 1/2$, then $\log(b) = 0$. Hence the probability of failure is simply:
 %
@@ -818,12 +815,11 @@ Now, if $q = 1/2$, then $\log(b) = 0$. Hence the probability of failure is simpl
 \quad \text{as} \quad \sigma \to \infty.
 %
 \end{align}
-
-On the other hand, if $q > 1-q$, then $\log(b) < 0$. Then 
+If $q > 1/2$, then $q > 1-q$ and $\log(b) < 0$. Consequently, 
 %
 \begin{align}
 %
-\P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right] \longrightarrow 0
+\P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right] \longrightarrow 0
 %
 \end{align}
 %
@@ -831,23 +827,25 @@ while
 %
 \begin{align}
 %
-\P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right] \longrightarrow 1
+\P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right] \longrightarrow 1
 %
 \end{align}
 %
-as $\sigma \to \infty$. Consequently,
+as $\sigma \to \infty$. Hence,
 %
 \begin{align}
 %
 \P[\hat{\eta} \ne \eta]
-&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
-+ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right]
-\nonumber\\
+%&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
+%+ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right]
+%\nonumber\\
 & \longrightarrow 1-q  \quad \text{as} \quad  \sigma \to \infty.
 %
 \end{align}
-%
-That is, the probability of success converges to $q$, which completes the proof.
+That is, the probability of success converges to $q$.
+Finally, if $q < 1/2$, then $\log(b) > 0$ and a similar reasoning shows the probability of success converges to $1-q$.
+In all cases, the probability of success of the best possible deterministic estimator converges to $\max(q, 1-q)$.
+
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
