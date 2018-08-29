@@ -120,15 +120,15 @@ Another interesting feature of the described approach pertains to model bias, wh
 
 \section{Proof of concept: A mathematical toy model}
 
-In this section, we present a toy model in order to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles carry through for the SPR problem. We here formulate the model for 1-D signals to ease exposition.
+In this section, we present a toy model in order to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles carry through for the SPR problem. We first formulate the model for 1-D signals to ease exposition.
 
-Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data, where $N \gg L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
+Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data, where $N$ is assumed far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
 \begin{align}
 y & =  x \ast s + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{align}
 where $\ast$ denotes linear convolution. 
-While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in the low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
+While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$ (this is a key difference with other works on sparse blind deconvolution, e.g.~\cite{zhang2018structured}). The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
 
 We assume that the binary signals $s$ obey the following \emph{separation condition}: If $s[i] = 1$ and $s[j] = 1$  for  $i \neq j$, then $\vert i - j\vert \geq 2L-1$.
 %\begin{align} 
@@ -137,7 +137,9 @@ We assume that the binary signals $s$ obey the following \emph{separation condit
 %\end{align}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
 
-Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the system identification forward model takes the form
+Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the
+%system identification
+forward model takes the form
 %
 \begin{math}
 %
@@ -145,19 +147,19 @@ y = x\ast w + \varepsilon,
 %
 \end{math} 
 %
-where $x$ is the unknown signal (the ``system''), $w$ is an unknown, random, input sequence, and $\varepsilon$ is an additive noise.   
-The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$, satisfying the separation condition, we obtain our model. The same observation model is used for \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+where $x$ is the unknown signal (the system's impulse response), $w$ is an unknown (often random) input sequence, and $\varepsilon$ is an additive noise.
+The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$ is binary and satisfies our separation condition, we recover our model. The same observation model is used for \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 
 Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. %For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). 
 If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
 Methods based on such formulations are popular nowadays in cryo-EM; see for instance~\cite{sigworth1998maximum,scheres2012relion}. 
 Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. %Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
-In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based upon a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is nonlinear in $N$, and therefore its usage is limited for big data sets. 
+In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based on a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is superlinear in $N$, and therefore its usage is limited for big data sets. 
 %Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation constraint on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
 %
 %Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
-Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Following this approach, in the next section we present an autocorrelation analysis for~\eqref{eq:model} and study it in Section~\ref{sec:theory}.  
+Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Building on such ideas, in the next section we present an autocorrelation analysis for~\eqref{eq:model} and study it in Section~\ref{sec:theory}.  
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
