@@ -36,6 +36,8 @@
 % Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
 \keywords{Keyword 1 $|$ Keyword 2 $|$ Keyword 3 $|$ ...} 
 
+\renewcommand{\P}{\mathrm{Prob}}
+
 \begin{abstract}
 Please provide an abstract of no more than 250 words in a single paragraph. Abstracts should explain to the general reader the major contributions of the article. References in the abstract must be cited in full within the abstract itself and cited in the text.
 \end{abstract}
@@ -217,19 +219,19 @@ Detailed derivations for identities in this and the next part are given in Appen
 
 If $x$ is known, then the support signal $s$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. 
 However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible. 
-To prove this argument, we consider an even easier problem, in which someone hands us intervals of length $L$ that either contain the full signal plus noise, or contain just noise, and we are asked to determine which intervals contain signal. 
-Let us assume too that we know the signal $x$, that we know the probability $q$ that one of the intervals contains a signal, and that we know the noise variance $\sigma^2$. Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.
+To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us intervals of length $L$ in the micrograph that either contain a full signal occurrence (plus noise), or contain just noise. Our task is to determine which intervals contain signal, that is, to determine whether the corresponding entries of $s$ are 0 or 1.
+The oracle further provides the signal $x$, the probability $q$ that one of the intervals contains signal, and the noise variance $\sigma^2$. \TODO{Nico: I don't see how the next sentence is relevant for the task of estimating $s$---Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.---I would just write this: Since the intervals are independent of each other, it is sufficient to consider a single interval.}
 
-Let us abstract this problem. We have two known vectors $\theta_0$ and $\theta_1$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ with the following distribution: $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words, if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$, and if $\varepsilon  = 1$, then $X \sim N(\theta_1,\sigma^2)$. If $\theta_1=0$, then the latter corresponds to pure noise interval.
+The decision problem for a single interval can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an interval) with the following distribution:
+% $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words,
+if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$ (that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$), and if $\eta = 1$, then $X \sim N(\theta_1,\sigma^2)$.
+%If $\theta_1=0$, then the latter corresponds to pure noise interval.
 
-We observe $X$, and our task is to predict $\eta$. How well can we do it? First, let us assume without loss of generality that $q \ge 1/2$. Then, if we make the constant prediction $\hat{\eta } \equiv 0$, we will be correct with probability $q$. So the question is, can we do better than this? We will prove that as $\sigma \to \infty$, the answer is no. More precisely:
+We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? We prove that, as $\sigma \to \infty$, the answer is no.
 \begin{proposition} \label{prop:two_gauss}
-	Let $\hat{\eta }$ be any predictor of $\eta$.
-	%
+	Let $\hat{\eta }$ be any estimator of $\eta$; then:
 	\begin{align*}
-	%
-	\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] \le q.
-	%
+		\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] & \leq \max(q, 1-q).
 	\end{align*}
 \end{proposition}
 \noindent The result is proved in Appendix~\ref{sec:proof_two_gauss}.
@@ -690,7 +692,7 @@ This completes the proof.
 
 \section{Proof of Proposition~\ref{prop:two_gauss}} \label{sec:proof_two_gauss}
 
-The proof is based on  a variant of the Neyman-Pearson Lemma to derive the best (deterministic) predictor $\hat{\eta}$. We take any predictor $\hat{\eta}$, and we let $S$ be the set of $X$'s where $\hat{\eta} = 1$. Then the probability that $\hat{\eta}$ fails is:
+The proof is based on  a variant of the Neyman--Pearson Lemma to derive the best (deterministic) estimator $\hat{\eta}$. We take any estimator $\hat{\eta}$, and we let $S$ be the set of $X$'s where $\hat{\eta} = 1$. We write $\P_i$ to mean the probability conditional on the event $\eta = i$; that is, $\P_i[A] = \P[A | \eta = i]$. Then, the probability that $\hat{\eta}$ fails is:
 %
 \begin{align}
 \label{eq:neyman-pearson}
@@ -706,31 +708,28 @@ The proof is based on  a variant of the Neyman-Pearson Lemma to derive the best 
 %
 \end{align}
 %
-where $f_i(x)$ is the normal density with mean $\theta_i$ and variance $\sigma^2$, and the notation $\P_i$ means probability conditional on the event $\eta = \theta_i$; that is, $\P_i[A] = \P[A | \eta=i]$. 
-Let $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$,
-The best predictor of $\eta$ based on $X$ will minimize the integral~\eqref{eq:neyman-pearson} and thus \TODO{Tamir: Are we sure this is the best?}
-%
-% is minimized by taking $S$ to be the set:
-%%
-%\begin{align}
-%%
-%S = \left\{x : \frac{f_0(x)}{f_1(x)} \le \frac{1-q}{q} \right\}.
-%%
-%\end{align}
-%%
-%In other words, if $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, then the best predictor of $\eta$ based on $X$ is:
-%
+where $f_i(x)$ is the normal density with mean $\theta_i$ and variance $\sigma^2$. 
+The best estimator of $\eta$ based on $X$ minimizes the failure probability; hence, it minimizes the integral in~\eqref{eq:neyman-pearson} through an appropriate choice of the set $S$. This is achieved as follows:
 \begin{align}
 %
-\eta = 
-\begin{cases}
-1,  \text{ if } \Lambda(x) \le b \\
-0,  \text{ if } \Lambda(x) \ge b
-\end{cases}.
+%S & = \left\{x : \frac{f_0(x)}{f_1(x)} \leq \frac{1-q}{q} \right\}.
+S & = \left\{x : qf_0(x) \leq (1-q)f_1(x) \right\}.
 %
 \end{align}
-
-Taking logarithms, the set $S$ can be rewritten as the set of $x$ where:
+%
+%In other words, if $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, then the best estimator of $\eta$ based on $X$ is:
+%
+With $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, the corresponding estimator is:
+\begin{align}
+%
+\hat{\eta} = 
+\begin{cases}
+1  \text{ if } \Lambda(x) \leq b, \\
+0  \text{ if } \Lambda(x) > b.
+\end{cases}
+%
+\end{align}
+Taking logarithms, the set $S$ can be rewritten as the set of $x$'s where:
 \begin{align*}
 %
 -\| x - \theta_0\|^2 \le - \|x - \theta_1\|^2 + 2 \sigma^2 \log(b),
@@ -746,8 +745,7 @@ or equivalently
 %
 \end{align*}
 %
-
-Now let us compute the probability of failure conditional on the event $\eta = 0$. In this case, failure occurs when $X \in S$. Since $X|(\eta=0) \sim N(\theta_0,\sigma^2)$, we can write $X | (\eta=0) = \sigma Z + \theta_0$, where $Z \sim N(0,1)$. Consequently,
+Now let us compute the probability of failure conditional on the event $\eta = 0$. In this case, failure occurs when $X \in S$. Since $X|(\eta=0) \sim N(\theta_0,\sigma^2)$, we can write $X | (\eta=0) = \sigma Z + \theta_0$, where $Z \sim N(0,1)$. On that condition,
 %
 \begin{align*}
 %
@@ -768,24 +766,24 @@ and failure occurs when
 &\ge \frac{\|\theta_1\|^2 + \|\theta_0\|^2}{2} - \langle \theta_0,\theta_1 \rangle
 - \sigma^2 \log(b)
 \nonumber \\
-&= \frac{1}{2} \|\theta_1 - \theta_0\|^2 - \sigma^2 \log(b)
+&= \frac{1}{2} \|\theta_1 - \theta_0\|^2 - \sigma^2 \log(b).
 %
 \end{align}
 %
-or equivalently
+Define $Y = \langle Z , \theta_1 - \theta_0 \rangle \sim N(0,\|\theta_1 - \theta_0\|^2)$ and divide through by $\sigma$. The above event is equivalent to:
 %
 \begin{align*}
 %
-Y \ge \frac{c}{\sigma} - \sigma^2 \log(b)
+Y \ge \frac{c}{\sigma} - \sigma \log(b),
 %
 \end{align*}
 %
-where $c = \|\theta_1 - \theta_0\|^2 / 2$ and $Y = \langle Z , \theta_1 - \theta_0 \rangle \sim N(0,\|\theta_1 - \theta_0\|^2)$. 
-Just for simplicity let us assume $\| \theta_1 - \theta_0\| = 1$, so that $Y \sim N(0,1)$. So:
+where $c = \|\theta_1 - \theta_0\|^2 / 2$. 
+For simplicity, let us assume $\| \theta_1 - \theta_0\| = 1$, so that $Y \sim N(0,1)$. Then, 
 %
 \begin{align*}
 %
-\P_0[\hat{\eta} = 1] = \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right],
+\P_0[\hat{\eta} = 1] = \P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right],
 \quad Y \sim N(0,1).
 %
 \end{align*}
@@ -794,20 +792,19 @@ Similarly,
 %
 \begin{align*}
 %
-\P_1[\hat{\eta} = 0] = \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right],
+\P_1[\hat{\eta} = 0] = \P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right],
 \quad Y \sim N(0,1).
 %
 \end{align*}
 %
-So the overall probability of failure is:
+Thus, the overall probability of failure is:
 %
-\begin{align*}
+\begin{multline*}
 %
-\P[\hat{\eta} \ne \eta]
-&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
-\\&+ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right].
+\P[\hat{\eta} \ne \eta] = q \P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right] \\
+  + (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right].
 %
-\end{align*}
+\end{multline*}
 %
 Now, if $q = 1/2$, then $\log(b) = 0$. Hence the probability of failure is simply:
 %
@@ -817,12 +814,11 @@ Now, if $q = 1/2$, then $\log(b) = 0$. Hence the probability of failure is simpl
 \quad \text{as} \quad \sigma \to \infty.
 %
 \end{align}
-
-On the other hand, if $q > 1-q$, then $\log(b) < 0$. Then 
+If $q > 1/2$, then $q > 1-q$ and $\log(b) < 0$. Consequently, 
 %
 \begin{align}
 %
-\P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right] \longrightarrow 0
+\P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right] \longrightarrow 0
 %
 \end{align}
 %
@@ -830,23 +826,25 @@ while
 %
 \begin{align}
 %
-\P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right] \longrightarrow 1
+\P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right] \longrightarrow 1
 %
 \end{align}
 %
-as $\sigma \to \infty$. Consequently,
+as $\sigma \to \infty$. Hence,
 %
 \begin{align}
 %
 \P[\hat{\eta} \ne \eta]
-&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
-+ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right]
-\nonumber\\
+%&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
+%+ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right]
+%\nonumber\\
 & \longrightarrow 1-q  \quad \text{as} \quad  \sigma \to \infty.
 %
 \end{align}
-%
-That is, the probability of success converges to $q$, which completes the proof.
+That is, the probability of success converges to $q$.
+Finally, if $q < 1/2$, then $\log(b) > 0$ and a similar reasoning shows the probability of success converges to $1-q$.
+In all cases, the probability of success of the best possible deterministic estimator converges to $\max(q, 1-q)$.
+
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
