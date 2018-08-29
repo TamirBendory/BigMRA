@@ -178,16 +178,6 @@ a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1
 The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^2[-\ell]$, and
 $a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $
-%\begin{align*}
-%a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
-%\end{align*}
-%Taking these symmetries into consideration, one can show that $a_z^1, a_z^2$ and $a_z^3$ contain \TODO{TKTK--I think it was commented in the latex} (respectively) non-trivial distinct real numbers, generically.
-%
-%For the special case $K = 1$ where a single signal $x = x_1$ must be recovered, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, so that we treat it first. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$, and let
-%\begin{align}
-%\gamma & = \frac{M L}{N}
-%\end{align}
-%denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The spacing constraint~\eqref{eq:spacing} imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
 Under the spacing constraint, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{align}
@@ -226,12 +216,26 @@ Detailed derivations for identities in this and the next part are given in Appen
 
 \section{Theory} \label{sec:theory}
 
-If $x$ is known, then the support signal $s$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible. 
-\TODO{Here we need to provide Will's argument as a proposition}
+If $x$ is known, then the support signal $s$ can be estimated via linear programming  in the high SNR regime~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. 
+However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible. 
+To prove this argument, we consider an even easier problem, in which someone hands us intervals of length $L$ that either contain the full signal plus noise, or contain just noise, and we are asked to determine which intervals contain signal. 
+Let us assume too that we know the signal $x$, that we know the probability $q$ that one of the intervals contains a signal, and that we know the noise variance $\sigma^2$. Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.
 
-%We have few evidences for that\cite{aguerrebere2016fundamental}, but we will provide Will's argument here.
+Let us abstract this problem. We have two known vectors $\theta_0$ and $\theta_1$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ with the following distribution: $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words, if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$, and if $\varepsilon  = 1$, then $X \sim N(\theta_1,\sigma^2)$. If $\theta_1=0$, then the latter corresponds to pure noise interval.
 
-Accordingly, we must consider methods that aim to estimate the signal directly, without estimating the nuisance variables as an intermediate step. 
+We observe $X$, and our task is to predict $\eta$. How well can we do it? First, let us assume without loss of generality that $q \ge 1/2$. Then, if we make the constant prediction $\hat{\eta } \equiv 0$, we will be correct with probability $q$. So the question is, can we do better than this? We will prove that as $\sigma \to \infty$, the answer is no. More precisely:
+\begin{proposition} \label{prop:two_gauss}
+	Let $\hat{\eta }$ be any predictor of $\eta$.
+	%
+	\begin{align*}
+	%
+	\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] \le q.
+	%
+	\end{align*}
+\end{proposition}
+\noindent The result is proved in Appendix~\ref{sec:proof_two_gauss}.
+
+Proposition~\ref{prop:two_gauss} implies that in order to estimate the signal in low SNR  we must consider methods that aim to estimate the signal directly, without estimating the nuisance variables as an intermediate step. 
  %we need to consider a different approach. In this paper, we consider autocorrelation analysis.
   In what follows, we present several results on properties of autocorrelations. For simplicity, we consider one-dimensional signals, but the results carry through for higher dimensions. 
 
@@ -250,7 +254,6 @@ In particular, we have proven the following proposition:
 
 Some remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable if $z[0]$ or $z[L-1]$ are close to 0. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
 Second, if the separation condition holds, then the length of the signal can be determined from the autocorrelations.
-%%%and therefore the assumption that the first and last entries are nonzero is met.
 In particular, if the separation condition holds for some spacing $W\geq L$, then $a_z^2[i]=0$ for all $i>L-1$.
 Third, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
 However, for dimensions greater than one, almost all signals are determined uniquely up to sign (phase for the complex signals) and reflection through the origin (with conjugation in the complex case). %~\cite{hayes1982reconstruction,hayes1982reducible}. 
@@ -276,13 +279,9 @@ First, we observe that if the noise level $\sigma$ is known, one can estimate $\
 
 Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are identifiable. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
 lies in a set with Lebesgue measure zero. 
-%in the vanishing locus of a nonzero polynomial\footnote{Given a  nonzero polynomial $f$ in $T$ variables (real or complex), the vanishing locus of $f$ is the set 
-%	$V(f) = \{(x_1, \ldots, x_T) \in \mathbb{R}^T (\text{resp. } \mathbb{C}^T) \vert f(x_1,\ldots x_T)=0\}$. By a general result in algebraic geometry $\dim V(f) < T$. As a consequence the complement of $V(f)$ in $\mathbb{R}^T$ (resp. $\mathbb{C}^T$) is dense.}. 
 In particular, this means that we can recover
 almost all signals with the given measurements.
-%%
-%we mean that it holds for all $x$ inside a set $\Omega \subset \RL$, whose complement $\RL \setminus \Omega$ has Lebesgue measure zero.
-%
+
 \begin{proposition} \label{prop:gamma_sigma}
 	%
 	%Let $\sigma > 0$ be fixed. 
@@ -302,9 +301,8 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 	\end{itemize}
 \end{corollary}
 
+
 \section{Numerical experiments}
-
-
 
 The technique we advocate allows recovery of a signal hidden in noisy micrographs without (even implicitly) \TODO{Will: What does this mean?} detecting the location  of the signals embedded in these micrographs. To illustrate the underlying principles of the method, we present several numerical examples for the toy model~\eqref{eq:model} and a simple proof of concept for simulated cryo-EM data.  Appendix~\ref{sec:numeric_details} provides additional details on the experiments.
 
@@ -691,6 +689,166 @@ Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge 
 
 This completes the proof.
 
+\section{Proof of Proposition~\ref{prop:two_gauss}} \label{sec:proof_two_gauss}
+
+The proof is based on  a variant of the Neyman-Pearson Lemma to derive the best (deterministic) predictor $\hat{\eta}$. We take any predictor $\hat{\eta}$, and we let $S$ be the set of $X$'s where $\hat{\eta} = 1$. Then the probability that $\hat{\eta}$ fails is:
+%
+\begin{align}
+\label{eq:neyman-pearson}
+%
+\P[\hat{\eta} \ne \eta] 
+&= q \P_0[\hat{\eta} = 1 ] + (1-q) \P_1[\hat{\eta} = 0]
+\nonumber \\
+&= q \P_0[\hat{\eta} = 1] + (1-q) (1 - \P_1[\hat{\eta} = 1])
+\nonumber \\
+&= q \P_0[\hat{\eta} = 1] + (1-q) - (1-q) \P_1[\hat{\eta} = 1]
+\nonumber \\
+&= (1-q)  + \int_S (q f_0(x) - (1-q) f_1(x))dx,
+%
+\end{align}
+%
+where $f_i(x)$ is the normal density with mean $\theta_i$ and variance $\sigma^2$, and the notation $\P_i$ means probability conditional on the event $\eta = \theta_i$; that is, $\P_i[A] = \P[A | \eta=i]$. 
+Let $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$,
+The best predictor of $\eta$ based on $X$ will minimize the integral~\eqref{eq:neyman-pearson} and thus \TODO{Tamir: Are we sure this is the best?}
+%
+% is minimized by taking $S$ to be the set:
+%%
+%\begin{align}
+%%
+%S = \left\{x : \frac{f_0(x)}{f_1(x)} \le \frac{1-q}{q} \right\}.
+%%
+%\end{align}
+%%
+%In other words, if $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, then the best predictor of $\eta$ based on $X$ is:
+%
+\begin{align}
+%
+\eta = 
+\begin{cases}
+1,  \text{ if } \Lambda(x) \le b \\
+0,  \text{ if } \Lambda(x) \ge b
+\end{cases}.
+%
+\end{align}
+
+Taking logarithms, the set $S$ can be rewritten as the set of $x$ where:
+\begin{align*}
+%
+-\| x - \theta_0\|^2 \le - \|x - \theta_1\|^2 + 2 \sigma^2 \log(b),
+%
+\end{align*}
+%
+or equivalently
+%
+\begin{align*}
+%
+\langle x , \theta_1 - \theta_0 \rangle 
+\ge \frac{\|\theta_1\|^2 - \|\theta_0\|^2}{2} - \sigma^2 \log(b).
+%
+\end{align*}
+%
+
+Now let us compute the probability of failure conditional on the event $\eta = 0$. In this case, failure occurs when $X \in S$. Since $X|(\eta=0) \sim N(\theta_0,\sigma^2)$, we can write $X | (\eta=0) = \sigma Z + \theta_0$, where $Z \sim N(0,1)$. Consequently,
+%
+\begin{align*}
+%
+\langle X , \theta_1 - \theta_0 \rangle 
+&= \sigma \langle Z , \theta_1 - \theta_0 \rangle 
++ \langle \theta_0,\theta_1 - \theta_0 \rangle
+\nonumber \\
+&= \sigma \langle Z , \theta_1 - \theta_0 \rangle 
++ \langle \theta_0,\theta_1 \rangle - \|\theta_0\|^2,
+%
+\end{align*}
+%
+and failure occurs when 
+%
+\begin{align}
+%
+\sigma\langle Z, \theta_1 - \theta_0 \rangle 
+&\ge \frac{\|\theta_1\|^2 + \|\theta_0\|^2}{2} - \langle \theta_0,\theta_1 \rangle
+- \sigma^2 \log(b)
+\nonumber \\
+&= \frac{1}{2} \|\theta_1 - \theta_0\|^2 - \sigma^2 \log(b)
+%
+\end{align}
+%
+or equivalently
+%
+\begin{align*}
+%
+Y \ge \frac{c}{\sigma} - \sigma^2 \log(b)
+%
+\end{align*}
+%
+where $c = \|\theta_1 - \theta_0\|^2 / 2$ and $Y = \langle Z , \theta_1 - \theta_0 \rangle \sim N(0,\|\theta_1 - \theta_0\|^2)$. 
+Just for simplicity let us assume $\| \theta_1 - \theta_0\| = 1$, so that $Y \sim N(0,1)$. So:
+%
+\begin{align*}
+%
+\P_0[\hat{\eta} = 1] = \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right],
+\quad Y \sim N(0,1).
+%
+\end{align*}
+%
+Similarly,
+%
+\begin{align*}
+%
+\P_1[\hat{\eta} = 0] = \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right],
+\quad Y \sim N(0,1).
+%
+\end{align*}
+%
+So the overall probability of failure is:
+%
+\begin{align*}
+%
+\P[\hat{\eta} \ne \eta]
+&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
+\\&+ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right].
+%
+\end{align*}
+%
+Now, if $q = 1/2$, then $\log(b) = 0$. Hence the probability of failure is simply:
+%
+\begin{align}
+%
+\P\left[Y \ge \frac{c}{\sigma} \right] \longrightarrow \frac{1}{2} = q
+\quad \text{as} \quad \sigma \to \infty.
+%
+\end{align}
+
+On the other hand, if $q > 1-q$, then $\log(b) < 0$. Then 
+%
+\begin{align}
+%
+\P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right] \longrightarrow 0
+%
+\end{align}
+%
+while
+%
+\begin{align}
+%
+\P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right] \longrightarrow 1
+%
+\end{align}
+%
+as $\sigma \to \infty$. Consequently,
+%
+\begin{align}
+%
+\P[\hat{\eta} \ne \eta]
+&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
++ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma^2 \log(b) \right]
+\nonumber\\
+& \longrightarrow 1-q  \quad \text{as} \quad  \sigma \to \infty.
+%
+\end{align}
+%
+That is, the probability of success converges to $q$, which completes the proof.
+
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
 We will prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we will work with $\beta = \gamma / L$ rather than $\gamma$ itself. We will construct two quadratic equations satisfied by $\beta$ from observed quantities, independent of $\sigma$. Then, we will show that these equations are independent, and hence that $\beta$ is uniquely defined.  Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
@@ -1005,7 +1163,7 @@ b_3[k_1,q_1; k_2, q_2]\psi_{k_1,q_1}[\Bell_1]\overline{\psi_{k_2,q_2}[\Bell_2]}.
 \end{align*}
 
 
-\section{Connection to volume}
+\subsection{Connection to volume}
 
 Until now, we have established  simple relations between the autocorrelations of the micrographs and the autocorrelations of the volume. Now, we complete the picture by deriving the connection with the volume itself.
 
