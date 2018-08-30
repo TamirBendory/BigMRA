@@ -55,7 +55,7 @@ Please provide an abstract of no more than 250 words in a single paragraph. Abst
 In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice. %Within the ice, the molecules are randomly oriented and positioned.
  The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecules from the micrographs.
 
-The signal to noise ratio (SNR) of the projections in the micrographs is a function of two dominating factors. On the one hand, the SNR is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the SNR is a function of the molecule size. The smaller the molecules, the fewer detected electrons carry information about them. \TODO{This isn't quite accurate: it's about the density of particles in the image; but we want to make a point about size; how do we reconcile this?}
+The signal to noise ratio (SNR) of the projections in the micrographs is a function of two dominating factors. On the one hand, the SNR is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the SNR is a function of the molecule size. The smaller the molecules, the fewer detected electrons carry information about them. \TODO{This isn't quite accurate. Amit: do you agree with the last sentence? maybe we should say it is a function of the contrast?}
 
 All contemporary methods in the field split the reconstruction procedure into several stages.
 The first stage consists in extracting the various particle projections from the micrographs. This stage is called \emph{particle picking}. Later stages aim to construct a 3-D model of the molecule from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. Figure~\ref{fig:micro_example} illustrates how particle picking becomes increasingly challenging as the SNR degrades.
@@ -99,9 +99,7 @@ In this paper, we argue that there is a gap between the two questions in Henders
 Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction.
 Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
 
-As a proof of concept, we study
-\TODO{This sentence beginning makes it sound like what follows is our main point; should the main point be the 3D recovery, even if low-res?}
-a toy model for which it is easier to convey the mathematical principles. 
+As a proof of concept, we first study a toy model \TODO{Amit: do you want to keep ``toy model'' or replace with ``mathematical toy model'', ``simplified model'' etc.} for which it is easier to convey the mathematical principles. 
 In this toy model, an unknown image appears multiple times at unknown locations in each of several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
 The goal is to estimate the planted image. The task is challenging in particular when the SNR is low enough that particle picking (identifying the locations of each image in each micrograph) cannot be done reliably. 
 This problem is interesting of its own as it appears in other scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
@@ -171,15 +169,16 @@ Because likelihood methods are computationally expensive, methods based on recov
 At high SNR, if $x$ is known, the support signal $s$ in~\eqref{eq:model} can be estimated via linear programming~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. 
 However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible, that is, one cannot reliably detect occurrences of $x$ in the micrograph $y$.
 
-To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us intervals of length $L$ in the micrograph that either contain a full signal occurrence (plus noise), or contain just noise. Our task is to determine which intervals contain signal, that is, to determine whether the corresponding entries of $s$ are 0 or 1.
-The oracle further provides the signal $x$, the probability $q$ that one of the intervals contains signal, and the noise variance $\sigma^2$. \TODO{Nico: I don't see how the next sentence is relevant for the task of estimating $s$---Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.---I would just write this: Since the intervals are independent of each other, it is sufficient to consider a single interval.}
+To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us one interval of length $L$ in the micrograph that either contains a full signal occurrence (plus noise), or contains just noise. Our task is to determine which one it is, that is, to determine whether the corresponding entry of $s$ is 0 or 1.
+The oracle further provides the signal $x$, the probability $q$ that  the interval contains signal, and the noise variance $\sigma^2$. %\TODO{Nico: I don't see how the next sentence is relevant for the task of estimating $s$---Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.---I would just write this: Since the intervals are independent of each other, it is sufficient to consider a single interval.}
 
-The decision problem for a single interval can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution:
+This decision problem can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution:
 % $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words,
-if $\eta = 0$, then $X \sim \mathcal N(\theta_0,\sigma^2)$ (that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$), and if $\eta = 1$, then $X \sim \mathcal N(\theta_1,\sigma^2)$. \TODO{Tamir: to remove parenthesis}
+if $\eta = 0$, then $X \sim \mathcal N(\theta_0,\sigma^2)$ %(that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$),
+ and if $\eta = 1$, then $X \sim \mathcal N(\theta_1,\sigma^2)$. %\TODO{Tamir: to remove parenthesis}
 %If $\theta_1=0$, then the latter corresponds to pure noise interval.
 
-We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? \TODO{to rephrase} We prove that, as $\sigma \to \infty$, the answer is no:
+We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise, if $q \leq 1/2$, the constant estimator $\hat{\eta} = 1$ is correct with probability $1-q$. The question is, can we do better than this?  We prove that, as $\sigma \to \infty$, the answer is no:
 \begin{proposition} \label{prop:two_gauss}
 	For any deterministic estimator $\hat{\eta }$ of $\eta$,
 	\begin{align*}
@@ -225,21 +224,22 @@ Under the separation condition, the relation between autocorrelations of the mic
 denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
 imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
-Under the separation condition on $s$,  for shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend only on the corresponding autocorrelations of $x$, the density $\gamma$ and the noise level $\sigma$. In particular, for the first-order autocorrelation (that is, the mean), since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:
-\begin{align*}
-\E\{ a_y^1 \} & = \gamma a_x^1.
-\end{align*}
-(The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic: under the conditions, the quantity under consideration depends on $s$ only through $\gamma$.)
-
-We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density.) In that regime, the law of large numbers can be used to show the following statement:
+For shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
+%In particular, for the first-order autocorrelation (that is, the mean), since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:
+%\begin{align*}
+%\E\{ a_y^1 \} & = \gamma a_x^1.
+%\end{align*}
+%(The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic: under the conditions, the quantity under consideration depends on $s$ only through $\gamma$.)
+We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
 \begin{align} \label{eq:mean_micrograph}
 \lim_{N\to\infty} a_y^1 & = \gamma a_{x}^1.
 \end{align}
-Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.)
+The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic.
+Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.) 
 
-We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$), and never with another occurrence. As a result,
+We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself (with the same shift $\ell$)\TODO{Tamir: remove parenthesis}, and never with another occurrence. As a result,
 \begin{align}
-	\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell]
+	\lim_{N\to\infty} a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell],
 	\label{eq:ac2_micrograph}
 \end{align}
 for $\ell = 0, \ldots, L-1$, where $\delta$ denotes the Kronecker delta function. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
@@ -455,12 +455,12 @@ On the hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise microg
 		The noise realization is identical in both micrographs. \TODO{The excerpts should be squares: use `axis equal;' -- also, what's going on with the diagonal line on the right panel?}}
 \end{figure*}
 
-\begin{figure*}
+\begin{figure}
     \centering
-    \includegraphics[angle=270, width=0.3\textwidth]{TRPV1_rec.eps}
+    \includegraphics[angle=270, width=0.4\textwidth]{TRPV1_rec.eps}
     \caption{Reconstruction of the TRPV1 molecule from its clean first 3 autocorrelations. The reconstruction is shown in gray while the ground truth is shown in yellow.}
     \label{fig:TRPV1_recon}
-\end{figure*}
+\end{figure}
 
 \section{Discussion}
 
