@@ -452,7 +452,12 @@ On the hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise microg
 		The noise realization is identical in both micrographs. \TODO{The excerpts should be squares: use `axis equal;' -- also, what's going on with the diagonal line on the right panel?}}
 \end{figure*}
 
-
+\begin{figure*}
+    \centering
+    \includegraphics[angle=270, width=0.3\textwidth]{TRPV1_rec.eps}
+    \caption{Reconstruction of the TRPV1 molecule from its clean first 3 autocorrelations. The reconstruction is shown in gray while the ground truth is shown in yellow.}
+    \label{fig:TRPV1_recon}
+\end{figure*}
 
 \section{Discussion}
 
@@ -600,7 +605,7 @@ In the experiments, we set $w_1=w_2=w_3=1$.
 
 The LS problem was solved using Matlab's \texttt{lsqnonlin} solver for nonlinear least-squares problems. The expected $\hat \gamma$ in this experiment is one.
 
-The true volume used in both experiments was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB)~\cite{pdb} as 1QLQ. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5 \AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. 
+The true volume used in both experiments was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB)~\cite{pdb} as 1QLQ. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5 \AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. We also present a reconstruction of TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB)~\cite{emdb} as EMD-8117. The original map has size $192^3$, and we downsample it to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in \eqref{eq:volume_expansion_app} with cutoff $L = 5$. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. Similarly, \TODO{Fill details for BPTI}. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data.
 
 The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in QR, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE \cite{aspire}. We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
 
