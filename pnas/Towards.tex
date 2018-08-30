@@ -176,10 +176,10 @@ The oracle further provides the signal $x$, the probability $q$ that one of the 
 
 The decision problem for a single interval can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution:
 % $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words,
-if $\eta = 0$, then $X \sim N(\theta_0,\sigma^2)$ (that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$), and if $\eta = 1$, then $X \sim N(\theta_1,\sigma^2)$.
+if $\eta = 0$, then $X \sim \mathcal N(\theta_0,\sigma^2)$ (that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$), and if $\eta = 1$, then $X \sim \mathcal N(\theta_1,\sigma^2)$. \TODO{Tamir: to remove parenthesis}
 %If $\theta_1=0$, then the latter corresponds to pure noise interval.
 
-We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? We prove that, as $\sigma \to \infty$, the answer is no:
+We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise for $\hat{\eta} = 1$ if $q \leq 1/2$, correct with probability $1-q$. The question is, can we do better than this? \TODO{to rephrase} We prove that, as $\sigma \to \infty$, the answer is no:
 \begin{proposition} \label{prop:two_gauss}
 	For any deterministic estimator $\hat{\eta }$ of $\eta$,
 	\begin{align*}
