@@ -60,6 +60,25 @@ The signal to noise ratio (SNR) of the projections in the micrographs is a funct
 All contemporary methods in the field split the reconstruction procedure into several stages.
 The first stage consists in extracting the various particle projections from the micrographs. This stage is called \emph{particle picking}. Later stages aim to construct a 3-D model of the molecule from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. Figure~\ref{fig:micro_example} illustrates how particle picking becomes increasingly challenging as the SNR degrades.
 
+\begin{figure*}[h]
+	\centering
+	\begin{subfigure}[h]{0.33\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{micrograph_Einstein_example_clean}
+		\caption{$\sigma = 0$}
+	\end{subfigure}%
+	\begin{subfigure}[h]{0.33\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{micrograph_Einstein_example_s05}
+		\caption{$\sigma = 0.5$}
+	\end{subfigure}
+	\begin{subfigure}[h]{0.33\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{micrograph_Einstein_example_s3}
+		\caption{$\sigma = 3$}
+	\end{subfigure}
+	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}	
+\end{figure*}
 
 Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following questions:
 \begin{quote}
@@ -95,30 +114,6 @@ Another interesting feature of the described approach pertains to model bias, wh
 
 \TODO{Need to cite \cite{scapin2018cryo}. Discusses cryo-em for drug discovery and mentions small molecule}
 %
-
-
-
-
-\begin{figure*}[h]
-	\centering
-	\begin{subfigure}[h]{0.33\textwidth}
-		\centering
-		\includegraphics[scale=0.5]{micrograph_Einstein_example_clean}
-		\caption{$\sigma = 0$}
-	\end{subfigure}%
-	\begin{subfigure}[h]{0.33\textwidth}
-		\centering
-		\includegraphics[scale=0.5]{micrograph_Einstein_example_s05}
-		\caption{$\sigma = 0.5$}
-	\end{subfigure}
-	\begin{subfigure}[h]{0.33\textwidth}
-		\centering
-		\includegraphics[scale=0.5]{micrograph_Einstein_example_s3}
-		\caption{$\sigma = 3$}
-	\end{subfigure}
-	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}	
-\end{figure*}
-
 
 \section{Proof of concept: A mathematical toy model}
 
@@ -1195,7 +1190,7 @@ b_3[k_1,q_1; k_2, q_2]\psi_{k_1,q_1}[\Bell_1]\overline{\psi_{k_2,q_2}[\Bell_2]}.
 \end{align*}
 
 
-\section{Connection to volume}
+\subsection{Connection to volume}
 
 Until now, we have established  simple relations between the autocorrelations of the micrographs and the autocorrelations of the volume. Now, we complete the picture by deriving the connection with the volume itself.
 
