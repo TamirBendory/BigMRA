@@ -586,18 +586,18 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 
 \paragraph{3-D experiments.}
 
-For the experiment in Figure~TKTK, we computed the analytical first three autocorrelations of the volume according to~TKTK. To estimate the coefficients of the volume itself, we solve the LS problem
+\TODO{Fill in refs to eqns.} For the experiment in Figure~TKTK, we computed the analytical first three autocorrelations of the volume according to~TKTK. To estimate the coefficients of the volume itself, we solve the LS problem
 \begin{equation} \label{eq:LS_cryo}
 \min_{\hat{x},\hat{\gamma}} w_1 \vert \mathfrak{a}_x^1 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^1 \vert^2 + w_2\| \mathfrak{a}_x^2 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^2 \|_2^2 + w_3\| \mathfrak{a}_x^3 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^3 \|_F^2, 
 \end{equation}  
 where the explicit expressions of $\mathfrak{a}_x^1$, $\mathfrak{a}_x^2$ and $\mathfrak{a}_x^3$ are given in~\eqref{eq:ac_1_prolates},~\eqref{eq:ac_2_prolates} and~\eqref{eq:ac_3_prolates}, respectively.  
 In the experiments, we set $w_1=w_2=w_3=1$. 
 
-The LS was solved by TKTK. The expected $\hat \gamma$ is one.
+The LS problem was solved using Matlab's \texttt{lsqnonlin} solver for nonlinear least-squares problems. The expected $\hat \gamma$ in this experiment is one.
 
-In the first experiment, we used \TODO{Bla bla bla, real valued volume}
+The true volume used in both experiments was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB)~\cite{pdb} as 1QLQ. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5 \AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. 
 
-The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows \TODO{separation, etc. }. Then, the LS~\eqref{eq:LS_cryo} was solved with $L=0$ (low-resolution estimate).
+The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in QR, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE \cite{aspire}. We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
 
 \section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
 
@@ -968,14 +968,23 @@ the condition~\eqref{eq:cond} cannot be satisfied for any signal.
 \subsection{Model and autocorrelation functions}
 
 Let $\phi$ be the Coulomb potential representing the molecule we aim to recover. 
-We assume that molecule is real-valued and smooth. In spherical coordinates, its 3-D Fourier transform $\widehat\phi$ admits a finite expansion of the form
-\be\label{eq:volume_expansion} 
-\widehat \phi(k, \theta, \varphi) = \sum_{\ell = 0}^L\sum_{m=-\ell}^{\ell}\sum_{s=1}^{S(\ell)}\tamir_{\ell, m, s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k),
-\ee
-where $Y_{\ell}^m$ are complex spherical harmonics and $j_{\ell,s}$ are normalized spherical Bessel functions; see Appendix TKTK for further definitions.  Let $I_{\omega}$ denote the tomographic projection obtained from viewing direction $\omega\in SO(3)$. By the Fourier projection-slice theorem, its 2-D Fourier transform  is given by~\cite{natterer1986mathematics}:
+We assume that molecule is real-valued and smooth. In spherical coordinates, its 3-D Fourier transform $\widehat\phi$ admits a finite expansion of the form 
+\begin{equation} \label{eq:volume_expansion_app} 
+\widehat \phi(ck, \theta, \varphi) = \sum_{\ell = 0}^L\sum_{m=-\ell}^{\ell}\sum_{s=1}^{S(\ell)}\tamir_{\ell, m, s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k), \quad k\leq 1,
+\end{equation}
+%\[ \widehat \phi(c\kk) = \sum_{\ell,m,s}a_{\ell,m,s}j_{\ell,s}(k)Y_{\ell}^m(\kk/k),\quad k\leq 1,\]
+%where $k=||\kk||_2$, 
+where $c$ is the bandlimit, $\{S_l\}$ are determined using the Nyquist criterion as descirbed in \cite{bhamre2017anisotropic}, $j_{\ell,s}$ is the normalized spherical Bessel functions given by
+\[ j_{\ell, s}(k) = \frac{4}{|j_{\ell+1}(u_{\ell, s})|}j_{\ell}(2u_{\ell,s} k),\]
+$j_{\ell}$ is the spherical Bessel function of order $\ell$ and  $u_{\ell,s}$ is the $s$th positive zero of $j_{\ell}$. We use 
+the complex spherical harmonics $Y_{\ell}^m$ defined by  
+\[ Y_{\ell}^m(\theta,\varphi) := \sqrt{\frac{2\ell+1}{4\pi}\cdot\frac{(\ell-m)!}{(\ell+m)!}}P_{\ell}^m(\cos\theta)e^{i m\varphi},\]
+where $P_{\ell}^m$ are the associated Legendre polynomials with the Condon-Shortley phase. 
+Sampling at the Nyquist-rate dictates $c=1/2$~\cite{levin20173d}. 
+Because $\phi$ is real-valued, so $\widehat \phi$ is conjugate-symmetric, the expansion coefficients satisfy $\tamir_{\ell, -m, s} = (-1)^{\ell+m}\overline{\tamir_{\ell,m,s}}$, and hence we only need to recover coefficients $\tamir_{\ell, m, s}$ with $m\geq 0$. Let $I_{\omega}$ denote the tomographic projection obtained from viewing direction $\omega\in SO(3)$. By the Fourier projection-slice theorem, its 2-D Fourier transform  is given by~\cite{natterer1986mathematics}:
 \be\label{eq:projection_model}
 \widehat I_{\omega}(k,\varphi) = \sum_{\ell,m,m',s}\tamir_{\ell,m,s}D_{m',m}^{\ell}(\omega)Y_{\ell}^{m'}\left(\frac{\pi}{2},\varphi\right)j_{\ell,s}(k),\ee
-where $D_{m',m}^{\ell}(\omega)$ is a Wigner-D matrix.
+where $D_{m',m}^{\ell}(\omega)$ is a Wigner-D matrix. This implies that the projections are also $c$-bandlimited.
 
 Let $\II\in\RNN$ denote a micrograph. We assume it consists of shifted copies of projections contaminated by additive white Gaussian noise:
 \begin{equation}\label{eq:micrograph_model}
@@ -987,7 +996,7 @@ Note that~\eqref{eq:model} can be also written as a sum of $\delta$ functions as
 
 Define the $p$th autocorrelation of $\II$ as
 \begin{equation*} \label{eq:Kth_autocorrelation}
-a^p_\II(\Bell_1,\ldots, \Bell_{p-1}) = \frac{1}{N^2}\sum_{\mb i}\II[\Bell]\II([\mb i+\Bell]_1)\cdots \II([\mb i+\Bell]_{p-1}),
+a^p_\II[\Bell_1,\ldots, \Bell_{p-1}] = \frac{1}{N^2}\sum_{\mb i}\II[\Bell]\II[\mb i+\Bell_1]\cdots \II[\mb i+\Bell_{p-1}],
 \end{equation*}
 where the summation is for $\mb i $ ranging over the $N^2$  pixels of the micrograph. %, $\Bell = (\Delta i, \Delta j)$.% and we set $\II(i,j)=0$ if either $i,j\notin\{1,\ldots, M\}$. 
 %In our procedure, we compute the first three autocorrelations. %, called the mean, power spectrum, and bispectrum, of the micrographs. \TODO{This definition and terminology should come earlier}. 
@@ -1008,7 +1017,7 @@ The details are in the appendix.
 
 \subsection{Moments derivation} \label{sec:moment_derivation}
 
-In this section we prove relation~\eqref{eq:ac_micrographs}. We note that mathematically taking infinitely many micrographs is equivalent to taking one infinitely large micrograph with fixed density $\gamma$~\eqref{eq:gamma}. Hence, we consider the moments of one micrograph $\II$ in the limit $N\to\infty$ and  $\gamma = \lim_{N\to\infty}\frac{MP^2}{N^2}\in(0,1)$. 
+In this section we prove relation~\eqref{eq:ac_micrographs}. We note that mathematically taking infinitely many micrographs is equivalent to take one infinitely large micrograph with fixed density $\gamma$. Hence, we consider the moments of one micrograph $\II$ in the limit $N\to\infty$ and  $\gamma = \lim_{N\to\infty}\frac{MP^2}{N^2}\in(0,1)$. 
 The separation condition guarantees that if $\mb i=(i,j)$ is in the support of some projection, then $\mb i + \mb \Bell$ for $\Bell\in[-(P-1),P-1]^2$ is either in the support of the same projection or outside the support of any projection. 
 
 We begin by calculating the relation between the $p$th autocorrelation of the clean micrograph and the  averaged autocorrelation of the projections.
@@ -1086,19 +1095,19 @@ debias the third-order autocorrelation.
 \subsection{Accounting for all in-plane rotations} \label{sec:steering}
 
 We represent our autocorrelations using Prolate Spheroidal Wave Functions (PSWFs) $\{\psi_{k,q}\}$ where $k \geq 0, q \geq 1$ are integers~\cite{slepian1964pswfIV}. As we demonstrate below, this makes it easier to account for the fact that all in-plane rotations of the micrographs are equally likely observations. This is only a concern for the second and third order autocorrelations. Below, we start with $p=2$.
-The PSWFs are eigenfunctions of the truncated Fourier transform and are given in polar coordinates by
+The PSWFs are eigenfunctions of the truncated Fourier transform and are given in polar coordinates by \footnote{A different normalization is used in \cite{landa2017steerable}.}
 \begin{align}
 \psi_{k,q}(r,\varphi) & = \left\{\begin{array}{ll} \frac{1}{\sqrt{8\pi}}\alpha_{k,q}R_{k,q}(r)e^{\iota k\varphi}, & r\leq 1,\\ 0, & r>1,\end{array}\right. \label{eq:prolatesdef}
 \end{align}
-\TODO{Ref eq. 8 in Boris' paper}
-where the ${R_{k,q}}$ are a family of real, one-dimensional functions and the ${\alpha_{k,q}}$ are  scaling factors which will be defined in the next section.
+
+where the range of $k,q$ is determined by Eq.~(8) in \cite{landa2017steerable}, the ${R_{k,q}}$ are a family of real, one-dimensional functions and the ${\alpha_{k,q}}$ are  scaling factors which will be defined in the next section.
 The PSWFs are orthogonal on the unit disk.
 
 For $\Bell \in [-(P-1), P-1]^2$, let us define 
 \begin{equation} \label{eq:PSWF_expansion}
 \mathfrak{a}^2[k, q]  =
 \sum_{\Bell}a^2_\II[\Bell]\overline{\psi_{k,q}[\Bell]}, \end{equation}
-where $\psi_{k,q}[\Bell] := \psi_{k,q}(\Bell/(P-1))$ is a discretization of the PSWFs. \TODO{Range of $k,q$? need approx orthonormality in discrete...}
+where $\psi_{k,q}[\Bell] := \psi_{k,q}(\Bell/(P-1))$ is a discretization of the PSWFs. 
 Knowledge of these coefficients is essentially equivalent to knowledge of the second-order correlations owing to the following approximate identity:
 \begin{align}
 a^2_\II[\Bell] & \approx \sum_{k,q}\mathfrak{a}^2[k,q]\psi_{k,q}[\Bell].
@@ -1165,7 +1174,7 @@ Averaging over all rotations of $\II$ and its reflection, we obtain
 \end{align}
 Thus, similarly to the second-order autocorrelation, averaging over all in-plane rotations reveals that the 4-D third-order autocorrelation truly only carries information along three dimensions.
 
-Finally, we treat the bias terms, using approximate orthonormality \TODO{!} of the discretized PSFWs:
+Finally, we treat the bias terms:
 \begin{align*}
 &\mk b_3[k_1,q_1; k_2,q_2] = \gamma\sigma^2\langle a^1_{I_{\omega}} \rangle_\omega \delta[k_1 - k_2]\\&\times \left[\delta[q_1-q_2] + \delta[k_1]\frac{1}{2\pi}(\alpha_{0,q_1} + \alpha_{0,q_2})R_{0,q_1}(0)R_{0,q_2}(0)\right].
 \end{align*}
@@ -1179,73 +1188,39 @@ b_3[k_1,q_1; k_2, q_2]\psi_{k_1,q_1}[\Bell_1]\overline{\psi_{k_2,q_2}[\Bell_2]}.
 \end{align*}
 
 
-\subsection{Connection to volume}
+\section{Connection to volume}
 
 Until now, we have established  simple relations between the autocorrelations of the micrographs and the autocorrelations of the volume. Now, we complete the picture by deriving the connection with the volume itself.
 
-We start by some preliminary computations. Let us  expand the Fourier transform of the volume as
-\begin{equation} \label{eq:volume_expansion_app} 
-\widehat \phi(ck, \theta, \varphi) = \sum_{\ell = 0}^L\sum_{m=-\ell}^{\ell}\sum_{s=1}^{S(\ell)}\tamir_{\ell, m, s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k), \quad k\leq 1,
-\end{equation}
-%\[ \widehat \phi(c\kk) = \sum_{\ell,m,s}a_{\ell,m,s}j_{\ell,s}(k)Y_{\ell,m}(\kk/k),\quad k\leq 1,\]
-%where $k=||\kk||_2$, 
-\TODO{How do we choose $S(\ell)$?}where $c$ is the bandlimit, $j_{\ell,s}$ is the normalized spherical Bessel functions given by
-\[ j_{\ell, s}(k) = \frac{4}{|j_{\ell+1}(u_{\ell, s})|}j_{\ell}(2u_{\ell,s} k),\]
-$j_{\ell}$ is the spherical Bessel function of order $\ell$ and  $u_{\ell,s}$ is the $s$th positive zero of $j_{\ell}$. We use 
-the complex spherical harmonics $Y_{\ell}^m$ defined by  
-\[ Y_{\ell,m}(\theta,\varphi) := \sqrt{\frac{2\ell+1}{4\pi}\cdot\frac{(\ell-m)!}{(\ell+m)!}}P_{\ell}^m(\cos\theta)e^{i m\varphi},\]
-where $P_{\ell}^m$ are the associated Legendre polynomials with the Condon-Shortley phase. 
-Sampling at the Nyquist-rate dictates $k\in[0,1/2]$~\cite{levin20173d}. \TODO{Didn't we say that $k\leq 1$?} With this notation, 
-the Fourier transform of a  projection taken from the viewing direction $\omega\in SO(3)$ can be written as 
-\[ \widehat I_{\omega}(ck,\theta) = \sum_{\ell,m,m',s}\tamir_{\ell,m,s}Y_{\ell,m'}(\pi/2,0)D_{m',m}^{\ell}(\omega)j_{\ell,s}(k)e^{im'\theta}.\]
-%whenever $k\leq 1$. 
-%where $D_{m',m}^{\ell}$ is the Wigner D-matrix.  
-
-Recall that the PSWFs are the solution of the integral equation \TODO{To mention the range of $\mb r$?} 
-\begin{equation}
-\label{eq:PSWF_defn_eq}
-\alpha_{N,n}\psi_{N,n}(\mb k) = \int_{\mb r} \psi_{N,n}(\mb r)e^{\iota c(\mb r\cdot\mb k)}d\mb r,
-\end{equation}
-%\begin{equation}
-%\label{eq:PSWF_defn_eq}
-%\alpha_{k,q}\psi_{k,q}(\mb k) = \sum_{\mb i}\psi_{k,q}(\mb i)e^{-2\pi \iota (\mb i\cdot\mb k)}
-%\end{equation}
-and are given explicitly by \TODO{Do we use this normalization?}
-\[ \psi_{N,n}(k,\theta) = \frac{1}{\sqrt{2\pi}}R_{N,n}(k)e^{\iota N\theta},\]
-where $R_{N,n}(k)$ is a solution to another integral equation~\cite{landa2017steerable}. 
-Let us assume that $I_{\omega}$ has bandlimit $c$ and is concentrated in the unit ball in real space. 
 Using the 2-D PSWFs, we can express each projection as 
-%Express this in 2D PSWFs so %\TODO{Eitan: I stopped here}
 \[ \widehat I_{\omega}(ck,\theta) = \sum_{N,n}b_{N,n}(\omega)\psi_{N,n}(k,\theta),\]
-%where in papers the 2D PSWFs are defined as
-%\[ \psi_{N,n}(k,\theta) = \frac{1}{\sqrt{2\pi}}R_{N,n}(k)e^{ik\theta},\]
-%%but in Boris' code the expansion is actually performed with respect to
-%\[ \widetilde\psi_{N,n}(k,\theta) = \frac{1}{2\sqrt{2\pi}}\alpha_{N,n}R_{N,n}(k)e^{ik\theta},\]
-%where $\alpha_{N,n}$ are the eigenvalues associated with $\psi_{N,n}$ - see Sect.~\ref{sec:PSWFs_props} below. 
-%
-%We then get
 where
-\[\begin{aligned} b_{N,n}(\omega) &= \frac{1}{\sqrt{2\pi}}\int_0^{2\pi}\int_0^1\widehat I_{\omega}(ck,\theta)R_{N,n}(k)e^{-\iota N\theta}k\, dk\, d\theta,\\
-&= \sum_{\ell,m,m',s}\tamir_{\ell,m,s}\left[\sqrt{2\pi}Y_{\ell,m'}(\pi/2,0)\right]D_{m',m}^{\ell}(\omega)\\&\times \left(\int_0^1j_{\ell,s}(k)R_{N,n}(k)k\, dk\right)\left(\frac{1}{2\pi}\int_0^{2\pi}e^{\iota(m'-N)\theta}\, d\theta\right),\\
+\[\begin{aligned} b_{N,n}(\omega) &= \frac{4}{\sqrt{2\pi}|\alpha_{N,n}|^2}\int_0^{2\pi}\int_0^1\widehat I_{\omega}(ck,\theta)R_{N,n}(k)e^{-\iota N\theta}k\, dk\, d\theta,\\
+&= \sum_{\ell,m,m',s}\tamir_{\ell,m,s}\left[\frac{2\sqrt{2\pi}}{\alpha_{N,n}}Y_{\ell}^{m'}(\pi/2,0)\right]D_{m',m}^{\ell}(\omega)\\&\times \left(\int_0^1j_{\ell,s}(k)R_{N,n}(k)k\, dk\right)\left(\frac{1}{2\pi}\int_0^{2\pi}e^{\iota(m'-N)\theta}\, d\theta\right),\\
 &= \sum_{\vert N\vert\leq \ell}\sum_{m,s}\tamir_{\ell,m,s}D_{N,m}^{\ell}(\omega)\beta_{\ell,s;N,n},\end{aligned}\]
 where the coefficients
 \begin{equation} \label{eq:beta}
-\beta_{\ell,s;N,n} := \left\{\begin{array}{ll} \sqrt{2\pi}Y_{\ell,N}(\pi/2,0)\int_0^1j_{\ell,s}(k)R_{N,n}(k)k\, dk, & \ell\geq |N|\\ 0, & \ell<|N|\end{array}\right.,
+\beta_{\ell,s;N,n} := \left\{\begin{array}{ll} \frac{2\sqrt{2\pi}}{\alpha_{N,n}}Y_{\ell}^{N}(\pi/2,0)\int_0^1j_{\ell,s}(k)R_{N,n}(k)k\, dk, & \ell\geq |N|\\ 0, & \ell<|N|\end{array}\right.,
 \end{equation}
 can be precomputed.
-Since the PSWFs are eigenfunctions of the truncated Fourier operator~\eqref{eq:PSWF_defn_eq}, we can now express the projection in real space as
+Since the PSWFs are eigenfunctions of the truncated Fourier transform~\cite{landa2017steerable} and hence satisfy 
+\begin{equation}
+\label{eq:PSWF_defn_eq}
+\alpha_{N,n}\psi_{N,n}(\mb k) = \int\limits_{||\mb r||_2\leq 1} \psi_{N,n}(\mb r)e^{\iota c(\mb r\cdot\mb k)}d\mb r,
+\end{equation} 
+we can now express the projection in real space as
 \begin{align} \label{eq:proj_expansion}
 I_{\omega}(r,\varphi) &= \sum_{N,n}\widehat{\alpha}_{N,n}b_{N,n}(\omega)\psi_{N,n}(r,\varphi)\nonumber \\
 &= \sum_{\ell=0}^L\sum_{N,m=-\ell}^{\ell}\sum_{n=0}^{n_{\text{max}}(N)}\sum_{s=1}^{S(\ell)}\tamir_{\ell,m,s}\widehat\beta_{\ell,s;N,n}D_{N,m}^{\ell}(\omega)\psi_{N,n}(r,\varphi)
 \end{align}
-\TODO{How do we choose $n_{max}$?}where $\alpha_{N,n}$ is the eigenvalue corresponding to the $(N,n)$th PSWF, $\widehat{\alpha}_{N,n} = (c/2\pi)^2\alpha_{N,n}$, and $\widehat\beta_{\ell,s;N,n}=\widehat\alpha_{N,n}\beta_{\ell,s;N,n}$.
+where $n_{max}(N)$ is chosen according to Eq.~(8) in \cite{landa2017steerable}, $\alpha_{N,n}$ is the eigenvalue corresponding to the $(N,n)$th PSWF, $\widehat{\alpha}_{N,n} = (c/2\pi)^2\alpha_{N,n}$, and $\widehat\beta_{\ell,s;N,n}=\widehat\alpha_{N,n}\beta_{\ell,s;N,n}$.
 
 
 \paragraph{Third-order autocorrelation.}
 In~\eqref{eq:third_order_ac_micro_volume} and~\eqref{eq:third_order_ac_pswf} we have shown how the third-order autocorrelations of the micrographs and the volume are related, and how we can present them in PSWFs. Now, we relate these expressions to the expansion coefficients of the volume itself.
 
 
-The third-order autocorrelation of the volume can be expressed in terms of~\eqref{eq:proj_expansion}:\TODO{What about the $\hat\alpha$ coefficients?}
+The third-order autocorrelation of the volume can be expressed in terms of~\eqref{eq:proj_expansion}:
 \begin{align} \label{eq:third_order_ac_volume}
 \langle
 a^3_{I_{\omega}}[\Bell_1, \Bell_2]\rangle_{\omega} &= \frac{1}{L^2}\sum_{\mb i}\langle I_{\omega}[\mb i]I_{\omega}[\mb i+\Bell_1]\overline{I_{\omega}([\mb i+\Bell_2])}\rangle_{\omega},\\
@@ -1253,7 +1228,7 @@ a^3_{I_{\omega}}[\Bell_1, \Bell_2]\rangle_{\omega} &= \frac{1}{L^2}\sum_{\mb i}\
 where the approximation is due to discretization. 
 Now,
 \[\begin{aligned} \langle &b_{N_1,n_1}(\omega)b_{N_2,n_2}(\omega)\overline{b_{N_3,n_3}}(\omega)\rangle_{\omega} \\&= \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\\ell_3,m_3,s_3}}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_3,s_3}}\\&\times \langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}(\omega)\overline{D_{N_3,m_3}^{\ell_3}}(\omega)\rangle_{\omega}\\
-&\times \beta_{\ell_1,s_1;N_1,n_1}\beta_{\ell_2,s_2;N_2,n_2}\overline{\beta_{\ell_3,s_3;N_3,n_3}},\end{aligned},\]
+&\times \widehat\beta_{\ell_1,s_1;N_1,n_1}\widehat\beta_{\ell_2,s_2;N_2,n_2}\overline{\widehat\beta_{\ell_3,s_3;N_3,n_3}},\end{aligned},\]
 where the latter coefficients are given explicitly in~\eqref{eq:beta}. Using standard properties of D-Wigner functions, we obtain  
 \begin{align}
 &\left\langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}\overline{D_{N_3,m_3}^{\ell_3}}\right\rangle_{\omega} = (-1)^{N_3+m_3}\\&\times \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_3\end{array}\right)\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_3\end{array}\right),\nonumber
@@ -1263,7 +1238,7 @@ Notably, these terms are zero unless $m_1+m_2+m_3=0$ and $|\ell_1-\ell_2|\leq \e
 \begin{align} \label{eq:b_average}
 &\langle b_{N_1,n_1}(\omega)b_{N_2,n_2}(\omega)\overline{b_{N_3,n_3}}(\omega)\rangle_{\omega} = \delta_{N_3,N_1+N_2}\\&\times \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\s_3}}\sum_{\ell_3=|\ell_1-\ell_2|}^{\min(L,\ell_1+\ell_2)}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_1+m2,s_3}}\nonumber\\
 &\times (-1)^{N_1+N_2+m_1+m_2}\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_1-N_2\end{array}\right)\nonumber\\&\times \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_1-m_2\end{array}\right)\nonumber\\
-&\times \beta_{\ell_1,s_1;N1,n_1}\beta_{\ell_2,s_2;N_2,n_2}\overline{\beta_{\ell_3,s_3;N_1+N2,n_3}}. \nonumber
+&\times \widehat\beta_{\ell_1,s_1;N_1,n_1}\widehat\beta_{\ell_2,s_2;N_2,n_2}\overline{\widehat\beta_{\ell_3,s_3;N_1+N_2,n_3}}. \nonumber
 \end{align}
 Combining~\eqref{eq:b_average} with~\eqref{eq:third_order_ac_volume} provides the explicit relation between the third-order autocorrelation and the volume.   
 
@@ -1271,7 +1246,7 @@ Recall that we obtain the autocorrelations of the volume in PSWFs coefficients; 
 \[ \langle a^3_{I_{\omega}}[\Bell_1, \Bell_2]\rangle_{\omega}= \sum_{k,q_1,q_2}\mathfrak{a}_x^3[k,q_1,q_2]\psi_{k,q_1}[\Bell_1]\overline{\psi_{k,q_2}[\Bell_2]},\]
 where we only include the block-diagonal terms in the expansion; the rest are equal to zero. Let
 \begin{align*}
-\Psi_{\ell,N,s}[\Bell] &:= \sum_{n=0}^{n_{\text{max}}(N)}\beta_{\ell,s;N,n}\psi_{N,n}[\Bell],\\ 
+\Psi_{\ell,N,s}[\Bell] &:= \sum_{n=0}^{n_{\text{max}}(N)}\widehat\beta_{\ell,s;N,n}\psi_{N,n}[\Bell],\\ 
 \rho_{\ell,N,s}^{(k,q)}&:=\int_{\Bell}\Psi_{\ell,N,s}([\mb i+\Bell])\overline{\psi_{k,q}(\Bell)}.
 \end{align*}
 Then, 
@@ -1318,14 +1293,13 @@ The integral on $k$ is precomputed.
 
 %Since the Fourier transformed volume is given by
 %\[ \widehat V(k,\theta,\varphi) =
-%\sum_{\ell,m,s}a_{\ell,m,s}Y_{\ell,m}(\theta,\varphi)j_{\ell,s}(k),\]
+%\sum_{\ell,m,s}a_{\ell,m,s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k),\]
 Since $j_{\ell,s}(0) = 0$ unless $\ell=0$, and since
 $Y_{0,0}(\theta,\varphi) = \frac{1}{\sqrt{4\pi}}$, we conclude from~\eqref{eq:volume_expansion_app} that
 \begin{equation} \label{eq:ac_1_prolates}
 \mathfrak{a}_x^1 = \langle
 a^1_{I_{\omega}}\rangle_{\omega}  = \widehat  \phi(\mb 0) = \frac{1}{\sqrt{4\pi}}\sum_s\tamir_{0,0,s}j_{0,s}(0).
 \end{equation}
-
 
 
 %\TODO{=========== Tamir: Stopped here ===============}
