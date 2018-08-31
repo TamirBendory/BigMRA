@@ -112,9 +112,7 @@ We show a few numerical examples and outline the future developments required to
 
 Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
-
 \TODO{Need to cite \cite{scapin2018cryo}. Discusses cryo-em for drug discovery and mentions small molecule}
-%
 
 \section{Proof of concept: A mathematical toy model}
 
@@ -131,8 +129,6 @@ This is a key difference with other works on  \emph{blind deconvolution}, a long
 The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
 
 We assume the binary signal $s$ obeys a \emph{separation condition}:
-%% Nicolas: this is too important: it must stand out
-% If $s[i] = 1$ and $s[j] = 1$  for  $i \neq j$, then $\vert i - j\vert \geq 2L-1$.
 \begin{align} 
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
@@ -140,7 +136,6 @@ We assume the binary signal $s$ obeys a \emph{separation condition}:
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
 
 Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the
-%system identification
 forward model takes the form
 %
 \begin{math}
@@ -151,16 +146,12 @@ y = x\ast w + \varepsilon,
 %
 where $x$ is the unknown signal (the system's impulse response), $w$ is an unknown (often random) input sequence, and $\varepsilon$ is an additive noise.
 The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$ is binary and satisfies our separation condition, we recover our model. 
-%The same observation model is used for \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 
-Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$. %For example, $f$ may be the likelihood itself, or a related function with a similar form (leading to the class of ``quasi-likelihood'' methods). 
+Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$.  
 If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
 Methods based on such formulations are popular nowadays in cryo-EM; see for instance~\cite{sigworth1998maximum,scheres2012relion}. 
-Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. %Another paper considers parameterized models for multiple distinct signals, as in our framework ($K>1$)~\cite{andrieu2001bayesian}. Their proposed solution is an MCMC algorithm tailored for their specific parametrized problem. 
+Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. 
 In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based on a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is superlinear in $N$, and therefore its usage is limited for big data sets. 
-%Indeed, for a general support signal $s$, on each iteration of EM, a probability must be assigned to any feasible combination of positions for the current signal estimate in $M$ locations on the grid $\{1,\ldots,N\}$---$O(N^M)$ such combinations in total. Hence, the problem becomes computationally intractable when $M$ grows with $N$ and $N$ is large. However, exploiting the separation condition on the support~\eqref{eq:spacing}, we devise in Section TKTK an approximate EM procedure for  our model. 
-%
-%Because likelihood methods are computationally expensive, methods based on recovery from moments, which are akin to our method, have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}.
 
 Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Building on such ideas, we focus on an autocorrelation analysis for~\eqref{eq:model}. % and study it in Section~\ref{sec:recovery}.  
 
@@ -170,13 +161,9 @@ At high SNR, if $x$ is known, the support signal $s$ in~\eqref{eq:model} can be 
 However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible, that is, one cannot reliably detect occurrences of $x$ in the micrograph $y$.
 
 To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us one interval of length $L$ in the micrograph that either contains a full signal occurrence (plus noise), or contains just noise. Our task is to determine which one it is, that is, to determine whether the corresponding entry of $s$ is 0 or 1.
-The oracle further provides the signal $x$, the probability $q$ that  the interval contains signal, and the noise variance $\sigma^2$. %\TODO{Nico: I don't see how the next sentence is relevant for the task of estimating $s$---Since we have the full generative model, we can always generate more data as needed; therefore it is enough to consider the hardness of deciding whether a single interval contains signal or not.---I would just write this: Since the intervals are independent of each other, it is sufficient to consider a single interval.}
+The oracle further provides the signal $x$, the probability $q$ that  the interval contains signal, and the noise variance $\sigma^2$. 
 
-This decision problem can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution:
-% $X | (\eta  = i) \sim N(\theta_i,\sigma^2)$; in other words,
-if $\eta = 0$, then $X \sim \mathcal N(\theta_0,\sigma^2)$ %(that is, $X$ follows a normal distribution around $\theta_0$ with variance $\sigma^2$),
- and if $\eta = 1$, then $X \sim \mathcal N(\theta_1,\sigma^2)$. %\TODO{Tamir: to remove parenthesis}
-%If $\theta_1=0$, then the latter corresponds to pure noise interval.
+This decision problem can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution: if $\eta = 0$, then $X \sim \mathcal N(\theta_0,\sigma^2)$ and if $\eta = 1$, then $X \sim \mathcal N(\theta_1,\sigma^2)$. 
 
 We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise, if $q \leq 1/2$, the constant estimator $\hat{\eta} = 1$ is correct with probability $1-q$. The question is, can we do better than this?  We prove that, as $\sigma \to \infty$, the answer is no:
 \begin{proposition} \label{prop:two_gauss}
@@ -189,15 +176,9 @@ We observe $X$, and our task is to estimate $\eta$. How reliably can this be don
 \noindent The result is proved in Appendix~\ref{sec:proof_two_gauss}.
 
 Proposition~\ref{prop:two_gauss} implies that in order to estimate the signal at low SNR we must consider methods that aim to estimate the signal $x$ directly, without estimating the nuisance variable $s$ as an intermediate step.
-%we need to consider a different approach.
-In the next sections, % Nicolas: sections is plural on purpose
-we consider autocorrelation analysis for that purpose.
-%In what follows, we present several results on properties of autocorrelations. 
-
-
+In the next sections, we consider autocorrelation analysis for that purpose.
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
-
 
 In general, for a signal $z$ of length $m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{align}
@@ -225,11 +206,6 @@ denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupi
 imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
 For shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
-%In particular, for the first-order autocorrelation (that is, the mean), since the noise is independent of the signal, the mathematical expectation of $a_y^1$ is easily seen to be:
-%\begin{align*}
-%\E\{ a_y^1 \} & = \gamma a_x^1.
-%\end{align*}
-%(The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic: under the conditions, the quantity under consideration depends on $s$ only through $\gamma$.)
 We consider the asymptotic regime where $M, N\to\infty$, while $\gamma$ remains constant (we see an increasingly large micrograph, containing increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
 \begin{align} \label{eq:mean_micrograph}
 \lim_{N\to\infty} a_y^1 & \aseq \gamma a_{x}^1,
@@ -256,7 +232,6 @@ Computing the autocorrelations of the micrograph is straightforward. The natural
 
 \section{Recovering a signal from autocorrelations} \label{sec:recovery}
 
-
 A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
 %
 \begin{align}
@@ -275,8 +250,6 @@ Some remarks are in order. First, \eqref{eq-uniqueness} is not numerically stabl
 Second, if the separation condition holds, then the length of the signal can be determined from the autocorrelations.
 In particular, if  $a_y^2[L-i] = 0$ for $i=1,\ldots,T$,
 then the support of $x$ has length $L-T$ rather than $L$. 
-%the separation condition holds 
-%\TODO{for some spacing $W\geq L$---Nico: what is this?}, then $a_z^2[i] = 0$ for all $i > L-1$.
 Third, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
 However, for dimensions greater than one, almost all signals are determined uniquely up to sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case). %~\cite{hayes1982reconstruction,hayes1982reducible}. 
 The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
@@ -323,7 +296,6 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 		\item   $x$ has nonzero mean  and $\gamma\geq\frac{L}{4(L-1)}$.
 	\end{itemize}
 \end{corollary}
-
 %
 %\TODO{Similar results hold for signals in higher dimensions.---need to keep this sentence in red until the very end to make sure it's correct.}
 
@@ -334,7 +306,7 @@ The technique we advocate allows recovery of a signal hidden in noisy micrograph
 In the first experiment, we estimated 
 an 50-by-50 pixel image of Einstein with mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. Each micrograph contains, on average, 700 occurrences of the target image at random locations. 
 Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$,  corresponding  to SNR = $\frac{M\|x\|_F^2} {\sigma^2N} \approx1/370$. This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
-To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition~\eqref{eq:spacing}. %The separation restriction is discussed in more details in the Methods Section.
+To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition~\eqref{eq:spacing}. 
 
 We compute the average second-order autocorrelation of the micrographs. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform (FFT) on GPUs. Given the noise level and number of image repetitions, the second-order autocorrelation of the image can be easily deduced from~\eqref{eq:ac2_micrograph}.  Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
 Relative error is measured as the ratio of the root mean square error to the norm of the ground truth (square root of the sum of squared pixel intensities).
@@ -345,7 +317,6 @@ In practice, we do not expect to know $\gamma$ and maybe not even $\sigma$.
 Figure~\ref{fig:1D_example} shows recovery of a 1-D signal from the first three autocorrelations of the data.
 The autocorrelations are computed from noisy micrographs with $\sigma=3$ that obey the separation condition of~\eqref{eq:spacing}. 
 Both the signal  and $\gamma$ are estimated simultaneously from the observed autocorrelations by LS fitting; more details are given in Appendix~\ref{sec:numeric_details}. Crucially, the LS does not require  knowledge of $\sigma$. 
-
 
 \begin{figure*}[h]
 	\centering
@@ -372,47 +343,11 @@ Both the signal  and $\gamma$ are estimated simultaneously from the observed aut
 	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $500,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels), each containing $700$ image occurrences on average.}	
 \end{figure*}
 
-
-%\begin{figure*}[h!]
-%	\centering
-%	\includegraphics[scale=0.7]{Einstein_progress_examples}
-%	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized with an image of the physicist Isaac Newton. Estimates are obtained from $P$ micrographs (growing across panels), each containing $700$ image occurrences on average.
-%		%\TODO{To add: redo the figures according to Amit's comments and the figures of noisy Einstein's micrographs}
-%		% At a noise level of $\sigma = 3$, this amounts to an SNR of $1/20$.
-%	}
-%\end{figure*}
-
-
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.28]{Einstein_recovery_error_combined}
 	\caption{\label{fig:error_per_micro}Relative error curves for the experiment of Figure~\ref{fig:Einst_example}.}
 \end{figure}
-
-
-%\begin{figure}[h]
-%	\centering
-%\begin{subfigure}[h]{0.25\textwidth}
-%	\centering
-%	\includegraphics[scale=0.33]{Einstein_ps_error}
-%	\caption{relative power spectrum estimation error}
-%\end{subfigure} 
-%\begin{subfigure}[h]{0.25\textwidth}
-%	\centering
-%	\includegraphics[scale=0.33]{Einstein_recovery_error}
-%	\caption{relative recovery error}
-%\end{subfigure} 
-%	\caption{\label{fig:error_per_micro} Error curves for the experiment of Figure~\ref{fig:Einst_example}}
-%\end{figure}
-
-%
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[scale=.55]{Einstein_progress} (left) power spectrum estimation error (right) RRR error after fixed number of 1000 iterations.
-%	\caption{\label{fig:error_per_micro} Relative root mean square error of the estimate of Einstein's image as a function of the number of observed micrographs (logarithmic scale along both axes.)}
-%\end{figure}
-
-
 
 \begin{figure*}[h!]
 	\centering
@@ -434,8 +369,6 @@ This task can be performed by considering solely the recovered $\gamma$ (the fra
 Figure~\ref{fig:cryo_detection} presents excerpts  of two noisy micrographs, only one of which contains projections.
 In the presence of projections, the estimated $\gamma$ was $0.12$, corresponding to approximately $6784$ projections. 
 On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise micrograph, corresponding to less than one projection.
-%
-%Under the experimental parameters (see Section~\ref{sec:numeric_details}), such values of $\gamma$ predict  in the informative micrograph and less than one projection in the pure noise scenario.  
 
 \begin{figure*}[h]
 	\centering
@@ -466,8 +399,7 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 \end{figure}
 
 \section{Discussion}
-
-%In the simplified model for cryo-EM we examined, we showed it is possible to estimate the 3-D structure of small volumes. 
+ 
 In the simplified mathematical model we examined, we showed it is possible to estimate a signal without detecting its appearances.  
 Our strategy is to compute autocorrelation functions of the micrographs and to relate these statistics to the unknown signal's parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations. 
 
@@ -475,13 +407,12 @@ We also showed how this technique can, in principle, be applied to cryo-EM.
 Crucially, the outlined approach involves no particle picking, hence a fortiori no viewing direction estimation. Concerns for model bias are also greatly reduced since no template matching is involved.
 Additionally,  our technique also allows the use of much lower defocus values. Lower defocus means lower contrast, but will maintain  higher frequency information. Consequently, we may be able to get high resolution reconstructions from fewer micrographs.
 
-
 Looking towards applying the framework to encompass all important features of real cryo-EM experiments, our work implies that it might be possible to reconstruct small molecules, particularly, molecules that are too small to be detected in micrographs. 
 In pursuing this research direction, our goal is to significantly increase the range of molecules to which cryo-EM can be successfully applied.
 We recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. We discuss a few now.
 
 The numerical experiments we have performed reveal that the third-order autocorrelation may not be enough for 3-D reconstruction in practice, due to high sensitivity.
-This suggests that fourth-order autocorrelation may be necessary. This in turn would imply that the procedure might require a large amount of data.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable SNR remains an open question.} Recent trends in high-throughput cryo-EM technology   give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved meaningfully in practice. %The proof-of-concept experiments above suggest they might. \TODO{Is it?}
+This suggests that fourth-order autocorrelation may be necessary. This in turn would imply that the procedure might require a large amount of data.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable SNR remains an open question.} Recent trends in high-throughput cryo-EM technology   give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved meaningfully in practice. 
 
 Beyond data acquisition and computational challenges, there are modeling issues to consider.
 As stated, our approach relies on two core assumptions that are not necessarily verified in SPR experiments.
@@ -490,13 +421,11 @@ Second, we assume that any two particles are sufficiently separated, and we use 
 We believe that this constraint could be replaced by a probabilistic condition on the average number of projections per micrograph.\TODO{Will: Is this really enough? I think the main issue is what happens when particles can collide (or maybe even overlap), since this introduces additional cross-terms for the moment-fitting problem.} 
 Such a condition can be met in practice by careful experimental design.
 
-
 We also note several aspects of SPR experiments that were neglected in this paper, including contrast transfer function (CTF), non-uniformly distributed viewing directions and other contaminants in the micrographs, such as ice crystals.
  All these aspects must be taken into account so the method could be applied on real data. We hope to take care of these issues in future research, as well as to extend the proposed method to conformational heterogeneity. 
 
 % Bibliography
 \bibliography{ref}
-
 
 \appendix
 
@@ -505,14 +434,12 @@ We also note several aspects of SPR experiments that were neglected in this pape
 \paragraph{2-D experiment.}
 
 For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated micrographs of size $4096\times 4096$ pixels. 
-In each micrograph, we placed Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition.%~\eqref{eq:spacing}.  
+In each micrograph, we placed Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition ~\eqref{eq:spacing}.  
 This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
 an accept/reject rule based on the separation condition and locations picked so far.
 On average, $700$ images are placed in each micrograph.   
 Then, i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ is added, inducing an SNR of approximately $1/370$.
 An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
-%Different micrographs are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
-
 
 In this experiment, we assume to know the noise level $\sigma$ and the total number of occurrences of the target image across all micrographs.
 In stark contrast with the 1-D setup, the second-order autocorrelation determines almost any target image uniquely, up to reflection through the origin. This is because the second-order autocorrelations correspond to the Fourier magnitudes of the signal through the 2-D Fourier transform. 
@@ -525,43 +452,22 @@ z & \leftarrow z + \beta (P_2(2P_1(z) - z) - P_1(z)),
 on an image $z$ of size $2L\times 2L$.
 We set the parameter $\beta$ to 1.
 The map is designed so that, if the estimated power spectrum is exact, then fixed points contain Einstein's image in the upper-left corner of size $L \times L$, possibly reflected through its origin, and zeros elsewhere. The operator $P_2(z)$ combines the Fourier phases of  the current estimation $z$ with the estimated Fourier magnitudes. The operator $P_1(z)$ zeros out all entries of $z$ outside the $L\times L$ upper-left corner. In all experiments, the algorithm halted after a fixed number of 2000 iterations.
-%
-%In order to compare the performance in multiple cases and at different noise levels,  and the iterate with the smallest error compared to the ground truth (up to the reflection ambiguity) is chosen as the solution. While this cannot be done in practice (since we do not have access to the ground truth to determine which iterate is best), this procedure enables us to compare a large number of instances in different noise environments. \TODO{Note the last two sentences!}
-
-
-
 
 \paragraph{1-D experiment.}
 For the 1-D experiment depicted in Figure~\ref{fig:1D_example}, we used a signal of length $L=21$ and generated an observation $y$ of length $N = 10(2L-1)M$, where $M$ is the number of repetitions. 
 The observation was generated by randomly selecting placements in $y$, one at a time with an accept/reject rule based on the separation condition and locations picked so far until reaching the desired number of signal occurrences. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$ is about $1/175$.
-%	 fix $K = 3$ signals of length $L = 21$. Following the forward model described at the beginning of this section, we generate an observation $y$ of length $12.3 \cdot 10^9$. Each of the three signals appears, respectively (and approximately), $30.0 \cdot 10^6$, $20.0 \cdot 10^6$ and $10.0 \cdot 10^6$ times in $y$ for a total of exactly $60 \cdot 10^6$ occurrences, such that at least $L-1$ zeros separate any two occurrences of any signals. 
-%This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation condition and locations picked so far. For each placement, one of the three signals is picked at random according to the proportions $1/2, 1/3, 1/6$. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$
-%% sqrt((m_want*sum(X.^2)')/(sigma^2*n))
-%is about 1/9.
 
-
-%This is enough noise to make cross-correlations of $y$ even with the true signals display peaks at essentially random locations, uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
-
-%\TODO{TB: I would place the equation counting argument in the theory section in the paragraph of open questions (I marked th place)}
-%
 Given the observation $y$, we proceed to compute the autocorrelations. %The first-order autocorrelation is straightforward. 
 We excluded biased elements of the autocorrelations; that is $a_y^2[\ell_1]$ and $a_y^3[\ell_1, \ell_2]$ such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero. 
 This has the  practical effect that we need not know $\sigma$. 
-%For second-order autocorrelations, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no noise-induced bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to make sense of the computed quantities. Likewise, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$---
 By also taking symmetries into account, the third-order autocorrelation contains $\frac{(L-1)(L-2)}{2}$ remaining entries. Thus, in total we have
 \begin{align*}
 1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
 \end{align*}
 coefficients. 
 This redundancy suggests that it might be possible to estimate several signals simultaneously (compare with~\cite{boumal2017heterogeneous,bandeira2017estimation}).
-%Since we aim to estimate $KL$ parameters (for the $K$ signals of length $L$) plus $K$ parameters (for the densities $\gamma_k$), an absolute upper bound on $K$ (simply to ensure we have at least as many equations as we have unknowns) is
-%\begin{align*}
-%K(L+1) \leq \frac{1}{2} L (L-1) + 1.
-%\end{align*}
-%Thus, $(L-1)/2$ (up to a small approximation) is an absolute upper limit on $K$ (compare with~\cite{boumal2017heterogeneous,bandeira2017estimation}). 
 In practice, the autocorrelations are computed on disjoint segments of $y$ of length $100\cdot10^6$ (if the length of the measurement is larger than that) and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
 
-%Having computed the moments of interest, we now estimate signals $x_1, \ldots, x_K$ and coefficients $\gamma_1, \ldots, \gamma_K$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear least-squares problem:
 Having computed the moments of interest, we now estimate the signal $x$ and coefficient $\gamma$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear LS problem:
 %\begin{align}
 %\min_{\substack{\hat x_1, \ldots, \hat x_K \in \mathbb{R}^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}}& w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 \\ & + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2  \nonumber \\&+ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2, \nonumber
@@ -588,9 +494,12 @@ where the explicit expressions of $\mathfrak{a}_x^1$, $\mathfrak{a}_x^2$ and $\m
 In the experiments, we set $w_1=w_2=w_3=1$. 
 The LS problem was solved using Matlab's \texttt{lsqnonlin} solver for nonlinear LS problems. The expected $\hat \gamma$ in this experiment is one.
 
-The true volume used in both experiments was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB)~\cite{pdb} as 1QLQ. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5 \AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. We also present a reconstruction of TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB)~\cite{emdb} as EMD-8117. The original map has size $192^3$, and we downsample it to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in \eqref{eq:volume_expansion_app} with cutoff $L = 5$. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. Similarly, \TODO{Fill details for BPTI}. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data. \TODO{Tamir: This entire paragraph will be changed a bit once we will have the final figures}
+The true volume used in both experiments was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB) %~\cite{pdb} 
+as 1QLQ\footnote{\url{https://www.rcsb.org}}. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5 \AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. We also present a reconstruction of TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB) %~\cite{emdb} 
+as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has size $192^3$, and we downsample it to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in \eqref{eq:volume_expansion_app} with cutoff $L = 5$. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. Similarly, \TODO{Fill details for BPTI}. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data. \TODO{Tamir: This entire paragraph will be changed a bit once we will have the final figures}
 
-The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in~\cite{stewart1980efficient}, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE \cite{aspire}. We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
+The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in~\cite{stewart1980efficient}, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE\footnote{\url{http://spr.math.princeton.edu}}. %\cite{aspire}.
+ We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
 
 \section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
 
@@ -603,16 +512,14 @@ We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, 
 \begin{equation*}
 \gamma := \frac{ML}{N}>0.
 \end{equation*}
-%
-%We will consider the regime $N,M\to\infty$ and assume that $M_N=\Omega(N)$, so that $\gamma>0$. %In the sequel, we will suppress the explicit dependence of $M$ on $N$ for notational convenience.
+
 We start by considering the mean of the data:
-%
-\begin{equation}
+\begin{equation*}
 a_y^1 = \frac{1}{N}\sum_{i=0}^{N-1} y[i] =
 \frac{1}{N/L}\sum_{j=0}^{M-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] +    
 \underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}}
 \xrightarrow{a.s.}\gamma a_x^1,
-\end{equation}
+\end{equation*}
 %
 where the noise term converges to zero almost surely (a.s.) by the strong law of large numbers.
 
@@ -687,7 +594,7 @@ Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge 
 
 {\bf Case 2:} $0=\ell_2 < \ell_1$. Term (2) is an average of products of the form $\ep[i]^2\ep[i+\ell_1]$, which have mean zero; consequently, term (2) converges to 0 almost surely. The same argument as for Case 1 shows that (3) and (5) also converge to 0. For term (4), we write:
 %
-\begin{align}
+\begin{align*}
 %
 &\frac{1}{N}\sum_{j=1}^{M} 
 \sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]
@@ -695,7 +602,7 @@ Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge 
 &= \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-1}x[i] \frac{1}{M}\sum_{j=1}^{M} \ep[s_j+i-\ell_1]^2
 \\& \xrightarrow{N\to\infty} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2. \nonumber
 %
-\end{align}
+\end{align*}
 
 {\bf Case 3:} $0<\ell_2 = \ell_1$. An argument nearly identical to that for Case 2 shows that terms (2), (4) and (5) converge to 0, while term (3) converges to $\gamma a_x^1 \sigma^2$.
 
@@ -723,17 +630,14 @@ The proof is based on  a variant of the Neyman--Pearson Lemma to derive the best
 %
 where $f_i(x)$ is the normal density with mean $\theta_i$ and variance $\sigma^2$. 
 The best estimator of $\eta$ based on $X$ minimizes the failure probability; hence, it minimizes the integral in~\eqref{eq:neyman-pearson} through an appropriate choice of the set $S$. This is achieved as follows:
-\begin{align}
+\begin{align*}
 %
-%S & = \left\{x : \frac{f_0(x)}{f_1(x)} \leq \frac{1-q}{q} \right\}.
 S & = \left\{x : qf_0(x) \leq (1-q)f_1(x) \right\}.
 %
-\end{align}
-%
-%In other words, if $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, then the best estimator of $\eta$ based on $X$ is:
+\end{align*}
 %
 With $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, the corresponding estimator is:
-\begin{align}
+\begin{align*}
 %
 \hat{\eta} = 
 \begin{cases}
@@ -741,7 +645,7 @@ With $\Lambda(x) = f_0(x) / f_1(x)$ and $b = (1-q) / q$, the corresponding estim
 0  \text{ if } \Lambda(x) > b.
 \end{cases}
 %
-\end{align}
+\end{align*}
 Taking logarithms, the set $S$ can be rewritten as the set of $x$'s where:
 \begin{align*}
 %
@@ -773,7 +677,7 @@ Now let us compute the probability of failure conditional on the event $\eta = 0
 %
 and failure occurs when 
 %
-\begin{align}
+\begin{align*}
 %
 \sigma\langle Z, \theta_1 - \theta_0 \rangle 
 &\ge \frac{\|\theta_1\|^2 + \|\theta_0\|^2}{2} - \langle \theta_0,\theta_1 \rangle
@@ -781,7 +685,7 @@ and failure occurs when
 \nonumber \\
 &= \frac{1}{2} \|\theta_1 - \theta_0\|^2 - \sigma^2 \log(b).
 %
-\end{align}
+\end{align*}
 %
 Define $Y = \langle Z , \theta_1 - \theta_0 \rangle \sim N(0,\|\theta_1 - \theta_0\|^2)$ and divide through by $\sigma$. The above event is equivalent to:
 %
@@ -821,31 +725,31 @@ Thus, the overall probability of failure is:
 %
 Now, if $q = 1/2$, then $\log(b) = 0$. Hence the probability of failure is simply:
 %
-\begin{align}
+\begin{align*}
 %
 \P\left[Y \ge \frac{c}{\sigma} \right] \longrightarrow \frac{1}{2} = q
 \quad \text{as} \quad \sigma \to \infty.
 %
-\end{align}
+\end{align*}
 If $q > 1/2$, then $q > 1-q$ and $\log(b) < 0$. Consequently, 
 %
-\begin{align}
+\begin{align*}
 %
 \P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right] \longrightarrow 0,
 %
-\end{align}
+\end{align*}
 %
 while
 %
-\begin{align}
+\begin{align*}
 %
 \P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right] \longrightarrow 1,
 %
-\end{align}
+\end{align*}
 %
 as $\sigma \to \infty$. Hence,
 %
-\begin{align}
+\begin{align*}
 %
 \P[\hat{\eta} \ne \eta]
 %&= q \P\left[Y \ge \frac{c}{\sigma} - \sigma^2 \log(b) \right]
@@ -853,11 +757,10 @@ as $\sigma \to \infty$. Hence,
 %\nonumber\\
 & \longrightarrow 1-q  \quad \text{as} \quad  \sigma \to \infty.
 %
-\end{align}
+\end{align*}
 That is, the probability of success converges to $q$.
 Finally, if $q < 1/2$, then $\log(b) > 0$ and a similar reasoning shows the probability of success converges to $1-q$.
 In all cases, the probability of success of the best possible deterministic estimator converges to $\max(q, 1-q)$.
-
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
@@ -908,9 +811,9 @@ where
 F_2 =  a_x^3[0,0] + 3\sum_{j=1}^{L-1}a_x^3[j,j] + 3\sum_{j=1}^{L-1}a_x^3[0,j] + 6\sum_{1\leq i < j\leq L-1}a_x^3[i,j].
 \end{equation*}
 On the other hand, from $a_y^3$ we can directly estimate $F_2$ up to scale and bias
-\begin{equation} \label{eq:E4}
+\begin{equation*} \label{eq:E4}
 E_4 = \beta F_2 + (6L-3)\sigma^2a_y^1.
-\end{equation}
+\end{equation*}
 Taking the ratio:
 \begin{equation*} 
 \frac{E_4}{E_3} = \frac{L}{\beta^2} + \frac{(6L-3)L\sigma^2a_y^1}{E_3}, 
@@ -966,50 +869,48 @@ We assume that molecule is real-valued and smooth. In spherical coordinates, its
 \begin{equation} \label{eq:volume_expansion_app} 
 \widehat \phi(ck, \theta, \varphi) = \sum_{\ell = 0}^L\sum_{m=-\ell}^{\ell}\sum_{s=1}^{S(\ell)}\tamir_{\ell, m, s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k), \quad k\leq 1,
 \end{equation}
-%\[ \widehat \phi(c\kk) = \sum_{\ell,m,s}a_{\ell,m,s}j_{\ell,s}(k)Y_{\ell}^m(\kk/k),\quad k\leq 1,\]
-%where $k=||\kk||_2$, 
-where $c$ is the bandlimit, $\{S_l\}$ are determined using the Nyquist criterion as descirbed in \cite{bhamre2017anisotropic}, $j_{\ell,s}$ is the normalized spherical Bessel functions given by
+where $c$ is the bandlimit, $\{S_l\}$ are determined using the Nyquist criterion as described in~\cite{bhamre2017anisotropic}, $j_{\ell,s}$ is the normalized spherical Bessel functions given by
 \[ j_{\ell, s}(k) = \frac{4}{|j_{\ell+1}(u_{\ell, s})|}j_{\ell}(2u_{\ell,s} k),\]
 $j_{\ell}$ is the spherical Bessel function of order $\ell$ and  $u_{\ell,s}$ is the $s$th positive zero of $j_{\ell}$. We use 
 the complex spherical harmonics $Y_{\ell}^m$ defined by  
 \[ Y_{\ell}^m(\theta,\varphi) := \sqrt{\frac{2\ell+1}{4\pi}\cdot\frac{(\ell-m)!}{(\ell+m)!}}P_{\ell}^m(\cos\theta)e^{i m\varphi},\]
 where $P_{\ell}^m$ are the associated Legendre polynomials with the Condon-Shortley phase. 
-Sampling at the Nyquist-rate dictates $c=1/2$~\cite{levin20173d}. 
-Because $\phi$ is real-valued, so $\widehat \phi$ is conjugate-symmetric, the expansion coefficients satisfy $\tamir_{\ell, -m, s} = (-1)^{\ell+m}\overline{\tamir_{\ell,m,s}}$, and hence we only need to recover coefficients $\tamir_{\ell, m, s}$ with $m\geq 0$. Let $I_{\omega}$ denote the tomographic projection obtained from viewing direction $\omega\in SO(3)$. By the Fourier projection-slice theorem, its 2-D Fourier transform  is given by~\cite{natterer1986mathematics}:
-\be\label{eq:projection_model}
-\widehat I_{\omega}(k,\varphi) = \sum_{\ell,m,m',s}\tamir_{\ell,m,s}D_{m',m}^{\ell}(\omega)Y_{\ell}^{m'}\left(\frac{\pi}{2},\varphi\right)j_{\ell,s}(k),\ee
+Sampling at the Nyquist rate dictates $c=1/2$~\cite{levin20173d}. 
+Because $\phi$ is real-valued,  $\widehat \phi$ is conjugate-symmetric and thus the expansion coefficients satisfy $\tamir_{\ell, -m, s} = (-1)^{\ell+m}\overline{\tamir_{\ell,m,s}}$. Therefore, we only need to recover coefficients $\tamir_{\ell, m, s}$ with $m\geq 0$. 
+
+Let $I_{\omega}$ denote the tomographic projection obtained from viewing direction $\omega\in SO(3)$. By the Fourier projection-slice theorem, its 2-D Fourier transform  is given by~\cite{natterer1986mathematics}:
+\begin{equation*}\label{eq:projection_model}
+\widehat I_{\omega}(k,\varphi) = \sum_{\ell,m,m',s}\tamir_{\ell,m,s}D_{m',m}^{\ell}(\omega)Y_{\ell}^{m'}\left(\frac{\pi}{2},\varphi\right)j_{\ell,s}(k),
+\end{equation*}
 where $D_{m',m}^{\ell}(\omega)$ is a Wigner-D matrix. This implies that the projections are also $c$-bandlimited.
 
 Let $\II\in\RNN$ denote a micrograph. We assume it consists of shifted copies of projections contaminated by additive white Gaussian noise:
 \begin{equation}\label{eq:micrograph_model}
 \II = \sum_{t=1}^{M} I_{\omega_t}\ast\delta_{\mb s_t}+ \varepsilon, \quad \varepsilon~\sim\mathcal{N}(0,\sigma^2 I),
 \end{equation}
-where the viewing directions $\omega_t$ are assumed to be drawn from the uniform distribution over $\text{SO}(3)$ and $\mb s_t$ denotes the location of the center of the $t$th projection in the micrograph. %Similarly to~\eqref{eq:spacing}, 
-Again, we impose a separation condition so that any two projections are separated by at least $2P-1$ pixels between their upper left corners  in each direction.
-Note that~\eqref{eq:model} can be also written as a sum of $\delta$ functions as in~\eqref{eq:micrograph_model}. 
+where the viewing directions $\omega_t$ are assumed to be drawn from the uniform distribution over $\text{SO}(3)$ and $\mb s_t$ denotes the location of the center of the $t$th projection in the micrograph.  
+We assume the projection is discretized on a Cartesian grid  of size $P\times P$ and we impose a separation condition so that any two projections are separated by at least $2P-1$ pixels between their upper left corners  in each direction, similarly to~\eqref{eq:spacing}. Note that~\eqref{eq:model} can be also written as a sum of $\delta$ functions as in~\eqref{eq:micrograph_model}. 
 
 Define the $p$th autocorrelation of $\II$ as
 \begin{equation*} \label{eq:Kth_autocorrelation}
-a^p_\II[\Bell_1,\ldots, \Bell_{p-1}] = \frac{1}{N^2}\sum_{\mb i}\II[\Bell]\II[\mb i+\Bell_1]\cdots \II[\mb i+\Bell_{p-1}],
+a^p_\II[\Bell_1,\ldots, \Bell_{p-1}] := \frac{1}{N^2}\sum_{\mb i}\II[\Bell]\II[\mb i+\Bell_1]\cdots \II[\mb i+\Bell_{p-1}],
 \end{equation*}
-where the summation is for $\mb i $ ranging over the $N^2$  pixels of the micrograph. %, $\Bell = (\Delta i, \Delta j)$.% and we set $\II(i,j)=0$ if either $i,j\notin\{1,\ldots, M\}$. 
-%In our procedure, we compute the first three autocorrelations. %, called the mean, power spectrum, and bispectrum, of the micrographs. \TODO{This definition and terminology should come earlier}. 
+where the summation is for $\mb i $ ranging over the $N^2$  pixels of the micrograph. 
 Let $\II_1,\ldots\II_K$ denote a set of $K$ micrographs. 
-Under the specified conditions, we show in Appendix~\ref{sec:moment_derivation} that the first three autocorrelations  of the micrographs are related to those of the projections by 
+Under the specified conditions, we show in the next section that the first three autocorrelations  of the micrographs are related to those of the projections by 
 \begin{align} \label{eq:ac_micrographs}
-\lim_{K\to\infty}\frac{1}{K}\sum_{i=1}^Ka^p_{\II_i}[\Bell_1,\ldots,\Bell_{p-1}]  &= \gamma\left\langle a^p_{I_\omega}[\Bell_1,\ldots,\Bell_{p-1}]\right\rangle_{\omega} \\&+ b_p[\Bell_1,\ldots,\Bell_{p-1}], \\ p=1,2,3, \quad \Bell_1,\ldots,\Bell_{p-1}&\in[-(P-1),P-1]^2, \nonumber
+\lim_{K\to\infty}\frac{1}{K}\sum_{i=1}^Ka^p_{\II_i}[\Bell_1,\ldots,\Bell_{p-1}]  &= \gamma\left\langle a^p_{I_\omega}[\Bell_1,\ldots,\Bell_{p-1}]\right\rangle_{\omega} \\&+ b_p[\Bell_1,\ldots,\Bell_{p-1}], \nonumber \\ p=1,2,3, \quad \Bell_1,\ldots,\Bell_{p-1}&\in[-(P-1),P-1]^2, \nonumber
 \end{align}
 where $\langle\cdot\rangle_\omega$ denotes averaging over all possible viewing directions $\omega$ and $b_p$ is a bias term. 
 Specifically,  $b_1 = 0$ and therefore the mean is unbiased. The bias term of the second-order autocorrelation  $b_2$ depends only on $\sigma^2$, the variance of the noise. Hence, if the noise level can be accurately estimated from the micrographs, this bias can be removed. 
-Finally, the bias term of the third-order autocorrelation $b_3$ depends on the mean of the micrograph and $\sigma^2$.  Therefore, given sufficiently many projections, we can accurately estimate the quantities $\gamma\langle a^p_{I_{\omega}}\rangle_{\omega}$ directly from the micrographs. These quantities are functions of the unknown coefficients $\tamir_{l,m,s}$ and we could proceed to invert their relation, as we did in the 2-D toy example. 
+Finally, the bias term of the third-order autocorrelation $b_3$ depends on the mean of the micrograph and $\sigma^2$.  Therefore, given sufficiently many projections, we can accurately estimate the quantities $\gamma\langle a^p_{I_{\omega}}\rangle_{\omega}$ directly from the micrographs. These quantities are functions of the unknown coefficients $\tamir_{l,m,s}$ and we could proceed to invert their relation, as we did in the  toy examples. 
 
 In practice, we want to leverage one more feature of the 3-D reconstruction problem.
 Since all in-plane rotations of the micrographs are equally likely observations, 
 it is desirable in~\eqref{eq:ac_micrographs} to average over all in-plane rotations as well.
 This can be done efficiently using Prolate Spheroidal Wave Functions (PSWFs).  We use autocorrelations up to and including the  third order since this is necessary to  determine the volume.
-The details are in the appendix. 
 
-\subsection{Moments derivation} \label{sec:moment_derivation}
+\subsection{Autocorrelation derivation} \label{sec:moment_derivation}
 
 In this section we prove relation~\eqref{eq:ac_micrographs}. We note that mathematically taking infinitely many micrographs is equivalent to take one infinitely large micrograph with fixed density $\gamma$. Hence, we consider the moments of one micrograph $\II$ in the limit $N\to\infty$ and  $\gamma = \lim_{N\to\infty}\frac{MP^2}{N^2}\in(0,1)$. 
 The separation condition guarantees that if $\mb i=(i,j)$ is in the support of some projection, then $\mb i + \mb \Bell$ for $\Bell\in[-(P-1),P-1]^2$ is either in the support of the same projection or outside the support of any projection. 
@@ -1018,14 +919,16 @@ We begin by calculating the relation between the $p$th autocorrelation of the cl
 Let us denote the clean micrograph by $\widetilde \II = \II-\varepsilon$, where $\II$ and $\varepsilon$ are given in~\eqref{eq:micrograph_model}.     
 Denote by $\mc S_t$ the support of the $t$th particle. 
 Then, we have
-\be\begin{aligned} \label{eq:general_moment}
+\begin{equation} \label{eq:general_moment}
+\begin{split}
 	a^p_{\widetilde\II}[\Bell_1,\ldots, \Bell_{p-1}] &= \frac{1}{N^2}\sum_{\mb i}\widetilde\II[\mb i]\widetilde\II[\mb i + \Bell_1]\cdots \widetilde\II[\mb i + \Bell_{p-1}]\\
-	&= \frac{1}{N^2}\sum_{t=1}^M\sum_{\mb i\in\mc S_t}\widetilde\II[\mb i]\widetilde\II[\mb i + \Bell_1]\cdots \widetilde\II[\mb i + \Bell_{p-1}] \\ %+ \frac{1}{N^2}\sum_{\mb i\in Z}\widetilde\II[\Bell]\widetilde\II[\mb i + \Bell]\cdots \widetilde\II(\mb i + \Bell_{p-1})\\
-	&= \frac{MP^2}{N^2}\cdot\frac{1}{M}\sum_{t=1}^M\frac{1}{P^2}\sum_{i,j=0}^{P-1} I_{\omega_t}[\mb i]I_{\omega_t}[\mb i+\Bell_1]\cdots I_{\omega_t}[\mb i + \Bell_{p-1}]\\
-	&= \frac{MP^2}{N^2}\frac{1}{M}\sum_{t=1}^Ma^p_{I_{\omega_t}}[\Bell_1,\ldots, \Bell_{p-1}]\\
-	&\to \gamma\langle a^p_{I_{\omega}}[\Bell_1,\ldots, \Bell_{p-1}]\rangle_{\omega}, \end{aligned}\ee
+&= \frac{1}{N^2}\sum_{t=1}^M\sum_{\mb i\in\mc S_t}\widetilde\II[\mb i]\widetilde\II[\mb i + \Bell_1]\cdots \widetilde\II[\mb i + \Bell_{p-1}] \\ %+ \frac{1}{N^2}\sum_{\mb i\in Z}\widetilde\II[\Bell]\widetilde\II[\mb i + \Bell]\cdots \widetilde\II(\mb i + \Bell_{p-1})\\
+&= \frac{MP^2}{N^2}\cdot\frac{1}{M}\sum_{t=1}^M\frac{1}{P^2}\sum_{i,j=0}^{P-1} I_{\omega_t}[\mb i]I_{\omega_t}[\mb i+\Bell_1]\cdots I_{\omega_t}[\mb i + \Bell_{p-1}]\\
+&= \frac{MP^2}{N^2}\frac{1}{M}\sum_{t=1}^Ma^p_{I_{\omega_t}}[\Bell_1,\ldots, \Bell_{p-1}]\\
+&\to \gamma\langle a^p_{I_{\omega}}[\Bell_1,\ldots, \Bell_{p-1}]\rangle_{\omega},
+\end{split}
+\end{equation}
 where the average is taken over $\omega$ with respect to the distribution of viewing directions. Here, we assume it to be uniform.
-
 
 In the presence of noise, we get additional bias terms denoted by $b_p$ in~\eqref{eq:ac_micrographs}. The mean ($p=1$) is unbiased  since the noise is assumed to have zero mean. For the second-order autocorrelation ($p=2$), we have
 \[\begin{aligned} 
@@ -1085,7 +988,6 @@ where the second term is the bias $b_3[\Bell_1,\Bell_2]$.
 Note that $\gamma\langle a^1_{I_{\omega}}\rangle_{\omega}$ is approximately the mean of the micrograph since  $a^1_\II \approx a^1_{\tilde\II} \approx \gamma\langle a^1_{I_{\omega}}\rangle_{\omega}$. Therefore, we do not need prior knowledge of $\gamma$ to effectively
 debias the third-order autocorrelation.
 
-
 \subsection{Accounting for all in-plane rotations} \label{sec:steering}
 
 We represent our autocorrelations using Prolate Spheroidal Wave Functions (PSWFs) $\{\psi_{k,q}\}$ where $k \geq 0, q \geq 1$ are integers~\cite{slepian1964pswfIV}. As we demonstrate below, this makes it easier to account for the fact that all in-plane rotations of the micrographs are equally likely observations. This is only a concern for the second and third order autocorrelations. Below, we start with $p=2$.
@@ -1093,14 +995,14 @@ The PSWFs are eigenfunctions of the truncated Fourier transform and are given in
 \begin{align}
 \psi_{k,q}(r,\varphi) & = \left\{\begin{array}{ll} \frac{1}{\sqrt{8\pi}}\alpha_{k,q}R_{k,q}(r)e^{\iota k\varphi}, & r\leq 1,\\ 0, & r>1,\end{array}\right. \label{eq:prolatesdef}
 \end{align}
-
 where the range of $k,q$ is determined by Eq.~(8) in \cite{landa2017steerable}, the ${R_{k,q}}$ are a family of real, one-dimensional functions and the ${\alpha_{k,q}}$ are  scaling factors which will be defined in the next section.
 The PSWFs are orthogonal on the unit disk.
 
 For $\Bell \in [-(P-1), P-1]^2$, let us define 
 \begin{equation} \label{eq:PSWF_expansion}
 \mathfrak{a}^2[k, q]  =
-\sum_{\Bell}a^2_\II[\Bell]\overline{\psi_{k,q}[\Bell]}, \end{equation}
+\sum_{\Bell}a^2_\II[\Bell]\overline{\psi_{k,q}[\Bell]}, 
+\end{equation}
 where $\psi_{k,q}[\Bell] := \psi_{k,q}(\Bell/(P-1))$ is a discretization of the PSWFs. 
 Knowledge of these coefficients is essentially equivalent to knowledge of the second-order correlations owing to the following approximate identity:
 \begin{align}
@@ -1125,9 +1027,8 @@ These coefficients can be computed efficiently. Indeed, consider a patch of the 
 \begin{align}
 \II[\mb i+\Bell] & \approx \sum_{k,q} a_{k,q}[\mb i] \psi_{k,q}[\Bell]. \label{eq:itamar}
 \end{align}
-%Considering equation~\eqref{eq:frakatwo}, our main task is to compute the coefficients $a_{k,q}$, which from the equation above can be done as follows: 
 Thus, we proceed as follows:
-for each position $\mb i$ in the micrograph $\II$, we extract the corresponding patch of size $2P-1$, expand it in the discretized PSWFs as in~\eqref{eq:itamar}, and collect the $a_{k,q}$ as per~\eqref{eq:frakatwo} to constitute the second-order autocorrelation of the micrograph.
+for each position $\mb i$ in the micrograph $\II$, we extract the corresponding patch of size $(2P-1) \times (2P-1)$, expand it in the discretized PSWFs as in~\eqref{eq:itamar}, and collect the $a_{k,q}$ as per~\eqref{eq:frakatwo} to constitute the second-order autocorrelation of the micrograph.
 
 Crucially, following this formalism, it is now straightforward to account for all in-plane rotations and reflections of the micrograph. Indeed, as can be seen from the definition of the (continuous) PSWFs~\eqref{eq:prolatesdef}, the effects of rotations and reflections on expansion coefficients of real images are, respectively, phase modulation and conjugation: this is why this the PSWF basis is called \emph{steerable}~\cite{landa2017steerable,zhao2016fast}. By analogy in the discrete case, we have the following approximate expansions for a patch rotated about its center $\mb i$ by an angle $\alpha$:
 \[ \II^{\alpha,+}[\mb i+\Bell] \approx \sum_{k,q}a_{k,q}e^{-\iota k\alpha}\psi_{k,q}[\Bell],\]
@@ -1163,8 +1064,8 @@ The coefficients $\mathfrak{a}^3[k_1,q_1;k_2,q_2]$ are related to the third-orde
 \[ a^3_\II[\Bell_1, \Bell_2] \approx \sum_{\substack{k_1,q_1\\ k_2,q_2}}\mathfrak{a}^3[k_1,q_1;k_2,q_2]\psi_{k_1,q_1}[\Bell_1]\overline{\psi_{k_2,q_2}[\Bell_2]}.\]
 Averaging over all rotations of $\II$ and its reflection, we obtain
 \begin{align} \label{eq:third_order_ac_pswf}
-&\mathfrak{a}^3[k_1,q_1;k_2,q_2] \\&= \frac{1}{N^2}\sum_{\mb i}\II[\mb i]\left(\frac{1}{4\pi}\int_0^{2\pi}\left(a_{k_1,q_1}[\mb i]\overline{a_{k_2,q_2}[\mb i]} + \overline{a_{k_1,q_1}[\mb i]}a_{k_2,q_2}[\mb i]\right)e^{-\iota(k_1-k_2)\alpha}d\alpha\right), \nonumber\\
-&= \delta[k_1 - k_2]\frac{1}{N^2}\sum_{\mb i}\II[\mb i]\Re\{a_{k_1,q_1}[\mb i]\overline{a_{k_2,q_2}[\mb i]}\}. 
+&\mathfrak{a}^3[k_1,q_1;k_2,q_2] = \frac{1}{N^2}\sum_{\mb i}\II[\mb i]\\&\times \left(\frac{1}{4\pi}\int_0^{2\pi}\left(a_{k_1,q_1}[\mb i]\overline{a_{k_2,q_2}[\mb i]} + \overline{a_{k_1,q_1}[\mb i]}a_{k_2,q_2}[\mb i]\right)e^{-\iota(k_1-k_2)\alpha}d\alpha\right), \nonumber\\
+&= \delta[k_1 - k_2]\frac{1}{N^2}\sum_{\mb i}\II[\mb i]\Re\{a_{k_1,q_1}[\mb i]\overline{a_{k_2,q_2}[\mb i]}\}. \nonumber 
 \end{align}
 Thus, similarly to the second-order autocorrelation, averaging over all in-plane rotations reveals that the 4-D third-order autocorrelation truly only carries information along three dimensions.
 
@@ -1181,7 +1082,6 @@ b_3[\Bell_1, \Bell_2] & = \gamma\sigma^2\langle a^1_{I_{\omega}}\rangle_{\omega}
 b_3[k_1,q_1; k_2, q_2]\psi_{k_1,q_1}[\Bell_1]\overline{\psi_{k_2,q_2}[\Bell_2]}.
 \end{align*}
 
-
 \subsection{Connection to volume}
 
 Until now, we have established  simple relations between the autocorrelations of the micrographs and the autocorrelations of the volume. Now, we complete the picture by deriving the connection with the volume itself.
@@ -1190,11 +1090,11 @@ Using the 2-D PSWFs, we can express each projection as
 \[ \widehat I_{\omega}(ck,\theta) = \sum_{N,n}b_{N,n}(\omega)\psi_{N,n}(k,\theta),\]
 where
 \[\begin{aligned} b_{N,n}(\omega) &= \frac{4}{\sqrt{2\pi}|\alpha_{N,n}|^2}\int_0^{2\pi}\int_0^1\widehat I_{\omega}(ck,\theta)R_{N,n}(k)e^{-\iota N\theta}k\, dk\, d\theta,\\
-&= \sum_{\ell,m,m',s}\tamir_{\ell,m,s}\left[\frac{2\sqrt{2\pi}}{\alpha_{N,n}}Y_{\ell}^{m'}(\pi/2,0)\right]D_{m',m}^{\ell}(\omega)\\&\times \left(\int_0^1j_{\ell,s}(k)R_{N,n}(k)k\, dk\right)\left(\frac{1}{2\pi}\int_0^{2\pi}e^{\iota(m'-N)\theta}\, d\theta\right),\\
+&= \sum_{\ell,m,m',s}\tamir_{\ell,m,s}\left[\frac{\sqrt{8\pi}}{\alpha_{N,n}}Y_{\ell}^{m'}(\pi/2,0)\right]D_{m',m}^{\ell}(\omega)\\&\times \left(\int_0^1j_{\ell,s}(k)R_{N,n}(k)k\, dk\right)\left(\frac{1}{2\pi}\int_0^{2\pi}e^{\iota(m'-N)\theta}\, d\theta\right),\\
 &= \sum_{\vert N\vert\leq \ell}\sum_{m,s}\tamir_{\ell,m,s}D_{N,m}^{\ell}(\omega)\beta_{\ell,s;N,n},\end{aligned}\]
 where the coefficients
 \begin{equation} \label{eq:beta}
-\beta_{\ell,s;N,n} := \left\{\begin{array}{ll} \frac{2\sqrt{2\pi}}{\alpha_{N,n}}Y_{\ell}^{N}(\pi/2,0)\int_0^1j_{\ell,s}(k)R_{N,n}(k)k\, dk, & \ell\geq |N|\\ 0, & \ell<|N|\end{array}\right.,
+\beta_{\ell,s;N,n} := \left\{\begin{array}{ll} \frac{\sqrt{8\pi}}{\alpha_{N,n}}Y_{\ell}^{N}(\pi/2,0)\int_0^1j_{\ell,s}(k)R_{N,n}(k)k\, dk, & \ell\geq |N|\\ 0, & \ell<|N|\end{array}\right.,
 \end{equation}
 can be precomputed.
 Since the PSWFs are eigenfunctions of the truncated Fourier transform~\cite{landa2017steerable} and hence satisfy 
@@ -1204,15 +1104,13 @@ Since the PSWFs are eigenfunctions of the truncated Fourier transform~\cite{land
 \end{equation} 
 we can now express the projection in real space as
 \begin{align} \label{eq:proj_expansion}
-I_{\omega}(r,\varphi) &= \sum_{N,n}\widehat{\alpha}_{N,n}b_{N,n}(\omega)\psi_{N,n}(r,\varphi)\nonumber \\
-&= \sum_{\ell=0}^L\sum_{N,m=-\ell}^{\ell}\sum_{n=0}^{n_{\text{max}}(N)}\sum_{s=1}^{S(\ell)}\tamir_{\ell,m,s}\widehat\beta_{\ell,s;N,n}D_{N,m}^{\ell}(\omega)\psi_{N,n}(r,\varphi)
+&I_{\omega}(r,\varphi) = \sum_{N,n}\widehat{\alpha}_{N,n}b_{N,n}(\omega)\psi_{N,n}(r,\varphi)\\
+&= \sum_{\ell=0}^L\sum_{N,m=-\ell}^{\ell}\sum_{n=0}^{n_{\text{max}}(N)}\sum_{s=1}^{S(\ell)}\tamir_{\ell,m,s}\widehat\beta_{\ell,s;N,n}D_{N,m}^{\ell}(\omega)\psi_{N,n}(r,\varphi), \nonumber 
 \end{align}
 where $n_{max}(N)$ is chosen according to Eq.~(8) in \cite{landa2017steerable}, $\alpha_{N,n}$ is the eigenvalue corresponding to the $(N,n)$th PSWF, $\widehat{\alpha}_{N,n} = (c/2\pi)^2\alpha_{N,n}$, and $\widehat\beta_{\ell,s;N,n}=\widehat\alpha_{N,n}\beta_{\ell,s;N,n}$.
 
-
 \paragraph{Third-order autocorrelation.}
 In~\eqref{eq:third_order_ac_micro_volume} and~\eqref{eq:third_order_ac_pswf} we have shown how the third-order autocorrelations of the micrographs and the volume are related, and how we can present them in PSWFs. Now, we relate these expressions to the expansion coefficients of the volume itself.
-
 
 The third-order autocorrelation of the volume can be expressed in terms of~\eqref{eq:proj_expansion}:
 \begin{align} \label{eq:third_order_ac_volume}
@@ -1224,9 +1122,9 @@ Now,
 \[\begin{aligned} \langle &b_{N_1,n_1}(\omega)b_{N_2,n_2}(\omega)\overline{b_{N_3,n_3}}(\omega)\rangle_{\omega} \\&= \sum_{\substack{\ell_1,m_1,s_1\\\ell_2,m_2,s_2\\\ell_3,m_3,s_3}}\tamir_{\ell_1,m_1,s_1}\tamir_{\ell_2,m_2,s_2}\overline{\tamir_{\ell_3,m_3,s_3}}\\&\times \langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}(\omega)\overline{D_{N_3,m_3}^{\ell_3}}(\omega)\rangle_{\omega}\\
 &\times \widehat\beta_{\ell_1,s_1;N_1,n_1}\widehat\beta_{\ell_2,s_2;N_2,n_2}\overline{\widehat\beta_{\ell_3,s_3;N_3,n_3}},\end{aligned},\]
 where the latter coefficients are given explicitly in~\eqref{eq:beta}. Using standard properties of D-Wigner functions, we obtain  
-\begin{align}
+\begin{align*}
 &\left\langle D_{N_1,m_1}^{\ell_1}(\omega)D_{N_2,m_2}^{\ell_2}\overline{D_{N_3,m_3}^{\ell_3}}\right\rangle_{\omega} = (-1)^{N_3+m_3}\\&\times \left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ N_1 & N_2 & -N_3\end{array}\right)\left(\begin{array}{ccc}\ell_1 & \ell_2  & \ell_3\\ m_1 & m_2 & -m_3\end{array}\right),\nonumber
-\end{align}
+\end{align*}
 where  $\left(\begin{array}{ccc} \ell_1 & \ell_2 & \ell_3\\ m_1 & m_2 & m_3\end{array}\right)$ are called Wigner 3-j symbols. 
 Notably, these terms are zero unless $m_1+m_2+m_3=0$ and $|\ell_1-\ell_2|\leq \ell_3\leq \ell_1+\ell_2$. Thus,  we conclude that 
 \begin{align} \label{eq:b_average}
