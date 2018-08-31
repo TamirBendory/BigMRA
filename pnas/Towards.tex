@@ -504,23 +504,23 @@ We also note several aspects of SPR experiments that were neglected in this pape
 
 \paragraph{2-D experiment.}
 
-For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generate $P$ micrographs of size $4096\times 4096$ pixels. 
-In each micrograph, we place Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition.%~\eqref{eq:spacing}.  
+For the 2-D experiment shown in Figures~\ref{fig:Einst_example} and~\ref{fig:error_per_micro}, we generated micrographs of size $4096\times 4096$ pixels. 
+In each micrograph, we placed Einstein's image (of zero mean) of size $50\times 50$  in random locations, while preserving the separation condition.%~\eqref{eq:spacing}.  
 This is done by randomly selecting $4000$ placements in the micrograph, one at a time with
 an accept/reject rule based on the separation condition and locations picked so far.
 On average, $700$ images are placed in each micrograph.   
-Then, i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ is added, inducing an SNR of approximately $1/375$.
+Then, i.i.d.\ Gaussian noise with standard deviation $\sigma=3$ is added, inducing an SNR of approximately $1/370$.
 An example of a micrograph's excerpt is presented in the right panel of Figure~\ref{fig:micro_example}.
 %Different micrographs are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
 
 
-In this experiment, we assume we know the noise level $\sigma$ and the total number of occurrences of the target image across all micrographs.
+In this experiment, we assume to know the noise level $\sigma$ and the total number of occurrences of the target image across all micrographs.
 In stark contrast with the 1-D setup, the second-order autocorrelation determines almost any target image uniquely, up to reflection through the origin. This is because the second-order autocorrelations correspond to the Fourier magnitudes of the signal through the 2-D Fourier transform. 
 Therefore, we estimate the signal's Fourier magnitudes (or power spectrum) from the Fourier magnitudes of the micrographs, at the cost of one 2-D fast Fourier transform (FFT) per micrograph. These can be computed highly efficiently and in parallel.
 
 To recover the target image from the estimated power spectrum, we use a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR). This algorithm iterates the map
 \begin{align*}
-z & \leftarrow z + \beta (P_2(2P_1(z) - z) - P_1(z))
+z & \leftarrow z + \beta (P_2(2P_1(z) - z) - P_1(z)),
 \end{align*}
 on an image $z$ of size $2L\times 2L$.
 We set the parameter $\beta$ to 1.
@@ -571,7 +571,7 @@ Having computed the moments of interest, we now estimate the signal $x$ and coef
 \min_{\substack{\hat x\in \mathbb{R}^{W} \\ \hat \gamma > 0}}& w_1 \left( a_y^1 - \hat \gamma a_{\hat x}^1 \right)^2  + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \hat \gamma a_{\hat x}^2[\ell] \right)^2  \nonumber \\&+ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] -  \hat \gamma a_{\hat x}^3[\ell_1,\ell_2] \right)^2, 
 \label{eq:optim1D}
 \end{align}
-where $W \geq L$ is the length of the sought signals and the weights are set to $w_1 = 1/2, w_2 = 1/2n_2, w_3 = 1/2n_3$, where $n_2, n_3$ are the number of moments used: $n_2 = L-1$, $n_3 = \frac{(L-1)(L-2)}{2}$ (weights could also be set in accordance with variance estimates as in~\cite{boumal2017heterogeneous}).
+where $W \geq L$ is the length of the sought signal and the weights are set to $w_1 = 1/2, w_2 = 1/2n_2, w_3 = 1/2n_3$, where $n_2, n_3$ are the number of moments used: $n_2 = L-1$, $n_3 = \frac{(L-1)(L-2)}{2}$ (weights could also be set in accordance with variance estimates as in~\cite{boumal2017heterogeneous}).
 
 Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers. Similar phenomenon was recently observed in a related problem~\cite{zhang2018structured}.
 Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
