@@ -52,6 +52,8 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{mathtools} 
+\usepackage{stackrel} 
+
 %\usepackage[margin=1.2in]{geometry}
 %\usepackage{showlabels}
 
@@ -95,6 +97,9 @@
 {\begin{equation}}
 \newcommand{\ee}
 {\end{equation}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\aseq}{\stackrel{a.s.}{=}}
+
 
 \theoremstyle{plain}
 \newtheorem{thm}{\protect\theoremname}[section]
@@ -121,5 +126,9 @@
 
 
 \allowdisplaybreaks
+
+\newenvironment{myquote}[1]%
+{\list{}{\leftmargin=#1\rightmargin=#1}\item[]}%
+{\endlist}
 
 \endinput
