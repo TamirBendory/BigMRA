@@ -831,7 +831,7 @@ If $q > 1/2$, then $q > 1-q$ and $\log(b) < 0$. Consequently,
 %
 \begin{align}
 %
-\P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right] \longrightarrow 0
+\P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right] \longrightarrow 0,
 %
 \end{align}
 %
@@ -839,7 +839,7 @@ while
 %
 \begin{align}
 %
-\P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right] \longrightarrow 1
+\P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right] \longrightarrow 1,
 %
 \end{align}
 %
@@ -883,9 +883,9 @@ Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get
 \begin{equation} \label{eq:E12}
 E_2\beta -(2L+1)\sigma^2\beta a_y^1 = E_1-\sigma^2a_y^1.
 \end{equation}
-Let $a_y^2:=\sum_{j=0}^{L-1}a_y^2[j]$ and recall from Proposition~\ref{prop:gamma}:
+Let $a_y^2:=a_y^2[0] + 2\sum_{j = 1}^{L-1}a_y^2[j]$ and recall from Proposition~\ref{prop:gamma}:
 \begin{equation} \label{eq:sigma2}
-\sigma^2 = a_y^2 - (a^1_y)^2/(\beta L). 
+\sigma^2 = a_y^2 - (a^1_y)^2/\beta. 
 \end{equation} 
 Plugging into~\eqref{eq:E12} and rearranging we get 
 \begin{equation} \label{eq:quad1}
@@ -894,8 +894,8 @@ Plugging into~\eqref{eq:E12} and rearranging we get
 where 
 \begin{align*}
 \mathcal{A} &= E_2 - (2L+1)a_y^1a_y^2, \\ 
-\mathcal{B} &= -E_1 + \frac{2L+1}{L}(a_y^1)^3 + a_y^1a_y^2  , \\
-\mathcal{C} &= -(a_y^1)^3/L.
+\mathcal{B} &= -E_1 + (2L+1)(a_y^1)^3 + a_y^1a_y^2  , \\
+\mathcal{C} &= -(a_y^1)^3.
 \end{align*}
 Importantly, these coefficients are observable quantities. 
 
@@ -926,7 +926,7 @@ Using~\eqref{eq:sigma2} and rearranging we get the second quadratic:
 where
 \begin{align*}
 \mathcal{D} &= a_y^2 - \frac{E_4}{a_y^1L(6L-3)}, \\ 
-\mathcal{E} &= -(a_y^1)^2/L, \\
+\mathcal{E} &= -(a_y^1)^2, \\
 \mathcal{F} &= \frac{E_3}{a_y^1(6L-3)}.
 \end{align*}
 
