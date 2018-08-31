@@ -594,16 +594,17 @@ The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} 
 
 \section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
 
-Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
-
-We will let the number of instances of the signal $M$ grow with $N$, and write $M=M_N$ to emphasize this. We assume $M_N$ grows proportionally with $N$, and define: \TODO{---Nico: the paper now no longer references $M_N$ and defines $\gamma$ 'as is' for given $M$ and $N$; may want to adapt things here as a result. It wouldn't make sense to make $M_N$ appear in the paper I think, as it just makes things more complicated. In a sense, much of this beginning of appendix is just repeating things we already said cleanly in the paper: let's just follow up from that.}
+%Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
+%We will let the number of instances of the signal $M$ grow with $N$, and write $M=M_N$ to emphasize this.
+We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, so that
+% We assume $M_N$ grows proportionally with $N$, and recall that
+% define: %\TODO{---Nico: the paper now no longer references $M_N$ and defines $\gamma$ 'as is' for given $M$ and $N$; may want to adapt things here as a result. It wouldn't make sense to make $M_N$ appear in the paper I think, as it just makes things more complicated. In a sense, much of this beginning of appendix is just repeating things we already said cleanly in the paper: let's just follow up from that.}
 %
-\begin{equation}
-\gamma = \lim_{N\to\infty} \frac{M_NL}{N}<1.
-\end{equation}
+\begin{equation*}
+\gamma := \frac{ML}{N}>0.
+\end{equation*}
 %
-We will assume that $M_N=\Omega(N)$, so that $\gamma>0$. In the sequel, we will suppress the explicit dependence of $M$ on $N$ for notational convenience.
-
+%We will consider the regime $N,M\to\infty$ and assume that $M_N=\Omega(N)$, so that $\gamma>0$. %In the sequel, we will suppress the explicit dependence of $M$ on $N$ for notational convenience.
 We start by considering the mean of the data:
 %
 \begin{equation}
@@ -622,17 +623,17 @@ We proceed with the (second-order) autocorrelation for fixed $\ell\in[0,\ldots,L
 a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]
 \nonumber \\
 & = \underbrace{\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}}
-\\ & + \underbrace{\frac{\TODO{1,2?}}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] \varepsilon[s_j + i + \ell]}_{\text{cross-term}}. 
+\\ & + \underbrace{\frac{2}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] \varepsilon[s_j + i + \ell]}_{\text{cross-term}}. 
 %
 \end{align*}
 
 The cross-terms are linear in the noise, and are easily shown to vanish almost surely in the limit $N\to\infty$, by the strong law of large numbers. As for the signal term, we break it into $M$ different sums, each containing one copy of the signal. This gives:
 %
-\begin{equation} \label{eq:2nd_moment_signal_term}
+\begin{align} \label{eq:2nd_moment_signal_term}
 %
-\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] = \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\xrightarrow{N\to\infty}\gamma a_x^2[\ell].
+\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] & = \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\nonumber\\&\xrightarrow{N\to\infty}\gamma a_x^2[\ell].
 %
-\end{equation}
+\end{align}
 %
 
 We next analyze the pure noise term. When $\ell\neq 0$, we can break the noise term into a sum of independent terms:
@@ -645,11 +646,11 @@ We next analyze the pure noise term. When $\ell\neq 0$, we can break the noise t
 %
 Each sum $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, and thus converges to zero almost surely as $N\to\infty$. If $\ell=0$, then we have:
 %
-\begin{equation}
+\begin{equation*}
 %
 \frac{1}{N}\sum_{i=0}^{N-1} \varepsilon^2[i] \xrightarrow{a.s.} \sigma^2.
 %
-\end{equation}
+\end{equation*}
 
 We now analyze the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2\ge0$. We have:
 %
