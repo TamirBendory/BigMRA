@@ -360,7 +360,7 @@ Both the signal  and $\gamma$ are estimated simultaneously from the observed aut
 
 The application of autocorrelation analysis to cryo-EM follows the same mathematical principles.
 The derivation of the first three autocorrelations of the micrographs and their relations to the volume itself are provided in Appendix~\ref{sec:ac_cryo}.
-In particular, numerical evidence suggests that the third-order autocorrelation uniquely determines the 3-D volume. Figure~\ref{fig:cryo_detection} shows recovery of the 3-D volume from the clean autocorrelations. The details of the reconstruction algorithm are given in Appendix~\ref{sec:numeric_details}.
+In particular, numerical evidence suggests that the third-order autocorrelation uniquely determines the 3-D volume. Figure~\ref{fig:cryo_recon} shows recovery of the 3-D volume from the clean autocorrelations. The details of the reconstruction algorithm are given in Appendix~\ref{sec:numeric_details}.
 Unfortunately, the mapping between the autocorrelations and volume seems to be ill-conditioned, preventing recovery from noisy data. 
 In the next section, we outline how we suggest to overcome the ill-conditioning in future work. 
 
@@ -370,32 +370,41 @@ Figure~\ref{fig:cryo_detection} presents excerpts  of two noisy micrographs, onl
 In the presence of projections, the estimated $\gamma$ was $0.12$, corresponding to approximately $6784$ projections. 
 On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise micrograph, corresponding to less than one projection.
 
-\begin{figure*}[h]
+\begin{figure*}[t!]
 	\centering
-	\begin{subfigure}[h]{0.3\textwidth}
+	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[scale=0.4]{pure_noise_micrograph_cutout.eps}
 		\caption{An excerpt of the pure noise micrograph}
 	\end{subfigure} \hspace{2pt}
-	\begin{subfigure}[h]{0.3\textwidth}
+	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[scale=0.4]{noisy_micrograph_cutout.eps}
 		\caption{An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.}
 	\end{subfigure} \hspace{2pt}
-	\begin{subfigure}[h]{0.3\textwidth}
+	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[scale=0.4]{clean_micrograph_cutout.eps}
 		\caption{An excerpt of the clean micrograph}
 	\end{subfigure}
 	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from a volume of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
-		The noise realization is identical in both micrographs. \TODO{The excerpts should be squares: use `axis equal;' -- also, what's going on with the diagonal line on the right panel?} To start }
+		The noise realization is identical in both micrographs. \TODO{Diagonal line}}
 \end{figure*}
 
-\begin{figure}
-    \centering
-    \includegraphics[angle=270, width=0.4\textwidth]{TRPV1_rec.eps}
-    \caption{Reconstruction of the TRPV1 molecule from its clean first 3 autocorrelations. The reconstruction is shown in gray while the ground truth is shown in yellow.}
-    \label{fig:TRPV1_recon}
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[angle=270, width=.7\textwidth]{TRPV1_rec.eps}
+		\caption{TPRV1}\label{fig:TRPV1_recon}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[angle=270, width=.7\textwidth]{BPTI_maxL2_L20.eps}
+		\caption{BPTI}\label{fig:BPTI_recon}
+	\end{subfigure} 
+	\caption{\label{fig:cryo_recon} Reconstructions from the first 3 autocorrelations. The reconstruction is shown in gray while the ground truth is shown in yellow.}
 \end{figure}
 
 \section{Discussion}
@@ -484,8 +493,7 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 
 \paragraph{3-D experiments.}
 
-For the experiment in Figure~\ref{fig:TRPV1_recon}, we computed the analytical first three autocorrelations of the volume as explained in Appendix~\ref{sec:ac_cryo}.
-\TODO{Add more ref to figures, if exist}
+For the experiments in Figure~\ref{fig:cryo_detection}, we computed the analytical first three autocorrelations of the volume as explained in Appendix~\ref{sec:ac_cryo}.
 To estimate the coefficients of the volume itself, we solve the LS problem
 \begin{equation} \label{eq:LS_cryo}
 \min_{\hat{x},\hat{\gamma}} w_1 \vert \mathfrak{a}_x^1 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^1 \vert^2 + w_2\| \mathfrak{a}_x^2 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^2 \|_2^2 + w_3\| \mathfrak{a}_x^3 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^3 \|_F^2, 
@@ -494,9 +502,9 @@ where the explicit expressions of $\mathfrak{a}_x^1$, $\mathfrak{a}_x^2$ and $\m
 In the experiments, we set $w_1=w_2=w_3=1$. 
 The LS problem was solved using Matlab's \texttt{lsqnonlin} solver for nonlinear LS problems. The expected $\hat \gamma$ in this experiment is one.
 
-The true volume used in both experiments was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB) %~\cite{pdb} 
-as 1QLQ\footnote{\url{https://www.rcsb.org}}. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5 \AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. We also present a reconstruction of TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB) %~\cite{emdb} 
-as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has size $192^3$, and we downsample it to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in \eqref{eq:volume_expansion_app} with cutoff $L = 5$. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. Similarly, \TODO{Fill details for BPTI}. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data. \TODO{Tamir: This entire paragraph will be changed a bit once we will have the final figures}
+The true volume used in the experiments in Figures~\ref{fig:cryo_detection} and \ref{fig:BPTI_recon} was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB) %~\cite{pdb} 
+as 1QLQ\footnote{\url{https://www.rcsb.org}}. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5 \AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. For the experiment in Figure~\ref{fig:BPTI_recon}, the volume was downsampled to size $20^3$. For the experiment in Figure~\ref{fig:TRPV1_recon}, we used the TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB) %~\cite{emdb} 
+as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has size $192^3$, and was downsampled to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in \eqref{eq:volume_expansion_app} with cutoff $L = 5$ for TRPV1 and $L = 2$ for BPTI \TODO{Do we need to explain why?}. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. For the BPTI reconstruction, the errors in the autocorrelations were $10^{-6}$, $10^{-7}$ and $10^{-8}$ for the third, second and first autocorrelations, respectively, while the error in the expansion coefficients of the volume was $5\times 10^{-2}$. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data. \TODO{Tamir: This entire paragraph will be changed a bit once we will have the final figures}
 
 The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in~\cite{stewart1980efficient}, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE\footnote{\url{http://spr.math.princeton.edu}}. %\cite{aspire}.
  We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
