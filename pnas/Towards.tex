@@ -354,7 +354,7 @@ Both the signal  and $\gamma$ are estimated simultaneously from the observed aut
 	\includegraphics[scale=0.7]{1D_example}
 	\caption{\label{fig:1D_example} Recovery of a 1-D signal of length $L=21$ at noise level $\sigma = 3$ from $M$ repetitions. The length of the micrograph was set to be $N = 410*M$. The first three panels (left to right) show reconstruction with different $M$ values compared to the ground truth signal (in blue).
 		The true value of $\gamma$ is $0.0512$.
-		   The relative errors of $\gamma$ for the three panels are: $27.1\%,4\%,1.2\%$. The right panel shows the relative error as a function of $M$.  \TODO{Nico: relative error should be logscale? Also, let's pick other colors; if we're running this again anyway, let's also aim for M being powers of 10 in all displayed cases? To run with logspace(3,7,9). We can remove the x-axis}
+		   The relative errors of $\gamma$ for the three panels are: $4.8\%,4\%,1.2\%$. The right panel shows the relative error as a function of $M$. 
 	}
 \end{figure*}
 
@@ -396,15 +396,17 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
 		\includegraphics[angle=270, width=.7\textwidth]{TRPV1_rec.eps}
-		\caption{TPRV1}\label{fig:TRPV1_recon}
+		\caption{TPRV1 with cutoff $L=5$}\label{fig:TRPV1_recon}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
 		\includegraphics[angle=270, width=.7\textwidth]{BPTI_maxL2_L20.eps}
-		\caption{BPTI}\label{fig:BPTI_recon}
+		\caption{BPTI with cutoff $L=2$}\label{fig:BPTI_recon}
 	\end{subfigure} 
-	\caption{\label{fig:cryo_recon} Reconstructions from the first 3 autocorrelations. The reconstruction is shown in gray while the ground truth is shown in yellow.}
+	\caption{\label{fig:cryo_recon} Reconstructions from the first 3 autocorrelations.
+		The ground truth volumes were expanded according to~\eqref{eq:volume_expansion_app} with cutoff $L$.
+		The reconstruction is shown in gray while the (smoothed) ground truth in yellow. }
 \end{figure}
 
 \section{Discussion}
@@ -502,9 +504,9 @@ where the explicit expressions of $\mathfrak{a}_x^1$, $\mathfrak{a}_x^2$ and $\m
 In the experiments, we set $w_1=w_2=w_3=1$. 
 The LS problem was solved using Matlab's \texttt{lsqnonlin} solver for nonlinear LS problems. The expected $\hat \gamma$ in this experiment is one.
 
-The true volume used in the experiments in Figures~\ref{fig:cryo_detection} and \ref{fig:BPTI_recon} was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB) %~\cite{pdb} 
-as 1QLQ\footnote{\url{https://www.rcsb.org}}. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5 \AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. For the experiment in Figure~\ref{fig:BPTI_recon}, the volume was downsampled to size $20^3$. For the experiment in Figure~\ref{fig:TRPV1_recon}, we used the TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB) %~\cite{emdb} 
-as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has size $192^3$, and was downsampled to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in \eqref{eq:volume_expansion_app} with cutoff $L = 5$ for TRPV1 and $L = 2$ for BPTI \TODO{Do we need to explain why?}. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. For the BPTI reconstruction, the errors in the autocorrelations were $10^{-6}$, $10^{-7}$ and $10^{-8}$ for the third, second and first autocorrelations, respectively, while the error in the expansion coefficients of the volume was $5\times 10^{-2}$. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data. \TODO{Tamir: This entire paragraph will be changed a bit once we will have the final figures}
+The true volume used in the experiments in Figures~\ref{fig:cryo_detection} and~\ref{fig:BPTI_recon} was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB) %~\cite{pdb} 
+as 1QLQ\footnote{\url{https://www.rcsb.org}}. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5~\AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. For the experiment in Figure~\ref{fig:BPTI_recon}, the volume was downsampled to size $20^3$. For the experiment in Figure~\ref{fig:TRPV1_recon}, we used the TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB) %~\cite{emdb} 
+as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has size $192^3$, and was downsampled to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in~\eqref{eq:volume_expansion_app} with cutoff $L = 5$ for TRPV1 and $L = 2$ for BPTI. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. For the BPTI reconstruction, the errors in the autocorrelations were $10^{-6}$, $10^{-7}$ and $10^{-8}$ for the third, second and first autocorrelations, respectively, while the error in the expansion coefficients of the volume was $5\times 10^{-2}$. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data.
 
 The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in~\cite{stewart1980efficient}, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE\footnote{\url{http://spr.math.princeton.edu}}. %\cite{aspire}.
  We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
@@ -771,7 +773,7 @@ Finally, if $q < 1/2$, then $\log(b) > 0$ and a similar reasoning shows the prob
 In all cases, the probability of success of the best possible deterministic estimator converges to $\max(q, 1-q)$.
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
-
+\TODO{Need to check the details of the proof one more time}
 We will prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we will work with $\beta = \gamma / L$ rather than $\gamma$ itself. We will construct two quadratic equations satisfied by $\beta$ from observed quantities, independent of $\sigma$. Then, we will show that these equations are independent, and hence that $\beta$ is uniquely defined.  Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
 
 Throughout the proof, it is important to distinguish between observed and unobserved values. 
