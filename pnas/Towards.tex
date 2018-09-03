@@ -281,7 +281,7 @@ almost all signals with the given measurements.
 \begin{proposition} \label{prop:gamma_sigma}
 	%
 	%Let $\sigma > 0$ be fixed. 
-	The observed autocorrelations $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma\geq\frac{L}{4(L-1)}\approx \frac{1}{4}$, then this holds for any signal $x$ with nonzero mean. 
+	The observed autocorrelations $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma\geq \frac{1}{4}$, then this holds for any signal $x$ with nonzero mean. 
 	\begin{proof}
 		See Appendix~\ref{sec:proof_prop_gamma_sigma}.
 	\end{proof}
@@ -293,7 +293,7 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 	 The signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are identifiable from the first three autocorrelation functions of $y$ if:
 	\begin{itemize}
 		\item Either the signal $x$ is generic; or
-		\item   $x$ has nonzero mean  and $\gamma\geq\frac{L}{4(L-1)}$.
+		\item   $x$ has nonzero mean  and $\gamma\geq\frac{1}{4}$.
 	\end{itemize}
 \end{corollary}
 %
@@ -513,6 +513,7 @@ The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} 
 
 \section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
 
+
 %Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
 %We will let the number of instances of the signal $M$ grow with $N$, and write $M=M_N$ to emphasize this.
 We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, so that
@@ -522,6 +523,8 @@ We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, 
 \begin{equation*}
 \gamma := \frac{ML}{N}>0.
 \end{equation*}
+%
+Any vectors with indices out of range are given value 0.
 
 We start by considering the mean of the data:
 \begin{equation*}
@@ -540,11 +543,11 @@ We proceed with the (second-order) autocorrelation for fixed $\ell\in[0,\ldots,L
 a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]
 \nonumber \\
 & = \underbrace{\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}}
-\\ & + \underbrace{\frac{2}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] \varepsilon[s_j + i + \ell]}_{\text{cross-term}}. 
+\\ & + \underbrace{\frac{1}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] (\varepsilon[s_j + i + \ell] + \varepsilon[s_j + i - \ell])}_{\text{cross-term}}. 
 %
 \end{align*}
 
-The cross-terms are linear in the noise, and are easily shown to vanish almost surely in the limit $N\to\infty$, by the strong law of large numbers. As for the signal term, we break it into $M$ different sums, each containing one copy of the signal. This gives:
+The cross-term is linear in the noise, and is easily shown to vanish almost surely in the limit $N\to\infty$, by the strong law of large numbers. We break the signal term into $M$ different sums, each containing one copy of the signal. This gives:
 %
 \begin{align} \label{eq:2nd_moment_signal_term}
 %
@@ -555,13 +558,13 @@ The cross-terms are linear in the noise, and are easily shown to vanish almost s
 
 We next analyze the pure noise term. When $\ell\neq 0$, we can break the noise term into a sum of independent terms:
 %
-\begin{equation}
+\begin{equation*}
 %
-\frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
+\frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
 %
-\end{equation}
+\end{equation*}
 %
-Each sum $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -1} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, and thus converges to zero almost surely as $N\to\infty$. If $\ell=0$, then we have:
+Each sum $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, hence converges to zero almost surely as $N\to\infty$. If $\ell=0$, then we have:
 %
 \begin{equation*}
 %
@@ -589,10 +592,10 @@ We now analyze the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2\ge0
 &+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
 	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_2]\ep[s_j+i+\ell_1-\ell_2]x[i]}_{(5)}
 \\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i]x[i+\ell_1-\ell_2]x[i]}_{(6)}
+	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i-\ell_2]x[i+\ell_1-\ell_2]x[i]}_{(6)}
 \nonumber \\
 &+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[s_j+ i+\ell_2]}_{(7)}
+	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[i+\ell_2]}_{(7)}
 \\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
 	\sum_{i=0}^{L-\ell_1-1} x[i]x[i+\ell_1]\ep[s_j+ i+\ell_2]}_{(8)}.
 %
@@ -610,7 +613,7 @@ Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge 
 \sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]
 \nonumber \\
 &= \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-1}x[i] \frac{1}{M}\sum_{j=1}^{M} \ep[s_j+i-\ell_1]^2
-\\& \xrightarrow{N\to\infty} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2. \nonumber
+\\& \xrightarrow{a.s.} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2. \nonumber
 %
 \end{align*}
 
@@ -621,6 +624,7 @@ Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge 
 This completes the proof.
 
 \section{Proof of Proposition~\ref{prop:two_gauss}} \label{sec:proof_two_gauss}
+
 
 The proof is based on  a variant of the Neyman--Pearson Lemma to derive the best (deterministic) estimator $\hat{\eta}$. We take any estimator $\hat{\eta}$, and we let $S$ be the set of $X$'s where $\hat{\eta} = 1$. We write $\P_i$ to mean the probability conditional on the event $\eta = i$; that is, $\P_i[A] = \P[A | \eta = i]$. Then, the probability that $\hat{\eta}$ fails is:
 %
@@ -672,7 +676,7 @@ or equivalently
 %
 \end{align*}
 %
-Now let us compute the probability of failure conditional on the event $\eta = 0$. In this case, failure occurs when $X \in S$. Since $X|(\eta=0) \sim N(\theta_0,\sigma^2)$, we can write $X | (\eta=0) = \sigma Z + \theta_0$, where $Z \sim N(0,1)$. On that condition,
+Now let us compute the probability of failure conditional on the event $\eta = 0$. In this case, failure occurs when $X \in S$. Since $X|(\eta=0) \sim N(\theta_0,\sigma^2)$, we can write $X | (\eta=0) = \sigma Z + \theta_0$, where $Z \sim N(0,I)$. On that condition,
 %
 \begin{align*}
 %
@@ -729,7 +733,7 @@ Thus, the overall probability of failure is:
 \begin{multline*}
 %
 \P[\hat{\eta} \ne \eta] = q \P\left[Y \ge \frac{c}{\sigma} - \sigma \log(b) \right] \\
-  + (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right].
++ (1-q) \P\left[Y \ge \frac{c}{\sigma} + \sigma \log(b) \right].
 %\
 \end{multline*}
 %
@@ -773,7 +777,6 @@ Finally, if $q < 1/2$, then $\log(b) > 0$ and a similar reasoning shows the prob
 In all cases, the probability of success of the best possible deterministic estimator converges to $\max(q, 1-q)$.
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
-\TODO{Need to check the details of the proof one more time}
 We will prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we will work with $\beta = \gamma / L$ rather than $\gamma$ itself. We will construct two quadratic equations satisfied by $\beta$ from observed quantities, independent of $\sigma$. Then, we will show that these equations are independent, and hence that $\beta$ is uniquely defined.  Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
 
 Throughout the proof, it is important to distinguish between observed and unobserved values. 
@@ -784,21 +787,21 @@ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ stands for vector of 
 \begin{equation}\label{eq:E1}
 \begin{split}
 E_1 &:= a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2) \\
-& = \sigma^2a_y^1 + \beta^2F_1,
+& = \sigma^2a_y^1 + L\beta^2F_1,
 \end{split}
 \end{equation}
 where $F_1 := a_x^3[0,0] + \sum_{j=1}^{L-1}(a_x^3[j,j] + a_x^3[0,j])$. 
 The terms of $F_1$ can be also estimated from $a_y^3$, while taking the scaling and bias terms into account:
 \begin{equation} \label{eq:E2}
-E_2:= \beta F_1 + (2L+1)\sigma^2a_y^1.
+E_2:= L\beta F_1 + (2L+1)\sigma^2a_y^1.
 \end{equation}
 Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get
 \begin{equation} \label{eq:E12}
 E_2\beta -(2L+1)\sigma^2\beta a_y^1 = E_1-\sigma^2a_y^1.
 \end{equation}
-Let $a_y^2:=a_y^2[0] + 2\sum_{j = 1}^{L-1}a_y^2[j]$ and recall from Proposition~\ref{prop:gamma}:
+Let $E_3:=a_y^2[0] + 2\sum_{j = 1}^{L-1}a_y^2[j]$ and recall from Proposition~\ref{prop:gamma}:
 \begin{equation} \label{eq:sigma2}
-\sigma^2 = a_y^2 - (a^1_y)^2/\beta. 
+\sigma^2 = E_3 - (a^1_y)^2/\beta. 
 \end{equation} 
 Plugging into~\eqref{eq:E12} and rearranging we get 
 \begin{equation} \label{eq:quad1}
@@ -806,15 +809,15 @@ Plugging into~\eqref{eq:E12} and rearranging we get
 \end{equation}
 where 
 \begin{align*}
-\mathcal{A} &= E_2 - (2L+1)a_y^1a_y^2, \\ 
-\mathcal{B} &= -E_1 + (2L+1)(a_y^1)^3 + a_y^1a_y^2  , \\
+\mathcal{A} &= E_2 - (2L+1)a_y^1E_3, \\ 
+\mathcal{B} &= -E_1 + (2L+1)(a_y^1)^3 + a_y^1E_3  , \\
 \mathcal{C} &= -(a_y^1)^3.
 \end{align*}
 Importantly, these coefficients are observable quantities. 
 
-We are now proceeding to derive the second quadratic equation. We notice that 
+Next, we derive the second quadratic equation for $\beta$. We notice that 
 \begin{equation} \label{eq:E3}
-E_3  = \frac{1}{L}(a_y^1)^3 = \frac{1}{L}\beta^3 (\one ^Tx)^3   = \frac{1}{L}\beta^3 F_2,
+E_4  = \frac{1}{L}(a_y^1)^3 = \frac{1}{L}\beta^3 (\one ^Tx)^3   = \beta^3 F_2,
 \end{equation}
 where 
 \begin{equation*}
@@ -822,15 +825,15 @@ F_2 =  a_x^3[0,0] + 3\sum_{j=1}^{L-1}a_x^3[j,j] + 3\sum_{j=1}^{L-1}a_x^3[0,j] + 
 \end{equation*}
 On the other hand, from $a_y^3$ we can directly estimate $F_2$ up to scale and bias
 \begin{equation*} \label{eq:E4}
-E_4 = \beta F_2 + (6L-3)\sigma^2a_y^1.
+E_5 = L \beta F_2 + (6L-3)\sigma^2a_y^1.
 \end{equation*}
 Taking the ratio:
 \begin{equation*} 
-\frac{E_4}{E_3} = \frac{L}{\beta^2} + \frac{(6L-3)L\sigma^2a_y^1}{E_3}, 
+\frac{E_5}{E_4} = \frac{L}{\beta^2} + \frac{(6L-3)\sigma^2a_y^1}{E_4}, 
 \end{equation*}
 we conclude:
 \begin{equation*}
-\sigma^2 = \frac{E_4}{a_y^1L(6L-3)}  - \frac{E_3}{\beta^2a_y^1(6L-3)}.
+\sigma^2 = \frac{E_5}{a_y^1(6L-3)}  - \frac{LE_4}{\beta^2a_y^1(6L-3)}.
 \end{equation*}
 Using~\eqref{eq:sigma2} and rearranging we get the second quadratic:
 \begin{equation} \label{eq:quad2}
@@ -838,37 +841,36 @@ Using~\eqref{eq:sigma2} and rearranging we get the second quadratic:
 \end{equation}
 where
 \begin{align*}
-\mathcal{D} &= a_y^2 - \frac{E_4}{a_y^1L(6L-3)}, \\ 
+\mathcal{D} &= E_3 - \frac{E_5}{a_y^1(6L-3)}, \\ 
 \mathcal{E} &= -(a_y^1)^2, \\
-\mathcal{F} &= \frac{E_3}{a_y^1(6L-3)}.
+\mathcal{F} &= \frac{LE_4}{a_y^1(6L-3)}.
 \end{align*}
 
 To complete the proof, we need to show that the two quadratic equations~\eqref{eq:quad1} and~\eqref{eq:quad2} are independent. To this end, it is enough to show that the ratio between the coefficients is not the same. 
 From~\eqref{eq:quad1} and~\eqref{eq:E1}, we have 
 \begin{equation*}
 \begin{split}
-\frac{\mathcal{B}}{\mathcal{C}} &= \frac{LE_1 - (2L+1)(a_y^1)^3 - La_y^1a_y^2}{(a_y^1)^3} \\&= \frac{La_y^2[0] - (2L+1)(a_y^1)^2 - La_y^2}{(a_y^1)^2}.
+\frac{\mathcal{B}}{\mathcal{C}} &= \frac{E_1 - (2L+1)(a_y^1)^3 - a_y^1E_3}{(a_y^1)^3} \\&= \frac{a_y^2[0] - (2L+1)(a_y^1)^2 - E_3}{(a_y^1)^2}.
 \end{split}
 \end{equation*}
 In addition, using~\eqref{eq:E3}
 \begin{equation*}
-\frac{\mathcal{E}}{\mathcal{F}} = \frac{(3-6L)(a_y^1)^3}{LE_3} = 3 - 6L . 
+\frac{\mathcal{E}}{\mathcal{F}} = \frac{(3-6L)(a_y^1)^3}{LE_4} = 3 - 6L . 
 \end{equation*}
 
 Now, suppose that the quadratics are dependent. Then, $\frac{\mathcal{B}}{\mathcal{C}} =\frac{\mathcal{E}}{\mathcal{F}} $, or, 	
 \begin{equation*}
-La_y^2[0] - (2L+1)(a_y^1)^2 - La_y^2 = (a_y^1)^2(3-6L).
+a_y^2[0] - (2L+1)(a_y^1)^2 - E_3 = (a_y^1)^2(3-6L).
 \end{equation*}
 Rearranging the equation and writing in terms of $x$ we get 
 \begin{equation} \label{eq:cond}
-4(L-1)\beta (a_x^1)^2  - \sum_{i=1}^{L-1} a_x^2[i] = 0.
+4(L-1)\beta (\1^\top x)^2  - (\1^\top x)^2 + \|x\|^2 = 0.
 \end{equation}	
-For generic $x$,  this polynomial equation is not satisfied. Therefore,  the equations are independent. 
-More than that, for any nonzero $x$, $(a_x^1)^2 >\sum_{i=1}^{L-1} a_x^2[i]$. Therefore, if $4(L-1)\beta \geq 1$, or,
+For generic $x$,  this polynomial equation is not satisfied and the equations are independent. 
+Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immediately that the equations must be independent so long as
 \begin{equation*}
-\beta \geq \frac{1}{4(L-1)},
+\beta \geq \frac{1}{4L}.
 \end{equation*}
-the condition~\eqref{eq:cond} cannot be satisfied for any signal. 
 
 \section{Autocorrelations of the cryo-EM problem} \label{sec:ac_cryo}
 
