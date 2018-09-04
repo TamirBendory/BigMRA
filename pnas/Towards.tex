@@ -269,7 +269,7 @@ First, we observe that if the noise level $\sigma$ is known, generally, one can 
 	%
 \end{proposition}
 \begin{proof}
-In the limit, $(a^1_y)^2=\frac{\gamma^2}{L^2}\sum_{i=0}^{L-1}x[i]x[j]$.  Similarly,  $\sum_{\ell = 1}^{L-1}a_y^2[\ell]=\frac{\gamma}{L}\sum_{\ell = 1}^{L-1}\sum_{i=0}^{L-1-\ell}x[i]x[i+\ell]$ and $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x^2[i] + \sigma^2$. The proof is concluded by noting that  $a_x^2[-\ell]=a_x^2[\ell]$. 
+In the limit, $(a^1_y)^2=\frac{\gamma^2}{L^2}\sum_{i=0}^{L-1}x[i]x[j]$. \TODO{In the previous equation, index $j$ is unaccounted for} Similarly,  $\sum_{\ell = 1}^{L-1}a_y^2[\ell]=\frac{\gamma}{L}\sum_{\ell = 1}^{L-1}\sum_{i=0}^{L-1-\ell}x[i]x[i+\ell]$ and $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x^2[i] + \sigma^2$. The proof is concluded by noting that  $a_x^2[-\ell]=a_x^2[\ell]$. 
 %	Plug in the explicit expressions of~\eqref{eq:mean_micrograph} and~\eqref{eq:ac2_micrograph} into the right hand side of the equality.
 \end{proof}
 
@@ -777,13 +777,15 @@ Finally, if $q < 1/2$, then $\log(b) > 0$ and a similar reasoning shows the prob
 In all cases, the probability of success of the best possible deterministic estimator converges to $\max(q, 1-q)$.
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
-We will prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we will work with $\beta = \gamma / L$ rather than $\gamma$ itself. We will construct two quadratic equations satisfied by $\beta$ from observed quantities, independent of $\sigma$. Then, we will show that these equations are independent, and hence that $\beta$ is uniquely defined.  Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
+
+\TODO{Nicolas: I'm pretty sure this proof assumes $L \geq 3$: let's add it as an assumption in the prop.}
+
+We will prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we will work with $\beta = \gamma / L$ rather than $\gamma$ itself. We will construct two quadratic equations satisfied by $\beta$ from observed quantities, \TODO{independent of $\sigma$---they're not independent of $\sigma$; did you mean `independently'?}. Then, we will show that these equations are independent, and hence that $\beta$ is uniquely defined.  Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
 
 Throughout the proof, it is important to distinguish between observed and unobserved values. 
 We denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$, while using $F_i$ for functions of the signal's autocorrelations. 
 
-Recall that $a_y^1 = \beta(\one^Tx)$ and  
-and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ stands for vector of ones. Taking the product:
+Recall that $a_y^1 = \beta(\one^Tx)$ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, \TODO{the latter statements are only true in expectation, or almost surely in the limit though; should revise whole proof accordingly} where $\one\in\RL$ is the vector of all-ones. Taking the product:
 \begin{equation}\label{eq:E1}
 \begin{split}
 E_1 &:= a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2) \\
@@ -791,10 +793,13 @@ E_1 &:= a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2) \\
 \end{split}
 \end{equation}
 where $F_1 := a_x^3[0,0] + \sum_{j=1}^{L-1}(a_x^3[j,j] + a_x^3[0,j])$. 
-The terms of $F_1$ can be also estimated from $a_y^3$, while taking the scaling and bias terms into account:
-\begin{equation} \label{eq:E2}
-E_2:= L\beta F_1 + (2L+1)\sigma^2a_y^1.
-\end{equation}
+% Nicolas: the expression for F_1 is correct, see identifiability_of_gamma_and_sigma_Sep4_2018.m and notes Sep 4, 2018
+The terms of $F_1$ can be also estimated from $a_y^3$, while taking the scaling and bias terms into account. This yields another observable:
+\begin{align} 
+E_2 & := a_y^3[0,0] + \sum_{j=1}^{L-1}(a_y^3[j,j] + a_y^3[0,j]) \nonumber\\
+	& = L\beta F_1 + (2L+1)\sigma^2a_y^1. \label{eq:E2}
+\end{align}
+% Nicolas: checked this one too.
 Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get
 \begin{equation} \label{eq:E12}
 E_2\beta -(2L+1)\sigma^2\beta a_y^1 = E_1-\sigma^2a_y^1.
@@ -803,7 +808,7 @@ Let $E_3:=a_y^2[0] + 2\sum_{j = 1}^{L-1}a_y^2[j]$ and recall from Proposition~\r
 \begin{equation} \label{eq:sigma2}
 \sigma^2 = E_3 - (a^1_y)^2/\beta. 
 \end{equation} 
-Plugging into~\eqref{eq:E12} and rearranging we get 
+Plugging into~\eqref{eq:E12} and rearranging we get a first quadratic equation in $\beta$,
 \begin{equation} \label{eq:quad1}
 \mathcal{A}\beta^2 + \mathcal{B}\beta + \mathcal{C} = 0,
 \end{equation}
@@ -814,10 +819,11 @@ where
 \mathcal{C} &= -(a_y^1)^3.
 \end{align*}
 Importantly, these coefficients are observable quantities. 
+% Nicolas, Sep 4 2018: everything checked and correct until here.
 
 Next, we derive the second quadratic equation for $\beta$. We notice that 
 \begin{equation} \label{eq:E3}
-E_4  = \frac{1}{L}(a_y^1)^3 = \frac{1}{L}\beta^3 (\one ^Tx)^3   = \beta^3 F_2,
+E_4 := \frac{1}{L}(a_y^1)^3 = \frac{1}{L}\beta^3 (\one ^Tx)^3   = \beta^3 F_2,
 \end{equation}
 where 
 \begin{equation*}
@@ -825,7 +831,7 @@ F_2 =  a_x^3[0,0] + 3\sum_{j=1}^{L-1}a_x^3[j,j] + 3\sum_{j=1}^{L-1}a_x^3[0,j] + 
 \end{equation*}
 On the other hand, from $a_y^3$ we can directly estimate $F_2$ up to scale and bias
 \begin{equation*} \label{eq:E4}
-E_5 = L \beta F_2 + (6L-3)\sigma^2a_y^1.
+E_5 := L \beta F_2 + (6L-3)\sigma^2a_y^1.
 \end{equation*}
 Taking the ratio:
 \begin{equation*} 
