@@ -269,7 +269,7 @@ First, we observe that if the noise level $\sigma$ is known, generally, one can 
 	%
 \end{proposition}
 \begin{proof}
-In the limit, $(a^1_y)^2=\frac{\gamma^2}{L^2}\sum_{i=0}^{L-1}x[i]x[j]$. \TODO{In the previous equation, index $j$ is unaccounted for} Similarly,  $\sum_{\ell = 1}^{L-1}a_y^2[\ell]=\frac{\gamma}{L}\sum_{\ell = 1}^{L-1}\sum_{i=0}^{L-1-\ell}x[i]x[i+\ell]$ and $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x^2[i] + \sigma^2$. The proof is concluded by noting that  $a_x^2[-\ell]=a_x^2[\ell]$. 
+In the limit, $(a^1_y)^2=\frac{\gamma^2}{L^2}\sum_{i=0}^{L-1}\sum_{j=0}^{L-1}x[i]x[j]$. Similarly,  $\sum_{\ell = 1}^{L-1}a_y^2[\ell]=\frac{\gamma}{L}\sum_{\ell = 1}^{L-1}\sum_{i=0}^{L-1-\ell}x[i]x[i+\ell]$ and $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x^2[i] + \sigma^2$. The proof is concluded by noting that  $a_x^2[-\ell]=a_x^2[\ell]$. 
 %	Plug in the explicit expressions of~\eqref{eq:mean_micrograph} and~\eqref{eq:ac2_micrograph} into the right hand side of the equality.
 \end{proof}
 
@@ -281,7 +281,8 @@ almost all signals with the given measurements.
 \begin{proposition} \label{prop:gamma_sigma}
 	%
 	%Let $\sigma > 0$ be fixed. 
-	The observed autocorrelations $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma\geq \frac{1}{4}$, then this holds for any signal $x$ with nonzero mean. 
+	Assume $L \geq 3$. % Added by Nicolas, Sep 4, 2018: I checked all identities for L >= 3, with some computer code; I didn't write code to verify the corner cases L = 1 and L = 2.
+	The observed autocorrelations $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma > \frac{1}{4}$, then this holds for any signal $x$ with nonzero mean. 
 	\begin{proof}
 		See Appendix~\ref{sec:proof_prop_gamma_sigma}.
 	\end{proof}
@@ -293,7 +294,7 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we can direct
 	 The signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are identifiable from the first three autocorrelation functions of $y$ if:
 	\begin{itemize}
 		\item Either the signal $x$ is generic; or
-		\item   $x$ has nonzero mean  and $\gamma\geq\frac{1}{4}$.
+		\item   $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
 	\end{itemize}
 \end{corollary}
 %
@@ -778,14 +779,14 @@ In all cases, the probability of success of the best possible deterministic esti
 
 \section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
-\TODO{Nicolas: I'm pretty sure this proof assumes $L \geq 3$: let's add it as an assumption in the prop.}
+%\TODO{Nicolas: I'm pretty sure this proof assumes $L \geq 3$: let's add it as an assumption in the prop. It also very clearly requires nonzero mean because of division by $E_4$, but we say that already.}
 
-We will prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we will work with $\beta = \gamma / L$ rather than $\gamma$ itself. We will construct two quadratic equations satisfied by $\beta$ from observed quantities, \TODO{independent of $\sigma$---they're not independent of $\sigma$; did you mean `independently'?}. Then, we will show that these equations are independent, and hence that $\beta$ is uniquely defined.  Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
+We prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we work with $\beta = \gamma / L$ rather than $\gamma$ itself. To this end, we construct two quadratic equations satisfied by $\beta$ and whose coefficients can be computed from observable quantities (in the limit). Then, we show that these equations are independent, and hence that $\beta$ is uniquely defined. Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
 
-Throughout the proof, it is important to distinguish between observed and unobserved values. 
-We denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$, while using $F_i$ for functions of the signal's autocorrelations. 
+Throughout the proof, it is important to distinguish between observed and unobserved values.
+We denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$. We use $F_i$ to denote functions of the signal's autocorrelations (which are not directly observable).
 
-Recall that $a_y^1 = \beta(\one^Tx)$ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, \TODO{the latter statements are only true in expectation, or almost surely in the limit though; should revise whole proof accordingly} where $\one\in\RL$ is the vector of all-ones. Taking the product:
+In the limit $N \to \infty$, almost surely, $a_y^1 = \beta(\one^Tx)$ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ is the vector of all-ones. (In this whole section, for clarity, we now omit to specify that identities hold almost surely in the limit.) Consider the product:
 \begin{equation}\label{eq:E1}
 \begin{split}
 E_1 &:= a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2) \\
@@ -794,21 +795,21 @@ E_1 &:= a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2) \\
 \end{equation}
 where $F_1 := a_x^3[0,0] + \sum_{j=1}^{L-1}(a_x^3[j,j] + a_x^3[0,j])$. 
 % Nicolas: the expression for F_1 is correct, see identifiability_of_gamma_and_sigma_Sep4_2018.m and notes Sep 4, 2018
-The terms of $F_1$ can be also estimated from $a_y^3$, while taking the scaling and bias terms into account. This yields another observable:
+The terms of $F_1$ can also be estimated from $a_y^3$, while taking the scaling and bias terms into account. This yields another observable:
 \begin{align} 
 E_2 & := a_y^3[0,0] + \sum_{j=1}^{L-1}(a_y^3[j,j] + a_y^3[0,j]) \nonumber\\
 	& = L\beta F_1 + (2L+1)\sigma^2a_y^1. \label{eq:E2}
 \end{align}
 % Nicolas: checked this one too.
-Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get
+Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get:
 \begin{equation} \label{eq:E12}
 E_2\beta -(2L+1)\sigma^2\beta a_y^1 = E_1-\sigma^2a_y^1.
 \end{equation}
-Let $E_3:=a_y^2[0] + 2\sum_{j = 1}^{L-1}a_y^2[j]$ and recall from Proposition~\ref{prop:gamma}:
+Let $E_3:=a_y^2[0] + 2\sum_{j = 1}^{L-1}a_y^2[j]$; recall from Proposition~\ref{prop:gamma}:
 \begin{equation} \label{eq:sigma2}
 \sigma^2 = E_3 - (a^1_y)^2/\beta. 
 \end{equation} 
-Plugging into~\eqref{eq:E12} and rearranging we get a first quadratic equation in $\beta$,
+Plugging into~\eqref{eq:E12} and rearranging, we get a first quadratic equation in $\beta$,
 \begin{equation} \label{eq:quad1}
 \mathcal{A}\beta^2 + \mathcal{B}\beta + \mathcal{C} = 0,
 \end{equation}
@@ -818,30 +819,31 @@ where
 \mathcal{B} &= -E_1 + (2L+1)(a_y^1)^3 + a_y^1E_3  , \\
 \mathcal{C} &= -(a_y^1)^3.
 \end{align*}
-Importantly, these coefficients are observable quantities. 
-% Nicolas, Sep 4 2018: everything checked and correct until here.
+Importantly, these coefficients are observable quantities. As we assume throughout this proof that $x$ has nonzero mean, $a_y^1 \neq 0$ and we conclude that this equation is non-trivial.
 
 Next, we derive the second quadratic equation for $\beta$. We notice that 
 \begin{equation} \label{eq:E3}
 E_4 := \frac{1}{L}(a_y^1)^3 = \frac{1}{L}\beta^3 (\one ^Tx)^3   = \beta^3 F_2,
 \end{equation}
-where 
+where $F_2 = \frac{1}{L}(\one ^Tx)^3$, and we can work out that:
 \begin{equation*}
-F_2 =  a_x^3[0,0] + 3\sum_{j=1}^{L-1}a_x^3[j,j] + 3\sum_{j=1}^{L-1}a_x^3[0,j] + 6\sum_{1\leq i < j\leq L-1}a_x^3[i,j].
+F_2 = a_x^3[0,0] + 3\sum_{j=1}^{L-1} \left(a_x^3[j,j] + a_x^3[0,j]\right) + 6\sum_{1\leq i < j\leq L-1}a_x^3[i,j].
+% Nicolas: checked this formula with the matlab code on Sep 4, 2018: it's correct
 \end{equation*}
-On the other hand, from $a_y^3$ we can directly estimate $F_2$ up to scale and bias
-\begin{equation*} \label{eq:E4}
-E_5 := L \beta F_2 + (6L-3)\sigma^2a_y^1.
-\end{equation*}
-Taking the ratio:
+Once again, $F_2$ can be estimated from $a_y^3$, taking bias and scaling into account:
+\begin{align}
+	E_5 & := a_y^3[0,0] + 3\sum_{j=1}^{L-1} \left(a_y^3[j,j] + a_y^3[0,j]\right) + 6\sum_{1\leq i < j\leq L-1}a_y^3[i,j] \nonumber \\
+		& = L \beta F_2 + (6L-3)\sigma^2a_y^1.
+\end{align}
+Consider the following ratio:
 \begin{equation*} 
-\frac{E_5}{E_4} = \frac{L}{\beta^2} + \frac{(6L-3)\sigma^2a_y^1}{E_4}, 
+\frac{E_5}{E_4} = \frac{L}{\beta^2} + \frac{(6L-3)\sigma^2a_y^1}{E_4}.
 \end{equation*}
-we conclude:
+From the latter, we deduce:
 \begin{equation*}
 \sigma^2 = \frac{E_5}{a_y^1(6L-3)}  - \frac{LE_4}{\beta^2a_y^1(6L-3)}.
 \end{equation*}
-Using~\eqref{eq:sigma2} and rearranging we get the second quadratic:
+Using~\eqref{eq:sigma2} and rearranging, we get the second quadratic:
 \begin{equation} \label{eq:quad2}
 \mathcal{D}\beta^2 + \mathcal{E}\beta + \mathcal{F} = 0,
 \end{equation}
@@ -851,31 +853,32 @@ where
 \mathcal{E} &= -(a_y^1)^2, \\
 \mathcal{F} &= \frac{LE_4}{a_y^1(6L-3)}.
 \end{align*}
+It is also non-trivial since $E_4 \neq 0$.
 
-To complete the proof, we need to show that the two quadratic equations~\eqref{eq:quad1} and~\eqref{eq:quad2} are independent. To this end, it is enough to show that the ratio between the coefficients is not the same. 
-From~\eqref{eq:quad1} and~\eqref{eq:E1}, we have 
+To complete the proof, we need to show that the two quadratic equations~\eqref{eq:quad1} and~\eqref{eq:quad2} are independent. To this end, it is enough to show that the ratios between coefficients differ. 
+From~\eqref{eq:quad1} and~\eqref{eq:E1}, we have:
 \begin{equation*}
 \begin{split}
 \frac{\mathcal{B}}{\mathcal{C}} &= \frac{E_1 - (2L+1)(a_y^1)^3 - a_y^1E_3}{(a_y^1)^3} \\&= \frac{a_y^2[0] - (2L+1)(a_y^1)^2 - E_3}{(a_y^1)^2}.
 \end{split}
 \end{equation*}
-In addition, using~\eqref{eq:E3}
+In addition, using~\eqref{eq:E3},
 \begin{equation*}
 \frac{\mathcal{E}}{\mathcal{F}} = \frac{(3-6L)(a_y^1)^3}{LE_4} = 3 - 6L . 
 \end{equation*}
-
-Now, suppose that the quadratics are dependent. Then, $\frac{\mathcal{B}}{\mathcal{C}} =\frac{\mathcal{E}}{\mathcal{F}} $, or, 	
+For contradiction, suppose that the quadratics are dependent. Then, $\frac{\mathcal{B}}{\mathcal{C}} =\frac{\mathcal{E}}{\mathcal{F}} $, that is, 	
 \begin{equation*}
 a_y^2[0] - (2L+1)(a_y^1)^2 - E_3 = (a_y^1)^2(3-6L).
 \end{equation*}
-Rearranging the equation and writing in terms of $x$ we get 
+Rewriting the identity in terms of $x$ and dividing by $\beta$ we get:
 \begin{equation} \label{eq:cond}
 4(L-1)\beta (\1^\top x)^2  - (\1^\top x)^2 + \|x\|^2 = 0.
 \end{equation}	
-For generic $x$,  this polynomial equation is not satisfied and the equations are independent. 
+% Nicolas, Sep 4 2018: everything checked and correct until here.
+For generic $x$,  this polynomial equation is not satisfied so that the quadratic equations are independent. 
 Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immediately that the equations must be independent so long as
 \begin{equation*}
-\beta \geq \frac{1}{4L}.
+\beta > \frac{1}{4L}.
 \end{equation*}
 
 \section{Autocorrelations of the cryo-EM problem} \label{sec:ac_cryo}

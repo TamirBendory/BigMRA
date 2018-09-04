@@ -1,6 +1,6 @@
 function identifiability_of_gamma_and_sigma_Sep4_2018()
 % See notes Sep 4, 2018, NB36
-L = 10;
+L = 3;
 labels = zeros(L^3, 3);
 counter = 0;
 for k1 = 0 : L-1
@@ -41,7 +41,7 @@ for k1 = 0 : L-1
         counter = counter + 1;
         % Setup linear combination corresponding to a_x^3[k1, k2]
         for j = max([0, -k1, -k2]) : (L-1+min([0, -k1, -k2]))
-            A(linear_index(j, j+k1, j+k2), counter) = 1;
+            A(linear_index(j, j+k1, j+k2), counter) = 1/L;
         end
     end
 end
@@ -51,7 +51,15 @@ end
 b = zeros(nlabels, 1);
 for k1 = 0 : L-1
     for k2 = 0 : L-1
-        b(linear_index(k1, k1, k2)) = L;
+        
+        % To check F1, activate this line
+        % b(linear_index(k1, k1, k2)) = b(linear_index(k1, k1, k2)) + 1;
+        
+        % To check F2, activate these three lines
+        for k3 = 0 : L-1
+            b(linear_index(k1, k2, k3)) = b(linear_index(k1, k2, k3)) + 1/L;
+        end
+        
     end
 end
 
@@ -67,6 +75,6 @@ for k1 = 0 : L-1
     end
 end
 
-
+imagesc(0:L-1, 0:L-1, reshape(x, L, L)); colorbar;
 
 end
