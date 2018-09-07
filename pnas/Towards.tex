@@ -25,13 +25,14 @@
 \leadauthor{Bendory} 
 
 % Please add here a significance statement to explain the relevance of your work
-\significancestatement{A common states that small molecules cannot be reconstructed using cryo-EM. In this paper, we show that this argument is flaw and show }
+\significancestatement{It is commonly believed that cryo-EM cannot be used to image the 3-D structure of small molecules (below ~50kDa). The classical argument is that, due to the high noise levels in cryo-EM, small particles cannot be detected reliably in micrographs. Challenging that belief, we demonstrate on a mathematical toy model that detection is not a prerequisite for structure reconstruction. Our reconstruction method is based on autocorrelation analysis. It requires only one pass over the data, so that it should, in principle, be appropriate for high-throughput experiments. This autocorrelation approach could also apply to other applications where the goal is estimation rather than detection.
+}
 
 % Please include corresponding author, author contribution and author declaration information
 \authorcontributions{Please provide details of author contributions here. \revised{Let's leave it open for now} }
 \authordeclaration{The authors declare no conflicts of interest.}
 %\equalauthors{\textsuperscript{1}A.O.(Author One) and A.T. (Author Two) contributed equally to this work (remove if not applicable).}
-\correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: author.two\@email.com}
+\correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: tamir.bendory@princeton.edu}
 
 % Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
 \keywords{Keyword 1 $|$ Keyword 2 $|$ Keyword 3 $|$ ...} 
@@ -437,7 +438,9 @@ This suggests that fourth-order autocorrelation may be necessary. This in turn w
 
 Beyond data acquisition and computational challenges, there are modeling issues to consider.
 As stated, our approach relies on two core assumptions that are not necessarily verified in SPR experiments.
-First, we assume an additive white noise model, while in practice the noise may be correlated or signal dependent. To address this point, it may be necessary to investigate better noise models and to incorporate power spectrum estimation methods. % and to extend the autocorrelation analysis accordingly. 
+First, we assume an additive white noise model, while in practice the noise may be colored.
+In that case, the general strategy would remain the same: establish a forward model expressing the expected autocorrelations of the micrographs in terms of the target volume, its density in the micrograph and the noise statistics (which would now involve more than the single parameter $\sigma^2$).
+%To address this point, it may be necessary to investigate better noise models and to incorporate power spectrum estimation methods. % and to extend the autocorrelation analysis accordingly. 
 Second, we assume that any two particles are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the 3-D volume. 
 We believe that this constraint could be replaced by a probabilistic condition on the average number of projections per micrograph.  
 %Such a condition can be met in practice by careful experimental design. 
@@ -445,13 +448,16 @@ We believe that this constraint could be replaced by a probabilistic condition o
 We also note several aspects of SPR experiments that were neglected in this paper, including contrast transfer function (CTF), non-uniformly distributed viewing directions and other contaminants in the micrographs, such as ice crystals.
  All these aspects must be taken into account so the method could be applied on real data. We hope to take care of these issues in future research, as well as to extend the proposed method to conformational heterogeneity. 
 
-\section*{Acknowledgment}
-The authors  thank Ayelet Heimowitz, Joe Kileel,  Roy Lederman, Amit Moscovich and Nir Sharon for helpful discussions, Fred Sigworth for supplying us with the dataset of the BPTI molecule,  and Boris Landa and Yoel Shkolnisky for providing the code for the 2-D PSWFs expansion.
- The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.\revised{Amit: to verify.} NB is partially supported by NSF award DMS-1719558.
-\TODO{Correct bib}
-
+\
 % Bibliography
 \bibliography{ref}
+
+\section*{Acknowledgment}
+The authors  thank Ayelet Heimowitz, Joe Kileel,  Roy Lederman, Amit Moscovich and Nir Sharon for helpful discussions, Fred Sigworth for supplying us with the dataset of the BPTI molecule,  and Boris Landa and Yoel Shkolnisky for providing the code for the 2-D PSWFs expansion.
+The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.
+\revised{Amit: to verify.} NB is partially supported by NSF award DMS-1719558.
+\TODO{Correct bib}
+
 
 \appendix
 
