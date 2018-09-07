@@ -437,18 +437,15 @@ The numerical experiments we have performed reveal that the third-order autocorr
 This suggests that fourth-order autocorrelation may be necessary. This in turn would imply that the procedure might require a large amount of data.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable SNR remains an open question.} Recent trends in high-throughput cryo-EM technology   give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved accurately and efficiently in practice. 
 
 Beyond data acquisition and computational challenges, there are modeling issues to consider.
-As stated, our approach relies on two core assumptions that are not necessarily verified in SPR experiments.
-First, we assume an additive white noise model, while in practice the noise may be colored.
-In that case, the general strategy would remain the same: establish a forward model expressing the expected autocorrelations of the micrographs in terms of the target volume, its density in the micrograph and the noise statistics (which would now involve more than the single parameter $\sigma^2$).
+In contrast to the simplifying assumptions we have made above, the noise might be colored; the viewing directions of the particles may be distributed non-uniformly; their may be conformational heterogeneity; particles generally do not satisfy our separation condition; and micrographs undergo a contrast transfer function which we have omitted. All of these aspects can be handled with the same general strategy: establish a forward model relating the expected autocorrelations of the micrographs to the target volume(s) and all parameters necessary to model the above effects. For instance, for colored noise, the forward model may involve multiple parameters to capture the power spectrum of the noise instead of the single parameter $\sigma^2$. The separation condition could be relaxed by assuming a Poisson process of particle distribution in the micrograph, in which case the forward model will involve the Poisson parameter.
 %To address this point, it may be necessary to investigate better noise models and to incorporate power spectrum estimation methods. % and to extend the autocorrelation analysis accordingly. 
-Second, we assume that any two particles are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the 3-D volume. 
-We believe that this constraint could be replaced by a probabilistic condition on the average number of projections per micrograph.  
+%Second, we assume that any two particles are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the 3-D volume. 
+%We believe that this constraint could be replaced by a probabilistic condition on the average number of projections per micrograph.  
 %Such a condition can be met in practice by careful experimental design. 
+%
+%We also note several aspects of SPR experiments that were neglected in this paper, including contrast transfer function (CTF), non-uniformly distributed viewing directions and other contaminants in the micrographs, such as ice crystals.
+All these aspects must be taken into account so the method can be applied on experimental data. We hope to take care of these issues in future research. 
 
-We also note several aspects of SPR experiments that were neglected in this paper, including contrast transfer function (CTF), non-uniformly distributed viewing directions and other contaminants in the micrographs, such as ice crystals.
- All these aspects must be taken into account so the method could be applied on real data. We hope to take care of these issues in future research, as well as to extend the proposed method to conformational heterogeneity. 
-
-\
 % Bibliography
 \bibliography{ref}
 
