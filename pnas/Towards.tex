@@ -25,7 +25,7 @@
 \leadauthor{Bendory} 
 
 % Please add here a significance statement to explain the relevance of your work
-\significancestatement{Authors must submit a 120-word maximum statement about the significance of their research paper written at a level understandable to an undergraduate educated scientist outside their field of speciality. The primary goal of the Significance Statement is to explain the relevance of the work in broad context to a broad readership. The Significance Statement appears in the paper itself and is required for all research papers.}
+\significancestatement{A common states that small molecules cannot be reconstructed using cryo-EM. In this paper, we show that this argument is flaw and show }
 
 % Please include corresponding author, author contribution and author declaration information
 \authorcontributions{Please provide details of author contributions here. \revised{Let's leave it open for now} }
@@ -39,6 +39,7 @@
 \renewcommand{\P}{\mathrm{Prob}}
 
 \begin{abstract}
+	
 Please provide an abstract of no more than 250 words in a single paragraph. Abstracts should explain to the general reader the major contributions of the article. References in the abstract must be cited in full within the abstract itself and cited in the text.
 \end{abstract}
 
@@ -331,7 +332,8 @@ As a side note, under the separation condition, the length $L$ of the signal can
 
 \section{Numerical experiments}
 
-The technique we advocate allows recovery of a signal hidden in noisy micrographs without detecting the location  of the signals embedded in these micrographs. To illustrate the underlying principles of the method, we present several numerical examples for the toy model~\eqref{eq:model} and a simple proof of concept for simulated cryo-EM data.  Appendix~\ref{sec:numeric_details} provides additional details on the experiments.
+The technique we advocate allows recovery of a signal hidden in noisy micrographs without detecting the location  of the signals embedded in these micrographs. To illustrate the underlying principles of the method, we present several numerical examples for the toy model~\eqref{eq:model} and a simple proof of concept for simulated cryo-EM data.  Appendix~\ref{sec:numeric_details} provides additional details on the experiments. 
+\revised{The code to generate all figures is publicly available in TKTK.}
 
 \subsection{Toy model}
 In the first experiment, we estimated 
@@ -444,7 +446,8 @@ We also note several aspects of SPR experiments that were neglected in this pape
  All these aspects must be taken into account so the method could be applied on real data. We hope to take care of these issues in future research, as well as to extend the proposed method to conformational heterogeneity. 
 
 \section*{Acknowledgment}
-The authors  thank Ayelet Heimowitz, Joe Kileel,  Roy Lederman, Amit Moscovich and Nir Sharon for helpful discussions, and Fred Sigworth for supplying us with the dataset of the BPTI molecule. The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.\revised{Amit: to verify.} NB is partially supported by NSF award DMS-1719558.
+The authors  thank Ayelet Heimowitz, Joe Kileel,  Roy Lederman, Amit Moscovich and Nir Sharon for helpful discussions, Fred Sigworth for supplying us with the dataset of the BPTI molecule,  and Boris Landa and Yoel Shkolnisky for providing the code for the 2-D PSWFs expansion.
+ The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.\revised{Amit: to verify.} NB is partially supported by NSF award DMS-1719558.
 \TODO{Correct bib}
 
 % Bibliography
@@ -951,8 +954,6 @@ Since all in-plane rotations of the micrographs are equally likely observations,
 it is desirable in~\eqref{eq:ac_micrographs} to average over all in-plane rotations as well.
 This can be done efficiently using Prolate Spheroidal Wave Functions (PSWFs).  We use autocorrelations up to and including the  third order. Indeed, second-order autocorrelations are not enough, as was observed already in~\cite{kam1980reconstruction} for a simpler problem where the input is not micrographs but rather picked, perfectly centered particles. 
 
-
-this is necessary to  determine the volume.
 
 \subsection{Autocorrelation derivation} \label{sec:moment_derivation}
 
