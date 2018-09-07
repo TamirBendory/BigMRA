@@ -88,7 +88,7 @@ The first stage consists in extracting the various particle projections from the
 	\begin{subfigure}[h]{0.24\textwidth}
 		\centering
 		\includegraphics[scale=0.35]{Einstien_progress_1}
-		\caption{$500$ micrographs \TODO{Tamir: I am redo the exp}}
+		\caption{$500$ micrographs \TODO{Tamir: I am redoing the exp}}
 	\end{subfigure} 
 	\begin{subfigure}[h]{0.24\textwidth}
 		\centering
@@ -182,10 +182,10 @@ In special cases, including the case where $w$ is binary, expectation maximizati
 Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Building on such ideas, we focus on an autocorrelation analysis for~\eqref{eq:model}. % and study it in Section~\ref{sec:recovery}.  
 
 \section{The detection limit} \label{sec:detectionlimit}
-
-At high SNR, if $x$ is known, the support signal $s$ in~\eqref{eq:model} can be estimated via linear programming~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. 
-However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible, that is, one cannot reliably detect occurrences of $x$ in the micrograph $y$.
-
+% Can be added to an arxiv version
+%At high SNR, if $x$ is known, the support signal $s$ in~\eqref{eq:model} can be estimated via linear programming~\cite{azais2015spike,denoyelle2017support,bendory2016robust,bendory2017robust}. 
+%However, in the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible, that is, one cannot reliably detect occurrences of $x$ in the micrograph $y$.
+In the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible, that is, one cannot reliably detect occurrences of $x$ in the micrograph $y$.
 To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us one interval of length $L$ in the micrograph that either contains a full signal occurrence (plus noise), or contains just noise. Our task is to determine which one it is, that is, to determine whether the corresponding entry of $s$ is 0 or 1.
 The oracle further provides the signal $x$, the probability $q$ that  the interval contains signal, and the noise variance $\sigma^2$. 
 
