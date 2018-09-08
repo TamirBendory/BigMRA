@@ -378,40 +378,57 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
 		\includegraphics[angle=270, width=.7\textwidth]{TRPV1_rec.eps}
-		\caption{TPRV1 with cutoff $L=5$}\label{fig:TRPV1_recon}
+		\caption{TPRV1 with cutoff $L_{\text{max}}=5$}\label{fig:TRPV1_recon}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
 		\includegraphics[angle=270, width=.7\textwidth]{BPTI_maxL2_L20.eps}
-		\caption{BPTI with cutoff $L=2$}\label{fig:BPTI_recon}
+		\caption{BPTI with cutoff $L_{\text{max}}=2$}\label{fig:BPTI_recon}
 	\end{subfigure} 
 	\caption{\label{fig:cryo_recon} Reconstructions from the first, second and third order autocorrelations.
-		The ground truth volumes were expanded according to~\eqref{eq:volume_expansion_app} with cutoff $L$.
-		The reconstruction is shown in gray while the (smoothed) ground truth in yellow. \TODO{Amit: I suggest calling the spherical harmonics cutoff $l_max$ rather than L. Previously, L is used for the size of the signal or for the size of images LxL. So, it is quite confusing to use L in a completely different context. You would need to make changes in many other places as well (e.g., eq.(23) and the labels (a) and (b) in this figure, are just two examples), in order to avoid this notation overload.  
-	}}
+		The ground truth volumes were expanded according to~\eqref{eq:volume_expansion_app} with cutoff $L_{\text{max}}$.
+		The reconstruction is shown in gray while the (smoothed) ground truth in yellow. }
 \end{figure}
 
+% -------------- Vertical subfigures: -------------------------------
+
+% \begin{figure}[t!]
+% 	\centering
+% 	\begin{subfigure}{0.3\textwidth}
+% 		\centering
+% 		\includegraphics[scale=0.3]{pure_noise_micrograph_cutout.png}
+% 	\end{subfigure}
+% 	\begin{subfigure}{0.3\textwidth}
+% 		\centering
+% 		\includegraphics[scale=0.3]{noisy_micrograph_cutout.png}
+% 	\end{subfigure} 
+% 	\begin{subfigure}{0.3\textwidth}
+% 		\centering
+% 		\includegraphics[scale=0.3]{clean_micrograph_cutout.png}
+% 	\end{subfigure}
+% 	\caption{\label{fig:cryo_detection} (a) An excerpt of the pure noise micrograph ; (b) An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.; (c) An excerpt of the clean micrograph. All micrographs are of size $7420^2$ pixels and the projections are taken from the BPTI molecule, having size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$. The noise realization is identical in both micrographs.} 
+% \end{figure}
 
 \begin{figure*}[t!]
 	\centering
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
-		\includegraphics[scale=0.4]{pure_noise_micrograph_cutout.eps}
+		\includegraphics[scale=0.4]{pure_noise_micrograph_cutout.png}
 		\caption{An excerpt of the pure noise micrograph}
 	\end{subfigure} \hspace{2pt}
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
-		\includegraphics[scale=0.4]{noisy_micrograph_cutout.eps}
+		\includegraphics[scale=0.4]{noisy_micrograph_cutout.png}
 		\caption{An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.}
 	\end{subfigure} \hspace{2pt}
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
-		\includegraphics[scale=0.4]{clean_micrograph_cutout.eps}
+		\includegraphics[scale=0.4]{clean_micrograph_cutout.png}
 		\caption{An excerpt of the clean micrograph}
 	\end{subfigure}
-	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from a volume of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
-		The noise realization is identical in both micrographs. \TODO{Diagonal line} \TODO{Amit: need to specify which molecule is projected to create micrographs shown in (b) and (c). This is not mentioned in the text either. }} 
+	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from the BPTI molecule of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
+		The noise realization is identical in both micrographs.} 
 \end{figure*}
 
 \section{Discussion}
@@ -534,7 +551,8 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 The computational complexity scales as $O(NL^2 + F(L))$, where $F$ is the complexity of the solving the LS.
 
 \paragraph{3-D experiments.}
-\TODO{We need to add description of computer + running times}
+The experiments in Figure~\ref{fig:cryo_recon}, and the recoveries of $\gamma$ for the experiment in Figure~\ref{fig:cryo_detection}, were performed on a machine with 40 cores of Intel Xeon E5-2698 v4 @ 2.20GHz with 100 GB of RAM, and took ~2 hours per reconstruction. The computation of the moments from each micrograph in Figure~\ref{fig:cryo_detection} was performed on a machine with 4 nVidia P100 GPUs with 16 GB of memory each and with 100 GB of RAM. It took 3 minutes per micrograph to compute the first three autocorrelations.
+
 For the experiments in Figure~\ref{fig:cryo_detection}, we computed the analytical first three autocorrelations of the volume as explained in Appendix~\ref{sec:ac_cryo}.
 To estimate the coefficients of the volume itself, we solve the LS problem
 \begin{equation} \label{eq:LS_cryo}
@@ -544,15 +562,14 @@ where the explicit expressions of $\mathfrak{a}_x^1$, $\mathfrak{a}_x^2$ and $\m
 In the experiments, we set $w_1=w_2=w_3=1$. 
 The LS problem was solved using Matlab's \texttt{lsqnonlin} solver for nonlinear LS problems. The expected $\hat \gamma$ in this experiment is one. 
 
-The computational complexity scales as $O(N^2L^6+ F(L))$, where $F$ is the complexity of the solving the LS and $N^2$ is the total number of pixels across micrographs. The factor of $L^6$ comes from \TODO{to continue} 
-
+The computational complexity for the computation of the moments from the micrograph is $O(N^2P^6)$, since we have $N^2$ patches that we extract from the micrograph, and for each patch we perform an expansion in PSWFs with complexity $O(P^3)$ \cite{landa2017steerable}, and then compute the autocorrelations dominated by computation of the bispectrum as in \eqref{eq:third_order_ac_pswf} costing $O(P^6)$. The complexity of evaluating the bispecturm using \eqref{eq:ac_3_prolates} after the precomputation takes $O(BP^6)$, where $B$ is the number of entries in the bispectrum. Since $B=O(P^3)$ \TODO{It's not directly stated in Boris' paper, but I checked this numerically and makes sense if $k,q=O(P)$}, the total complexity for evaluating the bispectrum is $O(P^9)$. That is because, if the number of volume expansion coefficients is $V = O(P^3)$, the dominant step can be written as a matrix-vector multiplication with a matrix of size $BV\times V$ and a vector $V\times 1$, so the cost is $BV^2=O(P^9)$. Thus, the complexity of solving the LS problem \eqref{eq:LS_cryo} is $O(KP^9)$ where $K$ is the number of iterations required for the optimizer to converge, since the bispectrum evaluation dominates the cost of each iteration.
 
 The true volume used in the experiments in Figures~\ref{fig:cryo_detection} and~\ref{fig:BPTI_recon} was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB) %~\cite{pdb} 
 as 1QLQ\footnote{\url{https://www.rcsb.org}}. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5~\AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. For the experiment in Figure~\ref{fig:BPTI_recon}, the volume was downsampled to size $20^3$. For the experiment in Figure~\ref{fig:TRPV1_recon}, we used the TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB) %~\cite{emdb} 
-as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has size $192^3$, and was downsampled to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in~\eqref{eq:volume_expansion_app} with cutoff $L = 5$ for TRPV1 and $L = 2$ for BPTI. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. For the BPTI reconstruction, the errors in the autocorrelations were $10^{-6}$, $10^{-7}$ and $10^{-8}$ for the third, second and first autocorrelations, respectively, while the error in the expansion coefficients of the volume was $5\times 10^{-2}$. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data.
+as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has size $192^3$, and was downsampled to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in~\eqref{eq:volume_expansion_app} with cutoff $L_{\text{max}} = 5$ for TRPV1 and $L_{\text{max}} = 2$ for BPTI. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. For the BPTI reconstruction, the errors in the autocorrelations were $10^{-6}$, $10^{-7}$ and $10^{-8}$ for the third, second and first autocorrelations, respectively, while the error in the expansion coefficients of the volume was $5\times 10^{-2}$. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data.
 
 The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in~\cite{stewart1980efficient}, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE\footnote{\url{http://spr.math.princeton.edu}}. %\cite{aspire}.
- We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. \TODO{Nico: is this really how the procedure works? Or is it just that after a few failed attempts, we abandon? Also, the text doesn't say if the projections are placed at random, but I'm assuming they are ?} Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
+We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. The location of the upper left corner of each new projection is picked uniformly at random from the set of available indices. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L_{\text{max}}=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
 
 \section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
 
@@ -941,12 +958,12 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 \subsection{Model and autocorrelation functions}
 
 Let $\phi$ be the Coulomb potential representing the molecule we aim to recover. 
-We assume that molecule is real-valued and smooth. In spherical coordinates, its 3-D Fourier transform $\widehat\phi$ admits a finite expansion of the form 
+We assume that molecule is real-valued and smooth. In spherical coordinates, its 3-D Fourier transform $\widehat\phi$ admits a finite expansion of the form  \TODO{Is it a problem that both our Fourier coordinates and angular frequencies for prolates are called $k$?}
 \begin{equation} \label{eq:volume_expansion_app} 
-\widehat \phi(ck, \theta, \varphi) = \sum_{\ell = 0}^L\sum_{m=-\ell}^{\ell}\sum_{s=1}^{S(\ell)}\tamir_{\ell, m, s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k), \quad k\leq 1,
+\widehat \phi(ck, \theta, \varphi) = \sum_{\ell = 0}^{L_{\text{max}}}\sum_{m=-\ell}^{\ell}\sum_{s=1}^{S(\ell)}\tamir_{\ell, m, s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k), \quad k\leq 1,
 \end{equation}
-where $c$ is the bandlimit, $\{S(\ell)\}$ \TODO{to check consistency of $S_l$} are determined using the Nyquist criterion as described in~\cite{bhamre2017anisotropic}, $j_{\ell,s}$ is the normalized spherical Bessel functions given by \TODO{Amit: why 2? }
-\[ j_{\ell, s}(k) = \frac{4}{|j_{\ell+1}(u_{\ell, s})|}j_{\ell}(2u_{\ell,s} k),\]
+where $c$ is the bandlimit, $\{S(\ell)\}$ are determined using the Nyquist criterion as described in~\cite{bhamre2017anisotropic}, $j_{\ell,s}$ is the normalized spherical Bessel functions given by
+\[ j_{\ell, s}(k) = \frac{4}{|j_{\ell+1}(u_{\ell, s})|}j_{\ell}(u_{\ell,s} k),\]
 $j_{\ell}$ is the spherical Bessel function of order $\ell$ and  $u_{\ell,s}$ is the $s$th positive zero of $j_{\ell}$. We use 
 the complex spherical harmonics $Y_{\ell}^m$ defined by  
 \[ Y_{\ell}^m(\theta,\varphi) := \sqrt{\frac{2\ell+1}{4\pi}\cdot\frac{(\ell-m)!}{(\ell+m)!}}P_{\ell}^m(\cos\theta)e^{\iota m\varphi},\]
@@ -954,9 +971,9 @@ where $P_{\ell}^m$ are the associated Legendre polynomials with the Condon-Short
 Sampling at the Nyquist rate dictates $c=1/2$~\cite{levin20173d}. 
 Because $\phi$ is real-valued,  $\widehat \phi$ is conjugate-symmetric and thus the expansion coefficients satisfy $\tamir_{\ell, -m, s} = (-1)^{\ell+m}\overline{\tamir_{\ell,m,s}}$. Therefore, we only need to recover coefficients $\tamir_{\ell, m, s}$ with $m\geq 0$. 
 
-Let $I_{\omega}$ denote the tomographic projection obtained from viewing direction $\omega\in SO(3)$. By the Fourier projection-slice theorem, its 2-D Fourier transform  is given by~\cite{natterer1986mathematics}: \TODO{Amit: why c is missing here? (it appears in [23])}
+Let $I_{\omega}$ denote the tomographic projection obtained from viewing direction $\omega\in SO(3)$. By the Fourier projection-slice theorem, its 2-D Fourier transform  is given by~\cite{natterer1986mathematics}:
 \begin{equation*}\label{eq:projection_model}
-\widehat I_{\omega}(k,\varphi) = \sum_{\ell,m,m',s}\tamir_{\ell,m,s}D_{m',m}^{\ell}(\omega)Y_{\ell}^{m'}\left(\frac{\pi}{2},\varphi\right)j_{\ell,s}(k),
+\widehat I_{\omega}(ck,\varphi) = \sum_{\ell,m,m',s}\tamir_{\ell,m,s}D_{m',m}^{\ell}(\omega)Y_{\ell}^{m'}\left(\frac{\pi}{2},\varphi\right)j_{\ell,s}(k),
 \end{equation*}
 where $D_{m',m}^{\ell}(\omega)$ is a Wigner-D matrix. This implies that the projections are also $c$-bandlimited.
 
@@ -1141,7 +1158,7 @@ The coefficients $\mathfrak{a}^3[k_1,q_1;k_2,q_2]$ are related to the third-orde
 \[ a^3_\II[\Bell_1, \Bell_2] \approx \sum_{\substack{k_1,q_1\\ k_2,q_2}}\mathfrak{a}^3[k_1,q_1;k_2,q_2]\psi_{k_1,q_1}[\Bell_1]\overline{\psi_{k_2,q_2}[\Bell_2]}.\]
 Averaging over all rotations of $\II$ and its reflection, we obtain
 \begin{align} \label{eq:third_order_ac_pswf}
-&\mathfrak{a}^3[k_1,q_1;k_2,q_2] = \frac{1}{N^2}\sum_{\mb i}\II[\mb i]\\&\times \left(\frac{1}{4\pi}\int_0^{2\pi}\left(a_{k_1,q_1}[\mb i]\overline{a_{k_2,q_2}[\mb i]} + \overline{a_{k_1,q_1}[\mb i]}a_{k_2,q_2}[\mb i]\right)e^{-\iota(k_1-k_2)\alpha}d\alpha\right) \nonumber\\
+&\mathfrak{a}^3[k_1,q_1;k_2,q_2] = \frac{1}{N^2}\sum_{\mb i}\II[\mb i]\\&\times \frac{1}{4\pi}\int_0^{2\pi}\left(a_{k_1,q_1}[\mb i]\overline{a_{k_2,q_2}[\mb i]} + \overline{a_{k_1,q_1}[\mb i]}a_{k_2,q_2}[\mb i]\right)e^{-\iota(k_1-k_2)\alpha}d\alpha \nonumber\\
 &= \delta[k_1 - k_2]\frac{1}{N^2}\sum_{\mb i}\II[\mb i]\Re\{a_{k_1,q_1}[\mb i]\overline{a_{k_2,q_2}[\mb i]}\}. \nonumber 
 \end{align}
 Thus, similarly to the second-order autocorrelation, averaging over all in-plane rotations reveals that the 4-D third-order autocorrelation truly only carries information along three dimensions.
@@ -1161,7 +1178,7 @@ b_3[k_1,q_1; k_2, q_2]\psi_{k_1,q_1}[\Bell_1]\overline{\psi_{k_2,q_2}[\Bell_2]}.
 
 \subsection{Connection to volume}
 
-Until now, we have established  simple relations between the autocorrelations of the micrographs and the autocorrelations of the volume. Now, we complete the picture by deriving the connection with the volume itself.
+Until now, we have established simple relations between the autocorrelations of the micrographs and the autocorrelations of the volume. Now, we complete the picture by deriving the connection with the volume itself.
 
 Using the 2-D PSWFs, we can express each projection as 
 \[ \widehat I_{\omega}(ck,\theta) = \sum_{N,n}b_{N,n}(\omega)\psi_{N,n}(k,\theta),\]
@@ -1182,7 +1199,7 @@ Since the PSWFs are eigenfunctions of the truncated Fourier transform~\cite{land
 we can now express the projection in real space as
 \begin{align} \label{eq:proj_expansion}
 &I_{\omega}(r,\varphi) = \sum_{N,n}\widehat{\alpha}_{N,n}b_{N,n}(\omega)\psi_{N,n}(r,\varphi)\\
-&= \sum_{\ell=0}^L\sum_{N,m=-\ell}^{\ell}\sum_{n=0}^{n_{\text{max}}(N)}\sum_{s=1}^{S(\ell)}\tamir_{\ell,m,s}\widehat\beta_{\ell,s;N,n}D_{N,m}^{\ell}(\omega)\psi_{N,n}(r,\varphi), \nonumber 
+&= \sum_{\ell=0}^{L_{\text{max}}}\sum_{N,m=-\ell}^{\ell}\sum_{n=0}^{n_{\text{max}}(N)}\sum_{s=1}^{S(\ell)}\tamir_{\ell,m,s}\widehat\beta_{\ell,s;N,n}D_{N,m}^{\ell}(\omega)\psi_{N,n}(r,\varphi), \nonumber 
 \end{align}
 where $n_{max}(N)$ is chosen according to Eq.~(8) in \cite{landa2017steerable}, $\alpha_{N,n}$ is the eigenvalue corresponding to the $(N,n)$th PSWF, $\widehat{\alpha}_{N,n} = (c/2\pi)^2\alpha_{N,n}$, and $\widehat\beta_{\ell,s;N,n}=\widehat\alpha_{N,n}\beta_{\ell,s;N,n}$.
 
