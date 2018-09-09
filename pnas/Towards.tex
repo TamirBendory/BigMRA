@@ -29,19 +29,21 @@
 }
 
 % Please include corresponding author, author contribution and author declaration information
-\authorcontributions{Please provide details of author contributions here. \revised{Let's leave it open for now} }
+\authorcontributions{Please provide details of author contributions here.}
 \authordeclaration{The authors declare no conflicts of interest.}
 %\equalauthors{\textsuperscript{1}A.O.(Author One) and A.T. (Author Two) contributed equally to this work (remove if not applicable).}
-\correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: tamir.bendory@princeton.edu \TODO{Should this be Amit's address?}}
+\correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: tamir.bendory@princeton.edu %\TODO{Should this be Amit's address?}
+}
 
 % Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
 \keywords{Cryo-EM $|$ autocorrelation analysis $|$ detection limit} 
 
-\renewcommand{\P}{\mathrm{Prob}}
 
 \begin{abstract}
-{C}ryo--electron microscopy (cryo--EM) is used in structural biology to determine the 3-D structure of molecules. In a cryo-EM experiment, the microscope produces images called micrographs. Projections of the molecule of interest are embedded in the micrographs at unknown locations, and under unknown viewing directions. Standard imaging techniques first locate these projections (detection), then reconstruct the 3-D structure from them. Unfortunately, high noise levels hinder detection. When reliable detection is rendered impossible, the standard techniques fail. This is a problem especially for small molecules, which can be particularly hard to detect. In this paper, we propose a radically different approach: we contend that the structure could, in principle, be reconstructed directly from the micrographs, without intermediate detection and independently of the noise level (provided sufficiently many micrographs are acquired). As a result, even small molecules should be within reach for cryo-EM. To support this claim, we setup a simplified mathematical model and demonstrate how our autocorrelation-based techniques allow to go directly from the micrographs to the sought signals. This involves only one pass over the micrographs, which is desirable for large experiments. Furthermore, concerns regarding experimental bias are reduced as we do not require particle picking via pattern matching. We detail elementary theory for a 1-D version of the simplified model and show how to extend it to 2-D and to single particle reconstruction from synthetic cryo-EM data. We show numerical results, then discuss challenges that lay ahead to turn this proof-of-concept into a competitive alternative to state-of-the-art algorithms.
-%Please provide an abstract of no more than 250 words in a single paragraph. Abstracts should explain to the general reader the major contributions of the article. References in the abstract must be cited in full within the abstract itself and cited in the text.
+{C}ryo--electron microscopy (cryo--EM) is used in structural biology to determine the 3-D structure of molecules. In a cryo-EM experiment, the microscope produces images called micrographs. Projections of the molecule of interest are embedded in the micrographs at unknown locations, and under unknown viewing directions. Standard imaging techniques first locate these projections (detection) and then reconstruct the 3-D structure from them. Unfortunately, high noise levels hinder detection. When reliable detection is rendered impossible, the standard techniques fail. This is a problem especially for small molecules, which can be particularly hard to detect. In this paper, we propose a radically different approach: we contend that the structure could, in principle, be reconstructed directly from the micrographs, without intermediate detection. % and independently of the noise level (provided sufficiently many micrographs are acquired). 
+As a result, even small molecules should be within reach for cryo-EM. To support this claim, we setup a simplified mathematical model and demonstrate how our autocorrelation-based techniques allow to go directly from the micrographs to the sought signals. This involves only one pass over the micrographs, which is desirable for large experiments. Furthermore, concerns regarding experimental bias are reduced as we do not require particle picking via template matching. 
+%We detail elementary theory for a 1-D version of the simplified model and show how to extend it to 2-D and to single particle reconstruction from synthetic cryo-EM data. We show numerical results, then discuss challenges that lay ahead to turn this proof-of-concept into a competitive alternative to state-of-the-art algorithms.
+We detail elementary theory for the simplified model and show how to extend it to single particle reconstruction from synthetic cryo-EM data. We show numerical results and then discuss challenges that lay ahead to turn this proof-of-concept into a competitive alternative to state-of-the-art algorithms.
 \end{abstract}
 
 \dates{This manuscript was compiled on \today}
@@ -79,7 +81,8 @@ The first stage consists in extracting the various particle projections from the
 		\includegraphics[scale=0.5]{micrograph_Einstein_example_s3}
 		\caption{$\sigma = 3$}
 	\end{subfigure}
-	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}	
+	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}
+	 \vspace{-14pt} 	
 \end{figure*}
 
 
@@ -106,11 +109,12 @@ The first stage consists in extracting the various particle projections from the
 		\caption{$2\times 10^5$ micrographs}
 	\end{subfigure}
 	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $500,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels), each containing $700$ image occurrences on average.  \TODO{Tamir: I am redoing the exp}}	
+ \vspace{-14pt} 
 \end{figure*}
 
 
 Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following questions:
-\begin{myquote}{0.15in}
+\begin{myquote}{0in}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{myquote}
 In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
@@ -357,7 +361,7 @@ Relative error is measured as the ratio of the root mean square error to the nor
 Figure~\ref{fig:Einst_example} shows several estimated images for a growing number of micrographs, and a movie is available as supplementary material. Figure~\ref{fig:error_per_micro} (see appendix) presents the normalized recovery error as a function of the amount of data available.  This is computed after fixing the reflection symmetries (see Section~\ref{sec:AC_analysis}). As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many micrographs, without particle picking.
 
 In practice, we do not expect to know $\gamma$ and maybe not even $\sigma$.
-Figure~\ref{fig:1D_example} shows recovery of a 1-D signal from the first three autocorrelations of the data.
+Figure~\ref{fig:1D_example} (see appendix) shows recovery of a 1-D signal from the first three autocorrelations of the data.
 The autocorrelations are computed from noisy micrographs with $\sigma=3$ that obey the separation condition of~\eqref{eq:spacing}. 
 Both the signal  and $\gamma$ are estimated simultaneously from the observed autocorrelations by LS fitting; more details are given in Appendix~\ref{sec:numeric_details}. Crucially, the LS does not require  knowledge of $\sigma$. 
 
@@ -389,8 +393,8 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 	\caption{\label{fig:cryo_recon} Reconstructions from the first, second and third order autocorrelations.
 		The ground truth volumes were expanded according to~\eqref{eq:volume_expansion_app} with cutoff $L_{\text{max}}$.
 		The reconstruction is shown in gray while the (smoothed) ground truth in yellow. }
+		 \vspace{-20pt} 	
 \end{figure}
-
 % -------------- Vertical subfigures: -------------------------------
 
 % \begin{figure}[t!]
@@ -410,26 +414,27 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 % 	\caption{\label{fig:cryo_detection} (a) An excerpt of the pure noise micrograph ; (b) An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.; (c) An excerpt of the clean micrograph. All micrographs are of size $7420^2$ pixels and the projections are taken from the BPTI molecule, having size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$. The noise realization is identical in both micrographs.} 
 % \end{figure}
 
-\begin{figure*}[t!]
-	\centering
-	\begin{subfigure}[t]{0.3\textwidth}
-		\centering
-		\includegraphics[scale=0.4]{pure_noise_micrograph_cutout.png}
-		\caption{An excerpt of the pure noise micrograph}
-	\end{subfigure} \hspace{2pt}
-	\begin{subfigure}[t]{0.3\textwidth}
-		\centering
-		\includegraphics[scale=0.4]{noisy_micrograph_cutout.png}
-		\caption{An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.}
-	\end{subfigure} \hspace{2pt}
-	\begin{subfigure}[t]{0.3\textwidth}
-		\centering
-		\includegraphics[scale=0.4]{clean_micrograph_cutout.png}
-		\caption{An excerpt of the clean micrograph}
-	\end{subfigure}
-	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from the BPTI molecule of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
-		The noise realization is identical in both micrographs.} 
-\end{figure*}
+%\begin{figure*}[t!]
+%	\centering
+%	\begin{subfigure}[t]{0.3\textwidth}
+%		\centering
+%		\includegraphics[scale=0.4]{pure_noise_micrograph_cutout.png}
+%		\caption{An excerpt of the pure noise micrograph}
+%	\end{subfigure} \hspace{2pt}
+%	\begin{subfigure}[t]{0.3\textwidth}
+%		\centering
+%		\includegraphics[scale=0.4]{noisy_micrograph_cutout.png}
+%		\caption{An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.}
+%	\end{subfigure} \hspace{2pt}
+%	\begin{subfigure}[t]{0.3\textwidth}
+%		\centering
+%		\includegraphics[scale=0.4]{clean_micrograph_cutout.png}
+%		\caption{An excerpt of the clean micrograph}
+%	\end{subfigure}
+%	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from the BPTI molecule of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
+%		The noise realization is identical in both micrographs.} 
+%	 \vspace{-14pt} 	
+%\end{figure*}
 
 \section{Discussion}
  
@@ -463,8 +468,7 @@ All these aspects must be taken into account so the method can be applied on exp
 \section*{Acknowledgment}
 The authors  thank Ayelet Heimowitz, Joe Kileel,  Roy Lederman, Amit Moscovich and Nir Sharon for helpful discussions, Fred Sigworth for supplying us with the dataset of the BPTI molecule,  and Boris Landa and Yoel Shkolnisky for providing the code for the 2-D PSWFs expansion.
 The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.
-\revised{Amit: to verify.} NB is partially supported by NSF award DMS-1719558.
-\TODO{Correct bib}
+NB is partially supported by NSF award DMS-1719558.
 
 
 \appendix
@@ -531,8 +535,7 @@ By also taking symmetries into account, the third-order autocorrelation contains
 \end{align*}
 coefficients. 
 This redundancy suggests that it might be possible to estimate several signals simultaneously (compare with~\cite{boumal2017heterogeneous,bandeira2017estimation}).
-In practice, the autocorrelations are computed on disjoint segments of $y$ of length $100\cdot10^6$ (if the length of the measurement is larger than that) and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
-\TODO{Do we use GPUs? Running times}
+In practice, the autocorrelations are computed on disjoint segments of $y$ of length $100\cdot10^6$ (if the length of the measurement is larger than that) and added up, without correction for the junction points. %Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
 
 Having computed the moments of interest, we now estimate the signal $x$ and coefficient $\gamma$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear LS problem:
 %\begin{align}
@@ -549,8 +552,32 @@ Setting $W = L$ (as is a priori desired) is problematic because the above optimi
 Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
 
 The computational complexity scales as $O(NL^2 + F(L))$, where $F$ is the complexity of the solving the LS.
+For example, computing the moments for the experiment in the left panel of Figure~\ref{fig:1D_example} took 38 seconds, while the optimization took 5.5 seconds in total.
 
 \paragraph{3-D experiments.}
+
+
+\begin{figure*}[t!]
+	\centering
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{pure_noise_micrograph_cutout.png}
+		\caption{An excerpt of the pure noise micrograph}
+	\end{subfigure} \hfill %\hspace{2pt}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{noisy_micrograph_cutout.png}
+		\caption{An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.}
+	\end{subfigure} \hfill %\hspace{2pt}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{clean_micrograph_cutout.png}
+		\caption{An excerpt of the clean micrograph}
+	\end{subfigure}
+	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from the BPTI molecule of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
+		The noise realization is identical in both micrographs.} 
+\end{figure*}
+
 The experiments in Figure~\ref{fig:cryo_recon}, and the recoveries of $\gamma$ for the experiment in Figure~\ref{fig:cryo_detection}, were performed on a machine with 40 cores of Intel Xeon E5-2698 v4 @ 2.20GHz with 100 GB of RAM, and took ~2 hours per reconstruction. The computation of the moments from each micrograph in Figure~\ref{fig:cryo_detection} was performed on a machine with 4 nVidia P100 GPUs with 16 GB of memory each and with 100 GB of RAM. It took 3 minutes per micrograph to compute the first three autocorrelations.
 
 For the experiments in Figure~\ref{fig:cryo_detection}, we computed the analytical first three autocorrelations of the volume as explained in Appendix~\ref{sec:ac_cryo}.
@@ -562,7 +589,7 @@ where the explicit expressions of $\mathfrak{a}_x^1$, $\mathfrak{a}_x^2$ and $\m
 In the experiments, we set $w_1=w_2=w_3=1$. 
 The LS problem was solved using Matlab's \texttt{lsqnonlin} solver for nonlinear LS problems. The expected $\hat \gamma$ in this experiment is one. 
 
-The computational complexity for the computation of the moments from the micrograph is $O(N^2P^6)$, since we have $N^2$ patches that we extract from the micrograph, and for each patch we perform an expansion in PSWFs with complexity $O(P^3)$ \cite{landa2017steerable}, and then compute the autocorrelations dominated by computation of the bispectrum as in \eqref{eq:third_order_ac_pswf} costing $O(P^6)$. The complexity of evaluating the bispecturm using \eqref{eq:ac_3_prolates} after the precomputation takes $O(BP^6)$, where $B$ is the number of entries in the bispectrum. Since $B=O(P^3)$ \TODO{It's not directly stated in Boris' paper, but I checked this numerically and makes sense if $k,q=O(P)$}, the total complexity for evaluating the bispectrum is $O(P^9)$. That is because, if the number of volume expansion coefficients is $V = O(P^3)$, the dominant step can be written as a matrix-vector multiplication with a matrix of size $BV\times V$ and a vector $V\times 1$, so the cost is $BV^2=O(P^9)$. Thus, the complexity of solving the LS problem \eqref{eq:LS_cryo} is $O(KP^9)$ where $K$ is the number of iterations required for the optimizer to converge, since the bispectrum evaluation dominates the cost of each iteration.
+The computational complexity for the computation of the moments from the micrograph is $O(N^2P^6)$, since we have $N^2$ patches that we extract from the micrograph. For each patch we perform an expansion in PSWFs with complexity $O(P^3)$ \cite{landa2017steerable}, and then compute the autocorrelations dominated by computation of the bispectrum as in \eqref{eq:third_order_ac_pswf} costing $O(P^6)$. The complexity of evaluating the bispecturm using \eqref{eq:ac_3_prolates} after the precomputation takes $O(BP^6)$, where $B$ is the number of entries in the bispectrum. Since $B=O(P^3)$, the total complexity for evaluating the bispectrum is $O(P^9)$. That is because, if the number of volume expansion coefficients is $V = O(P^3)$, the dominant step can be written as a matrix-vector multiplication with a matrix of size $BV\times V$ and a vector $V\times 1$, so the cost is $BV^2=O(P^9)$. Thus, the complexity of solving the LS problem \eqref{eq:LS_cryo} is $O(KP^9)$ where $K$ is the number of iterations required for the optimizer to converge, since the bispectrum evaluation dominates the cost of each iteration.
 
 The true volume used in the experiments in Figures~\ref{fig:cryo_detection} and~\ref{fig:BPTI_recon} was the Bovine Pancreatic Trypsin Inhibitor (BPTI) mutant with altered binding loop sequence, whos atomic model is available in the Protein Data Bank (PDB) %~\cite{pdb} 
 as 1QLQ\footnote{\url{https://www.rcsb.org}}. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5~\AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. For the experiment in Figure~\ref{fig:BPTI_recon}, the volume was downsampled to size $20^3$. For the experiment in Figure~\ref{fig:TRPV1_recon}, we used the TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB) %~\cite{emdb} 
@@ -958,7 +985,7 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 \subsection{Model and autocorrelation functions}
 
 Let $\phi$ be the Coulomb potential representing the molecule we aim to recover. 
-We assume that molecule is real-valued and smooth. In spherical coordinates, its 3-D Fourier transform $\widehat\phi$ admits a finite expansion of the form  \TODO{Is it a problem that both our Fourier coordinates and angular frequencies for prolates are called $k$?}
+We assume that molecule is real-valued and smooth. In spherical coordinates, its 3-D Fourier transform $\widehat\phi$ admits a finite expansion of the form
 \begin{equation} \label{eq:volume_expansion_app} 
 \widehat \phi(ck, \theta, \varphi) = \sum_{\ell = 0}^{L_{\text{max}}}\sum_{m=-\ell}^{\ell}\sum_{s=1}^{S(\ell)}\tamir_{\ell, m, s}Y_{\ell}^m(\theta,\varphi)j_{\ell,s}(k), \quad k\leq 1,
 \end{equation}
