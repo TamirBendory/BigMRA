@@ -55,6 +55,10 @@ We detail elementary theory for the simplified model and show how to extend it t
 \thispagestyle{firststyle}
 \ifthenelse{\boolean{shortarticle}}{\ifthenelse{\boolean{singlecolumn}}{\abscontentformatted}{\abscontent}}{}
 
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+
+
 \dropcap{C}ryo--electron microscopy (cryo--EM) is an imaging technique in structural biology used for single particle reconstruction (SPR) of macromolecules.
 In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice. %Within the ice, the molecules are randomly oriented and positioned.
  The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structure from the micrographs.
@@ -88,32 +92,13 @@ The first stage consists in extracting the various particle projections from the
 
 \begin{figure*}[h]
 	\centering
-	\begin{subfigure}[h]{0.24\linewidth}
-		\centering
-		\includegraphics[width=1.1\linewidth]{Einstien_progress_1}
-		\caption{$2\times 10^2$ micrographs}
-	\end{subfigure} \hfill
-	\begin{subfigure}[h]{0.24\linewidth}
-		\centering
-		\includegraphics[width=1.1\linewidth]{Einstien_progress_4}
-		\caption{$2\times 10^3$ micrographs}
-	\end{subfigure} \hfill
-	\begin{subfigure}[h]{0.24\linewidth}
-		\centering
-		\includegraphics[width=1.1\linewidth]{Einstien_progress_40}
-		\caption{$2\times 10^4$ micrographs}
-	\end{subfigure} \hfill
-	\begin{subfigure}[h]{0.24\linewidth}
-		\centering
-		\includegraphics[width=1.1\linewidth]{Einstien_progress_400}
-		\caption{$2\times 10^5$ micrographs}
-	\end{subfigure}
-	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels), each containing $700$ image occurrences on average.}	
+	\includegraphics[width=1\linewidth]{Einstien_progress_examples}
+	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels from left to right), each containing $700$ image occurrences on average.}	
 	\vspace{-12pt} 
 \end{figure*}
 
 Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following questions:
-\begin{myquote}{0.1in}
+\begin{myquote}{0in}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{myquote}
 In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
@@ -154,7 +139,8 @@ y & =  x \ast s + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
 \end{align}
 where $\ast$ denotes linear convolution. 
 While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$.
-This is a key difference with other works on  \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+This is a key difference with other works on  \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}
+, just to name a few. 
 The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
 
 We assume the binary signal $s$ obeys a \emph{separation condition}:
