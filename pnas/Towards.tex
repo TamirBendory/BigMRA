@@ -66,55 +66,54 @@ The first stage consists in extracting the various particle projections from the
 
 \begin{figure*}[h]
 	\centering
-	\begin{subfigure}[h]{0.33\textwidth}
+	\begin{subfigure}[h]{0.33\linewidth}
 		\centering
-		\includegraphics[scale=0.5]{micrograph_Einstein_example_clean}
+		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_clean}
 		\caption{$\sigma = 0$}
 	\end{subfigure}%
-	\begin{subfigure}[h]{0.33\textwidth}
+	\begin{subfigure}[h]{0.33\linewidth}
 		\centering
-		\includegraphics[scale=0.5]{micrograph_Einstein_example_s05}
+		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_s05}
 		\caption{$\sigma = 0.5$}
 	\end{subfigure}
-	\begin{subfigure}[h]{0.33\textwidth}
+	\begin{subfigure}[h]{0.33\linewidth}
 		\centering
-		\includegraphics[scale=0.5]{micrograph_Einstein_example_s3}
+		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_s3}
 		\caption{$\sigma = 3$}
 	\end{subfigure}
 	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}
-	 \vspace{-14pt} 	
+	\vspace{-12pt} 	
 \end{figure*}
 
 
 \begin{figure*}[h]
 	\centering
-	\begin{subfigure}[h]{0.24\textwidth}
+	\begin{subfigure}[h]{0.24\linewidth}
 		\centering
-		\includegraphics[scale=0.35]{Einstien_progress_1}
-		\caption{$500$ micrographs}
-	\end{subfigure} 
-	\begin{subfigure}[h]{0.24\textwidth}
+		\includegraphics[width=1.1\linewidth]{Einstien_progress_1}
+		\caption{$2\times 10^2$ micrographs}
+	\end{subfigure} \hfill
+	\begin{subfigure}[h]{0.24\linewidth}
 		\centering
-		\includegraphics[scale=0.35]{Einstien_progress_4}
+		\includegraphics[width=1.1\linewidth]{Einstien_progress_4}
 		\caption{$2\times 10^3$ micrographs}
-	\end{subfigure} 
-	\begin{subfigure}[h]{0.24\textwidth}
+	\end{subfigure} \hfill
+	\begin{subfigure}[h]{0.24\linewidth}
 		\centering
-		\includegraphics[scale=0.35]{Einstien_progress_40}
+		\includegraphics[width=1.1\linewidth]{Einstien_progress_40}
 		\caption{$2\times 10^4$ micrographs}
-	\end{subfigure} 
-	\begin{subfigure}[h]{0.24\textwidth}
+	\end{subfigure} \hfill
+	\begin{subfigure}[h]{0.24\linewidth}
 		\centering
-		\includegraphics[scale=0.35]{Einstien_progress_400}
+		\includegraphics[width=1.1\linewidth]{Einstien_progress_400}
 		\caption{$2\times 10^5$ micrographs}
 	\end{subfigure}
-	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $500,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels), each containing $700$ image occurrences on average.  \TODO{Tamir: I am redoing the exp}}	
- \vspace{-14pt} 
+	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels), each containing $700$ image occurrences on average.}	
+	\vspace{-12pt} 
 \end{figure*}
 
-
 Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following questions:
-\begin{myquote}{0in}
+\begin{myquote}{0.1in}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{myquote}
 In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
@@ -195,7 +194,7 @@ The oracle further provides the signal $x$, the probability $q$ that  the interv
 
 This decision problem can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution: if $\eta = 0$, then $X \sim \mathcal N(\theta_0,\sigma^2I_L)$ and if $\eta = 1$, then $X \sim \mathcal N(\theta_1,\sigma^2I_L)$. 
 
-We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise, if $q \leq 1/2$, the constant estimator $\hat{\eta} = 1$ is correct with probability $1-q$. The question is, can we do better than this?  We prove that, as $\sigma \to \infty$, the answer is no:
+We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise, if $q \leq 1/2$, the constant estimator $\hat{\eta} = 1$ is correct with probability $1-q$. The question is, can we do better than this?  We prove that, as $\sigma \to \infty$, the answer is no. The result is proved in Appendix~\ref{sec:proof_two_gauss}.
 \begin{proposition} \label{prop:two_gauss}
 	For any deterministic estimator $\hat{\eta }$ of $\eta$,
 	\begin{align*}
@@ -203,7 +202,6 @@ We observe $X$, and our task is to estimate $\eta$. How reliably can this be don
 	\end{align*}
 	that is: as the SNR deteriorates, the probability of success is no better than random chance.
 \end{proposition}
-\noindent The result is proved in Appendix~\ref{sec:proof_two_gauss}.
 
 Proposition~\ref{prop:two_gauss} implies that in order to estimate the signal at low SNR we must consider methods that aim to estimate the signal $x$ directly, without estimating the nuisance variable $s$ as an intermediate step.
 In the next sections, we consider autocorrelation analysis for that purpose.
@@ -319,22 +317,22 @@ almost all signals with the given measurements. The proof is provided in Appendi
 %	\end{proof}
 \end{proposition}
 
-From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce the following:
-\begin{corollary}
-	%Let $K=1$ and $\sigma > 0$ be fixed.
-	In the limit of $N\to \infty$ and under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if either the signal $x$ is generic or $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
-\end{corollary}
-
-%This can be added to an arxiv version of the paper	
 %From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce the following:
 %\begin{corollary}
 %	%Let $K=1$ and $\sigma > 0$ be fixed.
-%	 In the limit of $N\to \infty$ and under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if:
-%	\begin{itemize}
-%		\item Either the signal $x$ is generic; or
-%		\item   $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
-%	\end{itemize}
+%	In the limit of $N\to \infty$ and under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if either the signal $x$ is generic or $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
 %\end{corollary}
+
+%This can be added to an arxiv version of the paper	
+From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce the following:
+\begin{corollary}
+	%Let $K=1$ and $\sigma > 0$ be fixed.
+	 In the limit of $N\to \infty$ and under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if:
+	\begin{itemize}
+		\item Either the signal $x$ is generic; or
+		\item   $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
+	\end{itemize}
+\end{corollary}
 %
 %\TODO{Similar results hold for signals in higher dimensions.---need to keep this sentence in red until the very end to make sure it's correct.}
 
@@ -482,7 +480,7 @@ We run the toy model experiments on a shared computer with 144 logical CPUs of t
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[scale=0.28]{Einstein_recovery_error_combined}
+	\includegraphics[width=\linewidth]{Einstein_recovery_error_combined}
 	\caption{\label{fig:error_per_micro}Relative error curves for the experiment of Figure~\ref{fig:Einst_example}.}
 \end{figure}
 
@@ -597,116 +595,6 @@ as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has
 
 The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in~\cite{stewart1980efficient}, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE\footnote{\url{http://spr.math.princeton.edu}}. %\cite{aspire}.
 We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. The location of the upper left corner of each new projection is picked uniformly at random from the set of available indices. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L_{\text{max}}=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
-
-\section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
-
-
-%Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
-%We will let the number of instances of the signal $M$ grow with $N$, and write $M=M_N$ to emphasize this.
-We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, so that
-% We assume $M_N$ grows proportionally with $N$, and recall that
-% define: %\TODO{---Nico: the paper now no longer references $M_N$ and defines $\gamma$ 'as is' for given $M$ and $N$; may want to adapt things here as a result. It wouldn't make sense to make $M_N$ appear in the paper I think, as it just makes things more complicated. In a sense, much of this beginning of appendix is just repeating things we already said cleanly in the paper: let's just follow up from that.}
-%
-\begin{equation*}
-\gamma := \frac{ML}{N}>0.
-\end{equation*}
-%
-Any vectors with indices out of range are given value 0.
-
-We start by considering the mean of the data:
-\begin{equation*}
-a_y^1 = \frac{1}{N}\sum_{i=0}^{N-1} y[i] =
-\frac{1}{N/L}\sum_{j=0}^{M-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] +    
-\underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}}
-\xrightarrow{a.s.}\gamma a_x^1,
-\end{equation*}
-%
-where the noise term converges to zero almost surely (a.s.)\ by the strong law of large numbers.
-
-We proceed with the (second-order) autocorrelation for fixed $\ell\in[0,\ldots,L-1]$. We can compute:
-%
-\begin{align*}
-%
-a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]
-\nonumber \\
-& = \underbrace{\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}}
-\\ & + \underbrace{\frac{1}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] (\varepsilon[s_j + i + \ell] + \varepsilon[s_j + i - \ell])}_{\text{cross-term}}. 
-%
-\end{align*}
-The cross-term is linear in the noise, and is easily shown to vanish almost surely in the limit $N\to\infty$, by the strong law of large numbers. We break the signal term into $M$ different sums, each containing one copy of the signal. This gives:
-%
-\begin{align} \label{eq:2nd_moment_signal_term}
-%
-\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] & = \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\nonumber\\&\xrightarrow{N\to\infty}\gamma a_x^2[\ell].
-%
-\end{align}
-%
-We next analyze the pure noise term. When $\ell\neq 0$, we can break the noise term into a sum of independent terms:
-%
-\begin{equation*}
-%
-\frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
-%
-\end{equation*}
-%
-Each sum $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, hence converges to zero almost surely as $N\to\infty$. If $\ell=0$, then we have:
-%
-\begin{equation*}
-%
-\frac{1}{N}\sum_{i=0}^{N-1} \varepsilon^2[i] \xrightarrow{a.s.} \sigma^2.
-%
-\end{equation*}
-
-We now analyze the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2\ge0$. We have:
-%
-\begin{align*}
-%
-&a_y^3[\ell_1,\ell_2] 
-= \frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]
-\nonumber \\
-%
-=& \underbrace{ \frac{ML}{N}\frac{1}{M}\sum_{j=1}^M 
-	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x[i]x[i+\ell_1]x[i+\ell_2]   }_{(1)}
-\\& + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]}_{(2)}
-\nonumber \\
-&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-1} x[i]\ep[s_j + i+\ell_1]\ep[s_j+ i+\ell_2]}_{(3)}
-\\& + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]}_{(4)}
-\nonumber \\
-&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_2]\ep[s_j+i+\ell_1-\ell_2]x[i]}_{(5)}
-\\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i-\ell_2]x[i+\ell_1-\ell_2]x[i]}_{(6)}
-\nonumber \\
-&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[i+\ell_2]}_{(7)}
-\\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-\ell_1-1} x[i]x[i+\ell_1]\ep[s_j+ i+\ell_2]}_{(8)}.
-%
-\end{align*}
-%
-Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge to 0 almost surely by the law of large numbers, by similar arguments as used previously. Term (1) converges to $\gamma a_x^3[\ell_1,\ell_2]$ almost surely, for the same reasons as~\eqref{eq:2nd_moment_signal_term}. To deal with terms (2)--(5), we must distinguish between different values of $\ell_1$ and $\ell_2$.
-
-{\bf Case 1:} $0 < \ell_2 < \ell_1$. Here, all summands with elements of $\ep$ involve products of distinct entries, which have expected value 0. Consequently, the usual argument shows that terms (2)--(5) all converge to 0 almost surely as $N \to \infty$.
-
-{\bf Case 2:} $0=\ell_2 < \ell_1$. Term (2) is an average of products of the form $\ep[i]^2\ep[i+\ell_1]$, which have mean zero; consequently, term (2) converges to 0 almost surely. The same argument as for Case 1 shows that (3) and (5) also converge to 0. For term (4), we write:
-%
-\begin{align*}
-%
-&\frac{1}{N}\sum_{j=1}^{M} 
-\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]
-\nonumber \\
-&= \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-1}x[i] \frac{1}{M}\sum_{j=1}^{M} \ep[s_j+i-\ell_1]^2
-\\& \xrightarrow{a.s.} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2. \nonumber
-%
-\end{align*}
-
-{\bf Case 3:} $0<\ell_2 = \ell_1$. An argument nearly identical to that for Case 2 shows that terms (2), (4) and (5) converge to 0, while term (3) converges to $\gamma a_x^1 \sigma^2$.
-
-{\bf Case 4:} $0=\ell_2 = \ell_1$. The same argument as for term (4) in Case 2 shows that terms (3), (4) and (5) all converge to $\gamma a_x^1 \sigma^2$. Term (2) is an average of $\ep[i]^3$, which is mean zero; consequently, it converges to 0.
-
-This completes the proof.
 
 \section{Proof of Proposition~\ref{prop:two_gauss}} \label{sec:proof_two_gauss}
 
@@ -860,6 +748,115 @@ as $\sigma \to \infty$. Hence,
 That is, the probability of success converges to $q$.
 Finally, if $q < 1/2$, then $\log(b) > 0$ and a similar reasoning shows the probability of success converges to $1-q$.
 In all cases, the probability of success of the best possible deterministic estimator converges to $\max(q, 1-q)$.
+
+\section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
+
+
+%Throughout the proof, we consider the case of one signal $K=1$. The extension to $K>1$ is straightforward by averaging the contributions of all signal with  appropriate weights; see~\cite{boumal2017heterogeneous}. 
+%We will let the number of instances of the signal $M$ grow with $N$, and write $M=M_N$ to emphasize this.
+We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, so that
+% We assume $M_N$ grows proportionally with $N$, and recall that
+% define: %\TODO{---Nico: the paper now no longer references $M_N$ and defines $\gamma$ 'as is' for given $M$ and $N$; may want to adapt things here as a result. It wouldn't make sense to make $M_N$ appear in the paper I think, as it just makes things more complicated. In a sense, much of this beginning of appendix is just repeating things we already said cleanly in the paper: let's just follow up from that.}
+%
+\begin{equation*}
+\gamma := \frac{ML}{N}>0.
+\end{equation*}
+%
+Any vectors with indices out of range are given value 0.
+
+We start by considering the mean of the data:
+\begin{equation*}
+a_y^1 = \frac{1}{N}\sum_{i=0}^{N-1} y[i] =
+\frac{1}{N/L}\sum_{j=0}^{M-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] +    
+\underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}}
+\xrightarrow{a.s.}\gamma a_x^1,
+\end{equation*}
+%
+where the noise term converges to zero almost surely (a.s.)\ by the strong law of large numbers.
+
+We proceed with the (second-order) autocorrelation for fixed $\ell\in[0,\ldots,L-1]$. We can compute:
+%
+\begin{align*}
+%
+a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]
+\nonumber \\
+& = \underbrace{\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}}
+\\ & + \underbrace{\frac{1}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] (\varepsilon[s_j + i + \ell] + \varepsilon[s_j + i - \ell])}_{\text{cross-term}}. 
+%
+\end{align*}
+The cross-term is linear in the noise, and is easily shown to vanish almost surely in the limit $N\to\infty$, by the strong law of large numbers. We break the signal term into $M$ different sums, each containing one copy of the signal. This gives:
+%
+\begin{align} \label{eq:2nd_moment_signal_term}
+%
+\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] & = \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\nonumber\\&\xrightarrow{N\to\infty}\gamma a_x^2[\ell].
+%
+\end{align}
+%
+We next analyze the pure noise term. When $\ell\neq 0$, we can break the noise term into a sum of independent terms:
+%
+\begin{equation*}
+%
+\frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
+%
+\end{equation*}
+%
+Each sum $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, hence converges to zero almost surely as $N\to\infty$. If $\ell=0$, then we have:
+%
+\begin{equation*}
+%
+\frac{1}{N}\sum_{i=0}^{N-1} \varepsilon^2[i] \xrightarrow{a.s.} \sigma^2.
+%
+\end{equation*}
+
+We now analyze the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2\ge0$. We have:
+%
+\begin{align*}
+%
+&a_y^3[\ell_1,\ell_2] 
+= \frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]
+\nonumber \\
+%
+=& \underbrace{ \frac{ML}{N}\frac{1}{M}\sum_{j=1}^M 
+	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x[i]x[i+\ell_1]x[i+\ell_2]   }_{(1)}
+\\& + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]}_{(2)}
+\nonumber \\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} x[i]\ep[s_j + i+\ell_1]\ep[s_j+ i+\ell_2]}_{(3)}
+\\& + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]}_{(4)}
+\nonumber \\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_2]\ep[s_j+i+\ell_1-\ell_2]x[i]}_{(5)}
+\\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i-\ell_2]x[i+\ell_1-\ell_2]x[i]}_{(6)}
+\nonumber \\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[i+\ell_2]}_{(7)}
+\\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_1-1} x[i]x[i+\ell_1]\ep[s_j+ i+\ell_2]}_{(8)}.
+%
+\end{align*}
+%
+Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge to 0 almost surely by the law of large numbers, by similar arguments as used previously. Term (1) converges to $\gamma a_x^3[\ell_1,\ell_2]$ almost surely, for the same reasons as~\eqref{eq:2nd_moment_signal_term}. To deal with terms (2)--(5), we must distinguish between different values of $\ell_1$ and $\ell_2$.
+
+{\bf Case 1:} $0 < \ell_2 < \ell_1$. Here, all summands with elements of $\ep$ involve products of distinct entries, which have expected value 0. Consequently, the usual argument shows that terms (2)--(5) all converge to 0 almost surely as $N \to \infty$.
+
+{\bf Case 2:} $0=\ell_2 < \ell_1$. Term (2) is an average of products of the form $\ep[i]^2\ep[i+\ell_1]$, which have mean zero; consequently, term (2) converges to 0 almost surely. The same argument as for Case 1 shows that (3) and (5) also converge to 0. For term (4), we write:
+%
+\begin{align*}
+%
+&\frac{1}{N}\sum_{j=1}^{M} 
+\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]
+\nonumber \\
+&= \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-1}x[i] \frac{1}{M}\sum_{j=1}^{M} \ep[s_j+i-\ell_1]^2
+\\& \xrightarrow{a.s.} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2. \nonumber
+%
+\end{align*}
+
+{\bf Case 3:} $0<\ell_2 = \ell_1$. An argument nearly identical to that for Case 2 shows that terms (2), (4) and (5) converge to 0, while term (3) converges to $\gamma a_x^1 \sigma^2$.
+
+{\bf Case 4:} $0=\ell_2 = \ell_1$. The same argument as for term (4) in Case 2 shows that terms (3), (4) and (5) all converge to $\gamma a_x^1 \sigma^2$. Term (2) is an average of $\ep[i]^3$, which is mean zero; consequently, it converges to 0.
+This completes the proof.
 
 
 \section{Proof of Proposition~\ref{prop:gamma}} \label{sec:proof_prop_gamma}
