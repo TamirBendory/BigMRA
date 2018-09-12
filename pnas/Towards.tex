@@ -25,11 +25,13 @@
 \leadauthor{Bendory} 
 
 % Please add here a significance statement to explain the relevance of your work
-\significancestatement{It is commonly believed that cryo-EM cannot be used to image the 3-D structure of small molecules (below $\sim$50kDa). The classical argument is that, due to high noise levels in cryo-EM, small particles cannot be detected reliably in micrographs. Challenging that belief, we demonstrate on a mathematical toy model that detection is not a prerequisite for structure reconstruction. Our reconstruction method is based on autocorrelation analysis. It requires only one pass over the data, so that it should, in principle, be appropriate for high-throughput experiments. This autocorrelation approach could also apply to other applications where the goal is estimation rather than detection.
+\significancestatement{It is commonly believed that cryo-EM cannot be used to image the 3-D structure of small molecules (below $\sim$50kDa). The classical argument is that, due to high noise levels in cryo-EM, small particles cannot be detected reliably in micrographs. Challenging that belief, we demonstrate on a mathematical toy model that detection is not a prerequisite for structure determination. 
+Our reconstruction method is based on autocorrelation analysis. It requires only one pass over the data, so that it should, in principle, be appropriate for high-throughput experiments. This autocorrelation approach could also apply to other applications where the goal is estimation rather than detection.
 }
 
 % Please include corresponding author, author contribution and author declaration information
-\authorcontributions{Please provide details of author contributions here.}
+\authorcontributions{Author contributions: T.B., N.B., W.L., E.L., and A.S., designed research, performed research and wrote the paper; E.L. wrote the  computer code for the cryo-EM experiments;  N.B. and T.B.  wrote the computer code for the 1-D and 2-D numerical experiments. Authors are listed alphabetically.
+}
 \authordeclaration{The authors declare no conflicts of interest.}
 %\equalauthors{\textsuperscript{1}A.O.(Author One) and A.T. (Author Two) contributed equally to this work (remove if not applicable).}
 \correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: tamir.bendory@princeton.edu %\TODO{Should this be Amit's address?}
@@ -40,10 +42,14 @@
 
 
 \begin{abstract}
-{C}ryo--electron microscopy (cryo--EM) is used in structural biology to determine the 3-D structure of molecules. In a cryo-EM experiment, the microscope produces images called micrographs. Projections of the molecule of interest are embedded in the micrographs at unknown locations, and under unknown viewing directions. Standard imaging techniques first locate these projections (detection) and then reconstruct the 3-D structure from them. Unfortunately, high noise levels hinder detection. When reliable detection is rendered impossible, the standard techniques fail. This is a problem especially for small molecules, which can be particularly hard to detect. In this paper, we propose a radically different approach: we contend that the structure could, in principle, be reconstructed directly from the micrographs, without intermediate detection. % and independently of the noise level (provided sufficiently many micrographs are acquired). 
-As a result, even small molecules should be within reach for cryo-EM. To support this claim, we setup a simplified mathematical model and demonstrate how our autocorrelation-based techniques allow to go directly from the micrographs to the sought signals. This involves only one pass over the micrographs, which is desirable for large experiments. Furthermore, concerns regarding experimental bias are reduced as we do not require particle picking via template matching. 
-%We detail elementary theory for a 1-D version of the simplified model and show how to extend it to 2-D and to single particle reconstruction from synthetic cryo-EM data. We show numerical results, then discuss challenges that lay ahead to turn this proof-of-concept into a competitive alternative to state-of-the-art algorithms.
-We detail elementary theory for the simplified model and show how to extend it to single particle reconstruction from synthetic cryo-EM data. We show numerical results and then discuss challenges that lay ahead to turn this proof-of-concept into a competitive alternative to state-of-the-art algorithms.
+%{C}ryo--electron microscopy (cryo--EM) is used in structural biology to determine the 3-D structure of molecules. 
+Single-particle cryo-electron microscopy (cryo-EM) has recently joined X-ray crystallography
+and NMR spectroscopy as a high-resolution structural method for biological macromolecules.
+In a cryo-EM experiment, the microscope produces images called micrographs. Projections of the molecule of interest are embedded in the micrographs at unknown locations, and under unknown viewing directions. Standard imaging techniques first locate these projections (detection) and then reconstruct the 3-D structure from them. Unfortunately, high noise levels hinder detection. When reliable detection is rendered impossible, the standard techniques fail. This is a problem especially for small molecules, which can be particularly hard to detect. In this paper, we propose a radically different approach: we contend that the structure could, in principle, be reconstructed directly from the micrographs, without intermediate detection. % and independently of the noise level (provided sufficiently many micrographs are acquired). 
+As a result, even small molecules should be within reach for cryo-EM. To support this claim, we setup a simplified mathematical model and demonstrate how our autocorrelation analysis technique allows to go directly from the micrographs to the sought signals. This involves only one pass over the micrographs, which is desirable for large experiments. 
+%Furthermore, concerns regarding experimental bias are reduced as we do not require particle picking via template matching. 
+%We detail elementary theory for the simplified model and show how to extend it to single particle reconstruction from synthetic cryo-EM data.
+We show numerical results and  discuss challenges that lay ahead to turn this proof-of-concept into a competitive alternative to state-of-the-art algorithms.
 \end{abstract}
 
 \dates{This manuscript was compiled on \today}
@@ -55,11 +61,13 @@ We detail elementary theory for the simplified model and show how to extend it t
 \thispagestyle{firststyle}
 \ifthenelse{\boolean{shortarticle}}{\ifthenelse{\boolean{singlecolumn}}{\abscontentformatted}{\abscontent}}{}
 
-\setlength{\abovedisplayskip}{2pt}
-\setlength{\belowdisplayskip}{2pt}
+%\setlength{\abovedisplayskip}{2pt}
+%\setlength{\belowdisplayskip}{2pt}
+
+\begin{bibunit}
 
 
-\dropcap{C}ryo--electron microscopy (cryo--EM) is an imaging technique in structural biology used for single particle reconstruction (SPR) of macromolecules.
+\dropcap{C}ryo-electron microscopy (cryo-EM) is an imaging technique in structural biology used for single particle reconstruction (SPR) of macromolecules.
 In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice. %Within the ice, the molecules are randomly oriented and positioned.
  The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structure from the micrographs.
 
@@ -86,24 +94,24 @@ The first stage consists in extracting the various particle projections from the
 		\caption{$\sigma = 3$}
 	\end{subfigure}
 	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}
-	\vspace{-12pt} 	
+	%\vspace{-8pt} 	
 \end{figure*}
 
 
 \begin{figure*}[h]
 	\centering
 	\includegraphics[width=1\linewidth]{Einstien_progress_examples}
-	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels from left to right), each containing $700$ image occurrences on average.}	
-	\vspace{-12pt} 
+	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels from left to right) of size $4096\times 4096$, each containing $700$ image occurrences on average.}	
+%	\vspace{-8pt} 
 \end{figure*}
 
 Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following questions:
-\begin{myquote}{0in}
+\begin{myquote}{.2in}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{myquote}
 In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
 Joachim Frank voices a similar observation in his 2017 Nobel prize lecture: ``\emph{Using the ribosome as an example, it became clear from the formula we obtained that the single-particle approach to structure research was indeed feasible for molecules of sufficient size: Particle Size > 3/[Contrast$^2$ $\times$ Resolution (as length) $\times$ Critical Electron Dose]}''~\cite{frank2018single}. 
-As these two leaders of the cryo-EM community point out, it is impossible to reconstruct small molecules by any of the existing computational pipelines for single particle analysis in cryo--EM, because the particles themselves cannot be picked from the micrographs. Yet, imaging such molecules is important for a number of applications~\cite{scapin2018cryo}
+As these two leaders of the cryo-EM community point out, it is impossible to reconstruct small molecules by any of the existing computational pipelines for single particle analysis in cryo--EM, because the particles themselves cannot be picked from the micrographs. Yet, imaging such molecules is important for structure-guided drug design and other applications~\cite{scapin2018cryo}.
 
 The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
 Despite this progress, detecting small molecules in the micrographs remains a challenge.
@@ -133,21 +141,20 @@ Another interesting feature of the described approach pertains to model bias, wh
 In this section, we present a toy model in order to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles carry through for the SPR problem. We first formulate the model for 1-D signals to ease exposition.
 
 Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
-\begin{align}
-y & =  x \ast s + \varepsilon, & \varepsilon & \sim \mathcal{N}(0,\sigma^2 I_N),
+\begin{equation}
+y  =  x \ast s + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
-\end{align}
+\end{equation}
 where $\ast$ denotes linear convolution. 
 While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$.
-This is a key difference with other works on  \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}
-, just to name a few. 
+This is a key difference with other works on  \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
 
 We assume the binary signal $s$ obeys a \emph{separation condition}:
-\begin{align} 
+\begin{equation}
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
-\end{align}
+\end{equation}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
 
 Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the
@@ -181,11 +188,12 @@ The oracle further provides the signal $x$, the probability $q$ that  the interv
 This decision problem can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution: if $\eta = 0$, then $X \sim \mathcal N(\theta_0,\sigma^2I_L)$ and if $\eta = 1$, then $X \sim \mathcal N(\theta_1,\sigma^2I_L)$. 
 
 We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise, if $q \leq 1/2$, the constant estimator $\hat{\eta} = 1$ is correct with probability $1-q$. The question is, can we do better than this?  We prove that, as $\sigma \to \infty$, the answer is no. The result is proved in Appendix~\ref{sec:proof_two_gauss}.
+
 \begin{proposition} \label{prop:two_gauss}
 	For any deterministic estimator $\hat{\eta }$ of $\eta$,
-	\begin{align*}
-	\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] & \leq \max(q, 1-q);
-	\end{align*}
+	\begin{equation}
+	\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] \leq \max(q, 1-q);
+	\end{equation}
 	that is: as the SNR deteriorates, the probability of success is no better than random chance.
 \end{proposition}
 
@@ -195,10 +203,10 @@ In the next sections, we consider autocorrelation analysis for that purpose.
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
 In general, for a signal $z$ of length $m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
-\begin{align}
-a_z^q[\ell_1,\ldots,\ell_{q-1}]  & = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
+\begin{equation}
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
 \label{eq:ac_general}
-\end{align}
+\end{equation}
 where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
 For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
 %This part can be added to an arxiv version of the manuscript
@@ -213,33 +221,36 @@ For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (o
 %$
 
 Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
-\begin{align}
-	\gamma & = \frac{M L}{N}
-	\label{eq:gamma}
-\end{align}
+\begin{equation}
+	\gamma  = \frac{M L}{N}
+\label{eq:gamma}
+\end{equation}
 denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
 imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
 For shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
 We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $M$ also goes to infinity at the same rate (in other words, as we see an increasingly large micrograph, it contains increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
-\begin{align} \label{eq:mean_micrograph}
-\lim_{N\to\infty} a_y^1 & \aseq \gamma a_{x}^1,
-\end{align}
+\begin{equation} \label{eq:mean_micrograph}
+\lim_{N\to\infty} a_y^1  \aseq \gamma a_{x}^1,
+\end{equation}
 where equality holds almost surely (a.s.), meaning it holds with probability one.
 The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic.
 Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.) 
 
 We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result,
-\begin{align}
-	\lim_{N\to\infty} a_y^2[\ell] & \aseq \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell],
+\begin{equation}
+	\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell],
 	\label{eq:ac2_micrograph}
-\end{align}
+\end{equation}
 for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and zero otherwise. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
 
 Along the same lines, one can establish a relation for third-order autocorrelations:
-\begin{multline}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma a_{x}^3[\ell_1,\ell_2] \label{eq:ac3_micrograph} \\ + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]+\delta[\ell_1,\ell_2]\big),
-\end{multline}
+\begin{equation}
+\begin{split} \label{eq:ac3_micrograph}
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &\aseq \gamma a_{x}^3[\ell_1,\ell_2]  \\& + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]
++\delta[\ell_1,\ell_2]\big),
+\end{split}
+\end{equation}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$, where $\delta[\ell_1,\ell_2]:=\delta[\ell_1-\ell_2]$.
 Here too, few entries are affected by $\sigma$ in the limit.
 See Appendix~\ref{sec:autocorrelation_computation}.
@@ -250,12 +261,12 @@ Computing the autocorrelations of the micrograph is straightforward. The natural
 
 A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
 %
-\begin{align}
+\begin{equation}
 %
-z[k] & = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
+z[k]  = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
 \label{eq-uniqueness}
 %
-\end{align}
+\end{equation}
 This proves the following useful fact:
 \begin{proposition} \label{prop:uniqueness}
 	%
@@ -264,7 +275,7 @@ This proves the following useful fact:
 
 A couple of remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
 Second, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
-However, for dimensions greater than one, almost all signals are determined uniquely up to sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. %,hayes1982reducible}. 
+However, for dimensions greater than one \footnote{Autocorrelation in $d$ dimensions is defined similarly to~\eqref{eq:ac_general}, where $ i, \ell_1, \ldots, \ell_{q-1}$ take on values in $\mathbb{Z}^d$ and the summation in $i$ is over all of $\mathbb{Z}^d$.}, almost all signals are determined uniquely up to sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. %,hayes1982reducible}. 
 The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 
 The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that $x$ is still determined by the observed moments of $y$.
@@ -272,17 +283,14 @@ The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield t
 %identifiable from the observed moments of $y$. In general, we say a parameter is ``identifiable'' if its value is uniquely determined in the limit $N \to \infty$.
 
 First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Appendix~\ref{sec:proof_prop_gamma}.
-%
+
 \begin{proposition} \label{prop:gamma}
 	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then 
-	%
-	\begin{align*}
-	%
-	\gamma & \aseq \lim_{N \to \infty}\frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
-	%
-	\end{align*}
-	%
+	\begin{equation}
+\gamma  \aseq \lim_{N \to \infty}\frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
+	\end{equation}
 \end{proposition}
+
 %\begin{proof}
 %In the limit, $(a^1_y)^2=\frac{\gamma^2}{L^2}\sum_{i=0}^{L-1}\sum_{j=0}^{L-1}x[i]x[j]$. Similarly,  $\sum_{\ell = 1}^{L-1}a_y^2[\ell]=\frac{\gamma}{L}\sum_{\ell = 1}^{L-1}\sum_{i=0}^{L-1-\ell}x[i]x[i+\ell]$ and $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x^2[i] + \sigma^2$. The proof is concluded by noting that  $a_x^2[-\ell]=a_x^2[\ell]$. 
 %%	Plug in the explicit expressions of~\eqref{eq:mean_micrograph} and~\eqref{eq:ac2_micrograph} into the right hand side of the equality.
@@ -377,7 +385,7 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 	\caption{\label{fig:cryo_recon} Reconstructions from the first, second and third order autocorrelations.
 		The ground truth volumes were expanded according to~\eqref{eq:volume_expansion_app} with cutoff $L_{\text{max}}$.
 		The reconstruction is shown in gray, the (smoothed) ground truth in yellow, and the original molecules are shown in blue to illustrate the smoothing effect of our downsampling and truncation of the spherical harmonics expansion. }
-		 \vspace{-20pt} 	
+%		 \vspace{-20pt} 	
 \end{figure}
 % -------------- Vertical subfigures: -------------------------------
 
@@ -434,10 +442,11 @@ In pursuing this research direction, our goal is to significantly increase the r
 We recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. We discuss a few now.
 
 The numerical experiments we have performed reveal that the third-order autocorrelation may not be enough for 3-D reconstruction in practice, due to high sensitivity.
-This suggests that fourth-order autocorrelation may be necessary. This in turn would imply that the procedure might require a large amount of data.\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable SNR remains an open question.} Recent trends in high-throughput cryo-EM technology   give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved accurately and efficiently in practice. 
+This suggests that fourth-order autocorrelation may be necessary. This in turn would imply that the procedure might require a large amount of data. %\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable SNR remains an open question.}
+Recent trends in high-throughput cryo-EM technology   give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in a  streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved accurately and efficiently in practice. 
 
 Beyond data acquisition and computational challenges, there are modeling issues to consider.
-In contrast to the simplifying assumptions we have made above, the noise might be colored; the viewing directions of the particles may be distributed non-uniformly; their may be conformational heterogeneity; particles generally do not satisfy our separation condition; and micrographs undergo a contrast transfer function which we have omitted. All of these aspects can be handled with the same general strategy: establish a forward model relating the expected autocorrelations of the micrographs to the target volume(s) and all parameters necessary to model the above effects. For instance, for colored noise, the forward model may involve multiple parameters to capture the power spectrum of the noise instead of the single parameter $\sigma^2$. The separation condition could be relaxed by assuming a Poisson process of particle distribution in the micrograph, in which case the forward model will involve the Poisson parameter.
+In contrast to the simplifying assumptions we have made above, the noise might be colored; the viewing directions of the particles may be distributed non-uniformly; there may be conformational heterogeneity; particles generally do not satisfy our separation condition; and micrographs undergo a contrast transfer function which we have omitted. All of these aspects can be handled with the same general strategy: establish a forward model relating the expected autocorrelations of the micrographs to the target volume(s) and all parameters necessary to model the above effects. For instance, for colored noise, the forward model may involve multiple parameters to capture the power spectrum of the noise instead of the single parameter $\sigma^2$. The separation condition could be relaxed by assuming a Poisson process of particle distribution in the micrograph, in which case the forward model will involve the Poisson parameter.
 %To address this point, it may be necessary to investigate better noise models and to incorporate power spectrum estimation methods. % and to extend the autocorrelation analysis accordingly. 
 %Second, we assume that any two particles are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the 3-D volume. 
 %We believe that this constraint could be replaced by a probabilistic condition on the average number of projections per micrograph.  
@@ -452,11 +461,23 @@ The research was partially supported by Award Number R01GM090200 from the NIGMS,
 NB is partially supported by NSF award DMS-1719558.
 
 
-% Bibliography
-\bibliography{ref}
+\putbib
 
+\end{bibunit}
+
+%\bibliographystyle{main}{plain}
+%\bibliography{main}{literature}{References}
+% Bibliography
+%\bibliography{ref}
+
+
+\newpage 
+
+\begin{bibunit}
 
 \appendix
+
+
 
 \section{Numerical experiments details} \label{sec:numeric_details}
 
@@ -1385,5 +1406,8 @@ a^1_{I_{\omega}}\rangle_{\omega}  = \widehat  \phi(\mb 0) = \frac{1}{\sqrt{4\pi}
 %Similarly, for the power spectrum we get
 %\[ \widetilde{\mathfrak{m}}_2(q) = \mathfrak{m}_2(q) + \sigma^2\frac{1}{\sqrt{2\pi}}R_{0,q}(0).\]
 
+\putbib
+
+\end{bibunit}
 
 \end{document}
