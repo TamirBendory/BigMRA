@@ -65,8 +65,8 @@ We show numerical results and  discuss challenges that lay ahead to turn this pr
 %\setlength{\belowdisplayskip}{2pt}
 
 \begin{bibunit}
-
-\TODO{In RELION 3 paper, see these references, relevant for our claims about streaming mode: ``Other programs tackled individual steps in the single-particle workflow, like [...] on-the-fly processing of images while they are being acquired at the microscope [de la Rosa-Trevin et al., 2016, Biyani et al., 2017].''}
+%
+%\TODO{In RELION 3 paper, see these references, relevant for our claims about streaming mode: ``Other programs tackled individual steps in the single-particle workflow, like [...] on-the-fly processing of images while they are being acquired at the microscope [de la Rosa-Trevin et al., 2016, Biyani et al., 2017].''}
 
 \dropcap{C}ryo-electron microscopy (cryo-EM) is an imaging technique in structural biology used for single particle reconstruction (SPR) of macromolecules.
 In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice. %Within the ice, the molecules are randomly oriented and positioned.
@@ -431,23 +431,27 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 
 \section{Discussion}
  
-In the simplified mathematical model we examined, we showed it is possible to estimate a signal without detecting its appearances.  
-Our strategy is to compute autocorrelation functions of the micrographs and to relate these statistics to the unknown signal's parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations. 
+In the simplified mathematical model above, we showed it is possible to estimate a signal without detecting its appearances.  
+Our strategy is to compute autocorrelations of the micrographs and to relate these statistics to the unknown signal's parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations. 
 
 We also showed how this technique can, in principle, be applied to cryo-EM.
 Crucially, the outlined approach involves no particle picking, hence a fortiori no viewing direction estimation. Concerns for model bias are also greatly reduced since no template matching is involved.
 Additionally,  our technique also allows the use of much lower defocus values. Lower defocus means lower contrast, but will maintain  higher frequency information. Consequently, we may be able to get high resolution reconstructions from fewer micrographs.
 
-Looking towards applying the framework to encompass all important features of real cryo-EM experiments, our work implies that it might be possible to reconstruct small molecules, particularly, molecules that are too small to be detected in micrographs. 
+Looking toward applying the framework to encompass all important features of real cryo-EM experiments, our work implies that it might be possible to reconstruct small molecules, particularly, molecules that are too small to be detected in micrographs. 
 In pursuing this research direction, our goal is to significantly increase the range of molecules to which cryo-EM can be successfully applied.
-We recognize that significant challenges lay ahead for the implementation of the proposed approach to 3-D reconstruction directly from the micrographs. We discuss a few now.
+We recognize that significant challenges lay ahead for the implementation of the proposed approach to \revised{high-resolution} 3-D reconstruction directly from the micrographs. We discuss a few now.
 
 The numerical experiments we have performed reveal that the third-order autocorrelation may not be enough for 3-D reconstruction in practice, due to high sensitivity.
 This suggests that fourth-order autocorrelation may be necessary. This in turn would imply that the procedure might require a large amount of data. %\footnote{Whether or not this large amount of data would be necessary for any method to succeed given the unfavorable SNR remains an open question.}
 Recent trends in high-throughput cryo-EM technology   give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in a  streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved accurately and efficiently in practice. 
 
-Beyond data acquisition and computational challenges, there are modeling issues to consider.
-In contrast to the simplifying assumptions we have made above, the noise might be colored; the viewing directions of the particles may be distributed non-uniformly; there may be conformational heterogeneity; particles generally do not satisfy our separation condition; and micrographs undergo a contrast transfer function which we have omitted. All of these aspects can be handled with the same general strategy: establish a forward model relating the expected autocorrelations of the micrographs to the target volume(s) and all parameters necessary to model the above effects. For instance, for colored noise, the forward model may involve multiple parameters to capture the power spectrum of the noise instead of the single parameter $\sigma^2$. The separation condition could be relaxed by assuming a Poisson process of particle distribution in the micrograph, in which case the forward model will involve the Poisson parameter.
+\revised{To reach high-resolution reconstruction,} beyond data acquisition and computational challenges, there are modeling issues  to consider.
+In contrast to the simplifying assumptions we have made above, the noise might be colored; the viewing directions of the particles may be distributed non-uniformly; there may be conformational heterogeneity; particles generally do not satisfy our separation condition; and micrographs undergo a contrast transfer function which we have omitted. All of these aspects can be handled with the same general strategy: establish a forward model relating the expected autocorrelations of the micrographs to the target volume(s) and all parameters necessary to model the above effects. 
+For instance, for colored noise, the forward model may involve multiple parameters to capture the power spectrum of the noise instead of the single parameter $\sigma^2$. 
+\revised{Similarly, instead of the separation condition, we can model the spacing between the projections using a parameterized pair-correlation function. Such a function models the distribution of distances between neighboring projections. The observed autocorrelations depend linearly on these parameters, which would be estimated as part of the inverse problem.
+}
+%The separation condition could be relaxed by assuming a Poisson process of particle distribution in the micrograph, in which case the forward model will involve the Poisson parameter.
 %To address this point, it may be necessary to investigate better noise models and to incorporate power spectrum estimation methods. % and to extend the autocorrelation analysis accordingly. 
 %Second, we assume that any two particles are sufficiently separated, and we use this assumption to derive algebraic relations between autocorrelations of the micrographs and autocorrelations of the 3-D volume. 
 %We believe that this constraint could be replaced by a probabilistic condition on the average number of projections per micrograph.  
@@ -529,9 +533,17 @@ The computational complexity scales as $O(N^2L^2 + F(L))$, where $F$ is the comp
 \end{figure*}
 
 
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.7\linewidth]{example_obs_1D}
+	\caption{\label{fig:1D_obs_example} An example for a 1-D noisy measurement for the experiment in Figure~\ref{fig:1D_example}. The signal occurrences appear in blue, and the noisy data in green.
+	}
+\end{figure}
+
 
 For the 1-D experiment depicted in Figure~\ref{fig:1D_example}, we used a signal of length $L=21$ and generated an observation $y$ of length $N = 10(2L-1)M$, where $M$ is the number of repetitions. 
 The observation was generated by randomly selecting placements in $y$, one at a time with an accept/reject rule based on the separation condition and locations picked so far until reaching the desired number of signal occurrences. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$ is about $1/175$.
+\revised{Figure~\ref{fig:1D_obs_example} shows an example of the observed data.}
 
 Given the observation $y$, we proceed to compute the autocorrelations. %The first-order autocorrelation is straightforward. 
 We excluded biased elements of the autocorrelations; that is $a_y^2[\ell_1]$ and $a_y^3[\ell_1, \ell_2]$ such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero. 
