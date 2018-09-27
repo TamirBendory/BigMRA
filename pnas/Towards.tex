@@ -374,7 +374,7 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 	\centering
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
-		\includegraphics[angle=270, width=.7\textwidth]{TRPV1_rec.eps}
+		\includegraphics[angle=270, width=.7\textwidth]{TRPV1_rec_incl_noisy.eps}
 		\caption{TPRV1 with cutoff $L_{\text{max}}=5$}\label{fig:TRPV1_recon}
 	\end{subfigure}
 	\hfill
@@ -385,7 +385,7 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 	\end{subfigure} 
 	\caption{\label{fig:cryo_recon} Reconstructions from the first, second and third order autocorrelations.
 		The ground truth volumes were expanded according to~\eqref{eq:volume_expansion_app} with cutoff $L_{\text{max}}$.
-		The reconstruction is shown in gray, the (smoothed) ground truth in yellow, and the original molecules are shown in blue to illustrate the smoothing effect of our downsampling and truncation of the spherical harmonics expansion. }
+		\revised{The reconstructions from autocorrelations estimated from noisy data are shown in gray, the reconstructions from clean autocorrelations in yellow, the (smoothed) ground truths in blue, and the original molecules are shown in purple} to illustrate the smoothing effect of our downsampling and truncation of the spherical harmonics expansion. \revised{For the noisy experiment, we used 300 micrographs with SNRs of 1/16 for TRPV1 and 1/64 for BPTI - we present excerpts from noisy micrographs side-by-side with the corresponding clean ones in Figure~\ref{fig:cryo_noisy_micros_for_rec}}}
 %		 \vspace{-20pt} 	
 \end{figure}
 % -------------- Vertical subfigures: -------------------------------
@@ -597,9 +597,49 @@ For example, computing the moments for the experiment in the left panel of Figur
 		The noise realization is identical in both micrographs.} 
 \end{figure*}
 
+\begin{figure*}[t!]
+	\centering
+	\begin{subfigure}[t]{0.245\textwidth}
+		\centering
+		\includegraphics[scale=0.3]{TRPV1_clean_micro.png}
+		\caption{}
+	\end{subfigure} \hfill %\hspace{2pt}
+	\begin{subfigure}[t]{0.245\textwidth}
+		\centering
+		\includegraphics[scale=0.3]{TRPV1_noisy_micro_SNR_16.png}
+		\caption{}
+	\end{subfigure} \hfill %\hspace{2pt}
+	\begin{subfigure}[t]{0.245\textwidth}
+		\centering
+		\includegraphics[scale=0.3]{clean_micro_BPTI.png}
+		\caption{}
+	\end{subfigure} \hfill
+	\begin{subfigure}[t]{0.245\textwidth}
+		\centering
+		\includegraphics[scale=0.3]{noisy_micro_BPTI_SNR_64.png}
+		\caption{}
+	\end{subfigure}
+	\caption{\label{fig:cryo_noisy_micros_for_rec} \revised{Excerpts from the noisy micrographs used for the reconstructions in Figure~\ref{fig:cryo_recon} and the corresponding clean excerpts. (a) Excerpt of the clean TRPV1 micrograph; (b) Excerpt of the noisy TRPV1 micrograph, with SNR $= 1/16$; (c) Excerpt from the clean BPTI micrograph; (d) Excerpt from the noisy BPTI micrograph with SNR $= 1/64$.}} 
+\end{figure*}
+
+\begin{figure*}[t!]
+	\centering
+	\begin{subfigure}[t]{0.4\textwidth}
+		\centering
+		\includegraphics[scale=0.35]{TRPV1_trunc_FSC.eps}
+		\caption{}
+	\end{subfigure} \hfill %\hspace{2pt}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\centering
+		\includegraphics[scale=0.35]{BPTI_FSC.eps}
+		\caption{}
+	\end{subfigure} 
+	\caption{\label{fig:cryo_FSC} \revised{Fourier Shell Correlations (FSCs) for the noisy reconstructions presented in Figure~\ref{fig:cryo_recon} using the $0.5$ criterion, compared to the (low-resolution) ground truth. (a) FSC for the TRPV1 reconstruction, giving resolution of $24 \AA$; (b) FSC for the BPTI reconstruction, giving resolution of $13 \AA$.}} 
+\end{figure*}
+
 The experiments in Figure~\ref{fig:cryo_recon}, and the recoveries of $\gamma$ for the experiment in Figure~\ref{fig:cryo_detection}, were performed on a machine with 40 cores of Intel Xeon E5-2698 v4 @ 2.20GHz with 100 GB of RAM, and took ~2 hours per reconstruction. The computation of the moments from each micrograph in Figure~\ref{fig:cryo_detection} was performed on a machine with 4 nVidia P100 GPUs with 16 GB of memory each and with 100 GB of RAM. It took 3 minutes per micrograph to compute the first three autocorrelations.
 
-For the experiments in Figure~\ref{fig:cryo_detection}, we computed the analytical first three autocorrelations of the volume as explained in Appendix~\ref{sec:ac_cryo}.
+For the \revised{clean} experiments in Figure~\ref{fig:cryo_detection}, we computed the analytical first three autocorrelations of the volume as explained in Appendix~\ref{sec:ac_cryo}.
 To estimate the coefficients of the volume itself, we solve the LS problem
 \begin{equation} \label{eq:LS_cryo}
 \min_{\hat{x},\hat{\gamma}} w_1 \vert \mathfrak{a}_x^1 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^1 \vert^2 + w_2\| \mathfrak{a}_x^2 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^2 \|_2^2 + w_3\| \mathfrak{a}_x^3 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^3 \|_F^2, 
@@ -614,8 +654,11 @@ The true volume used in the experiments in Figures~\ref{fig:cryo_detection} and~
 as 1QLQ\footnote{\url{https://www.rcsb.org}}. We generated an EM map from this atomic model in UCSF Chimera~\cite{pettersen2004ucsf} at a resolution of 5~\AA, and cropped it to remove zeros at the boundary to obtain a volume of size $31^3$. For the experiment in Figure~\ref{fig:BPTI_recon}, the volume was downsampled to size $20^3$. For the experiment in Figure~\ref{fig:TRPV1_recon}, we used the TRPV1 in complex with DkTx and RTX, whose EM map is available in the  Electron Microscopy Data Bank (EMDB) %~\cite{emdb} 
 as EMD-8117\footnote{\url{http://www.ebi.ac.uk/pdbe/emdb}}. The original map has size $192^3$, and was downsampled to size $20^3$. To generate the ground truth for our reconstructions, we expanded both volumes as in~\eqref{eq:volume_expansion_app} with cutoff $L_{\text{max}} = 5$ for TRPV1 and $L_{\text{max}} = 2$ for BPTI. For the TRPV1 reconstruction, the optimizer converged to a point giving relative $\ell_2$ error of $10^{-6}$ in the first three autocorrelations and an error of $10^{-1}$ in the expansion coefficients of the volume. For the BPTI reconstruction, the errors in the autocorrelations were $10^{-6}$, $10^{-7}$ and $10^{-8}$ for the third, second and first autocorrelations, respectively, while the error in the expansion coefficients of the volume was $5\times 10^{-2}$. This illustrates the ill-conditioning of the map between the volume and its first three autocorrelations that prevents us from obtaining results from noisy data.
 
-The micrographs for the experiment presented in Figure~\ref{fig:cryo_detection} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in~\cite{stewart1980efficient}, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE\footnote{\url{http://spr.math.princeton.edu}}. %\cite{aspire}.
-We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. The location of the upper left corner of each new projection is picked uniformly at random from the set of available indices. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. Then, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L_{\text{max}}=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
+The micrographs for the experiment presented in Figures~\ref{fig:cryo_detection} \revised{and~\ref{fig:cryo_noisy_micros_for_rec}} were generated as follows. We sample rotation matrices from SO(3) uniformly at random using the QR-based algorithm described in~\cite{stewart1980efficient}, and generate the projection of the volume corresponding to that rotation matrix using \verb|cryo_project| in ASPIRE\footnote{\url{http://spr.math.princeton.edu}}. %\cite{aspire}.
+We keep track of the indices at which the upper left corner of a projection can be placed without violating the separation condition, so all projections are separated by at least 30 pixels in each dimension. The location of the upper left corner of each new projection is picked uniformly at random from the set of available indices. We continue adding projections to the micrograph until no more projections can be added without violating the separation condition. \revised{The noise level in the noisy micrograph in Figure~\ref{fig:cryo_detection} was $\text{SNR} = 1/1024$, the noise level in Figure~\ref{fig:cryo_noisy_micros_for_rec} was $\text{SNR} = 1/16$ for the TRPV1 micrographs and $\text{SNR} = 1/64$ for the BPTI micrographs. We used 300 micrographs for each of the noisy reconstructions presented in Figure~\ref{fig:cryo_recon}.}
+
+\revised{For the noisy reconstructions presented in Figure~\ref{fig:cryo_recon}, the LS problem~\eqref{eq:LS_cryo} was solved assuming spherical harmonic cutoffs of $L_{\text{max}} = 5$ for TRPV1 and $L_{\text{max}} = 2$ for BPTI, same as for the ground truth.}
+For the experiment in Figure~\ref{fig:cryo_detection}, the LS problem~\eqref{eq:LS_cryo} was solved assuming the spherical harmonic cutoff for the volume is $L_{\text{max}}=0$, which is sufficient to recover a significant $\widehat\gamma$ in the presence of projections in the micrograph.
 
 \section{Proof of Proposition~\ref{prop:two_gauss}} \label{sec:proof_two_gauss}
 
