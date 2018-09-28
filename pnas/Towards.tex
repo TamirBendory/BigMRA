@@ -103,11 +103,11 @@ The first stage consists in extracting the various particle projections from the
 	\centering
 	\includegraphics[width=1\linewidth]{Einstien_progress_examples}
 	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels from left to right) of size $4096\times 4096$, each containing $700$ image occurrences on average.}	
-	\vspace{-8pt} 
+%	\vspace{-8pt} 
 \end{figure*}
 
 Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following questions:
-\begin{myquote}{0in}
+\begin{myquote}{.2in}
 	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
 \end{myquote}
 In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
@@ -385,10 +385,8 @@ On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise 
 	\end{subfigure} 
 	\caption{\label{fig:cryo_recon} Reconstructions from the first, second and third order autocorrelations.
 		The ground truth volumes were expanded according to~\eqref{eq:volume_expansion_app} with cutoff $L_{\text{max}}$.
-		\revised{The original molecules are shown in purple
-				and the (smoothed) ground truths in blue to illustrate the smoothing effect of our downsampling and truncation of the spherical harmonics expansion.
-			The reconstructions  from clean autocorrelations are shown in yellow, and 	recovery from autocorrelations estimated from noisy data in gray. For the noisy experiments, we used 300 micrographs with SNRs of 1/16 for TRPV1 and 1/64 for BPTI. We present excerpts from noisy micrographs side-by-side with the corresponding clean ones in Figure~\ref{fig:cryo_noisy_micros_for_rec}}.}
-		 \vspace{-20pt} 	
+		\revised{The reconstructions from autocorrelations estimated from noisy data are shown in gray, the reconstructions from clean autocorrelations in yellow, the (smoothed) ground truths in blue, and the original molecules are shown in purple} to illustrate the smoothing effect of our downsampling and truncation of the spherical harmonics expansion. \revised{For the noisy experiment, we used 300 micrographs with SNRs of 1/16 for TRPV1 and 1/64 for BPTI - we present excerpts from noisy micrographs side-by-side with the corresponding clean ones in Figure~\ref{fig:cryo_noisy_micros_for_rec}}}
+%		 \vspace{-20pt} 	
 \end{figure}
 % -------------- Vertical subfigures: -------------------------------
 
@@ -621,7 +619,7 @@ For example, computing the moments for the experiment in the left panel of Figur
 		\includegraphics[scale=0.3]{noisy_micro_BPTI_SNR_64.png}
 		\caption{}
 	\end{subfigure}
-	\caption{\label{fig:cryo_noisy_micros_for_rec} \revised{Excerpts from the noisy micrographs used for the reconstructions in Figure~\ref{fig:cryo_recon} and the corresponding clean excerpts. (a) Excerpt of the clean TRPV1 micrograph. (b) Excerpt of the noisy TRPV1 micrograph with SNR $= 1/16$. (c) Excerpt from the clean BPTI micrograph. (d) Excerpt from the noisy BPTI micrograph with SNR $= 1/64$.}} 
+	\caption{\label{fig:cryo_noisy_micros_for_rec} \revised{Excerpts from the noisy micrographs used for the reconstructions in Figure~\ref{fig:cryo_recon} and the corresponding clean excerpts. (a) Excerpt of the clean TRPV1 micrograph; (b) Excerpt of the noisy TRPV1 micrograph, with SNR $= 1/16$; (c) Excerpt from the clean BPTI micrograph; (d) Excerpt from the noisy BPTI micrograph with SNR $= 1/64$.}} 
 \end{figure*}
 
 \begin{figure*}[t!]
@@ -636,7 +634,7 @@ For example, computing the moments for the experiment in the left panel of Figur
 		\includegraphics[scale=0.35]{BPTI_FSC.eps}
 		\caption{}
 	\end{subfigure} 
-	\caption{\label{fig:cryo_FSC} \revised{Fourier Shell Correlations (FSCs) for the noisy reconstructions presented in Figure~\ref{fig:cryo_recon} using the $0.5$ criterion, compared to the (smoothed) ground truth. (a) FSC for the TRPV1 reconstruction, giving resolution of $24 \AA$; (b) FSC for the BPTI reconstruction, giving resolution of $13 \AA$.}} 
+	\caption{\label{fig:cryo_FSC} \revised{Fourier Shell Correlations (FSCs) for the noisy reconstructions presented in Figure~\ref{fig:cryo_recon} using the $0.5$ criterion, compared to the (low-resolution) ground truth. (a) FSC for the TRPV1 reconstruction, giving resolution of $24 \AA$; (b) FSC for the BPTI reconstruction, giving resolution of $13 \AA$.}} 
 \end{figure*}
 
 The experiments in Figure~\ref{fig:cryo_recon}, and the recoveries of $\gamma$ for the experiment in Figure~\ref{fig:cryo_detection}, were performed on a machine with 40 cores of Intel Xeon E5-2698 v4 @ 2.20GHz with 100 GB of RAM, and took ~2 hours per reconstruction. The computation of the moments from each micrograph in Figure~\ref{fig:cryo_detection} was performed on a machine with 4 nVidia P100 GPUs with 16 GB of memory each and with 100 GB of RAM. It took 3 minutes per micrograph to compute the first three autocorrelations.
@@ -644,7 +642,7 @@ The experiments in Figure~\ref{fig:cryo_recon}, and the recoveries of $\gamma$ f
 For the \revised{clean} experiments in Figure~\ref{fig:cryo_detection}, we computed the analytical first three autocorrelations of the volume as explained in Appendix~\ref{sec:ac_cryo}.
 To estimate the coefficients of the volume itself, we solve the LS problem
 \begin{equation} \label{eq:LS_cryo}
-\min_{\hat{x},\hat{\gamma}} w_1 \vert \mathfrak{a}_x^1 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^1 \vert^2 + w_2\| \mathfrak{a}_x^2 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^2 \|_2^2 + w_3\| \mathfrak{a}_x^3 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^3 \|_\text{F}^2, 
+\min_{\hat{x},\hat{\gamma}} w_1 \vert \mathfrak{a}_x^1 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^1 \vert^2 + w_2\| \mathfrak{a}_x^2 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^2 \|_2^2 + w_3\| \mathfrak{a}_x^3 - \hat{\gamma}\mathfrak{a}_{\hat{x}}^3 \|_F^2, 
 \end{equation}  
 where the explicit expressions of $\mathfrak{a}_x^1$, $\mathfrak{a}_x^2$ and $\mathfrak{a}_x^3$ are given in~\eqref{eq:ac_1_prolates},~\eqref{eq:ac_2_prolates} and~\eqref{eq:ac_3_prolates}, respectively.  
 In the experiments, we set $w_1=w_2=w_3=1$. 
