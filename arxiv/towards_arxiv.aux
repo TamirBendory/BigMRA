@@ -1,0 +1,212 @@
+\relax 
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
+\citation{henderson1995limitations}
+\citation{glaeser1999electron}
+\citation{frank2018single}
+\citation{scapin2018cryo}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma ^2$ for increasing values of $\sigma $. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.\relax }}{2}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:micro_example}{{1}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure\nobreakspace  {}1\hbox {}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels from left to right) of size $4096\times 4096$, each containing $700$ image occurrences on average.\relax }}{2}}
+\newlabel{fig:Einst_example}{{2}{2}}
+\citation{khoshouei2017cryo}
+\citation{liang2017phase}
+\citation{liu2018nearatomic}
+\citation{lewicki1998review}
+\citation{gogineni2017passive}
+\citation{ljung1998system}
+\citation{kam1980reconstruction}
+\citation{shatsky2009method}
+\citation{vanheel1992correlation}
+\citation{henderson2013avoiding}
+\citation{vanheel2013finding}
+\citation{shatsky2009method}
+\citation{jefferies1993restoration}
+\citation{shalvi1990new}
+\citation{ayers1988iterative}
+\citation{abed1997blind}
+\citation{benveniste1980robust}
+\citation{kormylo1983identifiability}
+\citation{sigworth1998maximum}
+\citation{scheres2012relion}
+\citation{cappe1999simulation}
+\citation{cappe1999simulation}
+\citation{rabiner1989tutorial}
+\citation{lii1982deconvolution}
+\citation{giannakis1989identification}
+\citation{tugnait1984identification}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Proof of concept: A mathematical toy model}{4}}
+\newlabel{eq:model}{{1}{4}}
+\newlabel{eq:spacing}{{2}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}The detection limit}{5}}
+\newlabel{sec:detectionlimit}{{3}{5}}
+\newlabel{prop:two_gauss}{{3.1}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Autocorrelation analysis}{5}}
+\newlabel{sec:AC_analysis}{{4}{5}}
+\newlabel{eq:ac_general}{{4}{5}}
+\citation{bendory2017bispectrum}
+\citation{boumal2017heterogeneous}
+\citation{abbe2017multireference}
+\citation{hayes1982reconstruction}
+\newlabel{eq:gamma}{{6}{6}}
+\newlabel{eq:mean_micrograph}{{7}{6}}
+\newlabel{eq:ac2_micrograph}{{8}{6}}
+\newlabel{eq:ac3_micrograph}{{9}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Recovering a signal from autocorrelations}{6}}
+\newlabel{sec:recovery}{{5}{6}}
+\newlabel{eq-uniqueness}{{10}{6}}
+\newlabel{prop:uniqueness}{{5.1}{6}}
+\newlabel{prop:gamma}{{5.2}{7}}
+\newlabel{prop:gamma_sigma}{{5.3}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Numerical experiments}{7}}
+\citation{elser2017rrr}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Toy model}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Relative error curves for the experiment of Figure\nobreakspace  {}2\hbox {}.\relax }}{8}}
+\newlabel{fig:error_per_micro}{{3}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Cryo-EM}{8}}
+\citation{donoho2004higher}
+\citation{henderson2013avoiding}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Recovery of a 1-D signal of length $L=21$ at noise level $\sigma = 3$ from $M$ repetitions. The length of the micrograph was set to be $N = 410*M$. The first three panels (left to right) show reconstruction with different $M$ values compared to the ground truth signal (in blue). The true value of $\gamma $ is $0.0512$. The relative errors of $\gamma $ for the three panels are: $4.8\%,4\%,1.2\%$. The right panel shows the relative error as a function of $M$. \relax }}{9}}
+\newlabel{fig:1D_example}{{4}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  An example for a 1-D noisy measurement for the experiment in Figure\nobreakspace  {}4\hbox {}. The signal occurrences appear in blue, and the noisy data in green. \relax }}{9}}
+\newlabel{fig:1D_obs_example}{{5}{9}}
+\newlabel{fig:TRPV1_recon}{{6a}{10}}
+\newlabel{sub@fig:TRPV1_recon}{{a}{10}}
+\newlabel{fig:BPTI_recon}{{6b}{10}}
+\newlabel{sub@fig:BPTI_recon}{{b}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces  Reconstructions from the first, second and third order autocorrelations. The ground truth volumes were expanded according to\nobreakspace  {}\textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces 25\hbox {}\unskip \@@italiccorr )}} with cutoff $L_{\text  {max}}$. {The original molecules are shown in purple and the (smoothed) ground truths in blue to illustrate the smoothing effect of our downsampling and truncation of the spherical harmonics expansion. The reconstructions from clean autocorrelations are shown in yellow and recoveries from autocorrelations estimated from noisy data in gray. For the noisy experiments, we used 300 micrographs with SNRs of 1/16 for TRPV1 and 1/64 for BPTI. We present excerpts from noisy micrographs side-by-side with the corresponding clean ones in Figure\nobreakspace  {}7\hbox {} (see appendix)}.\relax }}{10}}
+\newlabel{fig:cryo_recon}{{6}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces  {Excerpts from the noisy micrographs used for the reconstructions in Figure\nobreakspace  {}6\hbox {} and the corresponding clean excerpts. (a) Excerpt of the clean TRPV1 micrograph; (b) Excerpt of the noisy TRPV1 micrograph with SNR $= 1/16$; (c) Excerpt from the clean BPTI micrograph; (d) Excerpt from the noisy BPTI micrograph with SNR $= 1/64$.}\relax }}{10}}
+\newlabel{fig:cryo_noisy_micros_for_rec}{{7}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces  {Fourier Shell Correlations (FSCs) for the noisy reconstructions presented in Figure\nobreakspace  {}6\hbox {} using the $0.5$ criterion, compared to the (smoothed) ground truth. (a) FSC for the TRPV1 reconstruction, giving resolution of $24$\r A; (b) FSC for the BPTI reconstruction, giving resolution of $13$\r A.}\relax }}{10}}
+\newlabel{fig:cryo_FSC}{{8}{10}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Discussion}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces  All micrographs are of size $7420^2$ pixels and the projections are taken from the BPTI molecule of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$. The noise realization is identical in both micrographs.\relax }}{11}}
+\newlabel{fig:cryo_detection}{{9}{11}}
+\bibstyle{plain}
+\bibdata{ref}
+\bibcite{abbe2017multireference}{1}
+\bibcite{abed1997blind}{2}
+\bibcite{ayers1988iterative}{3}
+\bibcite{bandeira2017estimation}{4}
+\bibcite{bendory2017bispectrum}{5}
+\bibcite{benveniste1980robust}{6}
+\bibcite{bhamre2017anisotropic}{7}
+\bibcite{manopt}{8}
+\bibcite{boumal2017heterogeneous}{9}
+\bibcite{cappe1999simulation}{10}
+\bibcite{donoho2004higher}{11}
+\bibcite{elser2017rrr}{12}
+\bibcite{frank2018single}{13}
+\bibcite{giannakis1989identification}{14}
+\bibcite{glaeser1999electron}{15}
+\bibcite{gogineni2017passive}{16}
+\bibcite{hayes1982reconstruction}{17}
+\bibcite{henderson1995limitations}{18}
+\bibcite{henderson2013avoiding}{19}
+\bibcite{jefferies1993restoration}{20}
+\bibcite{kam1980reconstruction}{21}
+\bibcite{khoshouei2017cryo}{22}
+\bibcite{kormylo1983identifiability}{23}
+\bibcite{landa2017steerable}{24}
+\bibcite{levin20173d}{25}
+\bibcite{lewicki1998review}{26}
+\bibcite{liang2017phase}{27}
+\bibcite{lii1982deconvolution}{28}
+\bibcite{liu2018nearatomic}{29}
+\bibcite{ljung1998system}{30}
+\bibcite{natterer1986mathematics}{31}
+\bibcite{pettersen2004ucsf}{32}
+\bibcite{rabiner1989tutorial}{33}
+\bibcite{scapin2018cryo}{34}
+\bibcite{scheres2012relion}{35}
+\bibcite{shalvi1990new}{36}
+\bibcite{shatsky2009method}{37}
+\bibcite{sigworth1998maximum}{38}
+\bibcite{slepian1964pswfIV}{39}
+\bibcite{stewart1980efficient}{40}
+\bibcite{tugnait1984identification}{41}
+\bibcite{vanheel2013finding}{42}
+\bibcite{vanheel1992correlation}{43}
+\bibcite{zhang2018structured}{44}
+\bibcite{zhao2016fast}{45}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Numerical experiments details}{15}}
+\newlabel{sec:numeric_details}{{A}{15}}
+\@writefile{toc}{\contentsline {paragraph}{2-D experiment.}{15}}
+\citation{boumal2017heterogeneous}
+\citation{bandeira2017estimation}
+\citation{boumal2017heterogeneous}
+\citation{zhang2018structured}
+\citation{manopt}
+\@writefile{toc}{\contentsline {paragraph}{1-D experiment.}{16}}
+\newlabel{eq:optim1D}{{12}{16}}
+\@writefile{toc}{\contentsline {paragraph}{3-D experiments.}{16}}
+\citation{landa2017steerable}
+\citation{pettersen2004ucsf}
+\citation{stewart1980efficient}
+\newlabel{eq:LS_cryo}{{13}{17}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Proof of Proposition\nobreakspace  {}3.1\hbox {}}{18}}
+\newlabel{sec:proof_two_gauss}{{B}{18}}
+\newlabel{eq:neyman-pearson}{{14}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Derivation of the identities in Section\nobreakspace  {}4\hbox {}}{19}}
+\newlabel{sec:autocorrelation_computation}{{C}{19}}
+\newlabel{eq:2nd_moment_signal_term}{{15}{20}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Proof of Proposition\nobreakspace  {}5.2\hbox {}}{21}}
+\newlabel{sec:proof_prop_gamma}{{D}{21}}
+\@writefile{toc}{\contentsline {section}{\numberline {E}Proof of Proposition\nobreakspace  {}5.3\hbox {}}{21}}
+\newlabel{sec:proof_prop_gamma_sigma}{{E}{21}}
+\newlabel{eq:E1}{{16}{22}}
+\newlabel{eq:E2}{{17}{22}}
+\newlabel{eq:E12}{{18}{22}}
+\newlabel{eq:sigma2}{{19}{22}}
+\newlabel{eq:quad1}{{20}{22}}
+\newlabel{eq:E3}{{21}{22}}
+\citation{bhamre2017anisotropic}
+\newlabel{eq:quad2}{{23}{23}}
+\newlabel{eq:cond}{{24}{23}}
+\@writefile{toc}{\contentsline {section}{\numberline {F}Autocorrelations for the cryo-EM problem}{23}}
+\newlabel{sec:ac_cryo}{{F}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.1}Model and autocorrelation functions}{23}}
+\newlabel{eq:volume_expansion_app}{{25}{23}}
+\citation{levin20173d}
+\citation{natterer1986mathematics}
+\citation{kam1980reconstruction}
+\newlabel{eq:projection_model}{{F.1}{24}}
+\newlabel{eq:micrograph_model}{{26}{24}}
+\newlabel{eq:Kth_autocorrelation}{{F.1}{24}}
+\newlabel{eq:ac_micrographs}{{27}{24}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.2}Autocorrelation derivation}{25}}
+\newlabel{sec:moment_derivation}{{F.2}{25}}
+\newlabel{eq:general_moment}{{28}{25}}
+\newlabel{eq:second_order_ac_volume_data}{{29}{25}}
+\citation{slepian1964pswfIV}
+\citation{landa2017steerable}
+\citation{landa2017steerable}
+\newlabel{eq:third_order_ac_micro_volume}{{30}{26}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.3}Accounting for all in-plane rotations}{26}}
+\newlabel{sec:steering}{{F.3}{26}}
+\citation{landa2017steerable}
+\citation{zhao2016fast}
+\newlabel{eq:prolatesdef}{{31}{27}}
+\newlabel{eq:PSWF_expansion}{{32}{27}}
+\newlabel{eq:approxprolatesdiscrete}{{33}{27}}
+\newlabel{eq:frakatwo}{{34}{27}}
+\newlabel{eq:patchcoefficients}{{35}{27}}
+\newlabel{eq:itamar}{{36}{27}}
+\newlabel{eq:second_order_ac_pswf}{{37}{28}}
+\citation{landa2017steerable}
+\newlabel{eq:third_order_ac_pswf}{{38}{29}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.4}Connection to volume}{29}}
+\newlabel{eq:beta}{{39}{29}}
+\newlabel{eq:PSWF_defn_eq}{{40}{29}}
+\citation{landa2017steerable}
+\newlabel{eq:proj_expansion}{{41}{30}}
+\@writefile{toc}{\contentsline {paragraph}{Third-order autocorrelation.}{30}}
+\newlabel{eq:third_order_ac_volume}{{42}{30}}
+\newlabel{eq:b_average}{{43}{30}}
+\citation{kam1980reconstruction}
+\newlabel{eq:ac_3_prolates}{{44}{31}}
+\@writefile{toc}{\contentsline {paragraph}{Second-order autocorrelation.}{31}}
+\newlabel{eq:ac_2_prolates}{{45}{32}}
+\@writefile{toc}{\contentsline {paragraph}{The mean.}{32}}
+\newlabel{eq:ac_1_prolates}{{46}{32}}

@@ -1,0 +1,270 @@
+\begin{thebibliography}{10}
+
+\bibitem{abbe2017multireference}
+Emmanuel Abbe, Tamir Bendory, William Leeb, Jo{\~a}o Pereira, Nir Sharon, and
+  Amit Singer.
+\newblock Multireference alignment is easier with an aperiodic translation
+  distribution.
+\newblock {\em arXiv preprint arXiv:1710.02793}, 2017.
+
+\bibitem{abed1997blind}
+Karim Abed-Meraim, Wanzhi Qiu, and Yingbo Hua.
+\newblock Blind system identification.
+\newblock {\em Proceedings of the IEEE}, 85(8):1310--1322, 1997.
+
+\bibitem{ayers1988iterative}
+GR~Ayers and J~Christopher Dainty.
+\newblock Iterative blind deconvolution method and its applications.
+\newblock {\em Optics letters}, 13(7):547--549, 1988.
+
+\bibitem{bandeira2017estimation}
+Afonso~S Bandeira, Ben Blum-Smith, Amelia Perry, Jonathan Weed, and Alexander~S
+  Wein.
+\newblock Estimation under group actions: recovering orbits from invariants.
+\newblock {\em arXiv preprint arXiv:1712.10163}, 2017.
+
+\bibitem{bendory2017bispectrum}
+Tamir Bendory, Nicolas Boumal, Chao Ma, Zhizhen Zhao, and Amit Singer.
+\newblock Bispectrum inversion with application to multireference alignment.
+\newblock {\em IEEE Transactions on Signal Processing}, 66(4):1037--1050, 2017.
+
+\bibitem{benveniste1980robust}
+Albert Benveniste, Maurice Goursat, and Gabriel Ruget.
+\newblock Robust identification of a nonminimum phase system: Blind adjustment
+  of a linear equalizer in data communications.
+\newblock {\em IEEE Transactions on Automatic Control}, 25(3):385--399, 1980.
+
+\bibitem{bhamre2017anisotropic}
+Tejal Bhamre, Teng Zhang, and Amit Singer.
+\newblock Anisotropic twicing for single particle reconstruction using
+  autocorrelation analysis.
+\newblock {\em arXiv preprint arXiv:1704.07969}, 2017.
+
+\bibitem{manopt}
+N.~Boumal, B.~Mishra, P.-A. Absil, and R.~Sepulchre.
+\newblock {M}anopt, a {M}atlab toolbox for optimization on manifolds.
+\newblock {\em Journal of Machine Learning Research}, 15:1455--1459, 2014.
+
+\bibitem{boumal2017heterogeneous}
+Nicolas Boumal, Tamir Bendory, Roy~R Lederman, and Amit Singer.
+\newblock Heterogeneous multireference alignment: A single pass approach.
+\newblock In {\em Information Sciences and Systems (CISS), 2018 52nd Annual
+  Conference on}, pages 1--6. IEEE, 2018.
+
+\bibitem{cappe1999simulation}
+Olivier Capp{\'e}, Arnaud Doucet, Marc Lavielle, and Eric Moulines.
+\newblock Simulation-based methods for blind maximum-likelihood filter
+  identification.
+\newblock {\em Signal processing}, 73(1-2):3--25, 1999.
+
+\bibitem{donoho2004higher}
+David Donoho, Jiashun Jin, et~al.
+\newblock Higher criticism for detecting sparse heterogeneous mixtures.
+\newblock {\em The Annals of Statistics}, 32(3):962--994, 2004.
+
+\bibitem{elser2017rrr}
+Veit Elser.
+\newblock Matrix product constraints by projection methods.
+\newblock {\em Journal of Global Optimization}, 68(2):329--355, 2017.
+
+\bibitem{frank2018single}
+Joachim Frank.
+\newblock Single-particle reconstruction of biological molecules-story in a
+  sample ({N}obel lecture).
+\newblock {\em Angewandte Chemie International Edition}, 2018.
+
+\bibitem{giannakis1989identification}
+Georgios~B Giannakis and Jerry~M Mendel.
+\newblock Identification of nonminimum phase systems using higher order
+  statistics.
+\newblock {\em IEEE Transactions on Acoustics, Speech, and Signal Processing},
+  37(3):360--377, 1989.
+
+\bibitem{glaeser1999electron}
+Robert~M Glaeser.
+\newblock Electron crystallography: present excitement, a nod to the past,
+  anticipating the future.
+\newblock {\em Journal of structural biology}, 128(1):3--14, 1999.
+
+\bibitem{gogineni2017passive}
+Sandeep Gogineni, Pawan Setlur, Muralidhar Rangaswamy, and Raj~Rao Nadakuditi.
+\newblock Passive radar detection with noisy reference channel using principal
+  subspace similarity.
+\newblock {\em IEEE Transactions on Aerospace and Electronic Systems},
+  54(1):18--36, 2018.
+
+\bibitem{hayes1982reconstruction}
+MHMH Hayes.
+\newblock The reconstruction of a multidimensional sequence from the phase or
+  magnitude of its {F}ourier transform.
+\newblock {\em IEEE Transactions on Acoustics, Speech, and Signal Processing},
+  30(2):140--154, 1982.
+
+\bibitem{henderson1995limitations}
+Richard Henderson.
+\newblock The potential and limitations of neutrons, electrons and {X}-rays for
+  atomic resolution microscopy of unstained biological molecules.
+\newblock {\em Quarterly reviews of biophysics}, 28(2):171--193, 1995.
+
+\bibitem{henderson2013avoiding}
+Richard Henderson.
+\newblock Avoiding the pitfalls of single particle cryo-electron microscopy:
+  {E}instein from noise.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  110(45):18037--18041, 2013.
+
+\bibitem{jefferies1993restoration}
+Stuart~M Jefferies and Julian~C Christou.
+\newblock Restoration of astronomical images by iterative blind deconvolution.
+\newblock {\em The Astrophysical Journal}, 415:862, 1993.
+
+\bibitem{kam1980reconstruction}
+Zvi Kam.
+\newblock The reconstruction of structure from electron micrographs of randomly
+  oriented particles.
+\newblock {\em Journal of Theoretical Biology}, 82(1):15--39, 1980.
+
+\bibitem{khoshouei2017cryo}
+Maryam Khoshouei, Mazdak Radjainia, Wolfgang Baumeister, and Radostin Danev.
+\newblock {Cryo-{EM} structure of haemoglobin at 3.2 {\AA} determined with the
+  {V}olta phase plate}.
+\newblock {\em Nature communications}, 8:16099, 2017.
+
+\bibitem{kormylo1983identifiability}
+John Kormylo and J~Mendel.
+\newblock Identifiability of nonminimum phase linear stochastic systems.
+\newblock {\em IEEE transactions on automatic control}, 28(12):1081--1090,
+  1983.
+
+\bibitem{landa2017steerable}
+Boris Landa and Yoel Shkolnisky.
+\newblock Steerable principal components for space-frequency localized images.
+\newblock {\em SIAM journal on imaging sciences}, 10(2):508--534, 2017.
+
+\bibitem{levin20173d}
+Eitan Levin, Tamir Bendory, Nicolas Boumal, Joe Kileel, and Amit Singer.
+\newblock {3D} ab initio modeling in cryo-{EM} by autocorrelation analysis.
+\newblock In {\em Biomedical Imaging (ISBI 2018), 2018 IEEE 15th International
+  Symposium on}, pages 1569--1573. IEEE, 2018.
+
+\bibitem{lewicki1998review}
+Michael~S Lewicki.
+\newblock A review of methods for spike sorting: the detection and
+  classification of neural action potentials.
+\newblock {\em Network: Computation in Neural Systems}, 9(4):R53--R78, 1998.
+
+\bibitem{liang2017phase}
+Yi-Lynn Liang, Maryam Khoshouei, Mazdak Radjainia, Yan Zhang, Alisa Glukhova,
+  Jeffrey Tarrasch, David~M Thal, Sebastian~GB Furness, George Christopoulos,
+  Thomas Coudrat, et~al.
+\newblock Phase-plate cryo-{EM} structure of a class {B} {GPCR}--{G}-protein
+  complex.
+\newblock {\em Nature}, 546(7656):118, 2017.
+
+\bibitem{lii1982deconvolution}
+KS~Lii, M~Rosenblatt, et~al.
+\newblock Deconvolution and estimation of transfer function phase and
+  coefficients for nongaussian linear processes.
+\newblock {\em The annals of statistics}, 10(4):1195--1208, 1982.
+
+\bibitem{liu2018nearatomic}
+Yuxi Liu, Shane Gonen, Tamir Gonen, and Todd~O Yeates.
+\newblock Near-atomic cryo-{EM} imaging of a small protein displayed on a
+  designed scaffolding system.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  115(13):3362--3367, 2018.
+
+\bibitem{ljung1998system}
+Lennart Ljung.
+\newblock System identification.
+\newblock In {\em Signal analysis and prediction}, pages 163--173. Springer,
+  1998.
+
+\bibitem{natterer1986mathematics}
+Frank Natterer.
+\newblock {\em The mathematics of computerized tomography}, volume~32.
+\newblock SIAM, 1986.
+
+\bibitem{pettersen2004ucsf}
+Eric~F Pettersen, Thomas~D Goddard, Conrad~C Huang, Gregory~S Couch, Daniel~M
+  Greenblatt, Elaine~C Meng, and Thomas~E Ferrin.
+\newblock {UCSF} chimera—a visualization system for exploratory research and
+  analysis.
+\newblock {\em Journal of computational chemistry}, 25(13):1605--1612, 2004.
+
+\bibitem{rabiner1989tutorial}
+Lawrence~R Rabiner.
+\newblock A tutorial on hidden {M}arkov models and selected applications in
+  speech recognition.
+\newblock {\em Proceedings of the IEEE}, 77(2):257--286, 1989.
+
+\bibitem{scapin2018cryo}
+Giovanna Scapin, Clinton~S Potter, and Bridget Carragher.
+\newblock Cryo-{EM} for small molecules discovery, design, understanding, and
+  application.
+\newblock {\em Cell Chemical Biology}, 2018.
+
+\bibitem{scheres2012relion}
+Sjors~HW Scheres.
+\newblock {RELION}: implementation of a bayesian approach to cryo-{EM}
+  structure determination.
+\newblock {\em Journal of structural biology}, 180(3):519--530, 2012.
+
+\bibitem{shalvi1990new}
+Ofir Shalvi and Ehud Weinstein.
+\newblock New criteria for blind deconvolution of nonminimum phase systems
+  (channels).
+\newblock {\em IEEE Transactions on information theory}, 36(2):312--321, 1990.
+
+\bibitem{shatsky2009method}
+Maxim Shatsky, Richard~J Hall, Steven~E Brenner, and Robert~M Glaeser.
+\newblock A method for the alignment of heterogeneous macromolecules from
+  electron microscopy.
+\newblock {\em Journal of structural biology}, 166(1):67--78, 2009.
+
+\bibitem{sigworth1998maximum}
+FJ~Sigworth.
+\newblock A maximum-likelihood approach to single-particle image refinement.
+\newblock {\em Journal of structural biology}, 122(3):328--339, 1998.
+
+\bibitem{slepian1964pswfIV}
+David Slepian.
+\newblock Prolate spheroidal wave functions, {F}ourier analysis and
+  uncertainty---iv: Extensions to many dimensions; generalized prolate
+  spheroidal functions.
+\newblock {\em The Bell System Technical Journal}, 43(6):3009--3057, Nov 1964.
+
+\bibitem{stewart1980efficient}
+Gilbert~W Stewart.
+\newblock The efficient generation of random orthogonal matrices with an
+  application to condition estimators.
+\newblock {\em SIAM Journal on Numerical Analysis}, 17(3):403--409, 1980.
+
+\bibitem{tugnait1984identification}
+Jitendra Tugnait.
+\newblock Identification of nonminimum phase linear stochastic systems.
+\newblock In {\em The 23rd IEEE Conference on Decision and Control}, number~23,
+  pages 342--347, 1984.
+
+\bibitem{vanheel2013finding}
+Marin van Heel.
+\newblock Finding trimeric {HIV}-1 envelope glycoproteins in random noise.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  110(45):E4175--E4177, 2013.
+
+\bibitem{vanheel1992correlation}
+Marin van Heel, Michael Schatz, and Elena Orlova.
+\newblock Correlation functions revisited.
+\newblock {\em Ultramicroscopy}, 46(1--4):307--316, 1992.
+
+\bibitem{zhang2018structured}
+Yuqian Zhang, Han-Wen Kuo, and John Wright.
+\newblock Structured local optima in sparse blind deconvolution.
+\newblock {\em arXiv preprint arXiv:1806.00338}, 2018.
+
+\bibitem{zhao2016fast}
+Zhizhen Zhao, Yoel Shkolnisky, and Amit Singer.
+\newblock Fast steerable principal component analysis.
+\newblock {\em IEEE transactions on computational imaging}, 2(1):1--12, 2016.
+
+\end{thebibliography}
