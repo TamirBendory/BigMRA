@@ -1,0 +1,37 @@
+Looks great!  I have a few more comments.
+
+ 
+
+1.  The 3D reconstruction from noisy micrographs is way undersold, please make it more prominent in the paper.
+
+a.  When I first read line 392, I thought that your reconstruction from noisy data had totally failed.  But you’re saying only that “high resolution” reconstruction doesn’t work!  Please make a more positive statement.
+
+b.  I want to know the voxel size, as the pixel-wise SNR can be interpreted only if that is known.  If the TRPV1 pixel size is 12A (guessed from Fig. 9 assuming the FSCs are computed out to Nyquist) then SNR=1/16 is about right for an experimental micrograph filtered at 24A!  How many “particles” did you have per micrograph?  What was \gamma (and how would it be defined in 2D)?
+
+c.  What does “cutoff L_max=5” mean?
+
+d.  Make it easier to tell at a glance which volume is the noisy reconstruction in Fig. 3, e.g. by labels in the images themselves.
+
+ 
+
+Minor comments
+
+Line 16, should be “set up”
+
+Line 69.  The argument about “two questions” in the Henderson quote is confusing, as the “gap” doesn’t obviously have to do with the particle picking problem.
+
+Line 321.  Can you give any intuition about the \gamma > 1/4 requirement?  But your 1D example has a smaller \gamma value.
+
+Fig. 6.  Too hard to distinguish green and blue curves.  Maybe make them green and black?
+
+Fig, 9. Make it clear whether the FSCs go to Nyquist.  If so, Fig. 9a is uncomfortably close to Nyquist, possibly giving artifactually high values (not a problem with Relion, but this was typical with early reconstruction packages that used poor gridding strategies).
+
+ 
+
+Finally, one of my colleagues was at the Kuo symposium in China in August.  There Gabe Lander reported reconstructions from very high particle densities—basically close packed monolayers of particles.  (Not all proteins can be concentrated that much.) And he didn’t bother to do particle picking, he just did arbitrary boxing and let the reconstruction program sort it out.  Interesting, though a solution to a different problem.
+
+ 
+
+Fred
+
+ 
