@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-%\pdfoutput=1
+\pdfoutput=1
 
 \usepackage[T1]{fontenc}
 %\usepackage[latin9]{inputenc}
@@ -1104,7 +1104,7 @@ Let $\II\in\RNN$ denote a micrograph. We assume it consists of shifted copies of
 where the viewing directions $\omega_t$ are assumed to be drawn from the uniform distribution over $\text{SO}(3)$ and $\mb s_t$ denotes the location of the center of the $t$th projection in the micrograph.  
 We assume the projection is discretized on a Cartesian grid  of size $P\times P$ and we impose a separation condition so that any two projections are separated by at least $2P-1$ pixels between their upper left corners  in each direction, similarly to~\eqref{eq:spacing}. Note that~\eqref{eq:model} can be also written as a sum of $\delta$ functions as in~\eqref{eq:micrograph_model}. 
 
-Define the $p$th autocorrelation of $\II$ as
+Define the $p$th autocorrelation of $\II$ as \TODO{The index of the first term within the sum should by $\mb i$ }
 \begin{equation*} \label{eq:Kth_autocorrelation}
 a^p_\II[\Bell_1,\ldots, \Bell_{p-1}] := \frac{1}{N^2}\sum_{\mb i}\II[\Bell]\II[\mb i+\Bell_1]\cdots \II[\mb i+\Bell_{p-1}],
 \end{equation*}
