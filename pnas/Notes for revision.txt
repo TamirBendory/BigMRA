@@ -1,0 +1,2 @@
+Need to cite the paper on the relation between cryo-EM and SAXS and in particular 
+"Cross-Validation of Data in SAXS and Cryo-EM" of Chirikjian
