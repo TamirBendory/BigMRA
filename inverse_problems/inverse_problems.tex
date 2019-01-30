@@ -379,161 +379,66 @@ The sign ambiguity can be resolved by the mean of the signal if it is not zero. 
 
 \section{Algorithms and numerical experiments}
 
-2-D homogeneous example, 1-D heterogeneous example, K-L figure for noiseless heterogeneous case
 
 
-%
-%The technique we advocate allows recovery of a signal hidden in noisy micrographs without detecting the location  of the signals embedded in these micrographs. To illustrate the underlying principles of the method, we present several numerical examples for the toy model~\eqref{eq:model} and a simple proof of concept for simulated cryo-EM data.  Appendix~\ref{sec:numeric_details} provides additional details on the experiments. 
-%The code to generate all figures is publicly available in \url{https://github.com/PrincetonUniversity/BreakingDetectionLimit}.
-%
-%\subsection{Toy model}
-%In the first experiment, we estimated 
-%an 50-by-50 pixel image of Einstein with mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. Each micrograph contains, on average, 700 occurrences of the target image at random locations. 
-%Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$,  corresponding  to SNR = $\frac{M\|x\|_F^2} {\sigma^2N} \approx1/370$. This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
-%To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition~\eqref{eq:spacing}. 
-%
-%We compute the average second-order autocorrelation of the micrographs. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform (FFT) in parallel.  
-%Given the noise level and number of image repetitions, the second-order autocorrelation of the image can be easily deduced from~\eqref{eq:ac2_micrograph}.  Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
-%Relative error is measured as the ratio of the root mean square error to the norm of the ground truth (square root of the sum of squared pixel intensities).
-%
-%Figure~\ref{fig:Einst_example} shows several estimated images for a growing number of micrographs. %, and a movie is available as supplementary material.
-%Figure~\ref{fig:error_per_micro} %(see appendix)
-%presents the normalized recovery error as a function of the amount of data available.  This is computed after fixing the reflection symmetries (see Section~\ref{sec:AC_analysis}). As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many micrographs, without particle picking.
-%
-%
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=.8\linewidth]{Einstein_recovery_error_combined}
-%	\caption{\label{fig:error_per_micro}Relative error curves for the experiment of Figure~\ref{fig:Einst_example}.}
-%\end{figure}
-%
-%
-%In practice, we do not expect to know $\gamma$ and maybe not even $\sigma$.
-%Figure~\ref{fig:1D_example} %(see appendix) 
-%shows recovery of a 1-D signal from the first three autocorrelations of the data.
-%The autocorrelations are computed from noisy micrographs with $\sigma=3$ that obey the separation condition of~\eqref{eq:spacing}; see Figure~\ref{fig:1D_obs_example}.  
-%Both the signal  and $\gamma$ are estimated simultaneously from the observed autocorrelations by LS fitting; more details are given in Appendix~\ref{sec:numeric_details}. Crucially, the LS does not require  knowledge of $\sigma$. 
-%
-%
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=\linewidth]{1D_example}
-%	\caption{\label{fig:1D_example} Recovery of a 1-D signal of length $L=21$ at noise level $\sigma = 3$ from $M$ repetitions. The length of the micrograph was set to be $N = 410*M$. The first three panels (left to right) show reconstruction with different $M$ values compared to the ground truth signal (in blue).
-%		The true value of $\gamma$ is $0.0512$.
-%		The relative errors of $\gamma$ for the three panels are: $4.8\%,4\%,1.2\%$. The right panel shows the relative error as a function of $M$. 
-%	}
-%\end{figure}
-%
-%
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=0.6\linewidth]{example_obs_1D}
-%	\caption{\label{fig:1D_obs_example} An example for a 1-D noisy measurement for the experiment in Figure~\ref{fig:1D_example}. The signal occurrences appear in blue, and the noisy data in green.
-%	}
-%\end{figure}
-%
-%
-%\subsection{Cryo-EM} The application of autocorrelation analysis to cryo-EM follows the same mathematical principles.
-%The derivation of the first three autocorrelations of the micrographs and their relations to the volume itself are provided in Appendix~\ref{sec:ac_cryo}.
-%In particular, numerical evidence suggests that the third-order autocorrelation uniquely determines the 3-D volume. 
-%Figure~\ref{fig:cryo_recon} shows recovery of the 3-D volume from the clean autocorrelations and from noisy micrographs. 
-%Excerpts from the noisy micrographs are shown in Figure~\ref{fig:cryo_noisy_micros_for_rec}.
-%Unfortunately, the mapping between the autocorrelations and volume seems to be ill-conditioned, preventing high-resolution recovery from noisy data.
-%The details of the reconstruction algorithm are given in Appendix~\ref{sec:numeric_details}.
-%In the next section, we outline how we suggest to overcome the ill-conditioning in future work. 
-%
-%\begin{figure}[h]
-%	\centering
-%	\begin{subfigure}[h]{0.45\textwidth}
-%		\centering
-%		\includegraphics[angle=270, width=1\textwidth]{TRPV1_rec_incl_noisy_resize.eps}
-%		\caption{TPRV1 with cutoff $L_{\text{max}}=5$}\label{fig:TRPV1_recon}
-%	\end{subfigure}
-%	\hfill
-%	\begin{subfigure}[h]{0.45\textwidth}
-%		\centering
-%		\includegraphics[angle=270, width=1\textwidth]{BPTI_maxL2_L20_resize.eps}
-%		\caption{BPTI with cutoff $L_{\text{max}}=2$}\label{fig:BPTI_recon}
-%	\end{subfigure} 
-%	\caption{\label{fig:cryo_recon} Reconstructions from the first, second and third order autocorrelations.
-%		The ground truth volumes were expanded according to~\eqref{eq:volume_expansion_app} with cutoff $L_{\text{max}}$.
-%		{The original molecules are shown in purple and the (smoothed) ground truths in blue  to illustrate the smoothing effect of our downsampling and truncation of the spherical harmonics expansion.
-%			The reconstructions  from clean autocorrelations are shown in yellow and recoveries from 
-%			autocorrelations estimated from noisy data in gray. For the noisy experiments, we used 300 micrographs with SNRs of 1/16 for TRPV1 and 1/64 for BPTI. We present excerpts from noisy micrographs side-by-side with the corresponding clean ones in Figure~\ref{fig:cryo_noisy_micros_for_rec} (see appendix)}.}
-%	%	\vspace{-20pt} 	
-%\end{figure}
-%
-%\begin{figure}[t!]
-%	\centering
-%	\begin{subfigure}[t]{0.245\textwidth}
-%		\centering
-%		\includegraphics[scale=0.3]{TRPV1_clean_micro.png}
-%		\caption{}
-%	\end{subfigure} \hfill %\hspace{2pt}
-%	\begin{subfigure}[t]{0.245\textwidth}
-%		\centering
-%		\includegraphics[scale=0.3]{TRPV1_noisy_micro_SNR_16.png}
-%		\caption{}
-%	\end{subfigure} \hfill %\hspace{2pt}
-%	\begin{subfigure}[t]{0.245\textwidth}
-%		\centering
-%		\includegraphics[scale=0.3]{clean_micro_BPTI.png}
-%		\caption{}
-%	\end{subfigure} \hfill
-%	\begin{subfigure}[t]{0.245\textwidth}
-%		\centering
-%		\includegraphics[scale=0.3]{noisy_micro_BPTI_SNR_64.png}
-%		\caption{}
-%	\end{subfigure}
-%	\caption{\label{fig:cryo_noisy_micros_for_rec}  {Excerpts from the noisy micrographs used for the reconstructions in Figure~\ref{fig:cryo_recon} and the corresponding clean excerpts. (a) Excerpt of the clean TRPV1 micrograph; (b) Excerpt of the noisy TRPV1 micrograph with SNR $= 1/16$; (c) Excerpt from the clean BPTI micrograph; (d) Excerpt from the noisy BPTI micrograph with SNR $= 1/64$.}} 
-%\end{figure}
-%
-%\begin{figure}[t!]
-%	\centering
-%	\begin{subfigure}[t]{0.4\textwidth}
-%		\centering
-%		\includegraphics[scale=0.35]{TRPV1_trunc_FSC.eps}
-%		\caption{}
-%	\end{subfigure} \hfill %\hspace{2pt}
-%	\begin{subfigure}[t]{0.4\textwidth}
-%		\centering
-%		\includegraphics[scale=0.35]{BPTI_FSC.eps}
-%		\caption{}
-%	\end{subfigure} 
-%	\caption{\label{fig:cryo_FSC}  {Fourier Shell Correlations (FSCs) for the noisy reconstructions presented in Figure~\ref{fig:cryo_recon} using the $0.5$ criterion, compared to the (smoothed) ground truth. (a) FSC for the TRPV1 reconstruction, giving resolution of $24$\AA; (b) FSC for the BPTI reconstruction, giving resolution of $13$\AA.}} 
-%\end{figure}
-%
-%
-%While we cannot provide a {high-resolution} 3-D reconstruction from noisy data with the current algorithm, our method can be easily applied to the problem of deciding whether a micrograph contains projections or merely pure noise---a problem considered in classical works in statistics~\cite{donoho2004higher} %and debates in the cryo-EM community~\cite{henderson2013avoiding}.
-%and cryo-EM~\cite{henderson2013avoiding}.
-%This task can be performed by considering solely the recovered $\gamma$ (the fraction of pixels occupied by projections in the micrograph), estimated as part of the recovery algorithm.
-%Figure~\ref{fig:cryo_detection} %(see appendix) 
-%presents excerpts  of two noisy micrographs, only one of which contains projections.
-%In the presence of projections, the estimated $\gamma$ was $0.12$, corresponding to approximately $6784$ projections. 
-%On the other hand, the estimated $\gamma$ drops to $10^{-5}$ for the pure noise micrograph, corresponding to less than one projection.
-%
-%
-%\begin{figure}[h]
-%	\centering
-%	\begin{subfigure}[t]{0.3\textwidth}
-%		\centering
-%		\includegraphics[scale=0.4]{pure_noise_micrograph_cutout.png}
-%		\caption{An excerpt of the pure noise micrograph}
-%	\end{subfigure} \hfill %\hspace{2pt}
-%	\begin{subfigure}[t]{0.3\textwidth}
-%		\centering
-%		\includegraphics[scale=0.4]{noisy_micrograph_cutout.png}
-%		\caption{An excerpt of the clean micrograph in right panel perturbed by the noise in the left panel.}
-%	\end{subfigure} \hfill %\hspace{2pt}
-%	\begin{subfigure}[t]{0.3\textwidth}
-%		\centering
-%		\includegraphics[scale=0.4]{clean_micrograph_cutout.png}
-%		\caption{An excerpt of the clean micrograph}
-%	\end{subfigure}
-%	\caption{\label{fig:cryo_detection} All micrographs are of size $7420^2$ pixels and the projections are taken from the BPTI molecule of size $31^3$. The added noise was drawn from i.i.d.\ Gaussian distribution with zero mean and standard deviation $25$, corresponding to an SNR below $1/1024$.  
-%		The noise realization is identical in both micrographs.} 
-%\end{figure}
+The technique we advocate allows recovery of a signal hidden in noisy micrographs without detecting the location  of the signals embedded in these micrographs. To illustrate the underlying principles of the method, we present several numerical examples. The code to generate all figures is publicly available in \url{https://github.com/PrincetonUniversity/BreakingDetectionLimit}.
 
+In the first experiment, we estimated 
+an 50-by-50 pixel image of Einstein with mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. Each micrograph contains, on average, 700 occurrences of the target image at random locations. 
+Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$,  corresponding  to SNR = $\frac{M\|x\|_F^2} {\sigma^2N} \approx1/370$. This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
+To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition~\eqref{eq:spacing}. 
+
+We compute the average second-order autocorrelation of the micrographs. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform (FFT) in parallel.  
+Given the noise level and number of image repetitions, the second-order autocorrelation of the image can be easily deduced from~\eqref{eq:ac2_micrograph}.  Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
+Relative error is measured as the ratio of the root mean square error to the norm of the ground truth (square root of the sum of squared pixel intensities).
+
+Figure~\ref{fig:Einst_example} shows several estimated images for a growing number of micrographs. 
+Figure~\ref{fig:error_per_micro} %(see appendix)
+presents the normalized recovery error as a function of the amount of data available.  This is computed after fixing the reflection symmetries (see Section~\ref{sec:AC_analysis}). As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many micrographs, without particle picking.
+
+\begin{figure}[t]
+	\centering
+	\begin{subfigure}[h]{0.33\linewidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_clean}
+		\caption{$\sigma = 0$}
+	\end{subfigure}%
+	\begin{subfigure}[h]{0.33\linewidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_s05}
+		\caption{$\sigma = 0.5$}
+	\end{subfigure}
+	\begin{subfigure}[h]{0.33\linewidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_s3}
+		\caption{$\sigma = 3$}
+	\end{subfigure}
+	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}
+	%\vspace{-8pt} 	
+\end{figure}
+
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=1\linewidth]{Einstien_progress_examples}
+	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels from left to right) of size $4096\times 4096$, each containing $700$ image occurrences on average.}	
+	%	\vspace{-8pt} 
+\end{figure}
+
+
+ Appendix~\ref{sec:numeric_details} provides additional details on the experiments. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.8\linewidth]{Einstein_recovery_error_combined}
+	\caption{\label{fig:error_per_micro}Relative error curves for the experiment of Figure~\ref{fig:Einst_example}.}
+\end{figure}
+
+
+In practice, we do not expect to know $\gamma$ and maybe not even $\sigma$
+\TODO{heterogeneous example}
+
+\TODO{K-L figure }
 
 \section{Relation with cryo-EM + experiments?}
 %
@@ -557,6 +462,7 @@ The sign ambiguity can be resolved by the mean of the signal if it is not zero. 
 %For instance, for colored noise, the forward model may involve multiple parameters to capture the power spectrum of the noise instead of the single parameter $\sigma^2$. 
 %Similarly, instead of the separation condition, we can model the spacing between the projections using a parameterized pair-correlation function. Such a function models the distribution of distances between neighboring projections. The observed autocorrelations depend linearly on these parameters, which would be estimated as part of the inverse problem.
 %All these aspects must be taken into account so the method can be applied on experimental data. We hope to take care of these issues in future research. 
+
 %
 %\section*{Acknowledgment}
 %The authors  thank Ayelet Heimowitz, Joe Kileel,  Roy Lederman, Amit Moscovich, Nir Sharon and  Fred Sigworth for helpful discussions,  and Boris Landa and Yoel Shkolnisky for providing the code for the 2-D PSWFs expansion.
@@ -567,6 +473,134 @@ The sign ambiguity can be resolved by the mean of the signal if it is not zero. 
 \bibliography{ref}
 
 \appendix
+
+\section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
+
+We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, so that
+\begin{equation*}
+\gamma := \frac{ML}{N}>0.
+\end{equation*}
+%
+Any vectors with indices out of range are given value 0.
+
+We start by considering the mean of the data:
+\begin{equation*}
+a_y^1 = \frac{1}{N}\sum_{i=0}^{N-1} y[i] =
+\frac{1}{N/L}\sum_{j=0}^{M-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] +    
+\underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}}
+\xrightarrow{a.s.}\gamma a_x^1,
+\end{equation*}
+%
+where the noise term converges to zero almost surely (a.s.)\ by the strong law of large numbers.
+
+We proceed with the (second-order) autocorrelation for fixed $\ell\in[0,\ldots,L-1]$. We can compute:
+%
+\begin{align*}
+%
+a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]
+\nonumber \\
+& = \underbrace{\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}}
+\\ & + \underbrace{\frac{1}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] (\varepsilon[s_j + i + \ell] + \varepsilon[s_j + i - \ell])}_{\text{cross-term}}. 
+%
+\end{align*}
+The cross-term is linear in the noise, and is easily shown to vanish almost surely in the limit $N\to\infty$, by the strong law of large numbers. We break the signal term into $M$ different sums, each containing one copy of the signal. This gives:
+%
+\begin{align} \label{eq:2nd_moment_signal_term}
+%
+\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] & = \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\nonumber\\&\xrightarrow{N\to\infty}\gamma a_x^2[\ell].
+%
+\end{align}
+%
+We next analyze the pure noise term. When $\ell\neq 0$, we can break the noise term into a sum of independent terms:
+%
+\begin{equation*}
+%
+\frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
+%
+\end{equation*}
+%
+Each sum $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, hence converges to zero almost surely as $N\to\infty$. If $\ell=0$, then we have:
+%
+\begin{equation*}
+\frac{1}{N}\sum_{i=0}^{N-1} \varepsilon^2[i] \xrightarrow{a.s.} \sigma^2.
+\end{equation*}
+
+We now analyze the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2\ge0$. We have:
+%
+%\begin{align*}
+%%
+%&a_y^3[\ell_1,\ell_2] 
+%= \frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]
+%\nonumber \\
+%%
+%=& \underbrace{ \frac{ML}{N}\frac{1}{M}\sum_{j=1}^M 
+%	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x[i]x[i+\ell_1]x[i+\ell_2]   }_{(1)}
+%\\& + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]}_{(2)}
+%\nonumber \\
+%&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+%	\sum_{i=0}^{L-1} x[i]\ep[s_j + i+\ell_1]\ep[s_j+ i+\ell_2]}_{(3)}
+%\\& + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+%	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]}_{(4)}
+%\nonumber \\
+%&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+%	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_2]\ep[s_j+i+\ell_1-\ell_2]x[i]}_{(5)}
+%\\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+%	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i-\ell_2]x[i+\ell_1-\ell_2]x[i]}_{(6)}
+%\nonumber \\
+%&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+%	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[i+\ell_2]}_{(7)}
+%\\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+%	\sum_{i=0}^{L-\ell_1-1} x[i]x[i+\ell_1]\ep[s_j+ i+\ell_2]}_{(8)}.
+%%
+%\end{align*}
+%
+\begin{align*}
+%
+a_y^3[\ell_1,\ell_2] 
+=& \frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]
+\\
+%
+=& \underbrace{ \frac{ML}{N}\frac{1}{M}\sum_{j=1}^M 
+	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x[i]x[i+\ell_1]x[i+\ell_2]   }_{(1)}
++ \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]}_{(2)}
+\ \\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} x[i]\ep[s_j + i+\ell_1]\ep[s_j+ i+\ell_2]}_{(3)}
++ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]}_{(4)}
+\\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_2]\ep[s_j+i+\ell_1-\ell_2]x[i]}_{(5)}
++ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i-\ell_2]x[i+\ell_1-\ell_2]x[i]}_{(6)}
+\\
+&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[i+\ell_2]}_{(7)}
++ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
+	\sum_{i=0}^{L-\ell_1-1} x[i]x[i+\ell_1]\ep[s_j+ i+\ell_2]}_{(8)}.
+%
+\end{align*}
+Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge to 0 almost surely by the law of large numbers, by similar arguments as used previously. Term (1) converges to $\gamma a_x^3[\ell_1,\ell_2]$ almost surely, for the same reasons as~\eqref{eq:2nd_moment_signal_term}. To deal with terms (2)--(5), we must distinguish between different values of $\ell_1$ and $\ell_2$.
+
+{\bf Case 1:} $0 < \ell_2 < \ell_1$. Here, all summands with elements of $\ep$ involve products of distinct entries, which have expected value 0. Consequently, the usual argument shows that terms (2)--(5) all converge to 0 almost surely as $N \to \infty$.
+
+{\bf Case 2:} $0=\ell_2 < \ell_1$. Term (2) is an average of products of the form $\ep[i]^2\ep[i+\ell_1]$, which have mean zero; consequently, term (2) converges to 0 almost surely. The same argument as for Case 1 shows that (3) and (5) also converge to 0. For term (4), we write:
+%
+\begin{align*}
+%
+&\frac{1}{N}\sum_{j=1}^{M} 
+\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]
+\nonumber \\
+&= \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-1}x[i] \frac{1}{M}\sum_{j=1}^{M} \ep[s_j+i-\ell_1]^2
+\\& \xrightarrow{a.s.} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2. \nonumber
+%
+\end{align*}
+
+{\bf Case 3:} $0<\ell_2 = \ell_1$. An argument nearly identical to that for Case 2 shows that terms (2), (4) and (5) converge to 0, while term (3) converges to $\gamma a_x^1 \sigma^2$.
+
+{\bf Case 4:} $0=\ell_2 = \ell_1$. The same argument as for term (4) in Case 2 shows that terms (3), (4) and (5) all converge to $\gamma a_x^1 \sigma^2$. Term (2) is an average of $\ep[i]^3$, which is mean zero; consequently, it converges to 0.
+This completes the proof.
+
 
 \section{Proof of Proposition~\ref{prop:gamma}} \label{sec:proof_prop_gamma}
 
