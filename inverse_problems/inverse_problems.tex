@@ -135,98 +135,84 @@ abstract
 
 \section{Introduction}
 
-Posing the problem: first the homogeneous case and then the heterogeneity. Later, motivating the model as an abstraction of cryo-EM, discuss the MRA-Kam's method relations, and maybe related topics. 
+\subsection{Model}
 
-%
-%Cryo-electron microscopy (cryo-EM) is an imaging technique in structural biology used for single particle reconstruction (SPR) of macromolecules.
-%In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice.
-%The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structure from the micrographs.
-%
-%The signal to noise ratio (SNR) of the projections in the micrographs is a function of two dominating factors. On the one hand, the SNR is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the SNR is a function of the molecule size. The smaller the molecules, the fewer detected electrons carry information about them.
-%
-%All contemporary methods in the field split the reconstruction procedure into two main  stages.
-%The first stage consists in extracting the various particle projections from the micrographs. This stage is called \emph{particle picking}. The second stage aims to construct a 3-D model of the molecular structure from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage. Figure~\ref{fig:micro_example} illustrates how particle picking becomes increasingly challenging as the SNR degrades.
-%
-%\begin{figure}[t]
-%	\centering
-%	\begin{subfigure}[h]{0.33\linewidth}
-%		\centering
-%		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_clean}
-%		\caption{$\sigma = 0$}
-%	\end{subfigure}%
-%	\begin{subfigure}[h]{0.33\linewidth}
-%		\centering
-%		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_s05}
-%		\caption{$\sigma = 0.5$}
-%	\end{subfigure}
-%	\begin{subfigure}[h]{0.33\linewidth}
-%		\centering
-%		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_s3}
-%		\caption{$\sigma = 3$}
-%	\end{subfigure}
-%	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}
-%	%\vspace{-8pt} 	
-%\end{figure}
+In this paper, we consider the problem of recovering signals that appear 
+multiple times at unknown locations in a noisy measurement. This problem can be conveniently posed as  \emph{blind deconvolution}.
+Let $x\in\RL$ be the sought signal and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
+\begin{equation} 
+y  =  x \ast s + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
+\label{eq:model}
+\end{equation}
+where $\ast$ denotes linear convolution. 
+While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. 
+We refer to~\eqref{eq:model} as the \emph{homogeneous model}.
+This is a key difference with other works on  \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
+This model appears in several scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}
 
+We also consider a natural generalization, called the \emph{heterogeneous model}, in which one aims to estimate a set of $K$ signals $x_1,\ldots,x_K\in\RL$ from their mixed blind deconvolution
+\begin{equation} 
+y  =  \sum_{i=1}^Kx_i \ast s_i + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
+\label{eq:model}
+\end{equation}
+where again $s_i$ denotes a binary signal. 
+
+The signals $s_i$ indicate the support of the occurrences of $x$ in the data. We will consider two generative models for $s$: well-spaced deterministic model, and a stochastic Possion model.
+
+\paragraph{Well-separated support model:} In this model, 
+we assume the binary signal $s$ obeys \TODO{This is not accurate}
+\begin{equation}
+\textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
+\label{eq:spacing}
+\end{equation}
+In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the data.
 %
-%\begin{figure}[t]
-%	\centering
-%	\includegraphics[width=1\linewidth]{Einstien_progress_examples}
-%	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels from left to right) of size $4096\times 4096$, each containing $700$ image occurrences on average.}	
-%%	\vspace{-8pt} 
-%\end{figure}
-%
-%Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following questions:
-%\begin{myquote}{10pt}
-%	\emph{For the purposes of this review, I would like to ask the question: what is the smallest size of free-standing molecule whose structure can in principle be determined by phase-contrast electron microscopy? Given what has already been demonstrated in published work, this reduces to the question: what is the smallest size of molecule for which it is possible to determine from images of unstained molecules the five parameters needed to define accurately its orientation (three parameters) and position (two parameters) so that averaging can be performed?}
-%\end{myquote}
-%In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
-%Joachim Frank voices a similar observation in his 2017 Nobel prize lecture: ``\emph{Using the ribosome as an example, it became clear from the formula we obtained that the single-particle approach to structure research was indeed feasible for molecules of sufficient size: Particle Size > 3/[Contrast$^2$ $\times$ Resolution (as length) $\times$ Critical Electron Dose]}''~\cite{frank2018single}. 
-%As these two leaders of the cryo-EM community point out, it is impossible to reconstruct small molecules by any of the existing computational pipelines for single particle analysis in cryo--EM, because the particles themselves cannot be picked from the micrographs. Yet, imaging such molecules is important for structure-guided drug design and other applications~\cite{scapin2018cryo}.
-%
-%The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
-%Despite this progress, detecting small molecules in the micrographs remains a challenge.
-%We note that nuclear magnetic resonance (NMR) spectroscopy and X-ray crystallography are well suited to reconstruct small molecules. Yet, cryo--EM has a lot to offer even for molecules with already known structures obtained via NMR spectroscopy or X-ray crystallography, because these methods have limited ability to distinguish conformational variability.  
-%
-%In this paper, we argue that there is a gap between the two questions in Henderson's quoted excerpt above, and that one may be able to exploit it to design better reconstruction algorithms.
-%Specifically, the impossibility of particle picking does not necessarily imply impossibility of particle reconstruction.
-%Indeed, the aim is only to reconstruct the molecule: estimating the locations of the particles in the micrograph is merely a helpful intermediate stage when it can be done. Our main message is that the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
-%
-%As a proof of concept, we first study a toy model  for which it is easier to convey the mathematical principles. 
-%In this model, an unknown image appears multiple times at unknown locations in each of several micrographs, each affected by additive Gaussian noise---see Figure~\ref{fig:micro_example} for an illustration.
-%The goal is to estimate the planted image. The task is challenging in particular when the SNR is low enough that particle picking (identifying the locations of each image in each micrograph) cannot be done reliably. 
-%This problem is interesting on its own as it appears in other scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}.
-%
-%In order to recover the image, we use autocorrelation analysis. Specifically, we relate the autocorrelations of the micrographs to the autocorrelations of the image.
-%For any noise level, these autocorrelations can be estimated to any desired accuracy, provided that we  observe sufficiently many image occurrences and the latter are separated in the micrograph. Importantly, there is no need to detect individual image occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the autocorrelations of the target image itself. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem; see for instance Figure~\ref{fig:Einst_example}.
+\paragraph{Poisson support model:}
+
+The relation between the two models is formulated in Section~\ref{sec:support}.
+
+In order to recover the image, we use autocorrelation analysis. Specifically, we relate the autocorrelations of the micrographs to the autocorrelations of the image.
+For any noise level, these autocorrelations can be estimated to any desired accuracy, provided that we  observe sufficiently many image occurrences and the latter are separated in the micrograph. Importantly, there is no need to detect individual image occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the autocorrelations of the target image itself. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem
+
+\subsection{Main motivation: single-particle reconstruction using cryo-electron microscopy}
+This work is motivated by the problem of single-particle reconstruction using cryo-electron microscopy (cryo-EM).  Cryo-EM is revolutionizing the field of structural biology, enabling XXX. 
+
+In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice.
+The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structure from the micrographs.
+
+The signal to noise ratio (SNR) of the projections in the micrographs is a function of two dominating factors. On the one hand, the SNR is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the SNR is a function of the molecule size. The smaller the molecules, the fewer detected electrons carry information about them.
+
+
+All contemporary methods in the field split the reconstruction procedure into two main  stages.
+The first stage consists in extracting the various particle projections from the micrographs. This stage is called \emph{particle picking}. The second stage aims to construct a 3-D model of the molecular structure from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
+Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following 
+In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
+
+As these two leaders of the cryo-EM community point out, it is impossible to reconstruct small molecules by any of the existing computational pipelines for single particle analysis in cryo--EM, because the particles themselves cannot be picked from the micrographs. Yet, imaging such molecules is important for structure-guided drug design and other applications~\cite{scapin2018cryo}.
+
+
+
+The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
+Despite this progress, detecting small molecules in the micrographs remains a challenge.
+We note that nuclear magnetic resonance (NMR) spectroscopy and X-ray crystallography are well suited to reconstruct small molecules. Yet, cryo--EM has a lot to offer even for molecules with already known structures obtained via NMR spectroscopy or X-ray crystallography, because these methods have limited ability to distinguish conformational variability.  
+
+In a recent paper~\cite{bendory2018toward} by the authors, it was suggested to bypass the particle picking stage and the reconstruct the 3-D structure directly from the micrograph.
+In that paper, we have shown that, at least in principle, the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
+The principle mathematical tool is the method of moments, or autocorrelation analysis, described in Section~\ref{sec:AC_analysis}.
+
+This goal of  this paper is to provide a theoretical and numerical justification for the method proposed in~\cite{bendory2018toward}.  
+In particular, the homogeneous  model serves as an abstraction of the cryo-EM problem. While in cryo-EM the 2-D images are tomographic projections of a 3-D structure, taken from unknown viewing directions, in the homogeneous model we observe the same 2-D image again and again. The heterogeneous case generalizes to multiple signals. 
+
+To talk about the MRA-Kam's method relations. Also, model bias 
+\TODO{Where do we discuss the limits of detection?}
 %
 %Beyond this 2-D proof of concept, we look toward \mbox{3-D} reconstruction as well. Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. In contrast, we derive the mathematical relation between the autocorrelations of the micrographs as a whole and the \mbox{3-D} volume, under some simplifying conditions.
 %We show a few numerical examples and outline the future developments required to make this method applicable to experimental  data. 
 %
 %Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
-%
-%\section{Proof of concept: A mathematical toy model}
-%
-%In this section, we present a toy model in order to introduce the mathematical principles enabling estimation of a signal in a low SNR regime, even when detection is impossible. Later, we discuss how these principles carry through for the SPR problem. We first formulate the model for 1-D signals to ease exposition.
-%
-%Let $x\in\RL$ be the target signal and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
-%\begin{equation}
-%y  =  x \ast s + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
-%\label{eq:model}
-%\end{equation}
-%where $\ast$ denotes linear convolution. 
-%While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$.
-%This is a key difference with other works on  \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
-%The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
-%
-%We assume the binary signal $s$ obeys a \emph{separation condition}:
-%\begin{equation}
-%\textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
-%\label{eq:spacing}
-%\end{equation}
-%In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the micrograph.
-%
+
 %Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the
 %forward model takes the form
 %%
@@ -272,127 +258,123 @@ Posing the problem: first the homogeneous case and then the heterogeneity. Later
 
 
 \section{The method of moments/ autocorrelation analysis} \label{sec:AC_analysis}
+\TODO{copied from PNAS's paper}
+In general, for a signal $z$ of length $m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
+\begin{equation}
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
+\label{eq:ac_general}
+\end{equation}
+where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
+Explicitly, the first-, second- and third-order autocorrelations are given by: 
+\begin{align} 
+a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} z[i], \nonumber\\
+a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} z[i]z[i+\ell],\\
+a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2].  \nonumber \label{eq:ac_special}
+\end{align}
+The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^2[-\ell]$, and
+$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
+$
+For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
 
-Presenting autocorrelations
+Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
+\begin{equation}
+\gamma  = \frac{M L}{N}
+\label{eq:gamma}
+\end{equation}
+denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
+imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
-%In general, for a signal $z$ of length $m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
-%\begin{equation}
-%a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
-%\label{eq:ac_general}
-%\end{equation}
-%where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
-%Explicitly, the first-, second- and third-order autocorrelations are given by: 
-%\begin{align} 
-%a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} z[i], \nonumber\\
-%a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} z[i]z[i+\ell],\\
-%a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2].  \nonumber \label{eq:ac_special}
-%\end{align}
-%The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^2[-\ell]$, and
-%$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
-%$
-%For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
-%
-%Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
-%\begin{equation}
-%\gamma  = \frac{M L}{N}
-%\label{eq:gamma}
-%\end{equation}
-%denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
-%imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
-%
-%For shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
-%We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $M$ also goes to infinity at the same rate (in other words, as we see an increasingly large micrograph, it contains increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
-%\begin{equation} \label{eq:mean_micrograph}
-%\lim_{N\to\infty} a_y^1  \aseq \gamma a_{x}^1,
-%\end{equation}
-%where equality holds almost surely (a.s.), meaning it holds with probability one.
-%The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic.
-%Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.) 
-%
-%We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result,
-%\begin{equation}
-%\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell],
-%\label{eq:ac2_micrograph}
-%\end{equation}
-%for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and zero otherwise. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
-%
-%Along the same lines, one can establish a relation for third-order autocorrelations:
-%\begin{equation}
-% \label{eq:ac3_micrograph}
-%\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{x}^1  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
-%+\delta[\ell_1,\ell_2]\big),
-%\end{equation}
-%%\begin{equation}
-%%\begin{split} \label{eq:ac3_micrograph}
-%%\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] &\aseq \gamma a_{x}^3[\ell_1,\ell_2]  \\& + \sigma^2\gamma a_{x}^1 \cdot \big(\delta[\ell_1,0]+\delta[0,\ell_2]
-%%+\delta[\ell_1,\ell_2]\big),
-%%\end{split}
-%%\end{equation}
-%for $\ell_1,\ell_2 = 0, \ldots, L-1$, where $\delta[\ell_1,\ell_2]:=\delta[\ell_1-\ell_2]$.
-%Here too, few entries are affected by $\sigma$ in the limit.
-%See Appendix~\ref{sec:autocorrelation_computation}.
-%
-%Computing the autocorrelations of the micrograph is straightforward. The natural question, treated next, is whether one can recover $x$ from them.
-%
+For shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
+We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $M$ also goes to infinity at the same rate (in other words, as we see an increasingly large micrograph, it contains increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
+\begin{equation} \label{eq:mean_micrograph}
+\lim_{N\to\infty} a_y^1  \aseq \gamma a_{x}^1,
+\end{equation}
+where equality holds almost surely (a.s.), meaning it holds with probability one.
+The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic.
+Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.) 
+
+We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result,
+\begin{equation}
+\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell],
+\label{eq:ac2_micrograph}
+\end{equation}
+for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and zero otherwise. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
+
+Along the same lines, one can establish a relation for third-order autocorrelations:
+\begin{equation}
+ \label{eq:ac3_micrograph}
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{x}^1  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
++\delta[\ell_1,\ell_2]\big),
+\end{equation}
+for $\ell_1,\ell_2 = 0, \ldots, L-1$, where $\delta[\ell_1,\ell_2]:=\delta[\ell_1-\ell_2]$.
+Here too, few entries are affected by $\sigma$ in the limit.
+
+
+Computing the autocorrelations of the micrograph is straightforward. The natural question, treated next, is whether one can recover $x$ from them.
+
 
 \section{Theory}
 
 \subsection{Theory for the 1-D homogeneous case}
 
-\subsection{Equivalence between the spacing condition and the Poisson process}
+A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
+%
+\begin{equation}
+%
+z[k]  = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
+\label{eq-uniqueness}
+%
+\end{equation}
+This proves the following useful fact:
+\begin{proposition} \label{prop:uniqueness}
+	%
+	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$.
+\end{proposition}
+
+A couple of remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
+%Second, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
+
+The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that $x$ is still determined by the observed moments of $y$.
+
+First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Appendix~\ref{sec:proof_prop_gamma}.
+
+\begin{proposition} \label{prop:gamma}
+	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then 
+	\begin{equation}
+	\gamma  \aseq \lim_{N \to \infty}\frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
+	\end{equation}
+\end{proposition}
+
+Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are determined. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
+has Lebesgue measure zero. 
+In particular, this means that we can recover
+almost all signals with the given measurements. The proof is provided in Appendix~\ref{sec:proof_prop_gamma_sigma}.
+
+\begin{proposition} \label{prop:gamma_sigma}
+	Assume $L \geq 3$ and assume that the separation condition~\eqref{eq:spacing} holds. 
+	In the limit of $N\to \infty$, the observed autocorrelations $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma > \frac{1}{4}$, then this holds for any signal $x$ with nonzero mean. 
+\end{proposition}
+
+From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce the following:
+\begin{corollary}
+	In the limit of $N\to \infty$ and under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if either the signal $x$ is generic or $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
+\end{corollary}
+
+As a side note, under the separation condition, the length $L$ of the signal can also be determined from the autocorrelations in the asymptotic regime, by inspection of the support of $a_y^2$.
+
+
+\subsection{Equivalence between the spacing condition and the Poisson process} \label{sec:support}
 
 \subsection{Theory for the 2-D case (relation with PR)}
+
+However, for dimensions greater than one \footnote{Autocorrelation in $d$ dimensions is defined similarly to~\eqref{eq:ac_general}, where $ i, \ell_1, \ldots, \ell_{q-1}$ take on values in $\mathbb{Z}^d$ and the summation in $i$ is over all of $\mathbb{Z}^d$.}, almost all signals are determined uniquely up to sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
+The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
+
 
 \subsection{The heterogeneous case}
 
 %\section{Recovering a signal from autocorrelations} \label{sec:recovery}
 %
-%A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
-%%
-%\begin{equation}
-%%
-%z[k]  = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
-%\label{eq-uniqueness}
-%%
-%\end{equation}
-%This proves the following useful fact:
-%\begin{proposition} \label{prop:uniqueness}
-%	%
-%	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$.
-%\end{proposition}
-%
-%A couple of remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
-%Second, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
-%However, for dimensions greater than one \footnote{Autocorrelation in $d$ dimensions is defined similarly to~\eqref{eq:ac_general}, where $ i, \ell_1, \ldots, \ell_{q-1}$ take on values in $\mathbb{Z}^d$ and the summation in $i$ is over all of $\mathbb{Z}^d$.}, almost all signals are determined uniquely up to sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
-%The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
-%
-%The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that $x$ is still determined by the observed moments of $y$.
-%
-%First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Appendix~\ref{sec:proof_prop_gamma}.
-%
-%\begin{proposition} \label{prop:gamma}
-%	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then 
-%	\begin{equation}
-%	\gamma  \aseq \lim_{N \to \infty}\frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
-%	\end{equation}
-%\end{proposition}
-%
-%Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are determined. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
-%has Lebesgue measure zero. 
-%In particular, this means that we can recover
-%almost all signals with the given measurements. The proof is provided in Appendix~\ref{sec:proof_prop_gamma_sigma}.
-%
-%\begin{proposition} \label{prop:gamma_sigma}
-%	Assume $L \geq 3$ and assume that the separation condition~\eqref{eq:spacing} holds. 
-%	In the limit of $N\to \infty$, the observed autocorrelations $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma > \frac{1}{4}$, then this holds for any signal $x$ with nonzero mean. 
-%\end{proposition}
-%
-%From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce the following:
-%\begin{corollary}
-%	In the limit of $N\to \infty$ and under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if either the signal $x$ is generic or $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
-%\end{corollary}
-%
-%As a side note, under the separation condition, the length $L$ of the signal can also be determined from the autocorrelations in the asymptotic regime, by inspection of the support of $a_y^2$.
 %
 
 \section{Algorithms and numerical experiments}
@@ -584,6 +566,118 @@ Presenting autocorrelations
 \bibliographystyle{plain}
 \bibliography{ref}
 
+\appendix
+
+\section{Proof of Proposition~\ref{prop:gamma}} \label{sec:proof_prop_gamma}
+
+In the limit, 
+\begin{equation*}
+(a^1_y)^2=\frac{\gamma^2}{L^2}\sum_{i=0}^{L-1}\sum_{j=0}^{L-1}x[i]x[j].
+\end{equation*}
+Similarly,  
+\begin{equation*}
+\sum_{\ell = 1}^{L-1}a_y^2[\ell]=\frac{\gamma}{L}\sum_{\ell = 1}^{L-1}\sum_{i=0}^{L-1-\ell}x[i]x[i+\ell],
+\end{equation*}
+and $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x^2[i] + \sigma^2$. The proof is concluded by noting that  $a_x^2[-\ell]=a_x^2[\ell]$. 
+
+
+\section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
+
+We prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we work with $\beta = \gamma / L$ rather than $\gamma$ itself. To this end, we construct two quadratic equations satisfied by $\beta$ and whose coefficients can be computed from observable quantities (in the limit). Then, we show that these equations are independent, and hence that $\beta$ is uniquely defined. Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
+
+Throughout the proof, it is important to distinguish between observed and unobserved values.
+We denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$. We use $F_i$ to denote functions of the signal's autocorrelations (which are not directly observable).
+
+In the limit $N \to \infty$, almost surely, $a_y^1 = \beta(\one^Tx)$ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ is the vector of all-ones. (In this whole section, for clarity, we now omit to specify that identities hold almost surely in the limit.) Consider the product:
+\begin{equation}\label{eq:E1}
+\begin{split}
+E_1 := a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2)  = \sigma^2a_y^1 + L\beta^2F_1,
+\end{split}
+\end{equation}
+where $F_1 := a_x^3[0,0] + \sum_{j=1}^{L-1}(a_x^3[j,j] + a_x^3[0,j])$. 
+% Nicolas: the expression for F_1 is correct, see identifiability_of_gamma_and_sigma_Sep4_2018.m and notes Sep 4, 2018
+The terms of $F_1$ can also be estimated from $a_y^3$, while taking the scaling and bias terms into account. This yields another observable:
+\begin{align} 
+E_2 & := a_y^3[0,0] + \sum_{j=1}^{L-1}(a_y^3[j,j] + a_y^3[0,j]) \nonumber\\
+& = L\beta F_1 + (2L+1)\sigma^2a_y^1. \label{eq:E2}
+\end{align}
+% Nicolas: checked this one too.
+Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get:
+\begin{equation} \label{eq:E12}
+E_2\beta -(2L+1)\sigma^2\beta a_y^1 = E_1-\sigma^2a_y^1.
+\end{equation}
+Let $E_3:=a_y^2[0] + 2\sum_{j = 1}^{L-1}a_y^2[j]$; recall from Proposition~\ref{prop:gamma}:
+\begin{equation} \label{eq:sigma2}
+\sigma^2 = E_3 - (a^1_y)^2/\beta. 
+\end{equation} 
+Plugging into~\eqref{eq:E12} and rearranging, we get a first quadratic equation in $\beta$,
+\begin{equation} \label{eq:quad1}
+\mathcal{A}\beta^2 + \mathcal{B}\beta + \mathcal{C} = 0,
+\end{equation}
+where 
+\begin{align*}
+\mathcal{A} &= E_2 - (2L+1)a_y^1E_3, \\ 
+\mathcal{B} &= -E_1 + (2L+1)(a_y^1)^3 + a_y^1E_3  , \\
+\mathcal{C} &= -(a_y^1)^3.
+\end{align*}
+Importantly, these coefficients are observable quantities. As we assume throughout this proof that $x$ has nonzero mean, $a_y^1 \neq 0$ and we conclude that this equation is non-trivial.
+
+Next, we derive the second quadratic equation for $\beta$. We notice that 
+\begin{equation} \label{eq:E3}
+E_4 := \frac{1}{L}(a_y^1)^3 = \frac{1}{L}\beta^3 (\one ^Tx)^3   = \beta^3 F_2,
+\end{equation}
+where $F_2 = \frac{1}{L}(\one ^Tx)^3$, and we can work out that:
+\begin{equation*}
+F_2 = a_x^3[0,0] + 3\sum_{j=1}^{L-1} \left(a_x^3[j,j] + a_x^3[0,j]\right) + 6\sum_{1\leq i < j\leq L-1}a_x^3[i,j].
+\end{equation*}
+Once again, $F_2$ can be estimated from $a_y^3$, taking bias and scaling into account:
+\begin{align}
+E_5 & := a_y^3[0,0] + 3\sum_{j=1}^{L-1} \left(a_y^3[j,j] + a_y^3[0,j]\right) + 6\sum_{1\leq i < j\leq L-1}a_y^3[i,j]  = L \beta F_2 + (6L-3)\sigma^2a_y^1.
+\end{align}
+Consider the following ratio:
+\begin{equation*} 
+\frac{E_5}{E_4} = \frac{L}{\beta^2} + \frac{(6L-3)\sigma^2a_y^1}{E_4}.
+\end{equation*}
+From the latter, we deduce:
+\begin{equation*}
+\sigma^2 = \frac{E_5}{a_y^1(6L-3)}  - \frac{LE_4}{\beta^2a_y^1(6L-3)}.
+\end{equation*}
+Using~\eqref{eq:sigma2} and rearranging, we get the second quadratic:
+\begin{equation} \label{eq:quad2}
+\mathcal{D}\beta^2 + \mathcal{E}\beta + \mathcal{F} = 0,
+\end{equation}
+where
+\begin{align*}
+\mathcal{D} &= E_3 - \frac{E_5}{a_y^1(6L-3)}, \\ 
+\mathcal{E} &= -(a_y^1)^2, \\
+\mathcal{F} &= \frac{LE_4}{a_y^1(6L-3)}.
+\end{align*}
+It is also non-trivial since $E_4 \neq 0$.
+
+To complete the proof, we need to show that the two quadratic equations~\eqref{eq:quad1} and~\eqref{eq:quad2} are independent. To this end, it is enough to show that the ratios between coefficients differ. 
+From~\eqref{eq:quad1} and~\eqref{eq:E1}, we have:
+\begin{equation*}
+\begin{split}
+\frac{\mathcal{B}}{\mathcal{C}} = \frac{E_1 - (2L+1)(a_y^1)^3 - a_y^1E_3}{(a_y^1)^3} = \frac{a_y^2[0] - (2L+1)(a_y^1)^2 - E_3}{(a_y^1)^2}.
+\end{split}
+\end{equation*}
+In addition, using~\eqref{eq:E3},
+\begin{equation*}
+\frac{\mathcal{E}}{\mathcal{F}} = \frac{(3-6L)(a_y^1)^3}{LE_4} = 3 - 6L . 
+\end{equation*}
+For contradiction, suppose that the quadratics are dependent. Then, $\frac{\mathcal{B}}{\mathcal{C}} =\frac{\mathcal{E}}{\mathcal{F}} $, that is, 	
+\begin{equation*}
+a_y^2[0] - (2L+1)(a_y^1)^2 - E_3 = (a_y^1)^2(3-6L).
+\end{equation*}
+Rewriting the identity in terms of $x$ and dividing by $\beta$ we get:
+\begin{equation} \label{eq:cond}
+4(L-1)\beta (\1^\top x)^2  - (\1^\top x)^2 + \|x\|^2 = 0.
+\end{equation}	
+For generic $x$,  this polynomial equation is not satisfied so that the quadratic equations are independent. 
+Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immediately that the equations must be independent so long as
+\begin{equation*}
+\beta > \frac{1}{4L}.
+\end{equation*}
 
 \end{document}
 
