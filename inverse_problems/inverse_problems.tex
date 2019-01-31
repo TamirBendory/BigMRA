@@ -41,6 +41,7 @@
 \newcommand*\Bell{\ensuremath{\boldsymbol\ell}}
 \newcommand{\TODO}[1]{{\color{red}{[#1]}}}
 \newcommand{\revised}[1]{{\color{blue}{#1}}}
+\newcommand{\R}{\mathbb{R}}
 
 %\newcommand{\SNR}{\ensuremath{\textsf{SNR}}}
 \makeatletter
@@ -79,6 +80,8 @@
 \theoremstyle{plain}
 \newtheorem{corollary}[thm]{\protect\corollaryname}
 \theoremstyle{plain}
+\newtheorem{conjecture}[thm]{\protect\conjecturename}
+\theoremstyle{plain}
 \newtheorem{proposition}[thm]{\protect\propositionname}
 \providecommand{\claimname}{Claim}
 \providecommand{\definitionname}{Definition}
@@ -87,6 +90,7 @@
 \providecommand{\theoremname}{Theorem}
 \providecommand{\corollaryname}{Corollary}
 \providecommand{\propositionname}{Proposition}
+\providecommand{\conjecturename}{Conjecture}
 
 \usepackage{authblk}
 \renewcommand*{\Affilfont}{\normalsize}
@@ -98,7 +102,8 @@
 {\list{}{\leftmargin=#1\rightmargin=#1}\item[]}%
 {\endlist}
 
-\allowdisplaybreaks
+%\allowdisplaybreaks
+\numberwithin{equation}{section}
 
 
 \begin{document}
@@ -135,10 +140,14 @@ abstract
 
 \section{Introduction}
 
-\subsection{Model}
+\subsection{Problem formulation} \label{sec:problem_formulation}
 
 In this paper, we consider the problem of recovering signals that appear 
-multiple times at unknown locations in a noisy measurement. This problem can be conveniently posed as  \emph{blind deconvolution}.
+multiple times at unknown locations in a noisy measurement. 
+In particular, we consider three/four models.
+
+\paragraph{The homogeneous well-separated model.}
+%This problem can be conveniently posed as  \emph{blind deconvolution}.
 Let $x\in\RL$ be the sought signal and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
 \begin{equation} 
 y  =  x \ast s + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
@@ -146,71 +155,74 @@ y  =  x \ast s + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I
 \end{equation}
 where $\ast$ denotes linear convolution. 
 While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. 
-We refer to~\eqref{eq:model} as the \emph{homogeneous model}.
 This is a key difference with other works on  \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
-The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas estimating $x$ is tractable under some conditions on $s$. 
-This model appears in several scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}
+Different variants of the blind deconvolution problem have been subject recently to a through  analysis, focusing on low noise regimes~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}.
+The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. 
+The model~\eqref{eq:model} appears in several scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}. 
 
-We also consider a natural generalization, called the \emph{heterogeneous model}, in which one aims to estimate a set of $K$ signals $x_1,\ldots,x_K\in\RL$ from their mixed blind deconvolution
-\begin{equation} 
-y  =  \sum_{i=1}^Kx_i \ast s_i + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
-\label{eq:model}
-\end{equation}
-where again $s_i$ denotes a binary signal. 
-
-The signals $s_i$ indicate the support of the occurrences of $x$ in the data. We will consider two generative models for $s$: well-spaced deterministic model, and a stochastic Possion model.
-
-\paragraph{Well-separated support model:} In this model, 
-we assume the binary signal $s$ obeys \TODO{This is not accurate}
+In the low noise regime, one can estimate $s$ and then estimate $x$ by standard deconvolution techniques. However, in the high noise regime, estimating $s$ is impossible---that is, detection is impossible~\cite{bendory2018toward}. To guarantee recovery in any noise regime, we require in this model a separation between adjacent signal's occurrences, that is,
 \begin{equation}
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
 \end{equation}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the data.
-%
-\paragraph{Poisson support model:}
+As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas in some cases estimating $x$ is tractable.
 
-The relation between the two models is formulated in Section~\ref{sec:support}.
 
-In order to recover the image, we use autocorrelation analysis. Specifically, we relate the autocorrelations of the micrographs to the autocorrelations of the image.
-For any noise level, these autocorrelations can be estimated to any desired accuracy, provided that we  observe sufficiently many image occurrences and the latter are separated in the micrograph. Importantly, there is no need to detect individual image occurrences. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the autocorrelations of the target image itself. To estimate the image itself from its estimated autocorrelations, we solve a nonlinear inverse problem
+\paragraph{The homogeneous Poisson model.}
+In this model, we assume that the support signal $s$ is generated by a Poisson process. Bla bla bla. While this model is very different from the well-separated model, in Section~\ref{sec:support} we show that TKTK 
 
-\subsection{Main motivation: single-particle reconstruction using cryo-electron microscopy}
-This work is motivated by the problem of single-particle reconstruction using cryo-electron microscopy (cryo-EM).  Cryo-EM is revolutionizing the field of structural biology, enabling XXX. 
+\paragraph{The heterogeneous well-separated model.}
+
+The homogeneous well-separated model can be naturally generalized to the problem of estimating a set of $K$ signals $x_1,\ldots,x_K\in\RL$ from their mixed blind deconvolution
+\begin{equation} 
+y  =  \sum_{i=1}^Kx_i \ast s_i + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
+\end{equation}
+where again $s_i$ denotes a binary signal indicating the support of the occurrences of $x_i$ in the data. We say that the separation condition is met \TODO{to verify}
+\begin{eqnarray}
+\text{If } s:=\bigcup\limits_{i=1}^Ks_i \text{ satisfies}~\eqref{eq:spacing} \text{ and for any } i\neq j, \thinspace s_i\cap s_j=\emptyset.
+\end{eqnarray}
+
+An key question in this model is how many signals can be recovered simultaneously. We derive a bound in Section~\ref{sec:heterogeneity} and show a numerical experiment in Section~\ref{sec:numerics}.
+
+
+\paragraph{The heterogeneous Poisson model?.}
+
+\subsection{Motivation: single-particle reconstruction using cryo-electron microscopy}
+Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
+In contrast X-ray and NMR which exaggerate information from an ensembles of
+particles, single particle cryo-EM produces images of individual particles and thus can, in principle, elucidate multiple energy landscapes associated with different structures.
+In addition, it does not require the formation of crystalline arrays of macromolecules.
 
 In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice.
-The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structure from the micrographs.
-
-The signal to noise ratio (SNR) of the projections in the micrographs is a function of two dominating factors. On the one hand, the SNR is a function of the electron dose. To keep radiation damage within acceptable bounds, the dose must be kept low, which leads to high noise levels. On the other hand, the SNR is a function of the molecule size. The smaller the molecules, the fewer detected electrons carry information about them.
+The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structure from the micrographs. 
+Importantly, to keep radiation damage within acceptable bounds, the dose must be kept low, leading to high noise levels.
 
 
 All contemporary methods in the field split the reconstruction procedure into two main  stages.
 The first stage consists in extracting the various particle projections from the micrographs. This stage is called \emph{particle picking}. The second stage aims to construct a 3-D model of the molecular structure from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
-Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. In particular, in an influential paper from 1995, Richard Henderson~\cite{henderson1995limitations} investigates the following 
-In that paper and in others that followed (e.g.,~\cite{glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
-
-As these two leaders of the cryo-EM community point out, it is impossible to reconstruct small molecules by any of the existing computational pipelines for single particle analysis in cryo--EM, because the particles themselves cannot be picked from the micrographs. Yet, imaging such molecules is important for structure-guided drug design and other applications~\cite{scapin2018cryo}.
-
-
-
+Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. 
+In~\cite{henderson1995limitations,glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
 The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
 Despite this progress, detecting small molecules in the micrographs remains a challenge.
-We note that nuclear magnetic resonance (NMR) spectroscopy and X-ray crystallography are well suited to reconstruct small molecules. Yet, cryo--EM has a lot to offer even for molecules with already known structures obtained via NMR spectroscopy or X-ray crystallography, because these methods have limited ability to distinguish conformational variability.  
+
+Another potential pitfall of particle picking pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
 In a recent paper~\cite{bendory2018toward} by the authors, it was suggested to bypass the particle picking stage and the reconstruct the 3-D structure directly from the micrograph.
 In that paper, we have shown that, at least in principle, the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
-The principle mathematical tool is the method of moments, or autocorrelation analysis, described in Section~\ref{sec:AC_analysis}.
+The principle mathematical tool is  autocorrelation analysis, described in detail in Section~\ref{sec:AC_analysis}.
+This goal of  the current paper is to provide a theoretical and numerical support  for the method proposed in~\cite{bendory2018toward}.  
+In this context, the  models described above serve  as  an abstraction of the cryo-EM problem: the multiple tomographic projections of the 3-D structure (taken from unknown viewing directions) are replaced by one (or multiple) repeated signals. A similar abstraction has been proven itself to be useful in a similar context as described in the next section. 
 
-This goal of  this paper is to provide a theoretical and numerical justification for the method proposed in~\cite{bendory2018toward}.  
-In particular, the homogeneous  model serves as an abstraction of the cryo-EM problem. While in cryo-EM the 2-D images are tomographic projections of a 3-D structure, taken from unknown viewing directions, in the homogeneous model we observe the same 2-D image again and again. The heterogeneous case generalizes to multiple signals. 
+\subsection{Principle mathematical tool: autocorrelation analysis.}
 
-To talk about the MRA-Kam's method relations. Also, model bias 
-\TODO{Where do we discuss the limits of detection?}
-%
-%Beyond this 2-D proof of concept, we look toward \mbox{3-D} reconstruction as well. Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. In contrast, we derive the mathematical relation between the autocorrelations of the micrographs as a whole and the \mbox{3-D} volume, under some simplifying conditions.
-%We show a few numerical examples and outline the future developments required to make this method applicable to experimental  data. 
-%
-%Another interesting feature of the described approach pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
+In order to recover the image, we employ autocorrelation analysis. The underlying principle is to relate the autocorrelations of the micrographs to the autocorrelations of the image, without trying to detect individual signal occurrences (i.e., the signal $s$).
+In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem
+
+Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. His method has been extended and employed by in X-ray free electron lasers and cryo-EM; see for instance~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}. 
+In order to investigate the computational and statistical properties Kam's method, a series of papers have studied the  multi-reference alignment problem as an abstraction~\cite{bandeira2014multireference,bendory2017bispectrum,bandeira2017optimal,perry2017sample,bandeira2017estimation,abbe2017multireference}.
+We follows the same line of research by considering the models of Section~\ref{sec:problem_formulation} as an abstraction to the application of reconstructing 3-D structures directly from the micrograph as proposed in~\cite{bendory2018toward}.
+
 
 
 %Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the
@@ -257,11 +269,11 @@ To talk about the MRA-Kam's method relations. Also, model bias
 %In the next sections, we consider autocorrelation analysis for that purpose.
 
 
-\section{The method of moments/ autocorrelation analysis} \label{sec:AC_analysis}
-\TODO{copied from PNAS's paper}
-In general, for a signal $z$ of length $m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
+\section{Autocorrelation analysis} \label{sec:AC_analysis}
+
+For a signal $z\in \R^m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{equation}
-a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{+\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
 \label{eq:ac_general}
 \end{equation}
 where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
@@ -271,11 +283,12 @@ a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} z[i], \nonumber\\
 a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} z[i]z[i+\ell],\\
 a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2].  \nonumber \label{eq:ac_special}
 \end{align}
-The autocorrelation functions have symmetries. Specifically, $a_z^2[\ell] = a_z^2[-\ell]$, and
-$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
-$
+The autocorrelation functions have symmetries. Specifically, $$a_z^2[\ell] = a_z^2[-\ell],$$ and
+$$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
+$$
 For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
 
+\TODO{Start directly with heterogeneous model, but first need to verify that the Poisson equivalence is true holds also for this case.}
 Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{equation}
 \gamma  = \frac{M L}{N}
@@ -365,21 +378,52 @@ As a side note, under the separation condition, the length $L$ of the signal can
 
 \subsection{Equivalence between the spacing condition and the Poisson process} \label{sec:support}
 
-\subsection{Theory for the 2-D case (relation with PR)}
-
-However, for dimensions greater than one \footnote{Autocorrelation in $d$ dimensions is defined similarly to~\eqref{eq:ac_general}, where $ i, \ell_1, \ldots, \ell_{q-1}$ take on values in $\mathbb{Z}^d$ and the summation in $i$ is over all of $\mathbb{Z}^d$.}, almost all signals are determined uniquely up to sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
-The sign ambiguity can be resolved by the mean of the signal if it is not zero. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
+\subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
 
 
-\subsection{The heterogeneous case}
+Autocorrelations in $d$ dimensions is defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
+\begin{equation}
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}].
+\label{eq:ac_d_dimension}
+\end{equation}
+Interestingly, for dimensions greater than one almost all signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
+This is not true for 1-D signals: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating the symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
 
-%\section{Recovering a signal from autocorrelations} \label{sec:recovery}
-%
-%
+In the literature, the phase and reflection symmetries are usually called trivial ambiguities. If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 
-\section{Algorithms and numerical experiments}
+This uniqueness result for multi-dimensional signals (especially for 2-D images) is the basis of a popular imaging technique called coherent diffraction imaging (CDI). In CDI, an object is
+illuminated with a coherent wave, and the far field diffraction
+intensity pattern  is measured, corresponding object's Fourier magnitude~\cite{miao1999extending,shechtman2015phase}. 
+If the support of the object is known and less than half of the support of the measured signal, then the data is equivalent to the second-order autocorrelation. The computational problem of recovering the signal is usually referred to as \emph{phase retrieval} or \emph{phase problem}.
+Albeit the uniqueness result, recently it has been shown that, at least for 2-D images, the problem is  ill-conditioned~\cite{barnett2018geometry}. That is, there exist different images whose second-order autocorrelation agree up to machine precision. 
+
+\subsection{How many signals can be recovered in the heterogeneous model?}
+\label{sec:heterogeneity}
+
+In the heterogeneous models, the autocorrelation of $K$ signals are mixed together. To this end, we count how many equations the first three autocorrelations provide, after omitting symmetries. While we do not provide a rigorous proof, it was shown in similar problems that number of equations captures exactly how many signals can be decomposed for a mix of their autocorrelations~\cite{bandeira2017estimation}.
+
+Clearly, the first-order autocorrelation provides us one equation. For second-order autocorrelations, notice  that $a_y^2[\ell]$ suffers no noise-induced bias for $\ell$ in $1$ to $L-1$. Thus if $\sigma$ is known we obtain $L$ equations, while if not we omit $\ell = 0$. This has the practical effect that we need not know $\sigma$ to make sense of the computed quantities, while loosing one one equation. 
+Likewise, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries): $\frac{(L+1)(L+2)}{2}-2$ in total. 
+If we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$---there are $\frac{(L-1)(L-2)}{2}$ remaining entries. 
+Hence, if $\sigma$ is know we have 
+\begin{align*}
+1 + L + \frac{(L+1)(L+2)}{2}-2 = \frac{1}{2} L (L+5)
+\end{align*}
+and if it unknown
+\begin{align*}
+1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
+\end{align*}
+coefficients in total. Since we aim to estimate $KL$ parameters (for the $K$ signals of length $L$) plus $K$ parameters (for the densities $\gamma_k$), an absolute upper bound on $K$  is
+\begin{equation}
+K\leq \frac{L(L+5)}{2(L+1)},
+\end{equation}
+\begin{align*}
+K \leq \frac{ L (L-1) + 1}{2(L+1)}.
+\end{align*}
+Thus, we conjecture that approximately $L/2$ signals can be decomposed from  the first three mixed autocorrelations.
 
 
+\section{Algorithms and numerical experiments} \label{sec:numerics}
 
 The technique we advocate allows recovery of a signal hidden in noisy micrographs without detecting the location  of the signals embedded in these micrographs. To illustrate the underlying principles of the method, we present several numerical examples. The code to generate all figures is publicly available in \url{https://github.com/PrincetonUniversity/BreakingDetectionLimit}.
 
@@ -436,9 +480,44 @@ presents the normalized recovery error as a function of the amount of data avail
 
 
 In practice, we do not expect to know $\gamma$ and maybe not even $\sigma$
-\TODO{heterogeneous example}
 
-\TODO{K-L figure }
+
+\paragraph{Numerical experiment with three 1-D signals.}
+
+
+For the 1-D experiment depicted in Figure~\ref{fig:1Dheterosignals}, we fix $K = 3$ signals of length $L = 21$. Following the forward model described at the beginning of this section, we generate an observation $y$ of length $12.3 \cdot 10^9$. Each of the three signals appears, respectively (and approximately), $30.0 \cdot 10^6$, $20.0 \cdot 10^6$ and $10.0 \cdot 10^6$ times in $y$ for a total of exactly $60 \cdot 10^6$ occurrences, such that at least $L-1$ zeros separate any two occurrences of any signals. 
+This is done by randomly selecting $60 \cdot 10^6$ placements in $y$, one at a time with an accept/reject rule based on the separation constraint and locations picked so far. For each placement, one of the three signals is picked at random according to the proportions $1/2, 1/3, 1/6$. Then, i.i.d.\ Gaussian noise with mean zero and standard deviation $\sigma = 3$ is added, to form the observed $y$. The resulting SNR of $y$
+% sqrt((m_want*sum(X.^2)')/(sigma^2*n))
+is about 1/9.
+
+
+This is enough noise to make cross-correlations of $y$ even with the true signals display peaks at essentially random locations, uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
+
+%\TODO{TB: I would place the equation counting argument in the theory section in the paragraph of open questions (I marked th place)}
+%
+Given the observation $y$, we proceed to compute the autocorrelations. The first-order autocorrelation is straightforward. For second-order autocorrelations, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no noise-induced bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to make sense of the computed quantities. Likewise, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$---there are $\frac{(L-1)(L-2)}{2}$ remaining entries. We have
+\begin{align*}
+1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
+\end{align*}
+coefficients in total. Since we aim to estimate $KL$ parameters (for the $K$ signals of length $L$) plus $K$ parameters (for the densities $\gamma_k$), an absolute upper bound on $K$ (simply to ensure we have at least as many equations as we have unknowns) is
+\begin{align*}
+K(L+1) \leq \frac{1}{2} L (L-1) + 1.
+\end{align*}
+Thus, $(L-1)/2$ (up to a small approximation) is an absolute upper limit on $K$ (compare with~\cite{boumal2017heterogeneous,bandeira2017estimation}). \TODO{The last paragraph can be removed}
+In practice, the autocorrelations are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can of course be handled in parallel.
+
+Having computed the moments of interest, we now estimate signals $x_1, \ldots, x_K$ and coefficients $\gamma_1, \ldots, \gamma_K$ which agree with the data. We choose to do so by running an optimization algorithm on the following nonlinear least-squares problem:
+\begin{multline}
+\min_{\substack{\hat x_1, \ldots, \hat x_K \in \R^{W} \\ \hat \gamma_1, \ldots, \hat \gamma_K > 0}} w_1 \left( a_y^1 - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^1 \right)^2 + w_2 \sum_{\ell = 1}^{L-1} \left( a_y^2[\ell] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^2[\ell] \right)^2 + \\ w_3 \sum_{\substack{2\leq\ell_1\leq L-1 \\ 1 \leq \ell_2 \leq \ell_1-1}} \left( a_y^3[\ell_1, \ell_2] - \sum_{k=1}^K \hat \gamma_k a_{\hat x_k}^3[\ell_1,\ell_2] \right)^2,
+\label{eq:optim1D}
+\end{multline}
+where $W \geq L$ is the length of the sought signals and the weights are set to $w_1 = 1/2, w_2 = 1/2n_2, w_3 = 1/2n_3$, where $n_2, n_3$ are the number of moments used: $n_2 = L-1$, $n_3 = \frac{(L-1)(L-2)}{2}$ (weights could also be set in accordance with variance estimates as in~\cite{boumal2017heterogeneous}).
+
+Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers.
+Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
+
+
+\paragraph{K-L figure}
 
 \section{Relation with cryo-EM + experiments?}
 %
