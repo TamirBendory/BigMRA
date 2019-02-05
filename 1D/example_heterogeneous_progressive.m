@@ -6,7 +6,7 @@ clc;
 
 % Pick K signals of length L and the size W of the separation window
 K = 3;
-L = 21;
+L = 11; % make this 21
 W = 2*L-1;
 X = zeros(L, K);
 X(:, 1) = [ones(ceil(L/2), 1) ; -ones(floor(L/2), 1)];
@@ -14,10 +14,10 @@ X(:, 2) = [linspace(1, -1, ceil(L/2))' ; linspace(-1, 1, floor(L/2))'];
 X(:, 3) = randn(L, 1);
 
 % Pick a noise level
-sigma = 3;
+sigma = .1; % make this 3
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = [3e7 2e7 1e7];
+m_want = [3 2 1]*1e4; % make these multiples of 1e8
 
 % Length of micrograph
 n = sum(m_want)*W*5;
@@ -40,7 +40,7 @@ SNR = norm(y_clean, 'fro')/norm(y_obs-y_clean, 'fro');
 %% The grand experiment starts here
 
 % Select sizes of sub-micrographs to consider.
-ns = unique(round(logspace(8, log10(n), 9)));
+ns = unique(round(logspace(6, log10(n), 9)));  % first input should be 8
 
 % How many times do we optimize from a different random initial guess?
 n_init_optim = 3;
@@ -110,7 +110,7 @@ clear y_clean y_obs;
 
 ID = randi(1000000);
 fprintf('\n\nThis XP ID: %d\n\n', ID);
-save(sprintf('progressive_n%d_%d.mat', n, ID));
+save(sprintf('heterogeneous_progressive_n%d_%d.mat', n, ID));
 
 %%
 figure(1);
