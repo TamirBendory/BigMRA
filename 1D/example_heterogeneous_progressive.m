@@ -17,7 +17,7 @@ X(:, 3) = randn(L, 1);
 sigma = 3; % make this 3
 
 % Desired number of occurrences of each signal X(:, k)
-m_want = [3 2 1]*1e8; % make these multiples of 1e8
+m_want = [3 2 1]*1e7; % make these multiples of 1e8
 
 % Length of micrograph
 n = sum(m_want)*W*5;
