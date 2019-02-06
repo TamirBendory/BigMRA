@@ -189,16 +189,15 @@ The models we described so far assume a well-separated support and a determinist
 We consider the following observation model. Let $X =\RL$ be a random vector drawn from some fixed distribution. We observe a random vector $Y\in\R^{N-L+1}$ generated as follows. Points are chosen in $\{1,\dots,N-L=1\}$ according to a Poisson process with parameter $\gamma N$. The parameter $\gamma$ can be thought of as the density of the $X$ in $Y$.
 For each point $i$ that is chosen from $1$ to $N-L+1$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. 
 
-If $M_i$ denotes the number of hits at location $i$, $1 \le i \le n$, then by definition of the Poisson process $M_i$'s are iid and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
-
-With this notation, if $Y \in \R^{n+L}$ is the observed vector, we can write each entry as:
+If $M_i$ denotes the number of hits at location $i$, $1 \le i \le N-L+1$, then by definition of the Poisson process $M_i$'s are i.i.d.\ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
+With this notation, we can write each entry as:
 %
 \begin{align}
 %
 Y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
 %
 \end{align}
-
+\TODO{The well separated model can be also written for a random signal X}
 
 \subsection{Motivation: single-particle reconstruction using cryo-electron microscopy}
 Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
@@ -390,40 +389,19 @@ As a side note, under the separation condition, the length $L$ of the signal can
 
 \subsection{Equivalence between the spacing condition and the Poisson process} \label{sec:support}
 
+In this section we omit the affect of the noise as it remains the same for the well-separated model. 
 
-We will denote by $\M_l$ the moments of $X$:
+Let us denote by $m_Y^q$ the moments of $Y$:
 %
 \begin{align}
 %
-\M_1[i] = \E X[i], \quad 0 \le i \le L-1,
+m_Y^1[i] = \E X[i], \quad 0 \le i \le L-1,
 %
 \end{align}
 %
 \begin{align}
 %
-\M_2[i,j] = \E X[i] X[j], \quad 0 \le i,j \le L-1,
-%
-\end{align}
-%
-and
-%
-\begin{align}
-%
-\M_3[i,j,k] = \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1.
-%
-\end{align}
-
-We will also denote by $\L_l$ the autocorrelations of $X$, $l = 1,2,3$:
-%
-\begin{align}
-%
-\L_1 = \sum_{i=0}^{L-1} \M_1[i] \in \R,
-%
-\end{align}
-%
-\begin{align}
-%
-\L_2(\Delta) = \sum_{i=0}^{L-1} \M_2[i,i+\Delta]  \in \R^L,
+m_Y^2[i,j] = \E X[i] X[j], \quad 0 \le i,j \le L-1,
 %
 \end{align}
 %
@@ -431,16 +409,38 @@ and
 %
 \begin{align}
 %
-\L_3(\Delta_1,\Delta_2) = \sum_{i=0}^{L-1} \M_3[i,i+\Delta_1,i+\Delta_2]  \in \R^{L \times L}.
+m_Y^3[i,j,k] = \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1.
 %
 \end{align}
 
-
-Note that in the strongly-separated model, the first three observed moments are, respectively, $\L_1$, $\L_2(\Delta)$, and $\L_3(\Delta_1,\Delta_2)$.
-
+%We will also denote by $\L_l$ the autocorrelations of $X$, $l = 1,2,3$:
+%%
+%\begin{align}
+%%
+%\L_1 = \sum_{i=0}^{L-1} \M_1[i] \in \R,
+%%
+%\end{align}
+%%
+%\begin{align}
+%%
+%\L_2(\Delta) = \sum_{i=0}^{L-1} \M_2[i,i+\Delta]  \in \R^L,
+%%
+%\end{align}
+%%
+%and
+%%
+%\begin{align}
+%%
+%\L_3(\Delta_1,\Delta_2) = \sum_{i=0}^{L-1} \M_3[i,i+\Delta_1,i+\Delta_2]  \in \R^{L \times L}.
+%%
+%\end{align}
 %
+%
+%Note that in the strongly-separated model, the first three observed moments are, respectively, $\L_1$, $\L_2(\Delta)$, and $\L_3(\Delta_1,\Delta_2)$.
+%
+%%
 
-We will prove the following result:
+In the following,  we show that the moments of the Poisson process can be written in terms of the autocorrelations of the well-separated model.
 
 \begin{proposition} \label{prop:poisson}
 	The first moment of the Poisson process is equal to:
@@ -474,8 +474,9 @@ We will prove the following result:
 %
 
 \begin{rem}
-	
-	The expected values of the non-zero (for second moment) and off-diagonal (for third moment) terms are the same as without noise, as is true for the strongly-separated case. The same proof of almost sure convergence from my notes for the strongly-separated case also goes through verbatim.
+
+%	
+%	The expected values of the non-zero (for second moment) and off-diagonal (for third moment) terms are the same as without noise, as is true for the strongly-separated case. The same proof of almost sure convergence from my notes for the strongly-separated case also goes through verbatim.
 	
 	
 \end{rem}
