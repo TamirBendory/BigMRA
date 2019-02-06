@@ -183,10 +183,16 @@ where again $s_i$ denotes a binary signal indicating the support of the occurren
 An key question in this model is how many signals can be recovered simultaneously. We derive a bound in Section~\ref{sec:heterogeneity} and show a numerical experiment in Section~\ref{sec:numerics}.
 
 
+\paragraph{The well-separated model with a random signal}
+In this model, we let the signal $x\in\RL$ to be a random vector drawn from some fixed distribution. We observe a random vector $Y\in\R^{N-L+1}$. The difference from the previous models is that here in each non-zero element of $s$  a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$.
+This model generalize the homogeneous and heterogeneous models; if the distribution is a Delta function that it coincides with the homogeneous model, and if it is a sum of Diracs then it is the heterogeneous model.
+\TODO{We need to write the  separation condition clearly}.
+
 \paragraph{Poisson model with a stochastic signal.}
 
-The models we described so far assume a well-separated support and a deterministic signal. This models can be extended to stochastic signals and the separation condition can be alleviated by assuming a Poisson process. 
-We consider the following observation model. Let $X =\RL$ be a random vector drawn from some fixed distribution. We observe a random vector $Y\in\R^{N-L+1}$ generated as follows. Points are chosen in $\{1,\dots,N-L=1\}$ according to a Poisson process with parameter $\gamma N$. The parameter $\gamma$ can be thought of as the density of the $X$ in $Y$.
+The models we described so far assume a well-separated support. The separation condition can be alleviated by assuming a Poisson process. 
+We consider the following observation model. Let $X =\RL$ be a random vector drawn from some fixed distribution.
+In this model, points are chosen in $\{1,\dots,N-L+1\}$ according to a Poisson process with parameter $\gamma N$. The parameter $\gamma$ can be thought of as the density of the $X$ in $Y$.
 For each point $i$ that is chosen from $1$ to $N-L+1$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. 
 
 If $M_i$ denotes the number of hits at location $i$, $1 \le i \le N-L+1$, then by definition of the Poisson process $M_i$'s are i.i.d.\ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
