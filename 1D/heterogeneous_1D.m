@@ -1,9 +1,9 @@
-function [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, K, L, L_optim, sigma_est, X0, gamma0)
+function [X2, gamma2, X1, gamma1, X1_L, cost_X2, problem] = heterogeneous_1D(moments, K, L, L_optim, sigma_est, X0, gamma0)
 % Estimate K signals of length L from moments, with an intermediate
 % optimization through signals of length L_optim.
 %
-% [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, ...
-%                                     K, L, L_optim, sigma_est, X0, gamma0)
+% [X2, gamma2, X1, gamma1, X1_L, cost_X2, problem] = heterogeneous_1D( ...
+%                            moments, K, L, L_optim, sigma_est, X0, gamma0)
 %
 %
 % Inputs:
@@ -24,6 +24,7 @@ function [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, K, 
 % X2 (LxK) and gamma2 (Kx1): final estimates for signals and densities.
 % X1 (L_optimxK) and gamma1 (Kx1): intermediate (long) estimates.
 % X1_L (LxK): regions of interest extracted from X1 to initialize X2.
+% problem: Manopt problem structure for the last output (X2).
 %
 
     % Estimate the noise variance (may be inconsequential if biased moments
@@ -70,7 +71,8 @@ function [X2, gamma2, X1, gamma1, X1_L, cost_X2] = heterogeneous_1D(moments, K, 
     gamma2_0 = gamma1*(L/L_optim);
 
     % Second optimization round.
-    [X2, gamma2, ~, ~, cost_X2] = least_squares_1D_heterogeneous(moments, ...
-                                       L, K, sigma_est, X1_L, gamma2_0(:));
+    [X2, gamma2, problem, ~, cost_X2] = least_squares_1D_heterogeneous( ...
+                                            moments, L, K, sigma_est, ...
+                                            X1_L, gamma2_0(:));
 
 end
