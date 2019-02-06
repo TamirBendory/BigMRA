@@ -185,12 +185,16 @@ An key question in this model is how many signals can be recovered simultaneousl
 
 \paragraph{Poisson model.}
 
+Until now we have presented models assuming that the signals' occurrences are well separated. This condition can be alleviated by assuming a Poisson distribution on $s$. 
 
-We consider the following observation model. $X = (X[0],\dots,X[L-1])$ is a random vector of length $L$, drawn from some fixed distribution. For fixed $n$, we observe a random vector $Y$ of length $n+L$, generated as follows. Points are chosen in $\{1,\dots,n\}$ according to a Poisson process with parameter $\gamma n$. For each point $i$ that is chosen from $1$ to $n$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. 
+Let $X\in\RL$ be a random vector drawn from some fixed distribution. 
+We observe a random vector $Y\in\R^N$ generated as follows. Points are chosen in $\{0,\dots,N-L\}$ according to a Poisson process with parameter $\gamma N$. 
+The parameter $\gamma$ plays the role of the density of the signal in the measurement. 
+For each point $i$ that is chosen from $1$ to $N-L$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. 
+If the distribution of $X$ is a single Dirac function, then we observe multiple repetition of the same signals, like in the homogeneous case. If the distribution consists of $K$ Diracs, then it is a heterogeneous model. 
 
-If $M_i$ denotes the number of hits at location $i$, $1 \le i \le n$, then by definition of the Poisson process $M_i$'s are iid and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
-
-With this notation, if $Y \in \R^{n+L}$ is the observed vector, we can write each entry as:
+If $M_i$ denotes the number of hits at location $i$, $1 \le i \le N$, then by definition of the Poisson process $M_i$'s are i.i.d.\ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_N)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
+With this notation,  we can write each entry as:
 %
 \begin{align}
 %
@@ -281,7 +285,7 @@ We follows the same line of research by considering the models of Section~\ref{s
 
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
-
+\TODO{Maybe we should re-write this section for a random signal and then particularized to the homogeneous and heterogeneous cases}
 For a signal $z\in \R^m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{equation}
 a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
@@ -299,7 +303,6 @@ $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $$
 For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
 
-\TODO{Start directly with heterogeneous model, but first need to verify that the Poisson equivalence is true holds also for this case.}
 Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{equation}
 \gamma  = \frac{M L}{N}
@@ -389,40 +392,19 @@ As a side note, under the separation condition, the length $L$ of the signal can
 
 \subsection{Equivalence between the spacing condition and the Poisson process} \label{sec:support}
 
+In this section we omit the effect of the noise as it remains identical to the well-separated model. 
 
-We will denote by $\M_l$ the moments of $X$:
+The moments of $Y$ are defined by
 %
 \begin{align}
 %
-\M_1[i] = \E X[i], \quad 0 \le i \le L-1,
+m^1_Y[i] = \E Y[i], \quad 0 \le i \le L-1,
 %
 \end{align}
 %
 \begin{align}
 %
-\M_2[i,j] = \E X[i] X[j], \quad 0 \le i,j \le L-1,
-%
-\end{align}
-%
-and
-%
-\begin{align}
-%
-\M_3[i,j,k] = \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1.
-%
-\end{align}
-
-We will also denote by $\L_l$ the autocorrelations of $X$, $l = 1,2,3$:
-%
-\begin{align}
-%
-\L_1 = \sum_{i=0}^{L-1} \M_1[i] \in \R,
-%
-\end{align}
-%
-\begin{align}
-%
-\L_2(\Delta) = \sum_{i=0}^{L-1} \M_2[i,i+\Delta]  \in \R^L,
+m^2_Y[i,j] = \E Y[i] Y[j], \quad 0 \le i,j \le L-1,
 %
 \end{align}
 %
@@ -430,37 +412,45 @@ and
 %
 \begin{align}
 %
-\L_3(\Delta_1,\Delta_2) = \sum_{i=0}^{L-1} \M_3[i,i+\Delta_1,i+\Delta_2]  \in \R^{L \times L}.
+m^3_Y[i,j,k] = \E Y[i] Y[j] Y[k], \quad 0 \le i,j,k \le L-1.
 %
 \end{align}
 
-
-Note that in the strongly-separated model, the first three observed moments are, respectively, $\L_1$, $\L_2(\Delta)$, and $\L_3(\Delta_1,\Delta_2)$.
-
+%We will also denote by $\L_l$ the autocorrelations of $X$, $l = 1,2,3$:
+%%
+%\begin{align}
+%%
+%\L_1 = \sum_{i=0}^{L-1} \M_1[i] \in \R,
+%%
+%\end{align}
+%%
+%\begin{align}
+%%
+%\L_2(\Delta) = \sum_{i=0}^{L-1} \M_2[i,i+\Delta]  \in \R^L,
+%%
+%\end{align}
+%%
+%and
+%%
+%\begin{align}
+%%
+%\L_3(\Delta_1,\Delta_2) = \sum_{i=0}^{L-1} \M_3[i,i+\Delta_1,i+\Delta_2]  \in \R^{L \times L}.
+%%
+%\end{align}
 %
-
-We will prove the following result:
+%Note that in the strongly-separated model, the first three observed moments are, respectively, $\L_1$, $\L_2(\Delta)$, and $\L_3(\Delta_1,\Delta_2)$. \TODO{I think we can remove it}
+%%
+%
+We now prove that the first three autocorrelations of the well-separated model can be recovered from the moments of the Poisson process. 
 
 \begin{proposition} \label{prop:poisson}
-	The first moment of the Poisson process is equal to:
-	%
-	\begin{align}
-	\gamma \L_1.
-	\end{align}
-	%
-	The second moment vector of the Poisson process has entries
-	%
-	\begin{align}
-	(\gamma \L_1)^2 + \gamma \L_2(\Delta),
-	\end{align}
-	%
-	for $0 \le \Delta < L$.
-	
-	The third moment matrix of the Poisson process has entries
-	\begin{align}
-	(\gamma \L_1)^3 + \gamma \L_1  \cdot ( \gamma\L_2(\Delta_1) + \gamma\L_2(\Delta_2) + \gamma\L_2(\Delta_2-\Delta_1)) + \gamma \L_3(\Delta_1,\Delta_2) ,
-	\end{align}
-	for $0 \le \Delta_1,\Delta_2 < L$.
+Let $a_X^1, a_X^2$ and $a_X^3$ be the first three autocorrelation function of the well-separated model \TODO{This is a bit unclear now, but if I get it right it holds true for any distribution over $X$}. Then, for any   $0\leq i\leq L-1$ we have 
+\begin{align}
+m_Y^1[i] &= \gamma a_X^1,  \nonumber \\
+m_Y^2[i,i+\ell] &= (\gamma a_X^1)^2 + \gamma a_X^2[\ell], \quad \ell\in[0,L-1], \\
+m_Y^3[i,i+\ell_1,i+\ell_2] &= 
+(\gamma a_X^1)^3 + \gamma a_X^1  \cdot ( \gamma a^2_X[\ell_1] + \gamma a_X^2[\ell_2] + \gamma a_X^2[\ell_2-\ell_1]) + \gamma a_X^3[\ell_1,\ell_2], \quad \quad \ell_1,\ell_2\in[0,L-1]. \nonumber
+\end{align}
 \end{proposition}
 
 
@@ -471,14 +461,14 @@ We will prove the following result:
 %%%, with the Poisson rate $\gamma$ playing the role of the ``occupancy factor''. So if recovery is possible for the strongly-separated model, it is also possible for the Poisson process model.
 
 %
-
-\begin{rem}
-	
-	The expected values of the non-zero (for second moment) and off-diagonal (for third moment) terms are the same as without noise, as is true for the strongly-separated case. The same proof of almost sure convergence from my notes for the strongly-separated case also goes through verbatim.
-	
-	
-\end{rem}
-
+%
+%\begin{rem}
+%	
+%	The expected values of the non-zero (for second moment) and off-diagonal (for third moment) terms are the same as without noise, as is true for the strongly-separated case. The same proof of almost sure convergence from my notes for the strongly-separated case also goes through verbatim.
+%	
+%	
+%\end{rem}
+%
 
 \subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
 
