@@ -171,22 +171,23 @@ As will be shown next, in a low SNR environment, estimating $s$ is impossible, w
 \subsection{Extensions}
 
 \paragraph{The heterogeneous well-separated model.}
-The homogeneous well-separated model can be naturally generalized to the problem of estimating a set of $K$ signals $x_1,\ldots,x_K\in\RL$ from their mixed blind deconvolution
+The homogeneous well-separated model can be naturally generalized to the problem of estimating a set of $K$ signals $x_1,\ldots,x_K\in\RL$. Let $s$ be a binary signal satisfying the separation condition~\eqref{eq:spacing}. Let $s[i]$ be one of the non-zero values of $s$. A random variable $v_i$ is drawn from some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
+Then $x_i$ is placed in $y$
+with element $0$ at location $i$.
+
+ This model can be written as  a mix of blind deconvolution problems
 \begin{equation} 
 y  =  \sum_{i=1}^Kx_i \ast s_i + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
 \end{equation}
-where again $s_i$ denotes a binary signal indicating the support of the occurrences of $x_i$ in the data. We say that the separation condition is met \TODO{to verify}
-\begin{eqnarray}
-\text{If } s:=\bigcup\limits_{i=1}^Ks_i \text{ satisfies}~\eqref{eq:spacing} \text{ and for any } i\neq j, \thinspace s_i\cap s_j=\emptyset.
-\end{eqnarray}
-
+where again $s_i$ is a binary signal, which is non-zero values 
+are the subset of the non-zero values of $s$ associated with $x_i$.
 An key question in this model is how many signals can be recovered simultaneously. We derive a bound in Section~\ref{sec:heterogeneity} and show a numerical experiment in Section~\ref{sec:numerics}.
 
 
 \paragraph{The well-separated model with a random signal}
-In this model, we let the signal $x\in\RL$ to be a random vector drawn from some fixed distribution. We observe a random vector $Y\in\R^{N-L+1}$. The difference from the previous models is that here in each non-zero element of $s$  a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$.
-This model generalize the homogeneous and heterogeneous models; if the distribution is a Delta function that it coincides with the homogeneous model, and if it is a sum of Diracs then it is the heterogeneous model.
-\TODO{We need to write the  separation condition clearly}.
+This model generalize the homogeneous and heterogeneous models. 
+We let the signal $x\in\RL$ to be a random vector drawn from some fixed distribution. We observe a random vector $Y\in\R^{N-L+1}$. For each non-zero element of $s$,  a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$.
+If the distribution is a Delta function that it coincides with the homogeneous model; if it is a sum of Diracs then it is the heterogeneous model.
 
 \paragraph{Poisson model with a stochastic signal.}
 
@@ -203,7 +204,6 @@ With this notation, we can write each entry as:
 Y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
 %
 \end{align}
-\TODO{The well separated model can be also written for a random signal X}
 
 \subsection{Motivation: single-particle reconstruction using cryo-electron microscopy}
 Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
@@ -231,14 +231,12 @@ The principle mathematical tool is  autocorrelation analysis, described in detai
 This goal of  the current paper is to provide a theoretical and numerical support  for the method proposed in~\cite{bendory2018toward}.  
 In this context, the  models described above serve  as  an abstraction of the cryo-EM problem: the multiple tomographic projections of the 3-D structure (taken from unknown viewing directions) are replaced by one (or multiple) repeated signals. A similar abstraction has been proven itself to be useful in a similar context as described in the next section. 
 
-\subsection{Principle mathematical tool: autocorrelation analysis.}
-
-In order to recover the image, we employ autocorrelation analysis. The underlying principle is to relate the autocorrelations of the micrographs to the autocorrelations of the image, without trying to detect individual signal occurrences (i.e., the signal $s$).
-In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy. The autocorrelations of the micrographs are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem
-
+We mention that~\cite{bendory2018toward} was not the first paper to employ autocorrelation analysis to cryo-EM. 
 Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. His method has been extended and employed by in X-ray free electron lasers and cryo-EM; see for instance~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}. 
 In order to investigate the computational and statistical properties Kam's method, a series of papers have studied the  multi-reference alignment problem as an abstraction~\cite{bandeira2014multireference,bendory2017bispectrum,bandeira2017optimal,perry2017sample,bandeira2017estimation,abbe2017multireference}.
 We follows the same line of research by considering the models of Section~\ref{sec:problem_formulation} as an abstraction to the application of reconstructing 3-D structures directly from the micrograph as proposed in~\cite{bendory2018toward}.
+
+%\subsection{Principle mathematical tool: autocorrelation analysis.}
 
 
 
@@ -287,53 +285,58 @@ We follows the same line of research by considering the models of Section~\ref{s
 
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
-\TODO{Could be written for a random signal and then particularized to the homogeneous and heterogeneous cases.}
-For a signal $z\in \R^m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
+
+
+In order to recover the signal, we employ autocorrelation analysis. The underlying principle is to relate the autocorrelations of the observation to the autocorrelations of the signal without trying to detect individual signal occurrences (i.e., the signal $s$).
+In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy. The autocorrelations of the observation are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem as explained in Section~\ref{sec:numerics}. \TODO{to re-write}
+
+
+Let $Z\in \R^m$ be a random signal drawn from some fixed distribution.  The autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{equation}
-a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}],
+a_Z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m} \sum_{i=-\infty}^{\infty} Z[i]Z[i+\ell_1]\cdots Z[i+\ell_{q-1}]\right\},
 \label{eq:ac_general}
 \end{equation}
-where indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
+where the expectation is taken with respect to the distribution of $Z$ and
+the indexing of $Z$ out of the range $0, \ldots, m-1$ is zero-padded.
 Explicitly, the first-, second- and third-order autocorrelations are given by: 
 \begin{align} 
-a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} z[i], \nonumber\\
-a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} z[i]z[i+\ell],\\
-a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2].  \nonumber \label{eq:ac_special}
+a_Z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} \E\left\{
+Z[i]\right\}, \nonumber\\
+a_Z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} \E\left\{Z[i]Z[i+\ell]\right\},\\
+a_Z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} \E\left\{Z[i]Z[i+\ell_1]Z[i+\ell_2]\right\}.  \nonumber \label{eq:ac_special}
 \end{align}
-The autocorrelation functions have symmetries. Specifically, $$a_z^2[\ell] = a_z^2[-\ell],$$ and
-$$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
+The autocorrelation functions have symmetries. Specifically, $$\E\left\{a_Z^2[\ell]\right\} = \E\left\{a_Z^2[-\ell]\right\},$$ and \TODO{to verify}
+$$\E\left\{a_Z^3[\ell_1,\ell_2]\right\} = \E\left\{a_Z^3[\ell_2,\ell_1]\right\}=\E\left\{a_Z^3[-\ell_1,\ell_2-\ell_1]\right\}.
 $$
 For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
 
-\TODO{Start directly with heterogeneous model, but first need to verify that the Poisson equivalence is true holds also for this case.}
-Under the separation condition, the relation between autocorrelations of the micrograph and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $x$ in $y$ (that is, the number of 1's in $s$), and let
+Under the separation condition, the relation between autocorrelations of the micrograph and those of $X$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $X$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{equation}
 \gamma  = \frac{M L}{N}
 \label{eq:gamma}
 \end{equation}
-denote the density of $x$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $x$.) The separation condition %~\eqref{eq:spacing} 
-imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
+denote the density of $X$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $X$.) The separation condition imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 
 For shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
 We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $M$ also goes to infinity at the same rate (in other words, as we see an increasingly large micrograph, it contains increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
 \begin{equation} \label{eq:mean_micrograph}
-\lim_{N\to\infty} a_y^1  \aseq \gamma a_{x}^1,
+\lim_{N\to\infty} a_y^1  \aseq \gamma \E\left\{a_{X}^1\right\},
 \end{equation}
 where equality holds almost surely (a.s.), meaning it holds with probability one.
 The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic.
-Thus, given enough data, if $\gamma$ is known, we can estimate $a_x^1$ from $y$. (We show later how to estimate $\gamma$ as well.) 
+Thus, given enough data, if $\gamma$ is known, we can estimate $\E\left\{a_{X}^1\right\}$ from $y$. (We show later how to estimate $\gamma$ as well.) 
 
 We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result,
 \begin{equation}
-\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell],
+\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma \E\left\{a_{X}^2[\ell]\right\} + \sigma^2\delta[\ell],
 \label{eq:ac2_micrograph}
 \end{equation}
-for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and zero otherwise. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_x^2$.
+for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and zero otherwise. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $\E\left\{a_{X}^2[\ell]\right\}$.
 
 Along the same lines, one can establish a relation for third-order autocorrelations:
 \begin{equation}
  \label{eq:ac3_micrograph}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{x}^1  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma \E\left\{a_{x}^3[\ell_1,\ell_2]\right\}  + \sigma^2\gamma \E\left\{a_{x}^1\right\}  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
 +\delta[\ell_1,\ell_2]\big),
 \end{equation}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$, where $\delta[\ell_1,\ell_2]:=\delta[\ell_1-\ell_2]$.
@@ -462,28 +465,16 @@ In the following,  we show that the moments of the Poisson process can be writte
 	From the first three moments of the Poisson process model, once can recover the first three moments from the strongly-separated model.
 \end{corollary}
 
-%%%, with the Poisson rate $\gamma$ playing the role of the ``occupancy factor''. So if recovery is possible for the strongly-separated model, it is also possible for the Poisson process model.
-
-%
-
-\begin{rem}
-
-%	
-%	The expected values of the non-zero (for second moment) and off-diagonal (for third moment) terms are the same as without noise, as is true for the strongly-separated case. The same proof of almost sure convergence from my notes for the strongly-separated case also goes through verbatim.
-	
-	
-\end{rem}
 
 
 \subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
 
-
 Autocorrelations in $d$ dimensions is defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
 \begin{equation}
-a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}].
+a_Z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
 \label{eq:ac_d_dimension}
 \end{equation}
-Interestingly, for dimensions greater than one almost all signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
+Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $Z$ is a Delta function) signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
 This is not true for 1-D signals: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating the symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
 
 In the literature, the phase and reflection symmetries are usually called trivial ambiguities. If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
@@ -658,6 +649,7 @@ We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, 
 \end{equation*}
 %
 Any vectors with indices out of range are given value 0.
+We focus here on the homogeneous model~\eqref{eq:model}. The extension to random signal $X$ is straight-forward by taking the expectation with respect to the distribution of $X$.
 
 We start by considering the mean of the data:
 \begin{equation*}
