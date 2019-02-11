@@ -205,7 +205,7 @@ We consider the following observation model. Let $X \in\RL$ be a random vector d
 Points are chosen in $\{1,\dots,N-L+1\}$ according to a Poisson process with parameter $\gamma (N-L)$. %The parameter $\gamma$ can be thought of as the density of the $X$ in $Y$.
 For each point $i$ that is chosen from $1$ to $N-L+1$, a random vector $X$ from the distribution is then placed in $y$, with element $0$ at location $i$, with overlapping vectors being added together. 
 
-If $M_i$ denotes the number of hits at location $i$,  then by definition of the Poisson process $M_i$'s are i.i.d.\ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
+If $M_i$ denotes the number of hits at location $i$,  then by definition of the Poisson process $M_i$'s are i.i.d.\ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_{N-L+1})$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
 With this notation, we can write each entry as:
 %
 \begin{align}
@@ -366,8 +366,9 @@ Here too, few entries are affected by $\sigma$ in the limit.
 \section{Theory}
 
 \subsection{Theory for the homogeneous case} \label{sec:theory_homogeneous}
-
-A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
+In this section, we derive some theoretical results for the homogeneous case. \TODO{Note: I am using terms interchangeably}
+ 
+A signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
 %
 \begin{equation}
 %
@@ -421,13 +422,13 @@ Let us denote by $m_Y^q$ the moments of $Y$:
 %
 \begin{align}
 %
-m_Y^1[i] = \E X[i], \quad 0 \le i \le L-1,
+m_y^1[i] = \E X[i], \quad 0 \le i \le L-1,
 %
 \end{align}
 %
 \begin{align}
 %
-m_Y^2[i,j] = \E X[i] X[j], \quad 0 \le i,j \le L-1,
+m_y^2[i,j] = \E X[i] X[j], \quad 0 \le i,j \le L-1,
 %
 \end{align}
 %
@@ -435,7 +436,7 @@ and
 %
 \begin{align}
 %
-m_Y^3[i,j,k] = \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1.
+m_y^3[i,j,k] = \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1.
 %
 \end{align}
 
@@ -466,20 +467,20 @@ m_Y^3[i,j,k] = \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1.
 %
 %%
 
-In the following,  we show that the moments of the Poisson process can be written in terms of the autocorrelations of the well-separated model.
+In the following,  we show that the moments of the observed data under the Poisson process can be written in terms of the autocorrelations of the well-separated model.
 
 \begin{proposition} \label{prop:poisson}
-    For each $i=0,\ldots,L-1$,  the moments of the Poisson process are equal to 
+    For each $i$,  the moments of the Poisson process are equal to 
     \begin{align}
-    m_Y^1[i] &= \gamma a_X^1 \nonumber \\
-    m_Y^2[i,i+\ell] &= (\gamma a_X^1)^2 + \gamma a_X^2[\ell],\quad \ell=0,\ldots,L-1, \\
-    m_Y^3[i,i+\ell_1,i+\ell_2] &= (\gamma a_X^1)^3 + \gamma a_X^1  \cdot ( \gamma a_X^2[\ell_1] + \gamma a_X^2[\ell_2] + \gamma a_X^2[\ell_2-\ell_1]) + \gamma a_X^3[\ell_1,\ell_2]. \nonumber  
+    m_y^1[i] &= \gamma a_X^1 \nonumber \\
+    m_y^2[i,i+\ell] &= (\gamma a_X^1)^2 + \gamma a_X^2[\ell],\quad \ell=0,\ldots,L-1, \\
+    m_y^3[i,i+\ell_1,i+\ell_2] &= (\gamma a_X^1)^3 + \gamma a_X^1  \cdot ( \gamma a_X^2[\ell_1] + \gamma a_X^2[\ell_2] + \gamma a_X^2[\ell_2-\ell_1]) + \gamma a_X^3[\ell_1,\ell_2]. \nonumber  
     \end{align}
 \end{proposition}
 
 
-\begin{corollary}
-	From the first three moments of the Poisson process model, once can recover the first three moments from the strongly-separated model.
+\begin{corollary} \TODO{re-write}
+	From the first three moments of the Poisson process model, one can recover the first three moments from the strongly-separated model.
 \end{corollary}
 
 
@@ -903,13 +904,13 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 
 \subsection{The first moment of $Y$}
 
-To compute the first moment of $Y$, we will first condition on $M = (M_1,\dots,M_n)$, and then average over $M$. We have:
+To compute the first moment of $Y$, we will first condition on $M = (M_1,\dots,M_{N-L+1})$, and then average over $M$. We have:
 %
 \begin{align}
 %
 \E[Y[i] | M] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} \E X_k^{i-j}[j]
-= \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} \M_1[j]
-= \sum_{j=0}^{L-1} M_{i-j} \M_1[j].
+= \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} m_y^1[j]
+= \sum_{j=0}^{L-1} M_{i-j} m_y^1[j].
 %
 \end{align}
 %
@@ -917,7 +918,7 @@ Now taking expectations over $M$ we see:
 %
 \begin{align}
 %
-\E Y[i] = \gamma \sum_{j=0}^{L-1} \M_1[j] = \gamma \L_1.
+\E Y[i] = \gamma \sum_{j=0}^{L-1}  m_y^1[j] = \gamma a_x^1.
 %
 \end{align}
 
