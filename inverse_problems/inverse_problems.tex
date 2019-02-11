@@ -210,7 +210,7 @@ With this notation, we can write each entry as:
 %
 \begin{align}
 %
-Y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
+y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
 %
 \end{align}
 
@@ -414,65 +414,33 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce t
 As a side note, under the separation condition, the length $L$ of the signal can also be determined from the autocorrelations in the asymptotic regime, by inspection of the support of $a_y^2$.
 
 
-\subsection{Equivalence between the spacing condition and the Poisson process} \label{sec:poisson}
+\subsection{Equivalence between the autocorrelations of under the separation and the Poisson process} \label{sec:poisson}
 
-In this section we omit the affect of the noise as it remains the same for the well-separated model. 
+In this section we omit the affect of the noise as it remains the same for the well-separated model. We aim to show that the moments of 
 
 Let us denote by $m_Y^q$ the moments of $Y$:
 %
 \begin{align}
 %
-m_y^1[i] = \E X[i], \quad 0 \le i \le L-1,
-%
+m_X^1[i] &= \E X[i], \quad 0 \le i \le L-1,   \nonumber\\ 
+m_X^2[i,j] &= \E X[i] X[j], \quad 0 \le i,j \le L-1, \\ 
+m_X^3[i,j,k] &= \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1. \nonumber
 \end{align}
 %
+Note that 
 \begin{align}
-%
-m_y^2[i,j] = \E X[i] X[j], \quad 0 \le i,j \le L-1,
-%
-\end{align}
-%
-and
-%
-\begin{align}
-%
-m_y^3[i,j,k] = \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1.
-%
+a_X^1 &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^1[i], \nonumber \\
+a_X^2[\ell] &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^2[i,i+\ell], \\
+a_X^3[\ell_1,\ell_2] &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^3[i,i+\ell_1,i+\ell_2]. \nonumber
 \end{align}
 
-%We will also denote by $\L_l$ the autocorrelations of $X$, $l = 1,2,3$:
-%%
-%\begin{align}
-%%
-%\L_1 = \sum_{i=0}^{L-1} \M_1[i] \in \R,
-%%
-%\end{align}
-%%
-%\begin{align}
-%%
-%\L_2(\Delta) = \sum_{i=0}^{L-1} \M_2[i,i+\Delta]  \in \R^L,
-%%
-%\end{align}
-%%
-%and
-%%
-%\begin{align}
-%%
-%\L_3(\Delta_1,\Delta_2) = \sum_{i=0}^{L-1} \M_3[i,i+\Delta_1,i+\Delta_2]  \in \R^{L \times L}.
-%%
-%\end{align}
-%
-%
-%Note that in the strongly-separated model, the first three observed moments are, respectively, $\L_1$, $\L_2(\Delta)$, and $\L_3(\Delta_1,\Delta_2)$.
-%
-%%
 
 In the following,  we show that the moments of the observed data under the Poisson process can be written in terms of the autocorrelations of the well-separated model.
 
 \begin{proposition} \label{prop:poisson}
-    For each $i$,  the moments of the Poisson process are equal to 
+    For any $i$,  the moments under the Poisson process are equal to 
     \begin{align}
-    m_y^1[i] &= \gamma a_X^1 \nonumber \\
+    m_y^1[i] &= \gamma L a_X^1 \nonumber \\
     m_y^2[i,i+\ell] &= (\gamma a_X^1)^2 + \gamma a_X^2[\ell],\quad \ell=0,\ldots,L-1, \\
     m_y^3[i,i+\ell_1,i+\ell_2] &= (\gamma a_X^1)^3 + \gamma a_X^1  \cdot ( \gamma a_X^2[\ell_1] + \gamma a_X^2[\ell_2] + \gamma a_X^2[\ell_2-\ell_1]) + \gamma a_X^3[\ell_1,\ell_2]. \nonumber  
     \end{align}
@@ -493,9 +461,9 @@ a_Z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^
 \label{eq:ac_d_dimension}
 \end{equation}
 Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $Z$ is a Delta function) signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
-This is not true for 1-D signals: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating the symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
+If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
+The case of 1-D signals is essentially different: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating  symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
 
-In the literature, the phase and reflection symmetries are usually called trivial ambiguities. If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 
 This uniqueness result for multi-dimensional signals (especially for 2-D images) is the basis of a popular imaging technique called coherent diffraction imaging (CDI). In CDI, an object is
 illuminated with a coherent wave, and the far field diffraction
@@ -508,6 +476,7 @@ Albeit the uniqueness result, recently it has been shown that, at least for 2-D 
 
 In the heterogeneous models, the autocorrelation of $K$ signals are mixed together. To this end, we count how many equations the first three autocorrelations provide, after omitting symmetries. While we do not provide a rigorous proof, it was shown in similar problems that number of equations captures exactly how many signals can be decomposed for a mix of their autocorrelations~\cite{bandeira2017estimation}.
 
+\TODO{Probably should be re-written}
 Clearly, the first-order autocorrelation provides us one equation. For second-order autocorrelations, notice  that $a_y^2[\ell]$ suffers no noise-induced bias for $\ell$ in $1$ to $L-1$. Thus if $\sigma$ is known we obtain $L$ equations, while if not we omit $\ell = 0$. This has the practical effect that we need not know $\sigma$ to make sense of the computed quantities, while loosing one one equation. 
 Likewise, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries): $\frac{(L+1)(L+2)}{2}-2$ in total. 
 If we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$---there are $\frac{(L-1)(L-2)}{2}$ remaining entries. 
@@ -902,13 +871,13 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 \section{Proof of Proposition~\ref{prop:poisson}} \label{sec:proof_prop_poisson}
 
 
-\subsection{The first moment of $Y$}
+\subsection{First moment}
 
-To compute the first moment of $Y$, we will first condition on $M = (M_1,\dots,M_{N-L+1})$, and then average over $M$. We have:
+To compute the first moment of $y$, we will first condition on $M = (M_1,\dots,M_{N-L+1})$, and then average over $M$. We have:
 %
 \begin{align}
 %
-\E[Y[i] | M] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} \E X_k^{i-j}[j]
+\E[y[i] | M] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} \E X_k^{i-j}[j]
 = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} m_y^1[j]
 = \sum_{j=0}^{L-1} M_{i-j} m_y^1[j].
 %
@@ -918,7 +887,7 @@ Now taking expectations over $M$ we see:
 %
 \begin{align}
 %
-\E Y[i] = \gamma \sum_{j=0}^{L-1}  m_y^1[j] = \gamma a_x^1.
+\E Y[i] = \gamma \sum_{j=0}^{L-1}  m_y^1[j] = \gamma La_x^1.
 %
 \end{align}
 
@@ -926,7 +895,7 @@ Now taking expectations over $M$ we see:
 %
 
 
-\subsection{The second moment of $Y$}
+\subsection{Second moment}
 
 Again, we will condition on $M$ first, and then take the expectation over $M$. Fix $i_1 \ne i_2$, and let $\Delta = i_2 - i_1$. Then:
 %
@@ -1006,7 +975,7 @@ But the first term in the sum is just the square of the first moment of $Y$; so 
 %
 
 
-\subsection{The third moment of $Y$}
+\subsection{Third moment}
 
 For three distinct $i_1$, $i_2$ and $i_3$, we let $\Delta_1 = i_2 - i_1$ and $\Delta_2 = i_3 - i_1$. We have:
 %
