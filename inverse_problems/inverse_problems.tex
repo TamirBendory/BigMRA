@@ -114,18 +114,18 @@
 %\begin{frontmatter}
 
 
-\title{Multi-target detection with application to cryo-electron microscopy}
-%
-%\author[a]{Tamir Bendory}
-%\author[b]{Nicolas Boumal} 
-%\author[c]{William Leeb}
-%\author[a,b]{Eitan Levin}
-%\author[a,b]{Amit Singer}
-%
-%\affil[a]{The Program in Applied and Computational Mathematics, Princeton University, Princeton, NJ, USA}
-%\affil[b]{Department of Mathematics, Princeton University, Princeton, NJ, USA}
-%\affil[c]{School of Mathematics, University of
-%	Minnesota, Minneapolis, MN, USA }
+\title{Multi-target detection and clustering with application to cryo-electron microscopy}
+
+\author[a]{Tamir Bendory}
+\author[b]{Nicolas Boumal} 
+\author[c]{William Leeb}
+\author[a,b]{Eitan Levin}
+\author[a,b]{Amit Singer}
+
+\affil[a]{The Program in Applied and Computational Mathematics, Princeton University, Princeton, NJ, USA}
+\affil[b]{Department of Mathematics, Princeton University, Princeton, NJ, USA}
+\affil[c]{School of Mathematics, University of
+	Minnesota, Minneapolis, MN, USA }
 
 %\date{}
 \maketitle
@@ -145,58 +145,67 @@ abstract
 
 \subsection{Problem formulation} \label{sec:problem_formulation}
 
-In this paper, we consider the problem of recovering signals that appear 
+In this paper, we consider the problem of recovering a signal that appear 
 multiple times at unknown locations in a noisy measurement.
-Let $x\in\RL$ be the sought signal and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with 1's) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise:
+Let $x\in\RL$ be the sought signal and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with ones) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise the measurement model reads:
 \begin{equation} 
 y  =  x \ast s + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{equation}
 where $\ast$ denotes linear convolution. 
-While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. 
-This is a key difference with other works on  \emph{blind deconvolution}, a longstanding problem arising in a variety of engineering and scientific applications such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
-Different variants of the blind deconvolution problem have been subject recently to a through  analysis, focusing on low noise regimes~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}.
-The parameters of the signal $s$ (the locations of its nonzero values) are the \emph{nuisance variables} of the problem. 
-The model~\eqref{eq:model} appears in several scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}. 
+While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. We name this problem \emph{multi-target detection}.
 
-In the low noise regime, one can estimate $s$ and then estimate $x$ by standard deconvolution techniques. However, in the high noise regime, estimating $s$ is impossible---that is, detection is impossible~\cite{bendory2018toward}. To guarantee recovery in any noise regime, we require in this model a separation between adjacent signal's occurrences, that is,
+The multi-target detection problem  is an instance of  
+\emph{blind deconvolution}---a longstanding problem arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
+Different variants of the blind deconvolution problem have been subject recently to a thorough  analysis, focusing on low noise regimes~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}.
+A key difference  is that in multi-target detection the parameters of the signal $s$ (the locations of its nonzero values) are  \emph{nuisance variables}---that is, we aim only at estimating only $x$. 
+Multi-target detection appears in several scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}. 
+
+In the low noise regime, one can estimate $s$ and then estimate $x$ by standard deconvolution techniques. However, in the high noise regime, estimating $s$ is impossible---that is, detection is impossible~\cite{bendory2018toward,aguerrebere2016fundamental}. To guarantee recovery in any noise regime, we require a separation between adjacent signal's occurrences, that is,
 \begin{equation}
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
 \end{equation}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the data.
-As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas in some cases estimating $x$ is tractable.
+%Under the separation condition~\eqref{eq:spacing}, we refer to this model as the \emph{homogeneous well-separated model}. 
+In then next section we present a model that alleviates this condition.
+%As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas in some cases estimating $x$ is tractable.
 
 
-\subsection{Extensions}
+\subsection{Extensions} \label{sec:extensions}
 
-\paragraph{The heterogeneous well-separated model.}
-The homogeneous well-separated model can be naturally generalized to the problem of estimating a set of $K$ signals $x_1,\ldots,x_K\in\RL$. Let $s$ be a binary signal satisfying the separation condition~\eqref{eq:spacing}. Let $s[i]$ be one of the non-zero values of $s$. A random variable $v_i$ is drawn from some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
-Then $x_i$ is placed in $y$
-with element $0$ at location $i$.
+The basic model~\eqref{eq:model} can be extended in various ways, some discussed below.
 
- This model can be written as  a mix of blind deconvolution problems
+\paragraph{Multi-target detection and clustering with separation.}
+The multi-target detection model can be naturally generalized to the problem of estimating a set of $K$ signals $x_1,\ldots,x_K\in\RL$. Let $s$ be a binary signal satisfying the separation condition~\eqref{eq:spacing}.
+For each $s[i]=1$, a random variable $v_i$ is drawn from some (possibly unknown) distribution over $\{1,\ldots,K\}$. Then, $x_{v_i}$ is placed in $y$
+with element $0$ at location $i$. 
+We refer to this model as \emph{multi-target detection and clustering}.
+
+ This model can be written as a mix of blind deconvolution problems
 \begin{equation} 
 y  =  \sum_{i=1}^Kx_i \ast s_i + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
 \end{equation}
-where again $s_i$ is a binary signal, which is non-zero values 
+where again $s_i$ is a binary signal, which its non-zero values 
 are the subset of the non-zero values of $s$ associated with $x_i$.
-An key question in this model is how many signals can be recovered simultaneously. We derive a bound in Section~\ref{sec:heterogeneity} and show a numerical experiment in Section~\ref{sec:numerics}.
+Generally, we refer to this problem as \emph{multi-target detection and clustering with separation.} 
+%An key question in this model is how many signals can be recovered simultaneously. We derive a bound in Section~\ref{sec:heterogeneity} and show a numerical experiment in Section~\ref{sec:numerics}.
 
 
 \paragraph{The well-separated model with a random signal}
-This model generalize the homogeneous and heterogeneous models. 
-We let the signal $x\in\RL$ to be a random vector drawn from some fixed distribution. We observe a random vector $Y\in\R^{N-L+1}$. For each non-zero element of $s$,  a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$.
-If the distribution is a Delta function that it coincides with the homogeneous model; if it is a sum of Diracs then it is the heterogeneous model.
+The homogeneous and heterogeneous models can be generalized as follows. 
+We let the signal $X\in\RL$ to be a random vector drawn from some fixed distribution. %We observe a random vector $Y\in\R^{N-L+1}$.
+For each non-zero element of $s$,  a random vector $X$ from the distribution is then placed in $y$, with element $0$ at location $i$.
+If the distribution is a Delta function that this model coincides with the multi-target detection model; if it is a sum of Diracs then it reduces to multi-target detection and clustering.
 
-\paragraph{Poisson model with a stochastic signal.}
+\paragraph{Poisson model for the support signal.}
 
 The models we described so far assume a well-separated support. The separation condition can be alleviated by assuming a Poisson process. 
 We consider the following observation model. Let $X \in\RL$ be a random vector drawn from some fixed distribution.
-In this model, points are chosen in $\{1,\dots,N-L+1\}$ according to a Poisson process with parameter $\gamma N$. The parameter $\gamma$ can be thought of as the density of the $X$ in $Y$.
-For each point $i$ that is chosen from $1$ to $N-L+1$, a random vector $X$ from the distribution is then placed in the large vector, with element $0$ at location $i$, with overlapping vectors being added together. 
+Points are chosen in $\{1,\dots,N-L+1\}$ according to a Poisson process with parameter $\gamma (N-L)$. %The parameter $\gamma$ can be thought of as the density of the $X$ in $Y$.
+For each point $i$ that is chosen from $1$ to $N-L+1$, a random vector $X$ from the distribution is then placed in $y$, with element $0$ at location $i$, with overlapping vectors being added together. 
 
-If $M_i$ denotes the number of hits at location $i$, $1 \le i \le N-L+1$, then by definition of the Poisson process $M_i$'s are i.i.d.\ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
+If $M_i$ denotes the number of hits at location $i$,  then by definition of the Poisson process $M_i$'s are i.i.d.\ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_n)$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
 With this notation, we can write each entry as:
 %
 \begin{align}
@@ -206,35 +215,38 @@ Y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
 \end{align}
 
 \subsection{Motivation: single-particle reconstruction using cryo-electron microscopy}
-Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
-In contrast X-ray and NMR which exaggerate information from an ensembles of
-particles, single particle cryo-EM produces images of individual particles and thus can, in principle, elucidate multiple energy landscapes associated with different structures.
+Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules; see for instance~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
+In contrast X-ray and NMR which aggregate information from an ensembles of
+particles, single particle cryo-EM produces images of individual particles and thus can, in principle, elucidate multiple  structures.
 In addition, it does not require the formation of crystalline arrays of macromolecules.
 
 In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice.
 The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structure from the micrographs. 
 Importantly, to keep radiation damage within acceptable bounds, the dose must be kept low, leading to high noise levels.
 
-
 All contemporary methods in the field split the reconstruction procedure into two main  stages.
-The first stage consists in extracting the various particle projections from the micrographs. This stage is called \emph{particle picking}. The second stage aims to construct a 3-D model of the molecular structure from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
+The first stage consists in extracting the  particle projections from the micrographs. This stage is called \emph{particle picking}. The second stage aims to construct a 3-D model of the molecular structure from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
 Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. 
-In~\cite{henderson1995limitations,glaeser1999electron}), it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
-The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
-Despite this progress, detecting small molecules in the micrographs remains a challenge.
+Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
+%The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
+%Despite this progress, detecting small molecules in the micrographs remains a challenge.
 
-Another potential pitfall of particle picking pertains to model bias, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
+Another potential pitfall of particle picking pertains to \emph{model bias}, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
-In a recent paper~\cite{bendory2018toward} by the authors, it was suggested to bypass the particle picking stage and the reconstruct the 3-D structure directly from the micrograph.
-In that paper, we have shown that, at least in principle, the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
-The principle mathematical tool is  autocorrelation analysis, described in detail in Section~\ref{sec:AC_analysis}.
-This goal of  the current paper is to provide a theoretical and numerical support  for the method proposed in~\cite{bendory2018toward}.  
-In this context, the  models described above serve  as  an abstraction of the cryo-EM problem: the multiple tomographic projections of the 3-D structure (taken from unknown viewing directions) are replaced by one (or multiple) repeated signals. A similar abstraction has been proven itself to be useful in a similar context as described in the next section. 
+A recent work of the authors suggests to bypass the particle picking stage and  reconstruct the 3-D structure directly from the micrograph~\cite{bendory2018toward}.
+In that paper, it was shown that---at least in principle---the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
+The principle mathematical tool is  \emph{autocorrelation analysis}, described in detail in Section~\ref{sec:AC_analysis}.
+This goal of  the current paper is to provide a theoretical justification and numerical support  for the method proposed in~\cite{bendory2018toward}.  
+In this context, the  models described above serve  as  an abstraction of the cryo-EM problem: the random signal $X$ discussed in Section~\ref{sec:extensions} can be thought of as 2-D random tomographic projections of the 3-D structure 
+taken according to some unknown distribution of the particles within the ice.
+
+% A similar abstraction has been proven itself to be useful in a similar context as described in the next section. 
 
 We mention that~\cite{bendory2018toward} was not the first paper to employ autocorrelation analysis to cryo-EM. 
-Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. His method has been extended and employed by in X-ray free electron lasers and cryo-EM; see for instance~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}. 
-In order to investigate the computational and statistical properties Kam's method, a series of papers have studied the  multi-reference alignment problem as an abstraction~\cite{bandeira2014multireference,bendory2017bispectrum,bandeira2017optimal,perry2017sample,bandeira2017estimation,abbe2017multireference}.
-We follows the same line of research by considering the models of Section~\ref{sec:problem_formulation} as an abstraction to the application of reconstructing 3-D structures directly from the micrograph as proposed in~\cite{bendory2018toward}.
+Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. His method has been extended and employed by in X-ray free electron lasers and cryo-EM; see for instance~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}.  
+In order to investigate the computational and statistical properties of Kam's method, a series of papers have studied a simplified model, 
+called   \emph{multi-reference alignment}~\cite{bandeira2014multireference,bendory2017bispectrum,bandeira2017optimal,perry2017sample,bandeira2017estimation,abbe2017multireference}.
+We follows the same line of research by considering the multi-target detection and clustering  as an abstraction to the application of reconstructing 3-D structures directly from the micrograph as proposed in~\cite{bendory2018toward}.
 
 %\subsection{Principle mathematical tool: autocorrelation analysis.}
 
@@ -288,7 +300,8 @@ We follows the same line of research by considering the models of Section~\ref{s
 
 
 In order to recover the signal, we employ autocorrelation analysis. The underlying principle is to relate the autocorrelations of the observation to the autocorrelations of the signal without trying to detect individual signal occurrences (i.e., the signal $s$).
-In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy. The autocorrelations of the observation are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem as explained in Section~\ref{sec:numerics}. \TODO{to re-write}
+In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy in the limit of $N\to\infty$. 
+The autocorrelations of the observation are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem as explained in Section~\ref{sec:numerics}. 
 
 
 Let $Z\in \R^m$ be a random signal drawn from some fixed distribution.  The autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
@@ -296,8 +309,7 @@ Let $Z\in \R^m$ be a random signal drawn from some fixed distribution.  The auto
 a_Z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m} \sum_{i=-\infty}^{\infty} Z[i]Z[i+\ell_1]\cdots Z[i+\ell_{q-1}]\right\},
 \label{eq:ac_general}
 \end{equation}
-where the expectation is taken with respect to the distribution of $Z$ and
-the indexing of $Z$ out of the range $0, \ldots, m-1$ is zero-padded.
+where the expectation is taken with respect to the distribution of $Z$. The indexing of $Z$ out of the range $0, \ldots, m-1$ is zero-padded.
 Explicitly, the first-, second- and third-order autocorrelations are given by: 
 \begin{align} 
 a_Z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} \E\left\{
@@ -315,40 +327,45 @@ Under the separation condition, the relation between autocorrelations of the mic
 \gamma  = \frac{M L}{N}
 \label{eq:gamma}
 \end{equation}
-denote the density of $X$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $X$.) The separation condition imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
+denote the density of $X$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $X$.) 
+In this section, we assume the separation condition~\eqref{eq:spacing} that  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. In Section~\ref{sec:poisson} we show that the autocorrelations in the Poisson model are equivalent to  those presented in this section.
 
 For shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
-We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $M$ also goes to infinity at the same rate (in other words, as we see an increasingly large micrograph, it contains increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
+We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $M$ also goes to infinity at the same rate (in other words, as we see an increasingly large observation, it contains increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
 \begin{equation} \label{eq:mean_micrograph}
-\lim_{N\to\infty} a_y^1  \aseq \gamma \E\left\{a_{X}^1\right\},
+\lim_{N\to\infty} a_y^1  \aseq \gamma a_{X}^1,
 \end{equation}
-where equality holds almost surely (a.s.), meaning it holds with probability one.
+\TODO{ should is be $\E\left\{a_{X}^1\right\}$?} where equality holds almost surely (a.s.), meaning it holds with probability one.
 The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic.
-Thus, given enough data, if $\gamma$ is known, we can estimate $\E\left\{a_{X}^1\right\}$ from $y$. (We show later how to estimate $\gamma$ as well.) 
+Thus, given enough data, if $\gamma$ is known, we can estimate $a_{X}^1$ from $y$. We show in Section~\ref{sec:theory_homogeneous} how to estimate $\gamma$ as well in the homogeneous model. 
 
 We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result,
 \begin{equation}
-\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma \E\left\{a_{X}^2[\ell]\right\} + \sigma^2\delta[\ell],
+\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma a_{X}^2[\ell] + \sigma^2\delta[\ell],
 \label{eq:ac2_micrograph}
 \end{equation}
-for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and zero otherwise. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $\E\left\{a_{X}^2[\ell]\right\}$.
+%\begin{equation}
+%\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma \E\left\{a_{X}^2[\ell]\right\} + \sigma^2\delta[\ell],
+%\label{eq:ac2_micrograph}
+%\end{equation}
+for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and zero otherwise. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_{X}^2[\ell]$.
 
 Along the same lines, one can establish a relation for third-order autocorrelations:
 \begin{equation}
  \label{eq:ac3_micrograph}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma \E\left\{a_{x}^3[\ell_1,\ell_2]\right\}  + \sigma^2\gamma \E\left\{a_{x}^1\right\}  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{X}^1  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
 +\delta[\ell_1,\ell_2]\big),
 \end{equation}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$, where $\delta[\ell_1,\ell_2]:=\delta[\ell_1-\ell_2]$.
 Here too, few entries are affected by $\sigma$ in the limit.
 
-
-Computing the autocorrelations of the micrograph is straightforward. The natural question, treated next, is whether one can recover $x$ from them.
+%
+%Computing the autocorrelations of the micrograph is straightforward. The natural question, treated next, is whether one can recover $x$ from them.
 
 
 \section{Theory}
 
-\subsection{Theory for the 1-D homogeneous case}
+\subsection{Theory for the homogeneous case} \label{sec:theory_homogeneous}
 
 A one-dimensional signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
 %
@@ -396,7 +413,7 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce t
 As a side note, under the separation condition, the length $L$ of the signal can also be determined from the autocorrelations in the asymptotic regime, by inspection of the support of $a_y^2$.
 
 
-\subsection{Equivalence between the spacing condition and the Poisson process} \label{sec:support}
+\subsection{Equivalence between the spacing condition and the Poisson process} \label{sec:poisson}
 
 In this section we omit the affect of the noise as it remains the same for the well-separated model. 
 
