@@ -12,9 +12,9 @@ clc;
 % Ls = 1:1:100; % 1 might be trouble
 % Ks = 1:10;
 % nrepeats = 30;
-Ls = [3 20:20:100];
-Ks = 1:3:10;
-nrepeats = 2;
+Ls = 5:5:100; %[5 20:20:100];
+Ks = 1:1:10;
+nrepeats = 50;
 
 nmetrics = 3;
 metric = zeros(nmetrics, length(Ls), length(Ks), nrepeats);
@@ -43,9 +43,9 @@ for iter_K = 1 : length(Ks)
         
         [list2, list3] = moment_selection(L, 'exclude biased');
         
-        if mod(iter_L, 10) == 0
+%         if mod(iter_L, 10) == 0
             fprintf(fid, '\tL = %3d, %s\r\n', L, datestr(now()));
-        end
+%         end
         
         x_true = randn(L, K);
         y = reshape([x_true ; zeros(2*L, K)], 3*L*K, 1); % the perfect micrograph; 1*L might be enough.
@@ -84,6 +84,8 @@ save XP1.mat;
 %%
 load XP1;
 
+threshold = 1e-16; % threshold in CISS paper is 1e-16
+
 figure(1);
 clf;
 metric1 = squeeze(metric(1, :, :, :));
@@ -100,7 +102,7 @@ metric3 = squeeze(metric(3, :, :, :));
 % axis tight;
 subplot(3, 1, 1);
 % imagesc(Ls, Ks, log10(min(metric2, [], 3))');
-imagesc(Ls, Ks, mean(metric2 <= 1e-16, 3)');
+imagesc(Ls, Ks, mean(metric2 <= threshold, 3)');
 % xlabel('L');
 ylabel('K');
 % title('Smallest objective value attained in log10');
@@ -115,8 +117,8 @@ subplot(3, 1, 2);
 Q = zeros(length(Ls), length(Ks));
 for iter_L = 1 : length(Ls)
     for iter_K = 1 : length(Ks)
-        q = find(metric2(iter_L, iter_K, :) <= 1e-16);
-        z = max(squeeze(metric1(iter_L, iter_K, q)));
+        q = find(metric2(iter_L, iter_K, :) <= threshold);
+        z = max(squeeze(metric1(iter_L, iter_K, q))); % display max or median?
         if isempty(z)
             z = 1; % if no optimum found, return 0: relative error is 1
         end
@@ -127,7 +129,7 @@ imagesc(Ls, Ks, log10(Q'));
 % xlabel('L');
 ylabel('K');
 % title('Smallest objective value attained in log10');
-title('Largest relative estimation error among computed optima');
+title('Largest relative estimation error among computed optima, log_{10} scale');
 set(gca, 'YDir', 'normal');
 colorbar;
 % axis equal;
@@ -135,11 +137,11 @@ pbaspect([5, 1, 1]);
 axis tight;
 
 subplot(3, 1, 3);
-imagesc(Ls, Ks, mean(log10(metric3), 3)');
+imagesc(Ls, Ks, median(log10(metric3), 3)');
 xlabel('L');
 ylabel('K');
 % title('Smallest objective value attained in log10');
-title('Average computation time (arithmetic mean, log_{10} scale)');
+title('Median computation time in log_{10} scale');
 set(gca, 'YDir', 'normal');
 colorbar;
 % axis equal;
@@ -148,12 +150,12 @@ axis tight;
 
 set(gcf, 'Color', 'w');
 
-subplot(3, 1, 1); hold all; t = 1:100; plot(t, sqrt(t), 'r-', 'LineWidth', 2); hold off;
-subplot(3, 1, 2); hold all; t = 1:100; plot(t, sqrt(t), 'r-', 'LineWidth', 2); hold off;
-subplot(3, 1, 3); hold all; t = 1:100; plot(t, sqrt(t), 'r-', 'LineWidth', 2); hold off;
+subplot(3, 1, 1); hold all; t = 5:100; plot(t, sqrt(t), 'r-', 'LineWidth', 2); hold off;
+subplot(3, 1, 2); hold all; t = 5:100; plot(t, sqrt(t), 'r-', 'LineWidth', 2); hold off;
+subplot(3, 1, 3); hold all; t = 5:100; plot(t, sqrt(t), 'r-', 'LineWidth', 2); hold off;
 
 %%
-subplotsqueeze(gcf, 1.15);
+% subplotsqueeze(gcf, 1.15);
 
 %%
 savefig('XP1.fig');
