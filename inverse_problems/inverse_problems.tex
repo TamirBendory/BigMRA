@@ -141,19 +141,19 @@ abstract
 
 \subsection{Problem formulation} \label{sec:problem_formulation}
 
-We consider the problem of recovering a set of $K$ signals that appear 
+We consider the \emph{multi-target detection} problem of recovering a set of $K$ signals that appear 
 multiple times at unknown locations in a noisy measurement.
 Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. 
-Let  $s \in \mathbb{N}^{N-L+1}$. In the $i$th entry of $s$, $s[i]$ signals are positioned in $y$ with element $0$ at location $i$, each of those  is chosen according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
+Let  $s[i]$ counts the number of signals whose first element is positioned in $y[i]$, each of those  is chosen according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
 If signal occurrences overlap, they interfere additively. %We think of those events as being rare. 
-With additive white Gaussian noise, the measurement model can be written as a mix of blind deconvolution problems 
+With additive white Gaussian noise, the measurement model can be written as 
 \begin{equation} 
 y  =  \sum_{k=1}^K x_k \ast s_k + \varepsilon, \qquad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{equation}
 where $\ast$ denotes linear convolution, and $s_k[i]$ indicates the number of starting positions of $x_k$ in $y[i]$ so that $s =  s_1+\cdots+s_K$. 
 The goal is  to estimate $x_1,\ldots,x_K$ from $y$. % while $s$ is the \emph{nuisance variable} of the problem.
-We name this problem \emph{multi-target detection}.
+%We name this problem \emph{multi-target detection}.
 This idealized setup appears in several scientific applications, including structural biology~\cite{bendory2018toward} (as we detail below), spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive}, and system identification~\cite{ljung1998system}. 
 
 In the low noise regime, a valid strategy is to first detect the signal occurrences in $y$ (that is, estimate $s$), cluster them (that is, separate $s$ into $s_1,\ldots,s_K$), and solve a standard deconvolution problem. Crucially, we focus on the high noise regime, where \emph{reliable detection of signal occurrences is  impossible}~\cite{bendory2018toward,aguerrebere2016fundamental}.
