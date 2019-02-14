@@ -144,14 +144,17 @@ abstract
 We consider the \emph{multi-target detection} problem of recovering a set of $K$ signals that appear 
 multiple times at unknown locations in a noisy measurement.
 Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. 
-Let  $s[i]$ counts the number of signals whose first element is positioned in $y[i]$, each of those  is chosen according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
+Let  $s[i]$ count the number of signals whose first element is positioned in $y[i]$, each of those  is chosen according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
 If signal occurrences overlap, they interfere additively. %We think of those events as being rare. 
 With additive white Gaussian noise, the measurement model can be written as 
 \begin{equation} 
-y  =  \sum_{k=1}^K x_k \ast s_k + \varepsilon, \qquad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
+y  =  \sum_{k=1}^K s_k \ast x_k + \varepsilon, \qquad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{equation}
-where $\ast$ denotes linear convolution, and $s_k[i]$ indicates the number of starting positions of $x_k$ in $y[i]$ so that $s =  s_1+\cdots+s_K$. 
+where $\ast$ denotes linear convolution, and $s_k[i]$ indicates the number of starting positions of $x_k$ in $y[i]$ so that $s =  s_1+\cdots+s_K$. Explicitly, with zero-based indexing, % and zero-padding out of bounds,
+\begin{align*}
+	y[i] & = \sum_{k=1}^{K} \sum_{j = 0}^{L-1} s_k[i-j] x_k[j] + \varepsilon[i].
+\end{align*}
 The goal is  to estimate $x_1,\ldots,x_K$ from $y$. % while $s$ is the \emph{nuisance variable} of the problem.
 %We name this problem \emph{multi-target detection}.
 This idealized setup appears in several scientific applications, including structural biology~\cite{bendory2018toward} (as we detail below), spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive}, and system identification~\cite{ljung1998system}. 
@@ -171,39 +174,35 @@ The multi-target detection problem  is an instance of
 \emph{blind deconvolution}---a longstanding problem arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 Different variants of the blind deconvolution problem have been subject recently to a thorough  analysis~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}. In clear contrast to multi-target detection, these works focus on the low noise regime and aim at estimating both unknown signals.
 
+\subsection{Models for target distribution}
 
-%In the low noise regime, one can estimate $s$ and then estimate $x$ by standard deconvolution techniques. However, in the high noise regime, estimating $s$ is impossible---that is, detection is impossible~\cite{bendory2018toward,aguerrebere2016fundamental}. 
-
-\subsection{Generative models}
+We consider two  models for the signal $s$: the first one is .......
 
 \paragraph{The well-separated model.}
-To guarantee recovery in any noise regime, we require a separation between adjacent signal's occurrences, that is,
+
+%Our approach is based on considering the first few entries of the observation's autocorrelations. These entries correspond to products of $y$ with its shifted version, for some small shifts.
+%If $s$ would be too clustered, then 
+
+As a first setup, we allow any generative model for $s$ which meets the following separation requirement: $s$ is binary, and
 \begin{equation}
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
 \end{equation}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the data.
 %Under the separation condition~\eqref{eq:spacing}, we refer to this model as the \emph{homogeneous well-separated model}. 
-In then next section we present a model that alleviates this condition.
+%In the next section we present a model that alleviates this condition.
 %As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas in some cases estimating $x$ is tractable.
+This property ensures that correlating $y$ with versions of itself shifted by at most $L-1$ entries does not involve correlating distinct signal occurrences. As a result, the only properties of $s_1, \ldots, s_K$ that affect the autocorrelations of $y$ are the total number of occurrences of the distinct signals: their individual and relative locations do not intervene.
 
 \paragraph{The Poisson model.}
 
-\TODO{For the heterogeneous case.} 
+If the separation condition is violated, more knowledge about the location distribution is necessary to disentangle the autocorrelations of $y$. To that effect, we consider a Poisson model.
 
-The models we described so far assume a well-separated support. The separation condition can be alleviated by assuming a Poisson process. 
-We consider the following observation model. Let $X \in\RL$ be a random vector drawn from some fixed distribution.
-Points are chosen in $\{1,\dots,N-L+1\}$ according to a Poisson process with parameter $\gamma (N-L)$. %The parameter $\gamma$ can be thought of as the density of the $X$ in $Y$.
-For each point $i$ that is chosen from $1$ to $N-L+1$, a random vector $X$ from the distribution is then placed in $y$, with element $0$ at location $i$, with overlapping vectors being added together. 
+%The models we described so far assume a well-separated support. The separation condition can be alleviated by assuming a Poisson process. 
+%We consider the following observation model. Let $X \in\RL$ be a random vector drawn from some fixed distribution.
 
-If $M_i$ denotes the number of hits at location $i$,  then by definition of the Poisson process $M_i$'s are i.i.d.\ and $M_i \sim \Poisson(\gamma)$. Conditional on the value of $M = (M_1,\dots,M_{N-L+1})$, if we let $X_1^{i},\dots,X_{M_i}^i$ denote the random vectors with position 0 located at $i$, then $X_{k_1}^{i}$ and $X_{k_2}^{i}$ are independent for $k_1 \ne k_2$.
-With this notation, we can write each entry as:
-%
-\begin{align}
-%
-y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
-%
-\end{align}
+Specifically, for some parameter $\gamma > 0$, the total number of signal occurrences is drawn from a Poisson distribution with expectation $(N-L+1)\gamma$. For each occurrence, a starting location $i$ is drawn uniformly and independently at random from $\{0, \ldots, N-L\}$. Then, one of the signals $x_1, \ldots, x_K$ is selected independently at random from a fixed distribution and added to the observation $y$ with first entry positioned at $i$. 
+By definition of the Poisson process, the entries of $s$ are independent and follow a Poisson distribution with expectation $\gamma$. In particular, this model allows for (additive) signal overlap. In Section~\TODO{ref}, we show that the autocorrelations of $y$ are nonetheless equivalent to those arising under our well-separated model above.
  
 \subsection{Extensions} \label{sec:extensions}
 
