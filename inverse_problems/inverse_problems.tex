@@ -101,10 +101,6 @@
 
 \usepackage[margin=3cm]{geometry}
 
-\newenvironment{myquote}[1]%
-{\list{}{\leftmargin=#1\rightmargin=#1}\item[]}%
-{\endlist}
-
 %\allowdisplaybreaks
 \numberwithin{equation}{section}
 
@@ -114,7 +110,7 @@
 %\begin{frontmatter}
 
 
-\title{Multi-target detection and clustering with application to cryo-electron microscopy}
+\title{Multi-target detection with application to cryo-electron microscopy}
 
 \author[a]{Tamir Bendory}
 \author[b]{Nicolas Boumal} 
@@ -145,23 +141,43 @@ abstract
 
 \subsection{Problem formulation} \label{sec:problem_formulation}
 
-In this paper, we consider the problem of recovering a signal that appear 
+We consider the problem of recovering a set of $K$ signals that appear 
 multiple times at unknown locations in a noisy measurement.
-Let $x\in\RL$ be the sought signal and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. Let  $s \in \{0, 1\}^{N-L+1}$ be a binary signal indicating (with ones) the starting positions of all occurrences of $x$ in $y$, so that, with additive white Gaussian noise the measurement model reads:
+Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. 
+Let  $s \in \mathbb{N}^{N-L+1}$. In the $i$th entry of $s$, $s[i]$ signals are positioned in $y$ with element $0$ at location $i$, each of those  is chosen according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
+If signal occurrences overlap, they interfere additively. %We think of those events as being rare. 
+With additive white Gaussian noise, the measurement model can be written as a mix of blind deconvolution problems 
 \begin{equation} 
-y  =  x \ast s + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
+y  =  \sum_{k=1}^K x_k \ast s_k + \varepsilon, \qquad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
 \label{eq:model}
 \end{equation}
-where $\ast$ denotes linear convolution. 
-While both $x$ and $s$ are unknown, the goal is only to estimate $x$ from $y$. We name this problem \emph{multi-target detection}.
+where $\ast$ denotes linear convolution, and $s_k[i]$ indicates the number of starting positions of $x_k$ in $y[i]$ so that $s =  s_1+\cdots+s_K$. 
+The goal is  to estimate $x_1,\ldots,x_K$ from $y$. % while $s$ is the \emph{nuisance variable} of the problem.
+We name this problem \emph{multi-target detection}.
+This idealized setup appears in several scientific applications, including structural biology~\cite{bendory2018toward} (as we detail below), spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive}, and system identification~\cite{ljung1998system}. 
+
+In the low noise regime, a valid strategy is to first detect the signal occurrences in $y$ (that is, estimate $s$), cluster them (that is, separate $s$ into $s_1,\ldots,s_K$), and solve a standard deconvolution problem. Crucially, we focus on the high noise regime, where \emph{reliable detection of signal occurrences is  impossible}~\cite{bendory2018toward,aguerrebere2016fundamental}.
+This limitation does not, however, preclude estimation of the signals $x_1,\ldots,x_K$, as we show in this paper. In this setting, we consider  $s_1,\ldots,s_K$  as \emph{nuisance variables}.
+
+In order to recover the signals in the high noise regime, we use autocorrelation analysis.
+For any noise level, the autocorrelations of the observation can be estimated to any desired accuracy for large enough $N$. 
+This computation is straightforward and requires only one pass over the data.
+The underlying principle is to relate the autocorrelations of the observation $y$ to the autocorrelations of $x_1,\ldots,x_K$.
+Below we describe two generative models for $s$.  
+In these models, the relationship between the autocorrelations of $y$ and those of $x_1,\ldots,x_K$ depend on $s_1,\ldots,s_K$ only through their sums, that is, the total number of occurrences of each signal.
+To estimate the signals and occurrence counts from the computed autocorrelations, we solve a nonlinear least-squares (LS) problem as explained in Section~\ref{sec:numerics}. 
 
 The multi-target detection problem  is an instance of  
 \emph{blind deconvolution}---a longstanding problem arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
-Different variants of the blind deconvolution problem have been subject recently to a thorough  analysis, focusing on low noise regimes~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}.
-A key difference  is that in multi-target detection the parameters of the signal $s$ (the locations of its nonzero values) are  \emph{nuisance variables}---that is, we aim only at estimating only $x$. 
-Multi-target detection appears in several scientific applications, including spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive} and system identification~\cite{ljung1998system}. 
+Different variants of the blind deconvolution problem have been subject recently to a thorough  analysis~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}. In clear contrast to multi-target detection, these works focus on the low noise regime and aim at estimating both unknown signals.
 
-In the low noise regime, one can estimate $s$ and then estimate $x$ by standard deconvolution techniques. However, in the high noise regime, estimating $s$ is impossible---that is, detection is impossible~\cite{bendory2018toward,aguerrebere2016fundamental}. To guarantee recovery in any noise regime, we require a separation between adjacent signal's occurrences, that is,
+
+%In the low noise regime, one can estimate $s$ and then estimate $x$ by standard deconvolution techniques. However, in the high noise regime, estimating $s$ is impossible---that is, detection is impossible~\cite{bendory2018toward,aguerrebere2016fundamental}. 
+
+\subsection{Generative models}
+
+\paragraph{The well-separated model.}
+To guarantee recovery in any noise regime, we require a separation between adjacent signal's occurrences, that is,
 \begin{equation}
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
@@ -171,34 +187,9 @@ In words: the starting positions of any two occurrences  must be separated by at
 In then next section we present a model that alleviates this condition.
 %As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas in some cases estimating $x$ is tractable.
 
+\paragraph{The Poisson model.}
 
-\subsection{Extensions} \label{sec:extensions}
-
-The basic model~\eqref{eq:model} can be extended in various ways, some discussed below.
-
-\paragraph{Multi-target detection and clustering with separation.}
-The multi-target detection model can be naturally generalized to the problem of estimating a set of $K$ signals $x_1,\ldots,x_K\in\RL$. Let $s$ be a binary signal satisfying the separation condition~\eqref{eq:spacing}.
-For each $s[i]=1$, a random variable $v_i$ is drawn from some (possibly unknown) distribution over $\{1,\ldots,K\}$. Then, $x_{v_i}$ is placed in $y$
-with element $0$ at location $i$. 
-We refer to this model as \emph{multi-target detection and clustering}.
-
- This model can be written as a mix of blind deconvolution problems
-\begin{equation} 
-y  =  \sum_{i=1}^Kx_i \ast s_i + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
-\end{equation}
-where again $s_i$ is a binary signal, which its non-zero values 
-are the subset of the non-zero values of $s$ associated with $x_i$.
-Generally, we refer to this problem as \emph{multi-target detection and clustering with separation.} 
-%An key question in this model is how many signals can be recovered simultaneously. We derive a bound in Section~\ref{sec:heterogeneity} and show a numerical experiment in Section~\ref{sec:numerics}.
-
-
-\paragraph{The well-separated model with a random signal}
-The homogeneous and heterogeneous models can be generalized as follows. 
-We let the signal $X\in\RL$ to be a random vector drawn from some fixed distribution. %We observe a random vector $Y\in\R^{N-L+1}$.
-For each non-zero element of $s$,  a random vector $X$ from the distribution is then placed in $y$, with element $0$ at location $i$.
-If the distribution is a Delta function that this model coincides with the multi-target detection model; if it is a sum of Diracs then it reduces to multi-target detection and clustering.
-
-\paragraph{Poisson model for the support signal.}
+\TODO{For the heterogeneous case.} 
 
 The models we described so far assume a well-separated support. The separation condition can be alleviated by assuming a Poisson process. 
 We consider the following observation model. Let $X \in\RL$ be a random vector drawn from some fixed distribution.
@@ -213,8 +204,37 @@ With this notation, we can write each entry as:
 y[i] = \sum_{j=0}^{L-1} \sum_{k=1}^{M_{i-j}} X_k^{i-j}[j].
 %
 \end{align}
+ 
+\subsection{Extensions} \label{sec:extensions}
 
-\subsection{Motivation: single-particle reconstruction using cryo-electron microscopy}
+\TODO{multi-dimensions}
+
+The basic model~\eqref{eq:model} can be extended in various ways, some discussed below.
+%
+%\paragraph{Multi-target detection and clustering with separation.}
+%The multi-target detection model can be naturally generalized to the problem of estimating a set of $K$ signals $x_1,\ldots,x_K\in\RL$. Let $s$ be a binary signal satisfying the separation condition~\eqref{eq:spacing}.
+%For each $s[i]=1$, a random variable $v_i$ is drawn from some (possibly unknown) distribution over $\{1,\ldots,K\}$. Then, $x_{v_i}$ is placed in $y$
+%with element $0$ at location $i$. 
+%We refer to this model as \emph{multi-target detection and clustering}.
+%
+% This model can be written as a mix of blind deconvolution problems
+%\begin{equation} 
+%y  =  \sum_{k=1}^Kx_k \ast s_k + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
+%\end{equation}
+%where again $s_i$ is a binary signal, which its non-zero values 
+%are the subset of the non-zero values of $s$ associated with $x_i$.
+%Generally, we refer to this problem as \emph{multi-target detection and clustering with separation.} 
+%An key question in this model is how many signals can be recovered simultaneously. We derive a bound in Section~\ref{sec:heterogeneity} and show a numerical experiment in Section~\ref{sec:numerics}.
+
+
+\paragraph{The well-separated model with a random signal}
+The homogeneous and heterogeneous models can be generalized as follows. 
+We let the signal $X\in\RL$ to be a random vector drawn from some fixed distribution. %We observe a random vector $Y\in\R^{N-L+1}$.
+For each non-zero element of $s$,  a random vector $X$ from the distribution is then placed in $y$, with element $0$ at location $i$.
+If the distribution is a Delta function that this model coincides with the multi-target detection model; if it is a sum of Diracs then it reduces to multi-target detection and clustering.
+
+
+\section{Motivation: single-particle reconstruction using cryo-electron microscopy}
 Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules; see for instance~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
 In contrast X-ray and NMR which aggregate information from an ensembles of
 particles, single particle cryo-EM produces images of individual particles and thus can, in principle, elucidate multiple  structures.
@@ -298,10 +318,10 @@ We follows the same line of research by considering the multi-target detection a
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
-
-In order to recover the signal, we employ autocorrelation analysis. The underlying principle is to relate the autocorrelations of the observation to the autocorrelations of the signal without trying to detect individual signal occurrences (i.e., the signal $s$).
-In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy in the limit of $N\to\infty$. 
-The autocorrelations of the observation are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem as explained in Section~\ref{sec:numerics}. 
+%
+%In order to recover the signal, we employ autocorrelation analysis. The underlying principle is to relate the autocorrelations of the observation to the autocorrelations of the signal without trying to detect individual signal occurrences (i.e., the signal $s$).
+%In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy in the limit of $N\to\infty$. 
+%The autocorrelations of the observation are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem as explained in Section~\ref{sec:numerics}. 
 
 
 Let $Z\in \R^m$ be a random signal drawn from some fixed distribution.  The autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
