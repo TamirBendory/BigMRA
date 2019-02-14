@@ -57,8 +57,9 @@ function [X_est, gamma_est, problem, stats, loss] = least_squares_1D_heterogeneo
     elements.X = euclideanfactory(L_optim, K);
     
 %     elements.gamma = euclideanfactory(K, 1);  %% TODO: try unrestricted reals
-    elements.gamma = positivefactory(K, 1);  %% TODO: try positive reals factory
-%     elements.gamma = constantfactory(gamma0);  %% TODO: try fixing gamma; requires gamma0
+%     elements.gamma = positivefactory(K, 1);  %% TODO: try positive reals factory
+    elements.gamma = constantfactory(gamma0);  %% TODO: try fixing gamma; requires gamma0
+    fprintf('\n\n ### GAMMA IS FIXED ###\n\n\n');
 
     manifold = productmanifold(elements);
     
@@ -84,8 +85,11 @@ function [X_est, gamma_est, problem, stats, loss] = least_squares_1D_heterogeneo
     
     %% Call an optimization algorithm
     opts = struct();
-    opts.tolgradnorm = 1e-8; %1e-12;
+    opts.tolgradnorm = 1e-10; %1e-12;
     opts.maxiter = 1000;
+    
+    fprintf(' ## MAX TIME ##\n');
+    opts.maxtime = 30*60;
     
     warning('off', 'manopt:getHessian:approx');
     [Z, loss, stats] = trustregions(problem, Z0, opts);
