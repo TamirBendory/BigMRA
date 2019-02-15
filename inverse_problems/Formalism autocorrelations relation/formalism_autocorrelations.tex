@@ -1,0 +1,53 @@
+%\documentclass{siamart1116}
+\documentclass[12pt]{article}
+
+\usepackage[hyphens]{url}
+\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue,linkcolor=blue]{hyperref}
+
+
+\input{preamble}
+
+\newcommand{\minimize}{\operatorname{minimize}}
+
+\newcommand{\st}{\textrm{ subject to }}
+
+\newcommand{\E}{\mathbb{E}}
+
+\title{Formalism for autocorrelation derivations}
+
+%\author{
+%Nicolas Boumal\thanks{Princeton University, Mathematics Department and PACM, \texttt{nboumal@math.princeton.edu}}  \and Vladislav Voroninski\thanks{Helm.ai} \and Afonso S.\ Bandeira\thanks{Department of Mathematics and Center for Data Science, Courant Institute of Mathematical Sciences, New York University, \texttt{bandeira@cims.nyu.edu}}
+%}
+\author{(T,N)B}
+\date{February 15, 2019}
+
+
+\begin{document}
+
+\maketitle
+
+Let $x_{(1)}, \ldots, x_{(|s|)}$ denote the (independent) realizations of the random signal $x$ in the observation $y$, starting at (deterministic) positions $s_{(1)}, \ldots, s_{(|s|)}$. Let $I_{ij}$ be the indicator variable for whether position $i$ is in the support of occurrence $j$, that is, it is one if $i$ is in $\{s_{(j)}, \ldots, s_{(j)}+L-1\}$, and zero otherwise. Then,
+\begin{align*}
+	y[i] & = \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i].
+\end{align*}
+This gives a simple expression for the first autocorrelation of $y$:
+\begin{align}
+	a_y^1 & = \E_y\left\{ \frac{1}{N} \sum_{i = 0}^{N-1} y[i] \right\} \\
+		  & = \frac{1}{N} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\left\{ \sum_{i = 0}^{N-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right\}.
+\end{align}
+Now switch the sums over $i$ and $j$, and observe that $I_{ij}$ is zero unless $i = s_{(j)} + t$ for $t$ in the range $0, \ldots, L-1$. Hence,
+\begin{align}
+	a_y^1 & = \frac{1}{N} \sum_{j = 1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-1} x_{(j)}[t]\right\} + \frac{1}{N} \E_\varepsilon\left\{ \sum_{i=0}^{N-1} \varepsilon[i]\right\}.
+\end{align}
+Since the noise has zero mean and $x_{(1)}, \ldots, x_{(|s|)}$ are independent and all distributed as $x$, we further find:
+\begin{align}
+	a_y^1 & = \frac{|s|}{N} L a_x^1 = \gamma a_x^1.
+\end{align}
+
+To address the second-order moments, we resort to the separation conditions. Indeed, consider this expression:
+\begin{align}
+	a_y^2[\ell] & = \E_y\left\{ \frac{1}{N} \sum_{i = 0}^{N-1} y[i] y[i+\ell] \right\} \\
+				& = \frac{1}{N} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\left\{ \left( \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right) \left( \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] + \varepsilon[i+\ell] \right) \right\}.
+\end{align}
+
+\end{document}
