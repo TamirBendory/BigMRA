@@ -303,24 +303,24 @@ We follows the same line of research by considering the multi-target detection a
 %In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy in the limit of $N\to\infty$. 
 %The autocorrelations of the observation are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem as explained in Section~\ref{sec:numerics}. 
 
+In what follows, we consider autocorrelations of both the observation $y$ and of the signal occurrences in $y$. As per our discussion of extensions, the signal occurrences may be sampled from a discrete set $\{x_1, \ldots, x_K\}$, or from a more general distribution. Accordingly, we define autocorrelations for a random signal $z$ of length $m$ \TODO{change $m$ to something upper case, maybe $U$}. For our purposes, this will be applied both to signal occurrences (of length $L$) and to $y$ (of length $N$).
 
-Let $Z\in \R^m$ be a random signal drawn from some fixed distribution.  The autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
+For a random signal $z\in \R^m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{equation}
-a_Z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m} \sum_{i=-\infty}^{\infty} Z[i]Z[i+\ell_1]\cdots Z[i+\ell_{q-1}]\right\},
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{\infty} \E\left\{z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\},
 \label{eq:ac_general}
 \end{equation}
-where the expectation is taken with respect to the distribution of $Z$. The indexing of $Z$ out of the range $0, \ldots, m-1$ is zero-padded.
+where the expectation is taken with respect to the distribution of $z$. Indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
 Explicitly, the first-, second- and third-order autocorrelations are given by: 
 \begin{align} 
-a_Z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} \E\left\{
-Z[i]\right\}, \nonumber\\
-a_Z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} \E\left\{Z[i]Z[i+\ell]\right\},\\
-a_Z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} \E\left\{Z[i]Z[i+\ell_1]Z[i+\ell_2]\right\}.  \nonumber \label{eq:ac_special}
+a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} \E\left\{
+z[i]\right\}, \nonumber\\
+a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} \E\left\{z[i]z[i+\ell]\right\},\\
+a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} \E\left\{z[i]z[i+\ell_1]z[i+\ell_2]\right\}.  \nonumber \label{eq:ac_special}
 \end{align}
-The autocorrelation functions have symmetries. Specifically, $$\E\left\{a_Z^2[\ell]\right\} = \E\left\{a_Z^2[-\ell]\right\},$$ and \TODO{to verify}
-$$\E\left\{a_Z^3[\ell_1,\ell_2]\right\} = \E\left\{a_Z^3[\ell_2,\ell_1]\right\}=\E\left\{a_Z^3[-\ell_1,\ell_2-\ell_1]\right\}.
+Since  autocorrelations depend only on the differences between indices, the obey the following symmetries: $$a_z^2[\ell] = a_z^2[-\ell],$$ and
+$$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $$
-For our purposes, this will be applied both to $x$ (of length $L$) and to $y$ (of length $N$).
 
 Under the separation condition, the relation between autocorrelations of the micrograph and those of $X$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $X$ in $y$ (that is, the number of 1's in $s$), and let
 \begin{equation}
@@ -353,11 +353,21 @@ for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and ze
 Along the same lines, one can establish a relation for third-order autocorrelations:
 \begin{equation}
  \label{eq:ac3_micrograph}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{X}^1  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
+\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma a_{X}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{X}^1  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
 +\delta[\ell_1,\ell_2]\big),
 \end{equation}
 for $\ell_1,\ell_2 = 0, \ldots, L-1$, where $\delta[\ell_1,\ell_2]:=\delta[\ell_1-\ell_2]$.
 Here too, few entries are affected by $\sigma$ in the limit.
+
+In particular, for $X$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$, the autocorrelations are given in explicit form as:
+\begin{align} 
+a_X^1 & = \frac{1}{m} \sum_{i=0}^{m-1} \E\left\{
+X[i]\right\}, \nonumber\\
+a_X^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} \E\left\{X[i]X[i+\ell]\right\},\\
+a_X^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} \E\left\{X[i]X[i+\ell_1]X[i+\ell_2]\right\}.  \nonumber
+\end{align}
+\TODO{ABOVE: replace expectations with sums.}
+
 
 %
 %Computing the autocorrelations of the micrograph is straightforward. The natural question, treated next, is whether one can recover $x$ from them.
@@ -455,12 +465,13 @@ In the following,  we show that the moments of the observed data under the Poiss
 
 \subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
 
+
 Autocorrelations in $d$ dimensions is defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
 \begin{equation}
-a_Z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
 \label{eq:ac_d_dimension}
 \end{equation}
-Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $Z$ is a Delta function) signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
+Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $z$ is a Delta function) signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
 If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 The case of 1-D signals is essentially different: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating  symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
 
