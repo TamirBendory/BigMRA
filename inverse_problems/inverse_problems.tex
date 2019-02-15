@@ -144,7 +144,7 @@ abstract
 We consider the \emph{multi-target detection} problem of recovering a set of $K$ signals that appear 
 multiple times at unknown locations in a noisy measurement.
 Let ${x_1,\ldots,x_K\in\RL}$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. 
-Let  $s[i]$ count the number of signals whose first element is positioned in $y[i]$. Each of those $s[i]$ is chosen according to some (possibly unknown) distribution $\pi$ \TODO{Add notation for the distribution} over $\{1,\ldots,K\}$. 
+Let  $s[i]$ count the number of signals whose first element is positioned in $y[i]$. Each of those $s[i]$ is chosen according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
 If signal occurrences overlap, they interfere additively. %We think of those events as being rare. 
 With additive white Gaussian noise, the measurement model can be written as 
 \begin{equation} 
@@ -192,6 +192,8 @@ In words: the starting positions of any two occurrences  must be separated by at
 %Under the separation condition~\eqref{eq:spacing}, we refer to this model as the \emph{homogeneous well-separated model}. 
 %In the next section we present a model that alleviates this condition.
 %As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas in some cases estimating $x$ is tractable.
+Furthermore, we require that the last signal occurrence in $y$ is also followed by at least $L-1$ signal-free (but still noisy) entries.
+% This last sentence is required for the proof of the identity of the third-order autocorrelation in Section 3.
 This property ensures that correlating $y$ with versions of itself shifted by at most $L-1$ entries does not involve correlating distinct signal occurrences. Once $s$ is determined, for each position $i$ such that $s[i] = 1$, one of the signals $x_k$ is selected independently at random, and accordingly we set $s_k[i] = 1$. As a result, the only properties of $s_1, \ldots, s_K$ that affect the autocorrelations of $y$ are the total number of occurrences of the distinct signals: their individual and relative locations do not intervene.
 
 \paragraph{The Poisson model.}
@@ -303,41 +305,45 @@ We follows the same line of research by considering the multi-target detection a
 %In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy in the limit of $N\to\infty$. 
 %The autocorrelations of the observation are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem as explained in Section~\ref{sec:numerics}. 
 
-In what follows, we consider autocorrelations of both the observation $y$ and of the signal occurrences in $y$. As per our discussion of extensions, the signal occurrences may be sampled from a discrete set $\{x_1, \ldots, x_K\}$, or from a more general distribution. Accordingly, we define autocorrelations for a random signal $z$ of length $m$ \TODO{change $m$ to something upper case, maybe $U$}. For our purposes, this will be applied both to signal occurrences (of length $L$) and to $y$ (of length $N$).
+In what follows, we consider autocorrelations of both the observation $y$ and of the signal occurrences in $y$. As per our discussion of extensions, the signal occurrences may be sampled from a discrete set $\{x_1, \ldots, x_K\}$, or from a more general distribution. Accordingly, we define autocorrelations for a random signal $z$ of length $M$ . For our purposes, this will be applied both to signal occurrences (of length $L$) and to $y$ (of length $N$).
 
-For a random signal $z\in \R^m$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
+For a random signal $z\in \R^M$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{equation}
-a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \frac{1}{m} \sum_{i=-\infty}^{\infty} \E\left\{z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\},
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E_z\left\{\frac{1}{M} \sum_{i=-\infty}^{\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\},
 \label{eq:ac_general}
 \end{equation}
-where the expectation is taken with respect to the distribution of $z$. Indexing of $z$ out of the range $0, \ldots, m-1$ is zero-padded.
+where the expectation is taken with respect to the distribution of $z$. Indexing of $z$ out of the range $0, \ldots, M-1$ is zero-padded.
 Explicitly, the first-, second- and third-order autocorrelations are given by: 
 \begin{align} 
-a_z^1 & = \frac{1}{m} \sum_{i=0}^{m-1} \E\left\{
+a_z^1 & = \E_z\left\{\frac{1}{M} \sum_{i=0}^{M-1} 
 z[i]\right\}, \nonumber\\
-a_z^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} \E\left\{z[i]z[i+\ell]\right\},\\
-a_z^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} \E\left\{z[i]z[i+\ell_1]z[i+\ell_2]\right\}.  \nonumber \label{eq:ac_special}
+a_z^2[\ell] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell\}}^{M-1 + \min\{0, -\ell\}} z[i]z[i+\ell]\right\},\\
+a_z^3[\ell_1,\ell_2] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{M-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]\right\}.  \nonumber \label{eq:ac_special}
 \end{align}
 Since  autocorrelations depend only on the differences between indices, the obey the following symmetries: $$a_z^2[\ell] = a_z^2[-\ell],$$ and
 $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $$
 
-Under the separation condition, the relation between autocorrelations of the micrograph and those of $X$ is particularly simple, as we now show. It is useful to introduce some notation: let $M$ denote the number of occurrences of $X$ in $y$ (that is, the number of 1's in $s$), and let
+Let $x$ be the random variable corresponding to signal occurrences in $y$. In particular, for the model~\eqref{eq:model}, $x=x_k$ with probability $\pi_k$.
+Under the separation condition~\eqref{eq:spacing}, the relation between autocorrelations of the observation $y$ and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $\vert s\vert = \sum_i s[i]$ denote the number of signal occurrences in $y$, and let
 \begin{equation}
-\gamma  = \frac{M L}{N}
+\gamma  = \frac{|s| L}{N}.
 \label{eq:gamma}
 \end{equation}
-denote the density of $X$ in $y$ (that is, the fraction of entries of $y$ occupied by occurrences of $X$.) 
-In this section, we assume the separation condition~\eqref{eq:spacing} that  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. In Section~\ref{sec:poisson} we show that the autocorrelations in the Poisson model are equivalent to  those presented in this section.
+In the well-separated model, $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. Henceforth, we call it   
+ the signal density. The separation condition~\eqref{eq:spacing}  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. 
+ In Section~\ref{sec:poisson} we show that the autocorrelations under the Poisson model are equivalent to those presented in this section.
 
-For shifts in $0, \ldots, L-1$, the autocorrelation functions of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
-We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $M$ also goes to infinity at the same rate (in other words, as we see an increasingly large observation, it contains increasingly many signal occurrences, with constant signal density). In that regime, the law of large numbers can be used to show the following statement:
+For shifts in $0, \ldots, L-1$, the autocorrelations of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. 
+%Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
+We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $|s|$ also goes to infinity at the same rate. %(in other words, as we see an increasingly large observation, it contains increasingly many signal occurrences, with constant signal density). 
+In that regime, the law of large numbers implies
 \begin{equation} \label{eq:mean_micrograph}
-\lim_{N\to\infty} a_y^1  \aseq \gamma a_{X}^1,
+\lim_{N\to\infty} a_y^1  \aseq \gamma a_{x}^1,
 \end{equation}
-\TODO{ should is be $\E\left\{a_{X}^1\right\}$?} where equality holds almost surely (a.s.), meaning it holds with probability one.
-The randomness is over the Gaussian noise $\varepsilon$; $s$ may be deterministic.
-Thus, given enough data, if $\gamma$ is known, we can estimate $a_{X}^1$ from $y$. We show in Section~\ref{sec:theory_homogeneous} how to estimate $\gamma$ as well in the homogeneous model. 
+where equality holds almost surely (a.s.), meaning it holds with probability one.
+The randomness is over $x$ and the Gaussian noise $\varepsilon$; $s$ may be deterministic.
+Thus, given enough data, if $\gamma$ is known, we can estimate $a_{x}^1$ from $y$. We show in Section~\ref{sec:theory_homogeneous} how to estimate $\gamma$ as well in a particular case. 
 
 We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result,
 \begin{equation}
@@ -359,14 +365,16 @@ Along the same lines, one can establish a relation for third-order autocorrelati
 for $\ell_1,\ell_2 = 0, \ldots, L-1$, where $\delta[\ell_1,\ell_2]:=\delta[\ell_1-\ell_2]$.
 Here too, few entries are affected by $\sigma$ in the limit.
 
-In particular, for $X$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$, the autocorrelations are given in explicit form as:
-\begin{align} 
-a_X^1 & = \frac{1}{m} \sum_{i=0}^{m-1} \E\left\{
-X[i]\right\}, \nonumber\\
-a_X^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} \E\left\{X[i]X[i+\ell]\right\},\\
-a_X^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} \E\left\{X[i]X[i+\ell_1]X[i+\ell_2]\right\}.  \nonumber
-\end{align}
-\TODO{ABOVE: replace expectations with sums.}
+In particular, for $x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$, the autocorrelations are given in explicit form as:
+\begin{equation}
+a_x^q  =  \sum_{i=1}^{K} \pi_ka_{x_i}^1.
+\end{equation}
+%\begin{align} 
+%a_X^1 & = \frac{1}{K} \sum_{i=1}^{K} \pi_ka_{x_i}, \nonumber\\
+%a_X^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} \E\left\{X[i]X[i+\ell]\right\},\\
+%a_X^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} \E\left\{X[i]X[i+\ell_1]X[i+\ell_2]\right\}.  \nonumber
+%\end{align}
+%\TODO{ABOVE: replace expectations with sums.}
 
 
 %
@@ -614,169 +622,83 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 
 
 \section{Relation with cryo-EM + experiments?}
-%
-%In the simplified mathematical model above, we showed it is possible to estimate a signal without detecting its appearances.  
-%Our strategy is to compute autocorrelations of the micrographs and to relate these statistics to the unknown signal's parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations. 
-%
-%We also showed how this technique can, in principle, be applied to cryo-EM.
-%Crucially, the outlined approach involves no particle picking, hence a fortiori no viewing direction estimation. Concerns for model bias are also greatly reduced since no template matching is involved.
-%Additionally,  our technique also allows the use of much lower defocus values. Lower defocus means lower contrast, but will maintain  higher frequency information. Consequently, we may be able to get high resolution reconstructions from fewer micrographs.
-%
-%Looking toward applying the framework to encompass all important features of real cryo-EM experiments, our work implies that it might be possible to reconstruct small molecules, particularly, molecules that are too small to be detected in micrographs. 
-%In pursuing this research direction, our goal is to significantly increase the range of molecules to which cryo-EM can be successfully applied.
-%We recognize that significant challenges lay ahead for the implementation of the proposed approach to {high-resolution} 3-D reconstruction directly from the micrographs. We discuss a few now.
-%
-%The numerical experiments we have performed reveal that the third-order autocorrelation may not be enough for 3-D reconstruction in practice, due to high sensitivity.
-%This suggests that fourth-order autocorrelation may be necessary. This in turn would imply that the procedure might require a large amount of data. 
-%Recent trends in high-throughput cryo-EM technology   give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in a  streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved accurately and efficiently in practice. 
-%
-%To reach high-resolution reconstruction, beyond data acquisition and computational challenges, there are modeling issues  to consider.
-%In contrast to the simplifying assumptions we have made above, the noise might be colored; the viewing directions of the particles may be distributed non-uniformly; there may be conformational heterogeneity; particles generally do not satisfy our separation condition; and micrographs undergo a contrast transfer function which we have omitted. All of these aspects can be handled with the same general strategy: establish a forward model relating the expected autocorrelations of the micrographs to the target volume(s) and all parameters necessary to model the above effects. 
-%For instance, for colored noise, the forward model may involve multiple parameters to capture the power spectrum of the noise instead of the single parameter $\sigma^2$. 
-%Similarly, instead of the separation condition, we can model the spacing between the projections using a parameterized pair-correlation function. Such a function models the distribution of distances between neighboring projections. The observed autocorrelations depend linearly on these parameters, which would be estimated as part of the inverse problem.
-%All these aspects must be taken into account so the method can be applied on experimental data. We hope to take care of these issues in future research. 
 
-%
-%\section*{Acknowledgment}
-%The authors  thank Ayelet Heimowitz, Joe Kileel,  Roy Lederman, Amit Moscovich, Nir Sharon and  Fred Sigworth for helpful discussions,  and Boris Landa and Yoel Shkolnisky for providing the code for the 2-D PSWFs expansion.
-%The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.
-%NB is partially supported by NSF award DMS-1719558.
+\section{Proof}
 
-\bibliographystyle{plain}
-\bibliography{ref}
-
-\appendix
-
-\section{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
-
-We consider the asymptotic regime $N,M\to\infty$ and assume that $M=\Omega(N)$, so that
+\subsection{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
+Let us define
 \begin{equation*}
-\gamma := \frac{ML}{N}>0.
+\gamma = \frac{|s|L}{N}>0.
 \end{equation*}
-%
-Any vectors with indices out of range are given value 0.
-We focus here on the homogeneous model~\eqref{eq:model}. The extension to random signal $X$ is straight-forward by taking the expectation with respect to the distribution of $X$.
-
-We start by considering the mean of the data:
+Then the first order autocorrelation of the observation is given by 
 \begin{equation*}
-a_y^1 = \frac{1}{N}\sum_{i=0}^{N-1} y[i] =
-\frac{1}{N/L}\sum_{j=0}^{M-1}\frac{1}{L}\sum_{i=0}^{L-1}x[i] +    
-\underbrace{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]}_{\text{noise term}}
-\xrightarrow{a.s.}\gamma a_x^1,
+a_y^1 = \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1} y[i]\right\} =
+\frac{|s|}{N}\E_x\left\{\sum_{i=0}^{L-1}x[i]\right\} +    
+\E_{\varepsilon}\left\{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]\right\}
+=\gamma a_x^1,
 \end{equation*}
-%
-where the noise term converges to zero almost surely (a.s.)\ by the strong law of large numbers.
+where $\E_z$ means expectation with respect to the distribution of $z$.
+%the noise term converges to zero almost surely (a.s.)\ by the strong law of large numbers.
 
-We proceed with the (second-order) autocorrelation for fixed $\ell\in[0,\ldots,L-1]$. We can compute:
+We proceed with the second-order autocorrelation for  $\ell\in\{0,\ldots,L-1\}$. We can compute:
 %
 \begin{align*}
 %
-a_y^2[\ell] & = \frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]
+a_y^2[\ell] & = \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]\right\}
 \nonumber \\
-& = \underbrace{\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]}_{\text{signal term}} + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell]}_{\text{noise term}}
-\\ & + \underbrace{\frac{1}{N} \sum_{j=1}^{M} \sum_{i=0}^{L-1} x[i] (\varepsilon[s_j + i + \ell] + \varepsilon[s_j + i - \ell])}_{\text{cross-term}}. 
+& = \frac{|s|}{N}\E_x\left\{\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\right\}  + \E_{\varepsilon}\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell] \right\},
 %
 \end{align*}
-The cross-term is linear in the noise, and is easily shown to vanish almost surely in the limit $N\to\infty$, by the strong law of large numbers. We break the signal term into $M$ different sums, each containing one copy of the signal. This gives:
-%
+where all cross terms vanish in expectation owing to independence of $x$ of $\varepsilon$, and $\E{\varepsilon}=0$.  
+Hence, 
 \begin{align} \label{eq:2nd_moment_signal_term}
 %
-\frac{1}{N}\sum_{j=1}^{M}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell] & = \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\nonumber\\&\xrightarrow{N\to\infty}\gamma a_x^2[\ell].
-%
+a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-1-\ell}{N}\sigma^2\delta[\ell],
 \end{align}
-%
-We next analyze the pure noise term. When $\ell\neq 0$, we can break the noise term into a sum of independent terms:
-%
-\begin{equation*}
-%
-\frac{1}{N}\sum_{i=0}^{N-1-\ell} \varepsilon[i]\varepsilon[i+\ell] = \frac{1}{\ell}\sum_{i=0}^{\ell-1}\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i].
-%
-\end{equation*}
-%
-Each sum $\frac{1}{N/\ell}\sum_{j=0}^{N/\ell -2} \varepsilon[j\ell + i] \varepsilon[(j+1)\ell + i]$ is an average of $N/\ell$ independent terms with expectation zero, hence converges to zero almost surely as $N\to\infty$. If $\ell=0$, then we have:
-%
-\begin{equation*}
-\frac{1}{N}\sum_{i=0}^{N-1} \varepsilon^2[i] \xrightarrow{a.s.} \sigma^2.
-\end{equation*}
+where $\delta[0]=1$ and zero otherwise. 
 
-We now analyze the third-order autocorrelation. Let us fix $\ell_1\geq\ell_2\ge0$. We have:
-%
-%\begin{align*}
-%%
-%&a_y^3[\ell_1,\ell_2] 
-%= \frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]
-%\nonumber \\
-%%
-%=& \underbrace{ \frac{ML}{N}\frac{1}{M}\sum_{j=1}^M 
-%	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x[i]x[i+\ell_1]x[i+\ell_2]   }_{(1)}
-%\\& + \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]}_{(2)}
-%\nonumber \\
-%&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-%	\sum_{i=0}^{L-1} x[i]\ep[s_j + i+\ell_1]\ep[s_j+ i+\ell_2]}_{(3)}
-%\\& + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-%	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]}_{(4)}
-%\nonumber \\
-%&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-%	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_2]\ep[s_j+i+\ell_1-\ell_2]x[i]}_{(5)}
-%\\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-%	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i-\ell_2]x[i+\ell_1-\ell_2]x[i]}_{(6)}
-%\nonumber \\
-%&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-%	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[i+\ell_2]}_{(7)}
-%\\ & + \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-%	\sum_{i=0}^{L-\ell_1-1} x[i]x[i+\ell_1]\ep[s_j+ i+\ell_2]}_{(8)}.
-%%
-%\end{align*}
-%
+We now analyze the third-order autocorrelation. 
+Let $x_{(j)}$ denote the $j$th
+realization of $x$, with starting position $s_{(j)}$, for $j=1,\ldots,|s|$.
+Let us fix $0\leq \ell_2\leq\ell_1\leq L-1$. We have:
 \begin{align*}
 %
 a_y^3[\ell_1,\ell_2] 
-=& \frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]
+=& \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]\right\}
 \\
 %
-=& \underbrace{ \frac{ML}{N}\frac{1}{M}\sum_{j=1}^M 
-	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x[i]x[i+\ell_1]x[i+\ell_2]   }_{(1)}
-+ \underbrace{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]}_{(2)}
+\stackrel{(1)}=& \E_{x_{(1)},\ldots,x_{(|s|)}}\left\{ \frac{|s|L}{N}\frac{1}{|s|}\sum_{j=1}^{|s|} 
+	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x_{(j)}[i]x_{(j)}[i+\ell_1]x_{(j)}[i+\ell_2]  \right\} \\
+\stackrel{(2)}+& \E_\varepsilon\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]\right\}
 \ \\
-&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-1} x[i]\ep[s_j + i+\ell_1]\ep[s_j+ i+\ell_2]}_{(3)}
-+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]}_{(4)}
+\stackrel{(3)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+	\sum_{i=0}^{L-1} x_{(j)}[i]\ep[s_{(j)} + i+\ell_1]\ep[s_{(j)}+ i+\ell_2]\right\} \\
+\stackrel{(4)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+	\sum_{i=0}^{L-1} \ep[s_{(j)}+i-\ell_1]x_{(j)}[i]\ep[s_{(j)}+ i+\ell_2-\ell_1]\right\}
 \\
-&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-1} \ep[s_j+i-\ell_2]\ep[s_j+i+\ell_1-\ell_2]x[i]}_{(5)}
-+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_j+i-\ell_2]x[i+\ell_1-\ell_2]x[i]}_{(6)}
+\stackrel{(5)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+	\sum_{i=0}^{L-1} \ep[s_{(j)}+i-\ell_2]\ep[s_{(j)}+i+\ell_1-\ell_2]x_{(j)}[i]\right\}
+\\ \stackrel{(6)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_{(j)}+i-\ell_2]x_{(j)}[i+\ell_1-\ell_2]x_{(j)}[i]\right\}
 \\
-&+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-\ell_2-1} x[i]\ep[s_j + i+\ell_1]x[i+\ell_2]}_{(7)}
-+ \underbrace{\frac{1}{N}\sum_{j=1}^{M} 
-	\sum_{i=0}^{L-\ell_1-1} x[i]x[i+\ell_1]\ep[s_j+ i+\ell_2]}_{(8)}.
+\stackrel{(7)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+	\sum_{i=0}^{L-\ell_2-1} x_{(j)}[i]\ep[s_{(j)} + i+\ell_1]x_{(j)}[i+\ell_2]\right\}
+\\ \stackrel{(8)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+	\sum_{i=0}^{L-\ell_1-1} x_{(j)}[i]x_{(j)}[i+\ell_1]\ep[s_{(j)}+ i+\ell_2]\right\}.
 %
 \end{align*}
-Terms (6), (7) and (8) are linear in $\ep$, and can easily be shown to converge to 0 almost surely by the law of large numbers, by similar arguments as used previously. Term (1) converges to $\gamma a_x^3[\ell_1,\ell_2]$ almost surely, for the same reasons as~\eqref{eq:2nd_moment_signal_term}. To deal with terms (2)--(5), we must distinguish between different values of $\ell_1$ and $\ell_2$.
+Terms (6), (7) and (8) are linear in $\ep$ and  thus zero.
+Term (1) is equal  to $\gamma a_x^3[\ell_1,\ell_2]$  for the same reasons as~\eqref{eq:2nd_moment_signal_term}. 
+Term (2) is always zero by properties of Gaussian variables. 
+To deal with terms (3)--(5), we must distinguish between different values of $\ell_1$ and $\ell_2$.
 
-{\bf Case 1:} $0 < \ell_2 < \ell_1$. Here, all summands with elements of $\ep$ involve products of distinct entries, which have expected value 0. Consequently, the usual argument shows that terms (2)--(5) all converge to 0 almost surely as $N \to \infty$.
+Term (3) is always zero, unless $\ell_1=\ell_2$, so that it is equal to 
+$\gamma\sigma^2 a_x^1 \delta[\ell_1-\ell_2]$.
+The same goes for Terms (4) and (5), which are equal, respectively, to
+$\gamma\sigma^2 a_x^1 \delta[\ell_2]$ 
+and $\gamma\sigma^2 a_x^1 \delta[\ell_1]$.
 
-{\bf Case 2:} $0=\ell_2 < \ell_1$. Term (2) is an average of products of the form $\ep[i]^2\ep[i+\ell_1]$, which have mean zero; consequently, term (2) converges to 0 almost surely. The same argument as for Case 1 shows that (3) and (5) also converge to 0. For term (4), we write:
-%
-\begin{align*}
-%
-&\frac{1}{N}\sum_{j=1}^{M} 
-\sum_{i=0}^{L-1} \ep[s_j+i-\ell_1]x[i]\ep[s_j+ i+\ell_2-\ell_1]
-\nonumber \\
-&= \frac{ML}{N}\frac{1}{L}\sum_{i=0}^{L-1}x[i] \frac{1}{M}\sum_{j=1}^{M} \ep[s_j+i-\ell_1]^2
-\\& \xrightarrow{a.s.} \gamma \frac{1}{L} \sum_{i=0}^{L-1}x[i] \sigma^2 = \gamma a_x^1 \sigma^2. \nonumber
-%
-\end{align*}
-
-{\bf Case 3:} $0<\ell_2 = \ell_1$. An argument nearly identical to that for Case 2 shows that terms (2), (4) and (5) converge to 0, while term (3) converges to $\gamma a_x^1 \sigma^2$.
-
-{\bf Case 4:} $0=\ell_2 = \ell_1$. The same argument as for term (4) in Case 2 shows that terms (3), (4) and (5) all converge to $\gamma a_x^1 \sigma^2$. Term (2) is an average of $\ep[i]^3$, which is mean zero; consequently, it converges to 0.
-This completes the proof.
-
-
-\section{Proof of Proposition~\ref{prop:gamma}} \label{sec:proof_prop_gamma}
+\subsection{Proof of Proposition~\ref{prop:gamma}} \label{sec:proof_prop_gamma}
 
 In the limit, 
 \begin{equation*}
@@ -789,7 +711,7 @@ Similarly,
 and $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x^2[i] + \sigma^2$. The proof is concluded by noting that  $a_x^2[-\ell]=a_x^2[\ell]$. 
 
 
-\section{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
+\subsection{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
 
 We prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we work with $\beta = \gamma / L$ rather than $\gamma$ itself. To this end, we construct two quadratic equations satisfied by $\beta$ and whose coefficients can be computed from observable quantities (in the limit). Then, we show that these equations are independent, and hence that $\beta$ is uniquely defined. Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
 
@@ -887,10 +809,10 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 \beta > \frac{1}{4L}.
 \end{equation*}
 
-\section{Proof of Proposition~\ref{prop:poisson}} \label{sec:proof_prop_poisson}
+\subsection{Proof of Proposition~\ref{prop:poisson}} \label{sec:proof_prop_poisson}
 
 
-\subsection{First moment}
+\subsubsection{First moment}
 
 To compute the first moment of $y$, we will first condition on $M = (M_1,\dots,M_{N-L+1})$, and then average over $M$. We have:
 %
@@ -914,7 +836,7 @@ Now taking expectations over $M$ we see:
 %
 
 
-\subsection{Second moment}
+\subsubsection{Second moment}
 
 Again, we will condition on $M$ first, and then take the expectation over $M$. Fix $i_1 \ne i_2$, and let $\Delta = i_2 - i_1$. Then:
 %
@@ -994,7 +916,7 @@ But the first term in the sum is just the square of the first moment of $Y$; so 
 %
 
 
-\subsection{Third moment}
+\subsubsection{Third moment}
 
 For three distinct $i_1$, $i_2$ and $i_3$, we let $\Delta_1 = i_2 - i_1$ and $\Delta_2 = i_3 - i_1$. We have:
 %
@@ -1228,6 +1150,38 @@ Again, note that this is obtained directly from the first two moments. Finally, 
 \end{align}
 %
 which is the usual third-order auto-correlation.
+
+
+%
+%In the simplified mathematical model above, we showed it is possible to estimate a signal without detecting its appearances.  
+%Our strategy is to compute autocorrelations of the micrographs and to relate these statistics to the unknown signal's parameters. Recovering the parameters from the statistics reduces to solving a set of polynomial equations. 
+%
+%We also showed how this technique can, in principle, be applied to cryo-EM.
+%Crucially, the outlined approach involves no particle picking, hence a fortiori no viewing direction estimation. Concerns for model bias are also greatly reduced since no template matching is involved.
+%Additionally,  our technique also allows the use of much lower defocus values. Lower defocus means lower contrast, but will maintain  higher frequency information. Consequently, we may be able to get high resolution reconstructions from fewer micrographs.
+%
+%Looking toward applying the framework to encompass all important features of real cryo-EM experiments, our work implies that it might be possible to reconstruct small molecules, particularly, molecules that are too small to be detected in micrographs. 
+%In pursuing this research direction, our goal is to significantly increase the range of molecules to which cryo-EM can be successfully applied.
+%We recognize that significant challenges lay ahead for the implementation of the proposed approach to {high-resolution} 3-D reconstruction directly from the micrographs. We discuss a few now.
+%
+%The numerical experiments we have performed reveal that the third-order autocorrelation may not be enough for 3-D reconstruction in practice, due to high sensitivity.
+%This suggests that fourth-order autocorrelation may be necessary. This in turn would imply that the procedure might require a large amount of data. 
+%Recent trends in high-throughput cryo-EM technology   give hope that this may be a lesser concern in the long term. Still, large amounts of data also require large amounts of computation. On this front, we note that computing autocorrelations can be executed efficiently on CPUs and GPUs, and in parallel across micrographs. It can even be done in a  streaming mode, as only one pass through each micrograph is necessary. The output of this data processing stage is a summary in the form of autocorrelation estimates: its size is a function of the resolution, not a function of the number of observed micrographs. Subsequent steps, which involve solving the system of polynomial equations, scale only in the size of that summary. Of course, an important question then is whether the equations can be solved accurately and efficiently in practice. 
+%
+%To reach high-resolution reconstruction, beyond data acquisition and computational challenges, there are modeling issues  to consider.
+%In contrast to the simplifying assumptions we have made above, the noise might be colored; the viewing directions of the particles may be distributed non-uniformly; there may be conformational heterogeneity; particles generally do not satisfy our separation condition; and micrographs undergo a contrast transfer function which we have omitted. All of these aspects can be handled with the same general strategy: establish a forward model relating the expected autocorrelations of the micrographs to the target volume(s) and all parameters necessary to model the above effects. 
+%For instance, for colored noise, the forward model may involve multiple parameters to capture the power spectrum of the noise instead of the single parameter $\sigma^2$. 
+%Similarly, instead of the separation condition, we can model the spacing between the projections using a parameterized pair-correlation function. Such a function models the distribution of distances between neighboring projections. The observed autocorrelations depend linearly on these parameters, which would be estimated as part of the inverse problem.
+%All these aspects must be taken into account so the method can be applied on experimental data. We hope to take care of these issues in future research. 
+
+%
+%\section*{Acknowledgment}
+%The authors  thank Ayelet Heimowitz, Joe Kileel,  Roy Lederman, Amit Moscovich, Nir Sharon and  Fred Sigworth for helpful discussions,  and Boris Landa and Yoel Shkolnisky for providing the code for the 2-D PSWFs expansion.
+%The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.
+%NB is partially supported by NSF award DMS-1719558.
+
+\bibliographystyle{plain}
+\bibliography{ref}
 
 
 \end{document}
