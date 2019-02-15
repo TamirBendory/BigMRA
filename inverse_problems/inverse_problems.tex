@@ -139,12 +139,12 @@ abstract
 
 \section{Introduction}
 
-\subsection{Problem formulation} \label{sec:problem_formulation}
+%\subsection{Problem formulation} \label{sec:problem_formulation}
 
 We consider the \emph{multi-target detection} problem of recovering a set of $K$ signals that appear 
 multiple times at unknown locations in a noisy measurement.
-Let $x_1,\ldots,x_K\in\RL$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. 
-Let  $s[i]$ count the number of signals whose first element is positioned in $y[i]$, each of those  is chosen according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
+Let ${x_1,\ldots,x_K\in\RL}$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. 
+Let  $s[i]$ count the number of signals whose first element is positioned in $y[i]$. Each of those $s[i]$ is chosen according to some (possibly unknown) distribution $\pi$ \TODO{Add notation for the distribution} over $\{1,\ldots,K\}$. 
 If signal occurrences overlap, they interfere additively. %We think of those events as being rare. 
 With additive white Gaussian noise, the measurement model can be written as 
 \begin{equation} 
@@ -174,9 +174,9 @@ The multi-target detection problem  is an instance of
 \emph{blind deconvolution}---a longstanding problem arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
 Different variants of the blind deconvolution problem have been subject recently to a thorough  analysis~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}. In clear contrast to multi-target detection, these works focus on the low noise regime and aim at estimating both unknown signals.
 
-\subsection{Models for target distribution}
+\subsection*{Models for target distribution}
 
-We consider two  models for the signal $s$: the first one is .......
+We consider two  models for the distribution of signal occurrences in the observation, that is, for $s_1, \ldots, s_K$.
 
 \paragraph{The well-separated model.}
 
@@ -192,7 +192,7 @@ In words: the starting positions of any two occurrences  must be separated by at
 %Under the separation condition~\eqref{eq:spacing}, we refer to this model as the \emph{homogeneous well-separated model}. 
 %In the next section we present a model that alleviates this condition.
 %As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas in some cases estimating $x$ is tractable.
-This property ensures that correlating $y$ with versions of itself shifted by at most $L-1$ entries does not involve correlating distinct signal occurrences. As a result, the only properties of $s_1, \ldots, s_K$ that affect the autocorrelations of $y$ are the total number of occurrences of the distinct signals: their individual and relative locations do not intervene.
+This property ensures that correlating $y$ with versions of itself shifted by at most $L-1$ entries does not involve correlating distinct signal occurrences. Once $s$ is determined, for each position $i$ such that $s[i] = 1$, one of the signals $x_k$ is selected independently at random, and accordingly we set $s_k[i] = 1$. As a result, the only properties of $s_1, \ldots, s_K$ that affect the autocorrelations of $y$ are the total number of occurrences of the distinct signals: their individual and relative locations do not intervene.
 
 \paragraph{The Poisson model.}
 
@@ -202,35 +202,16 @@ If the separation condition is violated, more knowledge about the location distr
 %We consider the following observation model. Let $X \in\RL$ be a random vector drawn from some fixed distribution.
 
 Specifically, for some parameter $\gamma > 0$, the total number of signal occurrences is drawn from a Poisson distribution with expectation $(N-L+1)\gamma$. For each occurrence, a starting location $i$ is drawn uniformly and independently at random from $\{0, \ldots, N-L\}$. Then, one of the signals $x_1, \ldots, x_K$ is selected independently at random from a fixed distribution and added to the observation $y$ with first entry positioned at $i$. 
-By definition of the Poisson process, the entries of $s$ are independent and follow a Poisson distribution with expectation $\gamma$. In particular, this model allows for (additive) signal overlap. In Section~\TODO{ref}, we show that the autocorrelations of $y$ are nonetheless equivalent to those arising under our well-separated model above.
+By definition of the Poisson process, the entries of $s$ are independent and follow a Poisson distribution with expectation $\gamma$. In particular, this model allows for (additive) signal overlap. In Section~\ref{sec:poisson}, we show that the autocorrelations of $y$ are nonetheless equivalent to those arising under our well-separated model above.
  
-\subsection{Extensions} \label{sec:extensions}
+\subsection*{Extensions} \label{sec:extensions}
 
-\TODO{multi-dimensions}
+Extending the problem setup and autocorrelation analysis to signals in more than one dimension is straightforward: see discussion in Section~\ref{sec:high_dimensions} and numerical experiments in Section~\ref{sec:numerics}.
 
-The basic model~\eqref{eq:model} can be extended in various ways, some discussed below.
-%
-%\paragraph{Multi-target detection and clustering with separation.}
-%The multi-target detection model can be naturally generalized to the problem of estimating a set of $K$ signals $x_1,\ldots,x_K\in\RL$. Let $s$ be a binary signal satisfying the separation condition~\eqref{eq:spacing}.
-%For each $s[i]=1$, a random variable $v_i$ is drawn from some (possibly unknown) distribution over $\{1,\ldots,K\}$. Then, $x_{v_i}$ is placed in $y$
-%with element $0$ at location $i$. 
-%We refer to this model as \emph{multi-target detection and clustering}.
-%
-% This model can be written as a mix of blind deconvolution problems
-%\begin{equation} 
-%y  =  \sum_{k=1}^Kx_k \ast s_k + \varepsilon, \quad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
-%\end{equation}
-%where again $s_i$ is a binary signal, which its non-zero values 
-%are the subset of the non-zero values of $s$ associated with $x_i$.
-%Generally, we refer to this problem as \emph{multi-target detection and clustering with separation.} 
-%An key question in this model is how many signals can be recovered simultaneously. We derive a bound in Section~\ref{sec:heterogeneity} and show a numerical experiment in Section~\ref{sec:numerics}.
+Likewise, it is easy to extend the model to situations where the signal occurrences are sampled from a general distribution rather than from a finite set of choices $x_1, \ldots, x_K$. In this setup, the goal is to estimate the distribution (possibly defined by a finite set of parameters). In particular, this allows for continuous distributions of targets. We adopt this perspective when deriving the autocorrelations in Section~\ref{sec:AC_analysis}.
 
+In the next section, we show how this flexibility allows us to model an important imaging problem in structural biology.
 
-\paragraph{The well-separated model with a random signal}
-The homogeneous and heterogeneous models can be generalized as follows. 
-We let the signal $X\in\RL$ to be a random vector drawn from some fixed distribution. %We observe a random vector $Y\in\R^{N-L+1}$.
-For each non-zero element of $s$,  a random vector $X$ from the distribution is then placed in $y$, with element $0$ at location $i$.
-If the distribution is a Delta function that this model coincides with the multi-target detection model; if it is a sum of Diracs then it reduces to multi-target detection and clustering.
 
 
 \section{Motivation: single-particle reconstruction using cryo-electron microscopy}
