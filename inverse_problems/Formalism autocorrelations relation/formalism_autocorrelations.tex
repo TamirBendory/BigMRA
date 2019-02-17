@@ -31,7 +31,7 @@ Let $x_{(1)}, \ldots, x_{(|s|)}$ denote the (independent) realizations of the ra
 	y[i] & = \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i].
 	\label{eq:explicityiindicators}
 \end{align}
-This gives a simple expression for the first autocorrelation of $y$:
+This gives a simple expression for the first autocorrelation of $y$. Indeed,
 \begin{align}
 	a_y^1 & = \E_y\left\{ \frac{1}{N} \sum_{i = 0}^{N-1} y[i] \right\} \\
 		  & = \frac{1}{N} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\left\{ \sum_{i = 0}^{N-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right\}.
@@ -46,14 +46,15 @@ Since the noise has zero mean and $x_{(1)}, \ldots, x_{(|s|)}$ are independent a
 \end{align}
 
 To address the second-order moments, we resort to the separation conditions. Indeed, consider this expression:
-\begin{align}
+\begin{align*}
 	N \cdot a_y^2[\ell] & = \E_y\left\{ \sum_{i = 0}^{N-1} y[i] y[i+\ell] \right\} \\
-				& = \sum_{i = 0}^{N-1} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\left\{ \left( \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right) \left( \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] + \varepsilon[i+\ell] \right)  \right\} \\
-				& = \sum_{i = 0}^{N-1} \E_{x_{(1)}, \ldots, x_{(|s|), \varepsilon}}\Big\{ \sum_{j = 1}^{|s|} \sum_{j' = 1}^{|s|} I_{ij}  I_{i+\ell,j'} x_{(j)}[i-s_{(j)}]  x_{(j')}[i+\ell-s_{(j')}] \\
+				& = \sum_{i = 0}^{N-1} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\Bigg\{ \left( \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right) \cdot \\
+				& \qquad \qquad \qquad \qquad \qquad  \left( \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] + \varepsilon[i+\ell] \right)  \Bigg\} \\
+				& = \sum_{i = 0}^{N-1} \E_{x_{(1)}, \ldots, x_{(|s|), \varepsilon}}\Bigg\{ \sum_{j = 1}^{|s|} \sum_{j' = 1}^{|s|} I_{ij}  I_{i+\ell,j'} x_{(j)}[i-s_{(j)}]  x_{(j')}[i+\ell-s_{(j')}] \\
 					& \qquad \qquad \qquad \qquad \qquad \qquad + \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell] \\
 					& \qquad \qquad \qquad \qquad \qquad \qquad + \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] \varepsilon[i] \\
-					& \qquad \qquad \qquad \qquad \qquad \qquad + \varepsilon[i] \varepsilon[i + \ell] \Big\}
-\end{align}
+					& \qquad \qquad \qquad \qquad \qquad \qquad + \varepsilon[i] \varepsilon[i + \ell] \Bigg\}.
+\end{align*}
 The cross-terms vanish in expectation since $\varepsilon$ is zero mean and independent from the signal occurrences. The last term vanishes in expectation unless $\ell = 0$ since distinct entries of $\varepsilon$ are independent. For $\ell = 0$, $\E\{\varepsilon[i]^2\} = \sigma^2$. Finally, using the separation property, observe that if $I_{ij}  I_{i+\ell,j'}$ is nonzero, then it is equal to one, $j = j'$ and $i = s_{(j)} + t$ for some $t$ in $0, \ldots, L-\ell-1$. Then, switch the order of summations to get
 \begin{align}
 	N \cdot a_y^2[\ell] & = \sum_{j=1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-\ell-1} x_{(j)}[t] x_{(j)}[t+\ell] \right\} + N\sigma^2 \delta[\ell],
@@ -67,7 +68,7 @@ We now turn to the third-order autocorrelations. These involve the sum
 \begin{align}
 	\sum_{i=0}^{N-1} y[i] y[i+\ell_1] y[i+\ell_2].
 \end{align}
-Using~\eqref{eq:explicityiindicators}, we find that this quantity can be expressed as a sum eight terms:
+Using~\eqref{eq:explicityiindicators}, we find that this quantity can be expressed as a sum of eight terms:
 % \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i]
 \begin{enumerate}
 	\item $\sum_{i=0}^{N-1} \sum_{j,j',j'' = 1}^{|s|} I_{ij} I_{i+\ell_1, j'} I_{i+\ell_2,j''} x_{(j)}[i-s_{(j)}] x_{(j')}[i+\ell_1-s_{(j')}] x_{(j'')}[i+\ell_2-s_{(j'')}]$
