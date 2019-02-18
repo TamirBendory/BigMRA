@@ -320,7 +320,7 @@ z[i]\right\}, \nonumber\\
 a_z^2[\ell] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell\}}^{M-1 + \min\{0, -\ell\}} z[i]z[i+\ell]\right\},\\
 a_z^3[\ell_1,\ell_2] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{M-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]\right\}.  \nonumber \label{eq:ac_special}
 \end{align}
-Since  autocorrelations depend only on the differences between indices, the obey the following symmetries: $$a_z^2[\ell] = a_z^2[-\ell],$$ and
+Since  autocorrelations depend only on the differences between indices, they obey the following symmetries: $$a_z^2[\ell] = a_z^2[-\ell],$$ and
 $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $$
 
@@ -330,55 +330,30 @@ Under the separation condition~\eqref{eq:spacing}, the relation between autocorr
 \gamma  = \frac{|s| L}{N}.
 \label{eq:gamma}
 \end{equation}
-In the well-separated model, $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. Henceforth, we call it   
- the signal density. The separation condition~\eqref{eq:spacing}  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. 
- In Section~\ref{sec:poisson} we show that the autocorrelations under the Poisson model are equivalent to those presented in this section.
+In the well-separated model, $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. Henceforth, we call it the signal density.
+The separation condition  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. 
 
-For shifts in $0, \ldots, L-1$, the autocorrelations of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the support signal $s$. 
-%Importantly, under the separation condition~\eqref{eq:spacing}, the dependency on $s$ is only through the density $\gamma$.
-We consider the asymptotic regime where $\gamma$ remains constant; that is, as $N$ goes to infinity, $|s|$ also goes to infinity at the same rate. %(in other words, as we see an increasingly large observation, it contains increasingly many signal occurrences, with constant signal density). 
-In that regime, the law of large numbers implies
-\begin{equation} \label{eq:mean_micrograph}
-\lim_{N\to\infty} a_y^1  \aseq \gamma a_{x}^1,
-\end{equation}
-where equality holds almost surely (a.s.), meaning it holds with probability one.
-The randomness is over $x$ and the Gaussian noise $\varepsilon$; $s$ may be deterministic.
-Thus, given enough data, if $\gamma$ is known, we can estimate $a_{x}^1$ from $y$. We show in Section~\ref{sec:theory_homogeneous} how to estimate $\gamma$ as well in a particular case. 
+Owing to the separation condition, when correlating $y$ with shifted versions of itself for shifts in $0, \ldots, L-1$, any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result, the autocorrelations of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the density $\gamma$ (which is a weak dependence on the support signal $s$). Specifically, we show the following identities in Section~\ref{sec:autocorrelation_computation}:
+\begin{align}
+	a_y^1 & = \gamma a_{x}^1, \label{eq:mean_micrograph} \\
+	a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell], \label{eq:ac2_micrograph} \\
+	a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{x}^1  \big(\delta[\ell_1]+\delta[\ell_2]
+	+\delta[\ell_1-\ell_2]\big), \label{eq:ac3_micrograph}
+\end{align}
+where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to the noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
 
-We have a similar observation for the second-order autocorrelation: $a_y^2[\ell]$ computes the correlation between $y$ and a copy of $y$ shifted by $\ell$ entries. Considering $\ell$ only in the range $0, \ldots, L-1$, one can see that any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result,
-\begin{equation}
-\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma a_{X}^2[\ell] + \sigma^2\delta[\ell],
-\label{eq:ac2_micrograph}
-\end{equation}
-%\begin{equation}
-%\lim_{N\to\infty} a_y^2[\ell]  \aseq \gamma \E\left\{a_{X}^2[\ell]\right\} + \sigma^2\delta[\ell],
-%\label{eq:ac2_micrograph}
-%\end{equation}
-for $\ell = 0, \ldots, L-1$, where $\delta[\ell]$ equals one for $\ell=0$ and zero otherwise. The last part captures the autocorrelation of the noise. Notice that, even if $\sigma$ is unknown, entries $\ell = 1, \ldots, L-1$ still provide useful information about $a_{X}^2[\ell]$.
+In our problem setup, we are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ converge to the actual autocorrelations of $y$, that is, % (ergodicity)
+\begin{align}
+	\lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] = a_y^q[\ell_1, \ldots, \ell_{q-1}].
+\end{align}
+This provides a concrete means of estimating the quantities $a_y^ q$.
 
-Along the same lines, one can establish a relation for third-order autocorrelations:
-\begin{equation}
- \label{eq:ac3_micrograph}
-\lim_{N\to\infty} a_y^3[\ell_1,\ell_2] \aseq \gamma a_{X}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{X}^1  \big(\delta[\ell_1,0]+\delta[0,\ell_2]
-+\delta[\ell_1,\ell_2]\big),
-\end{equation}
-for $\ell_1,\ell_2 = 0, \ldots, L-1$, where $\delta[\ell_1,\ell_2]:=\delta[\ell_1-\ell_2]$.
-Here too, few entries are affected by $\sigma$ in the limit.
 
 In particular, for $x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$, the autocorrelations are given in explicit form as:
 \begin{equation}
-a_x^q  =  \sum_{i=1}^{K} \pi_ka_{x_i}^1.
+a_x^q  =  \sum_{k=1}^{K} \pi_ka_{x_k}^q.
 \end{equation}
-%\begin{align} 
-%a_X^1 & = \frac{1}{K} \sum_{i=1}^{K} \pi_ka_{x_i}, \nonumber\\
-%a_X^2[\ell] & = \frac{1}{m} \sum_{i = \max\{0, -\ell\}}^{m-1 + \min\{0, -\ell\}} \E\left\{X[i]X[i+\ell]\right\},\\
-%a_X^3[\ell_1,\ell_2] & = \frac{1}{m} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{m-1 + \min\{0, -\ell_1, -\ell_2\}} \E\left\{X[i]X[i+\ell_1]X[i+\ell_2]\right\}.  \nonumber
-%\end{align}
-%\TODO{ABOVE: replace expectations with sums.}
-
-
-%
-%Computing the autocorrelations of the micrograph is straightforward. The natural question, treated next, is whether one can recover $x$ from them.
+We show in Section~\ref{sec:theory_homogeneous} how to estimate $\gamma$ from observations for the particular case where $K = 1$ (all signal occurrences are the same). Furthermore, in Section~\ref{sec:poisson} we show that the autocorrelations under the Poisson model provide the same information about $x$ as those presented in this section.
 
 
 \section{Theory}
@@ -626,77 +601,154 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 \section{Proof}
 
 \subsection{Derivation of the identities in Section~\ref{sec:AC_analysis}} \label{sec:autocorrelation_computation}
-Let us define
-\begin{equation*}
-\gamma = \frac{|s|L}{N}>0.
-\end{equation*}
-Then the first order autocorrelation of the observation is given by 
-\begin{equation*}
-a_y^1 = \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1} y[i]\right\} =
-\frac{|s|}{N}\E_x\left\{\sum_{i=0}^{L-1}x[i]\right\} +    
-\E_{\varepsilon}\left\{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]\right\}
-=\gamma a_x^1,
-\end{equation*}
-where $\E_z$ means expectation with respect to the distribution of $z$.
-%the noise term converges to zero almost surely (a.s.)\ by the strong law of large numbers.
 
-We proceed with the second-order autocorrelation for  $\ell\in\{0,\ldots,L-1\}$. We can compute:
+%Let us define
+%\begin{equation*}
+%\gamma = \frac{|s|L}{N}>0.
+%\end{equation*}
+%Then the first order autocorrelation of the observation is given by 
+%\begin{equation*}
+%a_y^1 = \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1} y[i]\right\} =
+%\frac{|s|}{N}\E_x\left\{\sum_{i=0}^{L-1}x[i]\right\} +    
+%\E_{\varepsilon}\left\{\frac{1}{N}\sum_{i=0}^{N-1}\varepsilon[i]\right\}
+%=\gamma a_x^1,
+%\end{equation*}
+%where $\E_z$ means expectation with respect to the distribution of $z$.
+%%the noise term converges to zero almost surely (a.s.)\ by the strong law of large numbers.
 %
-\begin{align*}
+%We proceed with the second-order autocorrelation for  $\ell\in\{0,\ldots,L-1\}$. We can compute:
+%%
+%\begin{align*}
+%%
+%a_y^2[\ell] & = \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]\right\}
+%\nonumber \\
+%& = \frac{|s|}{N}\E_x\left\{\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\right\}  + \E_{\varepsilon}\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell] \right\},
+%%
+%\end{align*}
+%where all cross terms vanish in expectation owing to independence of $x$ of $\varepsilon$, and $\E{\varepsilon}=0$.  
+%Hence, 
+%\begin{align} \label{eq:2nd_moment_signal_term}
+%%
+%a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-1-\ell}{N}\sigma^2\delta[\ell],
+%\end{align}
+%where $\delta[0]=1$ and zero otherwise. 
 %
-a_y^2[\ell] & = \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell}y[i]y[i+\ell]\right\}
-\nonumber \\
-& = \frac{|s|}{N}\E_x\left\{\sum_{i=0}^{L-\ell-1}x[i]x[i+\ell]\right\}  + \E_{\varepsilon}\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell}\varepsilon[i]\varepsilon[i+\ell] \right\},
+%We now analyze the third-order autocorrelation. 
+%Let $x_{(j)}$ denote the $j$th
+%realization of $x$, with starting position $s_{(j)}$, for $j=1,\ldots,|s|$.
+%Let us fix $0\leq \ell_2\leq\ell_1\leq L-1$. We have:
+%\begin{align*}
+%%
+%a_y^3[\ell_1,\ell_2] 
+%=& \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]\right\}
+%\\
+%%
+%\stackrel{(1)}=& \E_{x_{(1)},\ldots,x_{(|s|)}}\left\{ \frac{|s|L}{N}\frac{1}{|s|}\sum_{j=1}^{|s|} 
+%	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x_{(j)}[i]x_{(j)}[i+\ell_1]x_{(j)}[i+\ell_2]  \right\} \\
+%\stackrel{(2)}+& \E_\varepsilon\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]\right\}
+%\ \\
+%\stackrel{(3)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+%	\sum_{i=0}^{L-1} x_{(j)}[i]\ep[s_{(j)} + i+\ell_1]\ep[s_{(j)}+ i+\ell_2]\right\} \\
+%\stackrel{(4)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+%	\sum_{i=0}^{L-1} \ep[s_{(j)}+i-\ell_1]x_{(j)}[i]\ep[s_{(j)}+ i+\ell_2-\ell_1]\right\}
+%\\
+%\stackrel{(5)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+%	\sum_{i=0}^{L-1} \ep[s_{(j)}+i-\ell_2]\ep[s_{(j)}+i+\ell_1-\ell_2]x_{(j)}[i]\right\}
+%\\ \stackrel{(6)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+%	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_{(j)}+i-\ell_2]x_{(j)}[i+\ell_1-\ell_2]x_{(j)}[i]\right\}
+%\\
+%\stackrel{(7)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+%	\sum_{i=0}^{L-\ell_2-1} x_{(j)}[i]\ep[s_{(j)} + i+\ell_1]x_{(j)}[i+\ell_2]\right\}
+%\\ \stackrel{(8)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
+%	\sum_{i=0}^{L-\ell_1-1} x_{(j)}[i]x_{(j)}[i+\ell_1]\ep[s_{(j)}+ i+\ell_2]\right\}.
+%%
+%\end{align*}
+%Terms (6), (7) and (8) are linear in $\ep$ and  thus zero.
+%Term (1) is equal  to $\gamma a_x^3[\ell_1,\ell_2]$  for the same reasons as~\eqref{eq:2nd_moment_signal_term}. 
+%Term (2) is always zero by properties of Gaussian variables. 
+%To deal with terms (3)--(5), we must distinguish between different values of $\ell_1$ and $\ell_2$.
 %
-\end{align*}
-where all cross terms vanish in expectation owing to independence of $x$ of $\varepsilon$, and $\E{\varepsilon}=0$.  
-Hence, 
-\begin{align} \label{eq:2nd_moment_signal_term}
-%
-a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-1-\ell}{N}\sigma^2\delta[\ell],
+%Term (3) is always zero, unless $\ell_1=\ell_2$, so that it is equal to 
+%$\gamma\sigma^2 a_x^1 \delta[\ell_1-\ell_2]$.
+%The same goes for Terms (4) and (5), which are equal, respectively, to
+%$\gamma\sigma^2 a_x^1 \delta[\ell_2]$ 
+%and $\gamma\sigma^2 a_x^1 \delta[\ell_1]$.
+
+
+Let $x_{(1)}, \ldots, x_{(|s|)}$ denote the (independent) realizations of the random signal $x$ in the observation $y$, starting at (deterministic) positions $s_{(1)}, \ldots, s_{(|s|)}$. Let $I_{ij}$ be the indicator variable for whether position $i$ is in the support of occurrence $j$, that is, it is one if $i$ is in $\{s_{(j)}, \ldots, s_{(j)}+L-1\}$, and zero otherwise. Then,
+\begin{align}
+y[i] & = \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i].
+\label{eq:explicityiindicators}
 \end{align}
-where $\delta[0]=1$ and zero otherwise. 
+This gives a simple expression for the first autocorrelation of $y$. Indeed,
+\begin{align}
+a_y^1 & = \E_y\left\{ \frac{1}{N} \sum_{i = 0}^{N-1} y[i] \right\} \\
+& = \frac{1}{N} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\left\{ \sum_{i = 0}^{N-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right\}.
+\end{align}
+Now switch the sums over $i$ and $j$, and observe that $I_{ij}$ is zero unless $i = s_{(j)} + t$ for $t$ in the range $0, \ldots, L-1$. Hence,
+\begin{align}
+a_y^1 & = \frac{1}{N} \sum_{j = 1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-1} x_{(j)}[t]\right\} + \frac{1}{N} \E_\varepsilon\left\{ \sum_{i=0}^{N-1} \varepsilon[i]\right\}.
+\end{align}
+Since the noise has zero mean and $x_{(1)}, \ldots, x_{(|s|)}$ are independent and all distributed as $x$, we further find:
+\begin{align}
+a_y^1 & = \frac{|s|L}{N} a_x^1 = \gamma a_x^1.
+\end{align}
 
-We now analyze the third-order autocorrelation. 
-Let $x_{(j)}$ denote the $j$th
-realization of $x$, with starting position $s_{(j)}$, for $j=1,\ldots,|s|$.
-Let us fix $0\leq \ell_2\leq\ell_1\leq L-1$. We have:
+To address the second-order moments, we resort to the separation conditions. First, consider this expression:
 \begin{align*}
-%
-a_y^3[\ell_1,\ell_2] 
-=& \E_y\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} y[i]y[i+\ell_1]y[i+\ell_2]\right\}
-\\
-%
-\stackrel{(1)}=& \E_{x_{(1)},\ldots,x_{(|s|)}}\left\{ \frac{|s|L}{N}\frac{1}{|s|}\sum_{j=1}^{|s|} 
-	\frac{1}{L}\sum_{i=0}^{L-1-\ell_1}x_{(j)}[i]x_{(j)}[i+\ell_1]x_{(j)}[i+\ell_2]  \right\} \\
-\stackrel{(2)}+& \E_\varepsilon\left\{\frac{1}{N}\sum_{i=0}^{N-1-\ell_1} \ep[i]\ep[i+\ell_1]\ep[i+\ell_2]\right\}
-\ \\
-\stackrel{(3)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
-	\sum_{i=0}^{L-1} x_{(j)}[i]\ep[s_{(j)} + i+\ell_1]\ep[s_{(j)}+ i+\ell_2]\right\} \\
-\stackrel{(4)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
-	\sum_{i=0}^{L-1} \ep[s_{(j)}+i-\ell_1]x_{(j)}[i]\ep[s_{(j)}+ i+\ell_2-\ell_1]\right\}
-\\
-\stackrel{(5)}+& \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
-	\sum_{i=0}^{L-1} \ep[s_{(j)}+i-\ell_2]\ep[s_{(j)}+i+\ell_1-\ell_2]x_{(j)}[i]\right\}
-\\ \stackrel{(6)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
-	\sum_{i=0}^{L-\ell_1+\ell_2-1} \ep[s_{(j)}+i-\ell_2]x_{(j)}[i+\ell_1-\ell_2]x_{(j)}[i]\right\}
-\\
-\stackrel{(7)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
-	\sum_{i=0}^{L-\ell_2-1} x_{(j)}[i]\ep[s_{(j)} + i+\ell_1]x_{(j)}[i+\ell_2]\right\}
-\\ \stackrel{(8)}+ & \E_{x_{(1)},\ldots,x_{(|s|)},\varepsilon}\left\{\frac{1}{N}\sum_{j=1}^{|s|} 
-	\sum_{i=0}^{L-\ell_1-1} x_{(j)}[i]x_{(j)}[i+\ell_1]\ep[s_{(j)}+ i+\ell_2]\right\}.
-%
+N \cdot a_y^2[\ell] & = \E_y\left\{ \sum_{i = 0}^{N-\ell-1} y[i] y[i+\ell] \right\} \\
+& = \sum_{i = 0}^{N-\ell-1} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\Bigg\{ \left( \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right) \cdot \\
+& \qquad \qquad \qquad \qquad \qquad  \left( \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] + \varepsilon[i+\ell] \right)  \Bigg\} \\
+& = \sum_{i = 0}^{N-\ell-1} \E_{x_{(1)}, \ldots, x_{(|s|), \varepsilon}}\Bigg\{ \sum_{j = 1}^{|s|} \sum_{j' = 1}^{|s|} I_{ij}  I_{i+\ell,j'} x_{(j)}[i-s_{(j)}]  x_{(j')}[i+\ell-s_{(j')}] \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell] \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] \varepsilon[i] \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \varepsilon[i] \varepsilon[i + \ell] \Bigg\}.
 \end{align*}
-Terms (6), (7) and (8) are linear in $\ep$ and  thus zero.
-Term (1) is equal  to $\gamma a_x^3[\ell_1,\ell_2]$  for the same reasons as~\eqref{eq:2nd_moment_signal_term}. 
-Term (2) is always zero by properties of Gaussian variables. 
-To deal with terms (3)--(5), we must distinguish between different values of $\ell_1$ and $\ell_2$.
+The cross-terms vanish in expectation since $\varepsilon$ is zero mean and independent from the signal occurrences. The last term vanishes in expectation unless $\ell = 0$ since distinct entries of $\varepsilon$ are independent. For $\ell = 0$, $\E\{\varepsilon[i]^2\} = \sigma^2$. Finally, using the separation property, observe that if $I_{ij}  I_{i+\ell,j'}$ is nonzero, then it is equal to one, $j = j'$ and $i = s_{(j)} + t$ for some $t$ in $0, \ldots, L-\ell-1$. Then, switch the order of summations to get
+\begin{align}
+N \cdot a_y^2[\ell] & = \sum_{j=1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-\ell-1} x_{(j)}[t] x_{(j)}[t+\ell] \right\} + (N-\ell)\sigma^2 \delta[\ell],
+\end{align}
+where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$. Since each $x_{(j)}$ is distributed as $x$, they all have the same autocorrelations as $x$ and we finally get
+\begin{align}
+a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-\ell}{N}\sigma^2 \delta[\ell] = \gamma a_x^2[\ell] + \sigma^2 \delta[\ell].
+\end{align}
 
-Term (3) is always zero, unless $\ell_1=\ell_2$, so that it is equal to 
-$\gamma\sigma^2 a_x^1 \delta[\ell_1-\ell_2]$.
-The same goes for Terms (4) and (5), which are equal, respectively, to
-$\gamma\sigma^2 a_x^1 \delta[\ell_2]$ 
-and $\gamma\sigma^2 a_x^1 \delta[\ell_1]$.
+We now turn to the third-order autocorrelations. These involve the sum
+\begin{align}
+\sum_{i=0}^{N-\max(\ell_1, \ell_2)-1} y[i] y[i+\ell_1] y[i+\ell_2].
+\end{align}
+Using~\eqref{eq:explicityiindicators}, we find that this quantity can be expressed as a sum of eight terms:
+% \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i]
+\begin{enumerate}
+	\item $\sum_i \sum_{j,j',j'' = 1}^{|s|} I_{ij} I_{i+\ell_1, j'} I_{i+\ell_2,j''} x_{(j)}[i-s_{(j)}] x_{(j')}[i+\ell_1-s_{(j')}] x_{(j'')}[i+\ell_2-s_{(j'')}]$
+	\item $\sum_i \sum_{j,j' = 1}^{|s|} I_{ij} I_{i+\ell_1, j'} x_{(j)}[i-s_{(j)}] x_{(j')}[i+\ell_1-s_{(j')}] \varepsilon[i+\ell_2]$
+	\item $\sum_i \sum_{j,j'' = 1}^{|s|} I_{ij} I_{i+\ell_2,j''} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell_1] x_{(j'')}[i+\ell_2-s_{(j'')}]$
+	\item $\sum_i \sum_{j',j'' = 1}^{|s|} I_{i+\ell_1, j'} I_{i+\ell_2,j''} \varepsilon[i] x_{(j')}[i+\ell_1-s_{(j')}] x_{(j'')}[i+\ell_2-s_{(j'')}]$
+	\item $\sum_i \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell_1] \varepsilon[i+\ell_2]$
+	\item $\sum_i \sum_{j' = 1}^{|s|} I_{i+\ell_1, j'} \varepsilon[i] x_{(j')}[i+\ell_1-s_{(j')}] \varepsilon[i+\ell_2]$
+	\item $\sum_i \sum_{j'' = 1}^{|s|} I_{i+\ell_2,j''} \varepsilon[i] \varepsilon[i+\ell_1] x_{(j'')}[i+\ell_2-s_{(j'')}]$
+	\item $\sum_i \varepsilon[i] \varepsilon[i+\ell_1] \varepsilon[i+\ell_2]$
+\end{enumerate}
+Terms 2--4 and 8 vanish in expectation since odd moments of centered Gaussian variables are zero. For the first term, we use the fact that the separation condition implies
+\begin{multline}
+I_{ij} I_{i+\ell_1, j'} I_{i+\ell_2,j''} = 1 \iff \\ j=j'=j'' \textrm{ and } i = s_{(j)} + t \textrm{ with } t \in \{ 0, \ldots L-\max(\ell_1, \ell_2)-1 \}.
+\end{multline}
+(Otherwise, the product of indicators is zero.) This allows to reduce the summations over $j,j',j''$ to a single sum over $j$. Then, witching the order of summation with $i$, we get that the first term is equal to
+\begin{align}
+\sum_{j=1}^{|s|} \sum_{t=0}^{L-\max(\ell_1, \ell_2)-1} x_{(j)}[t] x_{(j)}[t+\ell_1] x_{(j)}[t+\ell_2].
+\end{align}
+In expectation over the realizations $x_{(j)}$, using again that they are i.i.d.\ with the same distribution as $x$, this first term yields $|s|L a_x^3[\ell_1, \ell_2]$. Now consider the fifth term. Taking expectation against $\varepsilon$ yields
+\begin{align}
+\sum_{i=0}^{N-\max(\ell_1, \ell_2)-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \sigma^2 \delta[\ell_1 - \ell_2].
+\end{align}
+Switch the order of summation over $i$ and $j$ again to get
+\begin{align}
+\sigma^2 \delta[\ell_1 - \ell_2] \sum_{j = 1}^{|s|} \sum_{t=0}^{L-1} x_{(j)}[t].
+\end{align}
+Now taking expectation against the signal occurrences yields $|s|L \sigma^2 a_x^1 \delta[\ell_1 - \ell_2]$. A similar reasoning for terms 6 and 7 yields this final formula for the third-order autocorrelations of $y$:
+\begin{align}
+a_y^3[\ell_1, \ell_2] & = \gamma a_x^3[\ell_1, \ell_2] + \gamma \sigma^2 a_x^1 \left( \delta[\ell_1] + \delta[\ell_2] + \delta[\ell_1 - \ell_2] \right).
+\end{align}
 
 \subsection{Proof of Proposition~\ref{prop:gamma}} \label{sec:proof_prop_gamma}
 

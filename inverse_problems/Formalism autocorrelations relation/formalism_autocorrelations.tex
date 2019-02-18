@@ -26,78 +26,80 @@
 
 \maketitle
 
+
 Let $x_{(1)}, \ldots, x_{(|s|)}$ denote the (independent) realizations of the random signal $x$ in the observation $y$, starting at (deterministic) positions $s_{(1)}, \ldots, s_{(|s|)}$. Let $I_{ij}$ be the indicator variable for whether position $i$ is in the support of occurrence $j$, that is, it is one if $i$ is in $\{s_{(j)}, \ldots, s_{(j)}+L-1\}$, and zero otherwise. Then,
 \begin{align}
-	y[i] & = \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i].
-	\label{eq:explicityiindicators}
+y[i] & = \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i].
+\label{eq:explicityiindicators}
 \end{align}
 This gives a simple expression for the first autocorrelation of $y$. Indeed,
 \begin{align}
-	a_y^1 & = \E_y\left\{ \frac{1}{N} \sum_{i = 0}^{N-1} y[i] \right\} \\
-		  & = \frac{1}{N} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\left\{ \sum_{i = 0}^{N-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right\}.
+a_y^1 & = \E_y\left\{ \frac{1}{N} \sum_{i = 0}^{N-1} y[i] \right\} \\
+& = \frac{1}{N} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\left\{ \sum_{i = 0}^{N-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right\}.
 \end{align}
 Now switch the sums over $i$ and $j$, and observe that $I_{ij}$ is zero unless $i = s_{(j)} + t$ for $t$ in the range $0, \ldots, L-1$. Hence,
 \begin{align}
-	a_y^1 & = \frac{1}{N} \sum_{j = 1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-1} x_{(j)}[t]\right\} + \frac{1}{N} \E_\varepsilon\left\{ \sum_{i=0}^{N-1} \varepsilon[i]\right\}.
+a_y^1 & = \frac{1}{N} \sum_{j = 1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-1} x_{(j)}[t]\right\} + \frac{1}{N} \E_\varepsilon\left\{ \sum_{i=0}^{N-1} \varepsilon[i]\right\}.
 \end{align}
 Since the noise has zero mean and $x_{(1)}, \ldots, x_{(|s|)}$ are independent and all distributed as $x$, we further find:
 \begin{align}
-	a_y^1 & = \frac{|s|L}{N} a_x^1 = \gamma a_x^1.
+a_y^1 & = \frac{|s|L}{N} a_x^1 = \gamma a_x^1.
 \end{align}
 
-To address the second-order moments, we resort to the separation conditions. Indeed, consider this expression:
+To address the second-order moments, we resort to the separation conditions. First, consider this expression:
 \begin{align*}
-	N \cdot a_y^2[\ell] & = \E_y\left\{ \sum_{i = 0}^{N-1} y[i] y[i+\ell] \right\} \\
-				& = \sum_{i = 0}^{N-1} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\Bigg\{ \left( \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right) \cdot \\
-				& \qquad \qquad \qquad \qquad \qquad  \left( \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] + \varepsilon[i+\ell] \right)  \Bigg\} \\
-				& = \sum_{i = 0}^{N-1} \E_{x_{(1)}, \ldots, x_{(|s|), \varepsilon}}\Bigg\{ \sum_{j = 1}^{|s|} \sum_{j' = 1}^{|s|} I_{ij}  I_{i+\ell,j'} x_{(j)}[i-s_{(j)}]  x_{(j')}[i+\ell-s_{(j')}] \\
-					& \qquad \qquad \qquad \qquad \qquad \qquad + \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell] \\
-					& \qquad \qquad \qquad \qquad \qquad \qquad + \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] \varepsilon[i] \\
-					& \qquad \qquad \qquad \qquad \qquad \qquad + \varepsilon[i] \varepsilon[i + \ell] \Bigg\}.
+N \cdot a_y^2[\ell] & = \E_y\left\{ \sum_{i = 0}^{N-\ell-1} y[i] y[i+\ell] \right\} \\
+& = \sum_{i = 0}^{N-\ell-1} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\Bigg\{ \left( \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right) \cdot \\
+& \qquad \qquad \qquad \qquad \qquad  \left( \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] + \varepsilon[i+\ell] \right)  \Bigg\} \\
+& = \sum_{i = 0}^{N-\ell-1} \E_{x_{(1)}, \ldots, x_{(|s|), \varepsilon}}\Bigg\{ \sum_{j = 1}^{|s|} \sum_{j' = 1}^{|s|} I_{ij}  I_{i+\ell,j'} x_{(j)}[i-s_{(j)}]  x_{(j')}[i+\ell-s_{(j')}] \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell] \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \sum_{j' = 1}^{|s|} I_{i+\ell,j'} x_{(j')}[i+\ell-s_{(j')}] \varepsilon[i] \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \varepsilon[i] \varepsilon[i + \ell] \Bigg\}.
 \end{align*}
 The cross-terms vanish in expectation since $\varepsilon$ is zero mean and independent from the signal occurrences. The last term vanishes in expectation unless $\ell = 0$ since distinct entries of $\varepsilon$ are independent. For $\ell = 0$, $\E\{\varepsilon[i]^2\} = \sigma^2$. Finally, using the separation property, observe that if $I_{ij}  I_{i+\ell,j'}$ is nonzero, then it is equal to one, $j = j'$ and $i = s_{(j)} + t$ for some $t$ in $0, \ldots, L-\ell-1$. Then, switch the order of summations to get
 \begin{align}
-	N \cdot a_y^2[\ell] & = \sum_{j=1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-\ell-1} x_{(j)}[t] x_{(j)}[t+\ell] \right\} + N\sigma^2 \delta[\ell],
+N \cdot a_y^2[\ell] & = \sum_{j=1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-\ell-1} x_{(j)}[t] x_{(j)}[t+\ell] \right\} + (N-\ell)\sigma^2 \delta[\ell],
 \end{align}
 where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$. Since each $x_{(j)}$ is distributed as $x$, they all have the same autocorrelations as $x$ and we finally get
 \begin{align}
-	a_y^2[\ell] & = \gamma a_x^2[\ell] + \sigma^2 \delta[\ell].
+a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-\ell}{N}\sigma^2 \delta[\ell] = \gamma a_x^2[\ell] + \sigma^2 \delta[\ell].
 \end{align}
 
 We now turn to the third-order autocorrelations. These involve the sum
 \begin{align}
-	\sum_{i=0}^{N-1} y[i] y[i+\ell_1] y[i+\ell_2].
+\sum_{i=0}^{N-\max(\ell_1, \ell_2)-1} y[i] y[i+\ell_1] y[i+\ell_2].
 \end{align}
 Using~\eqref{eq:explicityiindicators}, we find that this quantity can be expressed as a sum of eight terms:
 % \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i]
 \begin{enumerate}
-	\item $\sum_{i=0}^{N-1} \sum_{j,j',j'' = 1}^{|s|} I_{ij} I_{i+\ell_1, j'} I_{i+\ell_2,j''} x_{(j)}[i-s_{(j)}] x_{(j')}[i+\ell_1-s_{(j')}] x_{(j'')}[i+\ell_2-s_{(j'')}]$
-	\item $\sum_{i=0}^{N-1} \sum_{j,j' = 1}^{|s|} I_{ij} I_{i+\ell_1, j'} x_{(j)}[i-s_{(j)}] x_{(j')}[i+\ell_1-s_{(j')}] \varepsilon[i+\ell_2]$
-	\item $\sum_{i=0}^{N-1} \sum_{j,j'' = 1}^{|s|} I_{ij} I_{i+\ell_2,j''} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell_1] x_{(j'')}[i+\ell_2-s_{(j'')}]$
-	\item $\sum_{i=0}^{N-1} \sum_{j',j'' = 1}^{|s|} I_{i+\ell_1, j'} I_{i+\ell_2,j''} \varepsilon[i] x_{(j')}[i+\ell_1-s_{(j')}] x_{(j'')}[i+\ell_2-s_{(j'')}]$
-	\item $\sum_{i=0}^{N-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell_1] \varepsilon[i+\ell_2]$
-	\item $\sum_{i=0}^{N-1} \sum_{j' = 1}^{|s|} I_{i+\ell_1, j'} \varepsilon[i] x_{(j')}[i+\ell_1-s_{(j')}] \varepsilon[i+\ell_2]$
-	\item $\sum_{i=0}^{N-1} \sum_{j'' = 1}^{|s|} I_{i+\ell_2,j''} \varepsilon[i] \varepsilon[i+\ell_1] x_{(j'')}[i+\ell_2-s_{(j'')}]$
-	\item $\sum_{i=0}^{N-1} \varepsilon[i] \varepsilon[i+\ell_1] \varepsilon[i+\ell_2]$
+	\item $\sum_i \sum_{j,j',j'' = 1}^{|s|} I_{ij} I_{i+\ell_1, j'} I_{i+\ell_2,j''} x_{(j)}[i-s_{(j)}] x_{(j')}[i+\ell_1-s_{(j')}] x_{(j'')}[i+\ell_2-s_{(j'')}]$
+	\item $\sum_i \sum_{j,j' = 1}^{|s|} I_{ij} I_{i+\ell_1, j'} x_{(j)}[i-s_{(j)}] x_{(j')}[i+\ell_1-s_{(j')}] \varepsilon[i+\ell_2]$
+	\item $\sum_i \sum_{j,j'' = 1}^{|s|} I_{ij} I_{i+\ell_2,j''} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell_1] x_{(j'')}[i+\ell_2-s_{(j'')}]$
+	\item $\sum_i \sum_{j',j'' = 1}^{|s|} I_{i+\ell_1, j'} I_{i+\ell_2,j''} \varepsilon[i] x_{(j')}[i+\ell_1-s_{(j')}] x_{(j'')}[i+\ell_2-s_{(j'')}]$
+	\item $\sum_i \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \varepsilon[i+\ell_1] \varepsilon[i+\ell_2]$
+	\item $\sum_i \sum_{j' = 1}^{|s|} I_{i+\ell_1, j'} \varepsilon[i] x_{(j')}[i+\ell_1-s_{(j')}] \varepsilon[i+\ell_2]$
+	\item $\sum_i \sum_{j'' = 1}^{|s|} I_{i+\ell_2,j''} \varepsilon[i] \varepsilon[i+\ell_1] x_{(j'')}[i+\ell_2-s_{(j'')}]$
+	\item $\sum_i \varepsilon[i] \varepsilon[i+\ell_1] \varepsilon[i+\ell_2]$
 \end{enumerate}
 Terms 2--4 and 8 vanish in expectation since odd moments of centered Gaussian variables are zero. For the first term, we use the fact that the separation condition implies
 \begin{multline}
-	I_{ij} I_{i+\ell_1, j'} I_{i+\ell_2,j''} = 1 \iff \\ j=j'=j'' \textrm{ and } i = s_{(j)} + t \textrm{ with } t \in \{ 0, \ldots L-\max(\ell_1, \ell_2)-1 \}.
+I_{ij} I_{i+\ell_1, j'} I_{i+\ell_2,j''} = 1 \iff \\ j=j'=j'' \textrm{ and } i = s_{(j)} + t \textrm{ with } t \in \{ 0, \ldots L-\max(\ell_1, \ell_2)-1 \}.
 \end{multline}
 (Otherwise, the product of indicators is zero.) This allows to reduce the summations over $j,j',j''$ to a single sum over $j$. Then, witching the order of summation with $i$, we get that the first term is equal to
 \begin{align}
-	\sum_{j=1}^{|s|} \sum_{t=0}^{L-\max(\ell_1, \ell_2)-1} x_{(j)}[t] x_{(j)}[t+\ell_1] x_{(j)}[t+\ell_2].
+\sum_{j=1}^{|s|} \sum_{t=0}^{L-\max(\ell_1, \ell_2)-1} x_{(j)}[t] x_{(j)}[t+\ell_1] x_{(j)}[t+\ell_2].
 \end{align}
 In expectation over the realizations $x_{(j)}$, using again that they are i.i.d.\ with the same distribution as $x$, this first term yields $|s|L a_x^3[\ell_1, \ell_2]$. Now consider the fifth term. Taking expectation against $\varepsilon$ yields
 \begin{align}
-	\sum_{i=0}^{N-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \sigma^2 \delta[\ell_1 - \ell_2].
+\sum_{i=0}^{N-\max(\ell_1, \ell_2)-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \sigma^2 \delta[\ell_1 - \ell_2].
 \end{align}
 Switch the order of summation over $i$ and $j$ again to get
 \begin{align}
-	\sigma^2 \delta[\ell_1 - \ell_2] \sum_{j = 1}^{|s|} \sum_{t=0}^{L-1} x_{(j)}[t].
+\sigma^2 \delta[\ell_1 - \ell_2] \sum_{j = 1}^{|s|} \sum_{t=0}^{L-1} x_{(j)}[t].
 \end{align}
 Now taking expectation against the signal occurrences yields $|s|L \sigma^2 a_x^1 \delta[\ell_1 - \ell_2]$. A similar reasoning for terms 6 and 7 yields this final formula for the third-order autocorrelations of $y$:
 \begin{align}
-	a_y^3[\ell_1, \ell_2] & = \gamma a_x^3[\ell_1, \ell_2] + \gamma \sigma^2 a_x^1 \left( \delta[\ell_1] + \delta[\ell_2] + \delta[\ell_1 - \ell_2] \right).
+a_y^3[\ell_1, \ell_2] & = \gamma a_x^3[\ell_1, \ell_2] + \gamma \sigma^2 a_x^1 \left( \delta[\ell_1] + \delta[\ell_2] + \delta[\ell_1 - \ell_2] \right).
 \end{align}
+
 \end{document}
