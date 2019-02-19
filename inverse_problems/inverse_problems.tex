@@ -203,7 +203,7 @@ If the separation condition is violated, more knowledge about the location distr
 %The models we described so far assume a well-separated support. The separation condition can be alleviated by assuming a Poisson process. 
 %We consider the following observation model. Let $X \in\RL$ be a random vector drawn from some fixed distribution.
 
-Specifically, for some parameter $\gamma > 0$, the total number of signal occurrences is drawn from a Poisson distribution with expectation $(N-L+1)\gamma$. For each occurrence, a starting location $i$ is drawn uniformly and independently at random from $\{0, \ldots, N-L\}$. Then, one of the signals $x_1, \ldots, x_K$ is selected independently at random from a fixed distribution and added to the observation $y$ with first entry positioned at $i$. 
+\TODO{Careful that $\gamma$ changed by a factor of $L$: need to modify here too.} Specifically, for some parameter $\gamma > 0$, the total number of signal occurrences is drawn from a Poisson distribution with expectation $(N-L+1)\gamma$. For each occurrence, a starting location $i$ is drawn uniformly and independently at random from $\{0, \ldots, N-L\}$. Then, one of the signals $x_1, \ldots, x_K$ is selected independently at random from a fixed distribution and added to the observation $y$ with first entry positioned at $i$. 
 By definition of the Poisson process, the entries of $s$ are independent and follow a Poisson distribution with expectation $\gamma$. In particular, this model allows for (additive) signal overlap. In Section~\ref{sec:poisson}, we show that the autocorrelations of $y$ are nonetheless equivalent to those arising under our well-separated model above.
  
 \subsection*{Extensions} \label{sec:extensions}
@@ -324,13 +324,27 @@ Since  autocorrelations depend only on the differences between indices, they obe
 $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $$
 
-Let $x$ be the random variable corresponding to signal occurrences in $y$. In particular, for the model~\eqref{eq:model}, $x=x_k$ with probability $\pi_k$.
+In what follows, $x$ is the random variable corresponding to signal occurrences in $y$. In particular, for the model~\eqref{eq:model}, 
+%$x=x_k$ with probability $\pi_k$.
+%In particular, for
+$x$ is sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$, so that its autocorrelations are given in explicit form as:
+\begin{equation}
+	a_x^q  = \sum_{k=1}^{K} \pi_ka_{x_k}^q.
+\end{equation}
+We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ converge to the actual autocorrelations of $y$, that is, % (ergodicity)
+\begin{align}
+\lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] = a_y^q[\ell_1, \ldots, \ell_{q-1}].
+\end{align}
+This provides a concrete means of estimating the quantities $a_y^ q$. In the remainder of this section, we relate the observables $a_y^q$  to the unknowns $a_x^q$, first under the well-separated model, then under the Poisson model.
+
+\subsection{Autocorrelations under the well-separated model}
+
 Under the separation condition~\eqref{eq:spacing}, the relation between autocorrelations of the observation $y$ and those of $x$ is particularly simple, as we now show. It is useful to introduce some notation: let $\vert s\vert = \sum_i s[i]$ denote the number of signal occurrences in $y$, and let
 \begin{equation}
 \gamma  = \frac{|s| L}{N}.
 \label{eq:gamma}
 \end{equation}
-In the well-separated model, $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. Henceforth, we call it the signal density.
+This $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. Henceforth, we call it the signal density.
 The separation condition  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. 
 
 Owing to the separation condition, when correlating $y$ with shifted versions of itself for shifts in $0, \ldots, L-1$, any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result, the autocorrelations of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the density $\gamma$ (which is a weak dependence on the support signal $s$). Specifically, we show the following identities in Section~\ref{sec:autocorrelation_computation}:
@@ -342,23 +356,67 @@ Owing to the separation condition, when correlating $y$ with shifted versions of
 \end{align}
 where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to the noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
 
-In our problem setup, we are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ converge to the actual autocorrelations of $y$, that is, % (ergodicity)
+
+
+
+
+\TODO{We show in Section~\ref{sec:theory_homogeneous} how to estimate $\gamma$ from observations for the particular case where $K = 1$ (all signal occurrences are the same).}
+
+%Furthermore, in Section~\ref{sec:poisson} we show that the autocorrelations under the Poisson model provide the same information about $x$ as those presented in this section.
+
+\subsection{Autocorrelations under the Poisson model}
+
+\begin{comment}
+In this section we omit the affect of the noise as it remains the same for the well-separated model. We aim to show that the moments of 
+
+Let us denote by $m_Y^q$ the moments of $Y$:
+%
 \begin{align}
-	\lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] = a_y^q[\ell_1, \ldots, \ell_{q-1}].
+%
+m_X^1[i] &= \E X[i], \quad 0 \le i \le L-1,   \nonumber\\ 
+m_X^2[i,j] &= \E X[i] X[j], \quad 0 \le i,j \le L-1, \\ 
+m_X^3[i,j,k] &= \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1. \nonumber
 \end{align}
-This provides a concrete means of estimating the quantities $a_y^ q$.
+%
+Note that 
+\begin{align}
+a_X^1 &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^1[i], \nonumber \\
+a_X^2[\ell] &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^2[i,i+\ell], \\
+a_X^3[\ell_1,\ell_2] &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^3[i,i+\ell_1,i+\ell_2]. \nonumber
+\end{align}
 
 
-In particular, for $x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$, the autocorrelations are given in explicit form as:
-\begin{equation}
-a_x^q  =  \sum_{k=1}^{K} \pi_ka_{x_k}^q.
-\end{equation}
-We show in Section~\ref{sec:theory_homogeneous} how to estimate $\gamma$ from observations for the particular case where $K = 1$ (all signal occurrences are the same). Furthermore, in Section~\ref{sec:poisson} we show that the autocorrelations under the Poisson model provide the same information about $x$ as those presented in this section.
+In the following,  we show that the moments of the observed data under the Poisson process can be written in terms of the autocorrelations of the well-separated model.
+
+\begin{proposition} \label{prop:poisson}
+	For any $i$,  the moments under the Poisson process are equal to 
+	\begin{align}
+	m_y^1[i] &= \gamma L a_X^1 \nonumber \\
+	m_y^2[i,i+\ell] &= (\gamma a_X^1)^2 + \gamma a_X^2[\ell],\quad \ell=0,\ldots,L-1, \\
+	m_y^3[i,i+\ell_1,i+\ell_2] &= (\gamma a_X^1)^3 + \gamma a_X^1  \cdot ( \gamma a_X^2[\ell_1] + \gamma a_X^2[\ell_2] + \gamma a_X^2[\ell_2-\ell_1]) + \gamma a_X^3[\ell_1,\ell_2]. \nonumber  
+	\end{align}
+\end{proposition}
+
+
+\begin{corollary} \TODO{re-write}
+	From the first three moments of the Poisson process model, one can recover the first three moments from the strongly-separated model.
+\end{corollary}
+\end{comment}
+
+\TODO{What we want to have in this section}
+\begin{enumerate}
+	\item Recall the Poisson model (it's already described at the end of intro, so keep it short).
+	\item Define a proper notion of $\gamma$ (careful with scaling $L$).
+	\item State formulas for $a_y^q$ with $q = 1, 2, 3$ (ideally, including noise terms) to parallel what we did in the well-separated section. It would be better to do everything with autocorrelations rather than moments to keep the story uniform.
+	\item (optional) Claim: under some assumptions (knowing $\gamma$? Others?), the autocorrelations of $y$ of order $q = 1, 2, 3$ under the Poisson model provide the same information about $x$ as the corresponding autocorrelations under the well-separated model. Could also be in Section 4.1.
+\end{enumerate}
 
 
 \section{Theory}
 
-\subsection{Theory for the homogeneous case} \label{sec:theory_homogeneous}
+\TODO{Explain difference between homogeneous and heterogeneous}
+
+\subsection{Guarantees for the homogeneous case} \label{sec:theory_homogeneous}
 In this section, we derive some theoretical results for the homogeneous case. \TODO{Note: I am using terms interchangeably}
  
 A signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
@@ -372,7 +430,7 @@ z[k]  = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
 This proves the following useful fact:
 \begin{proposition} \label{prop:uniqueness}
 	%
-	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$.
+	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$. \TODO{Definitely only clear for the homogeneous case}
 \end{proposition}
 
 A couple of remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
@@ -383,6 +441,7 @@ The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield t
 First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Appendix~\ref{sec:proof_prop_gamma}.
 
 \begin{proposition} \label{prop:gamma}
+	\TODO{Can we do this simultaneously for Poisson? or do we only need to do it for well-separated and invoke the equivalence claim? Not if that claim requires knowledge of $\gamma, \sigma$.}
 	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then 
 	\begin{equation}
 	\gamma  \aseq \lim_{N \to \infty}\frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
@@ -407,66 +466,10 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce t
 As a side note, under the separation condition, the length $L$ of the signal can also be determined from the autocorrelations in the asymptotic regime, by inspection of the support of $a_y^2$.
 
 
-\subsection{Equivalence between the autocorrelations of under the separation and the Poisson process \TODO{?}} \label{sec:poisson}
-
-In this section we omit the affect of the noise as it remains the same for the well-separated model. We aim to show that the moments of 
-
-Let us denote by $m_Y^q$ the moments of $Y$:
-%
-\begin{align}
-%
-m_X^1[i] &= \E X[i], \quad 0 \le i \le L-1,   \nonumber\\ 
-m_X^2[i,j] &= \E X[i] X[j], \quad 0 \le i,j \le L-1, \\ 
-m_X^3[i,j,k] &= \E X[i] X[j] X[k], \quad 0 \le i,j,k \le L-1. \nonumber
-\end{align}
-%
-Note that 
-\begin{align}
-a_X^1 &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^1[i], \nonumber \\
-a_X^2[\ell] &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^2[i,i+\ell], \\
-a_X^3[\ell_1,\ell_2] &= \frac{1}{L}\sum_{i=0}^{L-1}m_X^3[i,i+\ell_1,i+\ell_2]. \nonumber
-\end{align}
-
-
-In the following,  we show that the moments of the observed data under the Poisson process can be written in terms of the autocorrelations of the well-separated model.
-
-\begin{proposition} \label{prop:poisson}
-    For any $i$,  the moments under the Poisson process are equal to 
-    \begin{align}
-    m_y^1[i] &= \gamma L a_X^1 \nonumber \\
-    m_y^2[i,i+\ell] &= (\gamma a_X^1)^2 + \gamma a_X^2[\ell],\quad \ell=0,\ldots,L-1, \\
-    m_y^3[i,i+\ell_1,i+\ell_2] &= (\gamma a_X^1)^3 + \gamma a_X^1  \cdot ( \gamma a_X^2[\ell_1] + \gamma a_X^2[\ell_2] + \gamma a_X^2[\ell_2-\ell_1]) + \gamma a_X^3[\ell_1,\ell_2]. \nonumber  
-    \end{align}
-\end{proposition}
-
-
-\begin{corollary} \TODO{re-write}
-	From the first three moments of the Poisson process model, one can recover the first three moments from the strongly-separated model.
-\end{corollary}
-
-
-
-\subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
-
-
-Autocorrelations in $d$ dimensions is defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
-\begin{equation}
-a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
-\label{eq:ac_d_dimension}
-\end{equation}
-Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $z$ is a Delta function) signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
-If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
-The case of 1-D signals is essentially different: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating  symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
-
-
-This uniqueness result for multi-dimensional signals (especially for 2-D images) is the basis of a popular imaging technique called coherent diffraction imaging (CDI). In CDI, an object is
-illuminated with a coherent wave, and the far field diffraction
-intensity pattern  is measured, corresponding object's Fourier magnitude~\cite{miao1999extending,shechtman2015phase}. 
-If the support of the object is known and less than half of the support of the measured signal, then the data is equivalent to the second-order autocorrelation. The computational problem of recovering the signal is usually referred to as \emph{phase retrieval} or \emph{phase problem}.
-Albeit the uniqueness result, recently it has been shown that, at least for 2-D images, the problem is  ill-conditioned~\cite{barnett2018geometry}. That is, there exist different images whose second-order autocorrelation agree up to machine precision. 
-
-\subsection{How many signals can be recovered in the heterogeneous model?}
+\subsection{Elemetary limitations of the heterogeneous case}
 \label{sec:heterogeneity}
+
+\TODO{Check and specify if this holds for both models}
 
 In the heterogeneous models, the autocorrelation of $K$ signals are mixed together. To this end, we count how many equations the first three autocorrelations provide, after omitting symmetries. While we do not provide a rigorous proof, it was shown in similar problems that number of equations captures exactly how many signals can be decomposed for a mix of their autocorrelations~\cite{bandeira2017estimation}.
 
@@ -490,6 +493,29 @@ K\leq \frac{L(L+5)}{2(L+1)},
 K \leq \frac{ L (L-1) + 1}{2(L+1)}.
 \end{align*}
 Thus, we conjecture that approximately $L/2$ signals can be decomposed from  the first three mixed autocorrelations.
+
+
+
+\subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
+
+\TODO{Debate this later}
+
+Autocorrelations in $d$ dimensions is defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
+\begin{equation}
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
+\label{eq:ac_d_dimension}
+\end{equation}
+Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $z$ is a Delta function) signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
+If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
+The case of 1-D signals is essentially different: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating  symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
+
+
+This uniqueness result for multi-dimensional signals (especially for 2-D images) is the basis of a popular imaging technique called coherent diffraction imaging (CDI). In CDI, an object is
+illuminated with a coherent wave, and the far field diffraction
+intensity pattern  is measured, corresponding object's Fourier magnitude~\cite{miao1999extending,shechtman2015phase}. 
+If the support of the object is known and less than half of the support of the measured signal, then the data is equivalent to the second-order autocorrelation. The computational problem of recovering the signal is usually referred to as \emph{phase retrieval} or \emph{phase problem}.
+Despite the uniqueness result, recently it has been shown that, at least for 2-D images, the problem is  ill-conditioned~\cite{barnett2018geometry}. That is, there exist different images whose second-order autocorrelation agree up to machine precision. 
+
 
 
 \section{Algorithms and numerical experiments} \label{sec:numerics}
