@@ -454,23 +454,20 @@ for the case of $\sigma$ unknown and not estimated. Overall, this indicates that
 
 \subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
 
-\TODO{Debate this later}
-
 Autocorrelations in $d$ dimensions is defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
 \begin{equation}
 a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
 \label{eq:ac_d_dimension}
 \end{equation}
-Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $z$ is a Delta function) signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
+Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $z$ is a Delta function) \TODO{Do we call it the homogeneous case?} signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
 If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 The case of 1-D signals is essentially different: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating  symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
 
 
-This uniqueness result for multi-dimensional signals (especially for 2-D images) is the basis of a popular imaging technique called coherent diffraction imaging (CDI). In CDI, an object is
-illuminated with a coherent wave, and the far field diffraction
-intensity pattern  is measured, corresponding object's Fourier magnitude~\cite{miao1999extending,shechtman2015phase}. 
-If the support of the object is known and less than half of the support of the measured signal, then the data is equivalent to the second-order autocorrelation. The computational problem of recovering the signal is usually referred to as \emph{phase retrieval} or \emph{phase problem}.
-Despite the uniqueness result, recently it has been shown that, at least for 2-D images, the problem is  ill-conditioned~\cite{barnett2018geometry}. That is, there exist different images whose second-order autocorrelation agree up to machine precision. 
+This uniqueness result for two and three-dimensional signals is the basis of a popular imaging technique called coherent diffraction imaging (CDI). In CDI, an object is
+illuminated with a coherent wave, and the far field diffraction pattern  is measured, corresponding to the object's Fourier magnitude~\cite{miao1999extending,shechtman2015phase}. 
+If the diffraction pattern is over-sampled by at least  twice the Nyquist frequency,  the data is equivalent to the signal's second-order autocorrelation. In this context, the computational problem of recovering the signal from its second-order autocorrelation is usually referred to as \emph{phase retrieval} or the \emph{phase problem}.
+Despite the uniqueness result, recently it has been shown that, the problem is  ill-conditioned, at least for 2-D images~\cite{barnett2018geometry}. That is, there exist different images whose second-order autocorrelations agree up to machine precision. 
 
 
 
