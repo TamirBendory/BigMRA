@@ -441,9 +441,9 @@ equations, while if it unknown and we choose not to estimate it, then we collect
 equations in total. Of course, there may be redundancy in these equations: we aim only to provide a bound, under the assumption that these equations are independent.
 
 Since we aim to estimate $KL$ parameters for the $K$ signals of length $L$ plus $K$ parameters for the densities $\gamma_k$ (or the distribution $\pi$ and overall density $\gamma$), there are $K(L+1)$ unknowns. As a result, an absolute upper bound on $K$ such that the estimation problem may be solvable is
-\begin{align}
+\begin{align*}
 	K \leq \frac{L(L+5)}{2(L+1)},
-\end{align}
+\end{align*}
 for the case of $\sigma$ known, and
 \begin{align*}
 	K \leq \frac{ L (L-1) + 1}{2(L+1)}
