@@ -480,16 +480,16 @@ Despite the uniqueness result, recently it has been shown that, at least for 2-D
 
 %\paragraph{Numerical experiment with three 1-D signals.}
 
-In this section, we present three numerical experiments. In the first two experiments, we consider the heterogeneous model~\eqref{eq:model}. First, with a fixed noise level, we show how the estimation quality improves as the length of the observation grows. Second, we explore how many signals can be recovered in an infinite data regime, where effects of the noise have been averaged out. In the last experiment, we extend our model to 2D signals.
+In this section, we present three numerical experiments. In the first two experiments, we consider the heterogeneous model~\eqref{eq:model}. First, with a fixed noise level, we show how the estimation quality improves as the length of the observation grows. Second, we explore how many signals can be recovered as a function of their length, in an infinite data regime where effects of the noise have been averaged out. In the last experiment, we extend our model to 2D signals.
 
-\subsection{Experiment 1}
+\subsection{Experiment 1} \label{sec:XP1}
 
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=1\linewidth]{heterogeneous_progressive_n12300000000_466300}
-	\caption{ds}
-	\label{fig:1D_example}
+	\caption{Experiment described in Section~\ref{sec:XP1}. For a fixed noise level $\sigma = 3$ and a fixed set of $K = 3$ signals of length $L = 21$, an observation $y$ of length $N = 12.3 \cdot 10^9$ is generated according to~\eqref{eq:model} in the well-separated model, with fixed density and occurrence probabilities. Each rows corresponds to one of the signals. The last column shows evolution of the relative root mean squared error in estimating each signal, as a longer and longer subset of $y$ is observed. Red dots mark the three snapshots that are illustrated in columns 1--3: red signals are the ground truth and blue signals are the estimators.}
+	\label{fig:1Dheterosignals}
 \end{figure}
 
 For the 1-D experiment depicted in Figure~\ref{fig:1Dheterosignals}, we fix $K = 3$ signals of length $L = 21$. Following the forward model described at the beginning of this section, we generate an observation $y$ of length $12.3 \cdot 10^9$. Each of the three signals appears, respectively (and approximately), $30.0 \cdot 10^6$, $20.0 \cdot 10^6$ and $10.0 \cdot 10^6$ times in $y$ for a total of exactly $60 \cdot 10^6$ occurrences, such that at least $L-1$ zeros separate any two occurrences of any signals. 
