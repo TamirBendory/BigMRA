@@ -533,8 +533,8 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 
 \subsection{Experiment 3}
 
-In the first experiment, we estimated 
-an 50-by-50 pixel image of Einstein with mean zero from a growing number of micrographs, each of size $4096\times 4096$ pixels. Each micrograph contains, on average, 700 occurrences of the target image at random locations. 
+Autocorrelation analysis can be carried out in dimensions greater than one. In the following experiment, we estimated 
+an 50-by-50 pixel image of Einstein with mean zero from a growing number of observations. Each observation is  of size $4096\times 4096$ pixels and contains on average, 700 occurrences  at random locations, while keeping the separation condition~\eqref{eq:spacing}.  
 Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$,  corresponding  to SNR = $\frac{M\|x\|_F^2} {\sigma^2N} \approx1/370$. This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
 To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition~\eqref{eq:spacing}. 
 
