@@ -531,6 +531,17 @@ In Figure~\ref{fig:1Dheterosignals}, we find that the signals can be recovered w
 	\label{fig:KLXP}
 \end{figure}
 
+In this second experiment, presented in Figure~\ref{fig:KLXP}, we investigate how many distinct signals $x_1, \ldots, x_K$ can be estimated from mixed autocorrelations~\eqref{eq:mixedautocorr}. In order to do so, we consider a setup where the mixed autocorrelations are known perfectly. This corresponds to the limit of an infinitely long observation $y$ with fixed density $\gamma$, and known $\sigma$ which would allow to remove noise bias. Furthermore, we assume uniform occurrence distribution $\pi$ (known to the algorithm), and known density $\gamma$ (which is then irrelevant as it only induces a global scaling of the autocorrelations of $y$).
+
+To produce Figure~\ref{fig:KLXP}, we consider each pair $(K, L)$ in turn, with $K = 1, 2, 3, \ldots, 10$ and $L = 5, 10, 15, \ldots, 100$. For each pair, we generate $K$ random normal signals of length $L$, once. The perfect mixed autocorrelations are computed. They are then provided to the algorithm described in Section~\ref{sec:XP1}, together with the knowledge that signals occur with equal probability, as well as the correct density $\gamma$. The algorithm is initialized 50 times with an independent random initial guess, also following a normal distribution. For each run, we record three metrics:
+\begin{enumerate}
+	\item Whether the optimization algorithm managed to produce a solution with cost function value below $10^{-16}$: this assesses whether optimization succeeded.
+	\item The relative root mean squared error between the estimated signals and the ground truth (up to permutation of the $K$ signals.)
+	\item The computation time in seconds (keeping in mind that the 50 runs are done in parallel on the same, shared computer, so that this is more of a qualitative assessment.)
+\end{enumerate}
+
+Figure~\ref{fig:KLXP} has three panels. \TODO{todo todo tk tk}
+
 
 \subsection{Experiment 3}
 
