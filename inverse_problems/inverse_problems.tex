@@ -564,9 +564,10 @@ Then, to estimate the target image, we employed a standard phase retrieval algor
 		\includegraphics[width=.8\linewidth]{micrograph_Einstein_example_s3}
 		\caption{$\sigma = 3$}
 	\end{subfigure}
-	\caption{\label{fig:micro_example} Example of micrographs of size $250\times 250$ with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each micrograph contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to locate the occurrences of the planted image. In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}
-	%\vspace{-8pt} 	
+	\caption{\label{fig:micro_example} Example of observations for the 2-D experiment (of size $250\times 250$) with additive white Gaussian noise of variance $\sigma^2$ for increasing values of $\sigma$. Each observation contains the same four occurrences of a $50 \times 50$ image of Einstein. In panel (c), the noise level is such that it is very challenging to detect  the planted image.} %In fact, it can be shown that at low SNR, reliable detection of individual image occurrences is impossible, even if the true image is known. } 	
 \end{figure}
+%By analogy to cryo-EM, this depicts a scenario where particle picking cannot be done.}
+%\vspace{-8pt}
 
 Relative error is measured as the ratio of the root mean square error to the norm of the ground truth (square root of the sum of squared pixel intensities). \TODO{The probably appeared before}
 Figure~\ref{fig:Einst_example} shows several estimated images for a growing number of observations. 
