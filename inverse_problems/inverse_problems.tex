@@ -576,21 +576,21 @@ presents the normalized recovery error as a function of the amount of data avail
 
 % As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many micrographs, without particle picking.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=.8\linewidth]{Einstein_recovery_error}
-	\caption{\label{fig:error_per_micro}Relative error curves for the experiment of Figure~\ref{fig:Einst_example}.}
-\end{figure}
-
 
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=1\linewidth]{Einstien_progress_examples}
-	\caption{\label{fig:Einst_example} Recovery of Einstein from micrographs at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the micrographs allow to estimate the power spectrum of the target image. This does not require particle picking. A phase retrieval algorithm (RRR) produces the estimates here shown, initialized randomly. Estimates are obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ micrographs (growing across panels from left to right) of size $4096\times 4096$, each containing $700$ image occurrences on average.}	
+	\caption{\label{fig:Einst_example} Recovery of Einstein from observations at noise level $\sigma = 3$ (see Figure~\ref{fig:micro_example}(c)). Averaged autocorrelations of the data allow to estimate the power spectrum of the target image. This does not require particle picking. The RRR algorithm produces the estimates,  obtained from $2\times 10^2,2\times 10^3,2\times 10^4,2\times 10^5$ observations (growing across panels from left to right).}	
 	%	\vspace{-8pt} 
 \end{figure}
 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.8\linewidth]{Einstein_recovery_error}
+	\caption{\label{fig:error_per_micro}Relative error curve for Experiment 3 in Figure~\ref{fig:Einst_example}.}
+\end{figure}
 
 \section{Proof}
 
