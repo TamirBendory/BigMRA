@@ -223,87 +223,37 @@ particles, single particle cryo-EM produces images of individual particles and t
 In addition, it does not require the formation of crystalline arrays of macromolecules.
 
 In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice.
-The microscope produces a 2-D tomographic image of the samples embedded in the ice, called a \emph{micrograph}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structure from the micrographs. 
+The microscope produces 2-D tomographic images of the samples embedded in the ice, called \emph{micrographs}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structures from the micrographs. 
 Importantly, to keep radiation damage within acceptable bounds, the dose must be kept low, leading to high noise levels.
 
+A 2-D micrograph $y$ can be in terms of~\eqref{eq:model} where the discrete signals $x_1,\ldots,x_K$ are replaced by a random signal drawn from the a general distribution. In particular, in each position $s[i]$, a 2-D tomographic projection of the 3-D structure is placed, taken from a random viewing direction according to (possibly unknown) fixed distribution. 
+
 All contemporary methods in the field split the reconstruction procedure into two main  stages.
-The first stage consists in extracting the  particle projections from the micrographs. This stage is called \emph{particle picking}. The second stage aims to construct a 3-D model of the molecular structure from these projections. The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
-Crucially, it can be shown that reliable detection of individual particles is impossible below a certain critical SNR. This fact has been recognized early on by the cryo-EM community. 
+The first stage consists of estimating the signal $s$---that is, extracting the particle projections from the micrographs. This stage is called \emph{particle picking}. Given the projections, the second stage aims to construct a 3-D model of the molecular structure. 
+%The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
+Crucially, reliable detection of individual particles is impossible in a highly noisy environment. This fact has been recognized early on by the cryo-EM community. 
 Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
 %The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
 %Despite this progress, detecting small molecules in the micrographs remains a challenge.
 
-Another potential pitfall of particle picking pertains to \emph{model bias}, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles may influence the reconstructed structure. This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
+Another potential pitfall of particle picking pertains to \emph{model bias}, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles biases the reconstructed structure. This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
 A recent work of the authors suggests to bypass the particle picking stage and  reconstruct the 3-D structure directly from the micrograph~\cite{bendory2018toward}.
 In that paper, it was shown that---at least in principle---the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
 The principle mathematical tool is  \emph{autocorrelation analysis}, described in detail in Section~\ref{sec:AC_analysis}.
 This goal of  the current paper is to provide a theoretical justification and numerical support  for the method proposed in~\cite{bendory2018toward}.  
-In this context, the  models described above serve  as  an abstraction of the cryo-EM problem: the random signal $X$ discussed in Section~\ref{sec:extensions} can be thought of as 2-D random tomographic projections of the 3-D structure 
+%In this context, the  models described above serve  as  an abstraction of the cryo-EM problem: the random signal $X$ discussed in Section~\ref{sec:extensions} can be thought of as 2-D random tomographic projections of the 3-D structure 
 taken according to some unknown distribution of the particles within the ice.
 
 % A similar abstraction has been proven itself to be useful in a similar context as described in the next section. 
 
 We mention that~\cite{bendory2018toward} was not the first paper to employ autocorrelation analysis to cryo-EM. 
-Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. His method has been extended and employed by in X-ray free electron lasers and cryo-EM; see for instance~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}.  
+Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. Kam's method has been extended and employed by in X-ray free electron lasers and cryo-EM; see for instance~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}.  
 In order to investigate the computational and statistical properties of Kam's method, a series of papers have studied a simplified model, 
 called   \emph{multi-reference alignment}~\cite{bandeira2014multireference,bendory2017bispectrum,bandeira2017optimal,perry2017sample,bandeira2017estimation,abbe2017multireference}.
-We follows the same line of research by considering the multi-target detection and clustering  as an abstraction to the application of reconstructing 3-D structures directly from the micrograph as proposed in~\cite{bendory2018toward}.
-
-%\subsection{Principle mathematical tool: autocorrelation analysis.}
-
-
-
-%Our problem can be interpreted as a special case of the \emph{system identification} problem. Similarly to~\eqref{eq:model}, the
-%forward model takes the form
-%%
-%\begin{math}
-%%
-%y = x\ast w + \varepsilon,  
-%%
-%\end{math} 
-%%
-%where $x$ is the unknown signal (the system's impulse response), $w$ is an unknown (often random) input sequence, and $\varepsilon$ is an additive noise.
-%The goal of this problem is to estimate $x$, usually referred to as ``identifying the system.'' The question of identifiability of $x$ under this observation model is addressed for certain Gaussian and non-Gaussian $w$ in~\cite{benveniste1980robust,kormylo1983identifiability}. In the special case where $w$ is binary and satisfies our separation condition, we recover our model. 
-%
-%Likelihood-based methods estimate $x$ as the maximizer of some function $f(x | y)$, where $f$ is derived from the likelihood function of $x$ given the observed signal $y$.  
-%If some prior is assumed on $x$, then $f(x|y)$ can be taken to be the posterior distribution of $x$ given the data; this is the simplest form of Bayesian inference.
-%Methods based on such formulations are popular nowadays in cryo-EM; see for instance~\cite{sigworth1998maximum,scheres2012relion}. 
-%Optimizing the function $f(x|y)$ exactly is often intractable, and thus heuristic methods are used instead. One proposed technique is to use Markov Chain Monte Carlo (MCMC)~\cite{cappe1999simulation}. 
-%In special cases, including the case where $w$ is binary, expectation maximization (EM) has been used~\cite{cappe1999simulation}. The EM method for discrete $w$ is based on a certain ``forward-backward'' procedure used in hidden Markov models~\cite{rabiner1989tutorial}. However, the complexity of this procedure is superlinear in $N$, and therefore its usage is limited for big data sets. 
-%
-%Because likelihood methods are computationally expensive, methods based on recovery from moments have also been previously used for system identification. Methods based on the third- and fourth-order moments are described and analyzed in~\cite{lii1982deconvolution,giannakis1989identification,tugnait1984identification}. Building on such ideas, we focus on an autocorrelation analysis for~\eqref{eq:model}. 
-
-
-%
-%\section{The detection limit} \label{sec:detectionlimit}
-%
-%In the low SNR regime---even if $x$ is known---estimating the binary sparse signal $s$ is impossible, that is, one cannot reliably detect occurrences of $x$ in the micrograph $y$.
-%To support this claim, we consider a strictly simpler problem: suppose an oracle identifies for us one interval of length $L$ in the micrograph that either contains a full signal occurrence (plus noise), or contains just noise. Our task is to determine which one it is, that is, to determine whether the corresponding entry of $s$ is 0 or 1.
-%The oracle further provides the signal $x$, the probability $q$ that  the interval contains signal, and the noise variance $\sigma^2$. 
-%
-%This decision problem can be abstracted as follows: We have two known vectors $\theta_0 = x$ and $\theta_1 = 0$ in $\mathbb{R}^L$. There is a random variable $\eta$ taking values 0 or 1 with probabilities $q$ and $1-q$, respectively. We observe a random vector $X \in \mathbb{R}^L$ (an extract of the micrograph) with the following distribution: if $\eta = 0$, then $X \sim \mathcal N(\theta_0,\sigma^2I_L)$ and if $\eta = 1$, then $X \sim \mathcal N(\theta_1,\sigma^2I_L)$. 
-%
-%We observe $X$, and our task is to estimate $\eta$. How reliably can this be done? If $q \geq 1/2$, the constant estimator $\hat{\eta} = 0$ is correct with probability $q$; likewise, if $q \leq 1/2$, the constant estimator $\hat{\eta} = 1$ is correct with probability $1-q$. The question is, can we do better than this?  We prove that, as $\sigma \to \infty$, the answer is no. The result is proved in Appendix~\ref{sec:proof_two_gauss}.
-%
-%\begin{proposition} \label{prop:two_gauss}
-%	For any deterministic estimator $\hat{\eta }$ of $\eta$,
-%	\begin{equation}
-%	\lim_{\sigma \to \infty} \P[ \hat{\eta} = \eta  ] \leq \max(q, 1-q);
-%	\end{equation}
-%	that is: as the SNR deteriorates, the probability of success is no better than random chance.
-%\end{proposition}
-%
-%Proposition~\ref{prop:two_gauss} implies that in order to estimate the signal at low SNR we must consider methods that aim to estimate the signal $x$ directly, without estimating the nuisance variable $s$ as an intermediate step.
-%In the next sections, we consider autocorrelation analysis for that purpose.
-
+We follows the same line of research by considering the multi-target detection as an abstraction to the application of reconstructing 3-D structures directly from the micrograph as proposed in~\cite{bendory2018toward}.
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
-
-%
-%In order to recover the signal, we employ autocorrelation analysis. The underlying principle is to relate the autocorrelations of the observation to the autocorrelations of the signal without trying to detect individual signal occurrences (i.e., the signal $s$).
-%In the models described above, for any noise level, these autocorrelations can be estimated to any desired accuracy in the limit of $N\to\infty$. 
-%The autocorrelations of the observation are straightforward to compute and require only one pass over the data. After estimation of the density of particles in the micrographs, these directly yield estimates for the mixed autocorrelations of the signals. To estimate the signals them from their estimated autocorrelations, we solve a nonlinear inverse problem as explained in Section~\ref{sec:numerics}. 
 
 In what follows, we consider autocorrelations of both the observation $y$ and of the signal occurrences in $y$. As per our discussion of extensions, the signal occurrences may be sampled from a discrete set $\{x_1, \ldots, x_K\}$, or from a more general distribution. Accordingly, we define autocorrelations for a random signal $z$ of length $M$ . For our purposes, this will be applied both to signal occurrences (of length $L$) and to $y$ (of length $N$).
 
@@ -336,6 +286,7 @@ We are given one observation (one realization) of $y$. Thus, we cannot compute t
 \lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] = a_y^q[\ell_1, \ldots, \ell_{q-1}].
 \end{align}
 This provides a concrete means of estimating the quantities $a_y^ q$. In the remainder of this section, we relate the observables $a_y^q$  to the unknowns $a_x^q$, first under the well-separated model, then under the Poisson model.
+\TODO{Explicit expressions of the autocorrelations for cryo-EM are given in~\cite{bendory2018toward}}
 
 \subsection{Autocorrelations under the well-separated model}
 
@@ -417,7 +368,7 @@ In the following,  we show that the moments of the observed data under the Poiss
 \TODO{Explain difference between homogeneous and heterogeneous}
 
 \subsection{Guarantees for the homogeneous case} \label{sec:theory_homogeneous}
-In this section, we derive some theoretical results for the homogeneous case. \TODO{Note: I am using terms interchangeably}
+%In this section, we derive some theoretical results for the homogeneous case. \TODO{Note: I am using terms interchangeably}
  
 A signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
 %
@@ -622,7 +573,7 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 \end{figure}
 
 
-\section{Relation with cryo-EM + experiments?}
+%\section{Relation with cryo-EM + experiments?}
 
 \section{Proof}
 
