@@ -148,8 +148,8 @@ Let  $s[i]$ count the number of signals whose first element is positioned in $y[
 If signal occurrences overlap, they interfere additively. %We think of those events as being rare. 
 With additive white Gaussian noise, the measurement model can be written as 
 \begin{equation} 
-y  =  \sum_{k=1}^K s_k \ast x_k + \varepsilon, \qquad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
-\label{eq:model}
+	y  =  \sum_{k=1}^K s_k \ast x_k + \varepsilon, \qquad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
+	\label{eq:model}
 \end{equation}
 where $\ast$ denotes linear convolution, and $s_k[i]$ indicates the number of starting positions of $x_k$ in $y[i]$ so that $s =  s_1+\cdots+s_K$. Explicitly, with zero-based indexing, % and zero-padding out of bounds,
 \begin{align*}
@@ -157,6 +157,7 @@ where $\ast$ denotes linear convolution, and $s_k[i]$ indicates the number of st
 \end{align*}
 The goal is  to estimate $x_1,\ldots,x_K$ from $y$. % while $s$ is the \emph{nuisance variable} of the problem.
 %We name this problem \emph{multi-target detection}.
+In parts of the paper, we focus on the case $K = 1$, called the \emph{homogeneous} case; the case $K > 2$ is called \emph{heterogeneous}.
 This idealized setup appears in several scientific applications, including structural biology~\cite{bendory2018toward} (as we detail below), spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive}, and system identification~\cite{ljung1998system}. 
 
 In the low noise regime, a valid strategy is to first detect the signal occurrences in $y$ (that is, estimate $s$), cluster them (that is, separate $s$ into $s_1,\ldots,s_K$), and solve a standard deconvolution problem. Crucially, we focus on the high noise regime, where \emph{reliable detection of signal occurrences is  impossible}~\cite{bendory2018toward,aguerrebere2016fundamental}.
@@ -267,8 +268,8 @@ Explicitly, the first-, second- and third-order autocorrelations are given by:
 \begin{align} 
 a_z^1 & = \E_z\left\{\frac{1}{M} \sum_{i=0}^{M-1} 
 z[i]\right\}, \nonumber\\
-a_z^2[\ell] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell\}}^{M-1 + \min\{0, -\ell\}} z[i]z[i+\ell]\right\},\\
-a_z^3[\ell_1,\ell_2] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{M-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]\right\}.  \nonumber \label{eq:ac_special}
+a_z^2[\ell] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell\}}^{M-1 + \min\{0, -\ell\}} z[i]z[i+\ell]\right\}, \label{eq:ac_special} \\
+a_z^3[\ell_1,\ell_2] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell_1, -\ell_2\}}^{M-1 + \min\{0, -\ell_1, -\ell_2\}} z[i]z[i+\ell_1]z[i+\ell_2]\right\}. \nonumber
 \end{align}
 Since  autocorrelations depend only on the differences between indices, they obey the following symmetries: $$a_z^2[\ell] = a_z^2[-\ell],$$ and
 $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
@@ -278,9 +279,10 @@ In what follows, $x$ is the random variable corresponding to signal occurrences 
 %$x=x_k$ with probability $\pi_k$.
 %In particular, for
 $x$ is sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$, so that its autocorrelations are given in explicit form as:
-\begin{equation}
-	a_x^q  = \sum_{k=1}^{K} \pi_ka_{x_k}^q.
-\end{equation}
+\begin{align}
+	a_x^q  & = \sum_{k=1}^{K} \pi_ka_{x_k}^q.
+	\label{eq:mixedautocorr}
+\end{align}
 We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ converge to the actual autocorrelations of $y$, that is, % (ergodicity)
 \begin{align}
 \lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] = a_y^q[\ell_1, \ldots, \ell_{q-1}].
@@ -421,29 +423,32 @@ As a side note, under the separation condition, the length $L$ of the signal can
 \label{sec:heterogeneity}
 
 \TODO{Check and specify if this holds for both models}
+\TODO{Did we define densities $\gamma_k$?}
 
-In the heterogeneous models, the autocorrelation of $K$ signals are mixed together. To this end, we count how many equations the first three autocorrelations provide, after omitting symmetries. While we do not provide a rigorous proof, it was shown in similar problems that number of equations captures exactly how many signals can be decomposed for a mix of their autocorrelations~\cite{bandeira2017estimation}.
+In the heterogeneous model~\eqref{eq:model}, the unknowns are $K$ signals of length $L$, together with their densities $\gamma_1, \ldots, \gamma_K$ (equivalently: the distribution $\pi$ and overall density $\gamma$) and possibly the noise level $\sigma$. To estimate these parameters, we must collect at least as many independent equations. Within our framework, polynomial equations are provided by the observable autocorrelations, which correspond to mixed autocorrelations of the unknowns as per~\eqref{eq:mixedautocorr}. In this section, following~\cite{boumal2017heterogeneous}, we count how many equations the first three autocorrelations may provide in the best case (discounting symmetries). This leads to a straightforward information-theoretic upper bound on the number $K$ of signals which can be estimated, as a function of $L$. This is only an upper bound, though a bound of the same type was shown to be tight in a similar setting~\cite{bandeira2017estimation}.
 
-\TODO{Probably should be re-written}
-Clearly, the first-order autocorrelation provides us one equation. For second-order autocorrelations, notice  that $a_y^2[\ell]$ suffers no noise-induced bias for $\ell$ in $1$ to $L-1$. Thus if $\sigma$ is known we obtain $L$ equations, while if not we omit $\ell = 0$. This has the practical effect that we need not know $\sigma$ to make sense of the computed quantities, while loosing one one equation. 
-Likewise, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries): $\frac{(L+1)(L+2)}{2}-2$ in total. 
-If we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$---there are $\frac{(L-1)(L-2)}{2}$ remaining entries. 
-Hence, if $\sigma$ is known we have 
+The first-order autocorrelation $a_y^1$~\eqref{eq:mean_micrograph} provides one equation. For second-order autocorrelations $a_y^2[\ell]$~\eqref{eq:ac2_micrograph}, if $\sigma$ is known we obtain $L$ equations with $\ell$ ranging from 0 to $L-1$. If $\sigma$ is unknown, we may disregard $a_y^2[0]$ (then only entry affected by $\sigma$) and still collect $L-1$ equations. Similarly, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$~\eqref{eq:ac3_micrograph} with $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), providing $\frac{(L+1)(L+2)}{2}-2$ equations in total. 
+If we further exclude any entries such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$, there are $\frac{(L-1)(L-2)}{2}$ remaining entries.
+
+Hence, if $\sigma$ is known we collect
 \begin{align*}
-1 + L + \frac{(L+1)(L+2)}{2}-2 = \frac{1}{2} L (L+5)
+	1 + L + \frac{(L+1)(L+2)}{2}-2 = \frac{1}{2} L (L+5)
 \end{align*}
-and if it unknown
+equations, while if it unknown and we choose not to estimate it, then we collect
 \begin{align*}
-1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
+	1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
 \end{align*}
-coefficients in total. Since we aim to estimate $KL$ parameters (for the $K$ signals of length $L$) plus $K$ parameters (for the densities $\gamma_k$), an absolute upper bound on $K$  is
+equations in total. Of course, there may be redundancy in these equations: we aim only to provide a bound, under the assumption that these equations are independent.
+
+Since we aim to estimate $KL$ parameters for the $K$ signals of length $L$ plus $K$ parameters for the densities $\gamma_k$ (or the distribution $\pi$ and overall density $\gamma$), there are $K(L+1)$ unknowns. As a result, an absolute upper bound on $K$ such that the estimation problem may be solvable is
 \begin{equation}
-K\leq \frac{L(L+5)}{2(L+1)},
+	K \leq \frac{L(L+5)}{2(L+1)},
 \end{equation}
+for the case of $\sigma$ known, and
 \begin{align*}
-K \leq \frac{ L (L-1) + 1}{2(L+1)}.
+	K \leq \frac{ L (L-1) + 1}{2(L+1)}
 \end{align*}
-Thus, we conjecture that approximately $L/2$ signals can be decomposed from  the first three mixed autocorrelations.
+for the case of $\sigma$ unknown and not estimated. Overall, this indicates that, at best, approximately $L/2$ signals and their densities can be recovered from the first three mixed autocorrelations. Based on related results in~\cite{bandeira2017estimation}, we expect that as many as $L/2$ signals can indeed be estimated, though possibly not with computationally tractable estimators.
 
 
 
