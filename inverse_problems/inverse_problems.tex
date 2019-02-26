@@ -534,9 +534,10 @@ Thus, we first run the optimization with $W = 2L-1$. This problem appears to hav
 \subsection{Experiment 3}
 
 Autocorrelation analysis can be carried out in dimensions greater than one. In the following experiment, we estimated 
-an 50-by-50 pixel image of Einstein with mean zero from a growing number of observations. Each observation is  of size $4096\times 4096$ pixels and contains on average, 700 occurrences  at random locations, while keeping the separation condition~\eqref{eq:spacing}.  
-Thus, about 10\% of each micrograph contains signal. The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$,  corresponding  to SNR = $\frac{M\|x\|_F^2} {\sigma^2N} \approx1/370$. This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
-To simplify the experiment, we assume the number of signal occurrences and the noise standard deviation are known. Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition~\eqref{eq:spacing}. 
+an 50-by-50 pixel image of Einstein with mean zero from a growing number of observations. Each observation is  of size $4096\times 4096$ pixels and contains on average, 700 occurrences  at random locations, while keeping the separation condition~\eqref{eq:spacing}.
+The micrographs are contaminated with additive white Gaussian noise with standard deviation $\sigma=3$,  corresponding  to SNR = ${\frac{M\|x\|_F^2} {\sigma^2N} \approx1/370}$. This high noise level is illustrated in Figure~\ref{fig:micro_example}. 
+As explained in Section~\ref{sec:high_dimensions}, an image is determined uniquely form its second-order autocorrelation.
+Hence, to use this property and keep things simple, we assume the number of signal occurrences and the noise standard deviation are known so that we can estimate the second-order autocorrelation of the image from thos the observation directly.  %Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition~\eqref{eq:spacing}. 
 
 We compute the average second-order autocorrelation of the micrographs. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform (FFT) in parallel.  
 Given the noise level and number of image repetitions, the second-order autocorrelation of the image can be easily deduced from~\eqref{eq:ac2_micrograph}.  Then, to estimate the target image, we resort to a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
@@ -546,13 +547,11 @@ Figure~\ref{fig:Einst_example} shows several estimated images for a growing numb
 Figure~\ref{fig:error_per_micro} %(see appendix)
 presents the normalized recovery error as a function of the amount of data available.  This is computed after fixing the reflection symmetries (see Section~\ref{sec:AC_analysis}). As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many micrographs, without particle picking.
 
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=.8\linewidth]{Einstein_recovery_error_combined}
-	\caption{\label{fig:error_per_micro}Relative error curves for the experiment of Figure~\ref{fig:Einst_example}.}
-\end{figure}
-
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics[width=.8\linewidth]{Einstein_recovery_error_combined}
+%	\caption{\label{fig:error_per_micro}Relative error curves for the experiment of Figure~\ref{fig:Einst_example}.}
+%\end{figure}
 
 
 \begin{figure}[t]
