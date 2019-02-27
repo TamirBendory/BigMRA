@@ -218,14 +218,15 @@ In the next section, we show how this flexibility allows us to model an importan
 
 
 \section{Motivation: single-particle reconstruction using cryo-electron microscopy}
-Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules; see for instance~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
+Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
 In contrast X-ray and NMR which aggregate information from an ensembles of
-particles, single particle cryo-EM produces images of individual particles and thus can, in principle, elucidate multiple  structures.
-In addition, it does not require the formation of crystalline arrays of macromolecules.
+particles, single particle cryo-EM produces images of individual particles and thus can, in principle, elucidate multiple  structures simultaneously.
+%In addition, it does not require the formation of crystalline arrays of macromolecules.
 
-In a cryo--EM experiment, biological samples are rapidly frozen in a thin layer of vitreous ice.
-The microscope produces 2-D tomographic images of the samples embedded in the ice, called \emph{micrographs}. Each micrograph contains tomographic projections of the samples at unknown locations and under unknown viewing directions. The goal is to construct 3-D models of the molecular structures from the micrographs. 
-Importantly, to keep radiation damage within acceptable bounds, the dose must be kept low, leading to high noise levels.
+In a cryo--EM experiment, biological samples (e.g., macromolecules, viruses) are rapidly frozen in a thin layer of vitreous ice.
+The microscope produces 2-D tomographic images of the samples embedded in the ice, called \emph{micrographs}. Each micrograph contains multiple tomographic projections of the samples at unknown locations and under unknown viewing directions. 
+Importantly, the electron dose must be kept low to mitigate  radiation damage, leading to high noise levels.
+The goal is to construct 3-D models of the molecular structures from the micrographs. 
 
 A 2-D micrograph $y$ can be in terms of~\eqref{eq:model} where the discrete signals $x_1,\ldots,x_K$ are replaced by a random signal drawn from the a general distribution. In particular, in each position $s[i]$, a 2-D tomographic projection of the 3-D structure is placed, taken from a random viewing direction according to (possibly unknown) fixed distribution. 
 
