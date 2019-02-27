@@ -129,12 +129,16 @@
 
 
 \begin{abstract}
-abstract
-%Single-particle cryo-electron microscopy (cryo-EM) has recently joined X-ray crystallography
-%and NMR spectroscopy as a high-resolution structural method for biological macromolecules.
-%In a cryo-EM experiment, the microscope produces images called micrographs. Projections of the molecule of interest are embedded in the micrographs at unknown locations, and under unknown viewing directions. Standard imaging techniques first locate these projections (detection) and then reconstruct the 3-D structure from them. Unfortunately, high noise levels hinder detection. When reliable detection is rendered impossible, the standard techniques fail. This is a problem especially for small molecules, which can be particularly hard to detect. In this paper, we propose a radically different approach: we contend that the structure could, in principle, be reconstructed directly from the micrographs, without intermediate detection. 
-%As a result, even small molecules should be within reach for cryo-EM. To support this claim, we setup a simplified mathematical model and demonstrate how our autocorrelation analysis technique allows to go directly from the micrographs to the sought signals. This involves only one pass over the micrographs, which is desirable for large experiments. 
-%We show numerical results and  discuss challenges that lay ahead to turn this proof-of-concept into a competitive alternative to state-of-the-art algorithms.
+
+We consider the multi-target detection problem of recovering a set of signals that appear 
+multiple times at unknown locations in a noisy measurement.
+We derive simple relations between the autocorrelations of the observations and those of the signals. These autocorrelations can be estimate accurately in any noise level given sufficiently long measurement. 
+To recover the signals from their autocorrelations, we suggest to solve a nonlinear least-squares. 
+This is of particular importance in high noise regimes in which detecting individual signal appearance is impossible.
+We provide rigorous analysis for the special case in which the same signal appears multiple times in the data, and demonstrate numerically the effectiveness of the method in a variety of settings. 
+
+The main goal of this work is to supply theoretical and numerical support for the possibility of estimating the 3-D structure of single particles using cryo-electron microscopy without detection~\cite{bendory2018toward}.
+ 
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
