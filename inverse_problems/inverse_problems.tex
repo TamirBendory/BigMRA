@@ -397,7 +397,7 @@ z[k]  = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]}.
 This proves the following useful fact:
 \begin{proposition} \label{prop:uniqueness}
 	%
-	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$. \TODO{Definitely only clear for the homogeneous case}
+	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$. 
 \end{proposition}
 
 A couple of remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
@@ -536,7 +536,7 @@ This phenomenon has been also observed in multi-reference alignment~\cite[Sectio
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=.7\linewidth]{KLXP/XP1}
-	\caption{In the $N \to \infty$ regime (access to exact moments, excluding biased entries) and with known uniform densities, it seems $K$ up to $\sqrt{L}$ (red curve) i.i.d.\ Gaussian signals of length $L$ can be recovered from the known moments. CPU time in seconds. Strictly above red dots, recovery is impossible because the number of unknowns exceeds the number of computed moments. Similar to~\cite[Fig.~4.1]{boumal2017heterogeneous}, this experiment suggests a possible statistical-computational gap.}
+	\caption{In the $N \to \infty$ regime (access to exact autocorrelations, excluding biased entries) and with known uniform densities, it seems $K$ up to $\sqrt{L}$ (red curve) i.i.d.\ Gaussian signals of length $L$ can be recovered from the known moments. CPU time in seconds. Strictly above red dots, recovery is impossible because the number of unknowns exceeds the number of computed moments. Similar to~\cite[Fig.~4.1]{boumal2017heterogeneous}, this experiment suggests a possible statistical-computational gap.}
 	\label{fig:KLXP}
 \end{figure}
 
