@@ -239,29 +239,30 @@ By allowing $V$ to be a random signal as well, this model can encode a mixture o
 (which might be continuous as well).
 
 All contemporary methods in the field split the reconstruction procedure into two main  stages.
-The first stage consists of estimating the signal $s$---that is, extracting the particle projections from the micrographs. This stage is called \emph{particle picking}. Given the projections, the second stage aims to construct a 3-D model of the molecular structure. 
+The first stage, called \emph{particle picking},  extracts the particle projections from the micrographs. Given the projections, the second stage aims to construct a 3-D model of the molecular structure, usually using a  expectation-maximization algorithm~\cite{scheres2012relion}. 
 %The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
 Crucially, reliable detection of individual particles is impossible in a highly noisy environment. This fact has been recognized early on by the cryo-EM community. 
 Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
 %The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
 %Despite this progress, detecting small molecules in the micrographs remains a challenge.
 
-Another potential pitfall of particle picking pertains to \emph{model bias}, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. In~\cite{shatsky2009method}, it was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles biases the reconstructed structure. This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
+Another potential pitfall of particle picking is related  to \emph{model bias}, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. It was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template~\cite{shatsky2009method}. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles biases the reconstructed structure. %This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
 A recent work of the authors suggests to bypass the particle picking stage and  reconstruct the 3-D structure directly from the micrograph~\cite{bendory2018toward}.
-In that paper, it was shown that---at least in principle---the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
-The principle mathematical tool is  \emph{autocorrelation analysis}, described in detail in Section~\ref{sec:AC_analysis}.
+Based on autocorrelation analysis it was shown that---at least in principle---the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
+%The principle mathematical tool is  \emph{autocorrelation analysis}, described in detail in Section~\ref{sec:AC_analysis}.
 This goal of  the current paper is to provide a theoretical justification and numerical support  for the method proposed in~\cite{bendory2018toward}.  
 %In this context, the  models described above serve  as  an abstraction of the cryo-EM problem: the random signal $X$ discussed in Section~\ref{sec:extensions} can be thought of as 2-D random tomographic projections of the 3-D structure 
-taken according to some unknown distribution of the particles within the ice.
+%taken according to some unknown distribution of the particles within the ice.
 
 % A similar abstraction has been proven itself to be useful in a similar context as described in the next section. 
 
-We mention that~\cite{bendory2018toward} was not the first paper to employ autocorrelation analysis to cryo-EM. 
-Zvi Kam~\cite{kam1980reconstruction} first proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of perfect particle picking: his method used autocorrelations of the picked, perfectly centered, particles. Kam's method has been extended and employed by in X-ray free electron lasers and cryo-EM; see for instance~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}.  
+%We mention that~\cite{bendory2018toward} was not the first paper to employ autocorrelation analysis to cryo-EM. 
+Autocorrelation analysis for cryo-EM traces back to the seminal paper of Zvi Kam~\cite{kam1980reconstruction}. This paper proposed autocorrelation analysis for {3-D} reconstruction, under the assumption of picked, perfectly centered, particles. Kam's method has been extended and employed in X-ray free electron lasers and cryo-EM~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}.  
 In order to investigate the computational and statistical properties of Kam's method, a series of papers have studied a simplified model, 
 called   \emph{multi-reference alignment}~\cite{bandeira2014multireference,bendory2017bispectrum,bandeira2017optimal,perry2017sample,bandeira2017estimation,abbe2017multireference}.
 We follows the same line of research by considering the multi-target detection as an abstraction to the application of reconstructing 3-D structures directly from the micrograph as proposed in~\cite{bendory2018toward}.
+\TODO{Not sure about the location of the last paragraph.}
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
