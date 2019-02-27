@@ -161,10 +161,10 @@ In parts of the paper, we focus on the case $K = 1$, called the \emph{homogeneou
 This idealized setup appears in several scientific applications, including structural biology~\cite{bendory2018toward} (as we detail below), spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive}, and system identification~\cite{ljung1998system}. 
 
 In the low noise regime, a valid strategy is to first detect the signal occurrences in $y$ (that is, estimate $s$), cluster them (that is, separate $s$ into $s_1,\ldots,s_K$), and solve a standard deconvolution problem. Crucially, we focus on the high noise regime, where \emph{reliable detection of signal occurrences is  impossible}~\cite{bendory2018toward,aguerrebere2016fundamental}.
-This limitation does not, however, preclude estimation of the signals $x_1,\ldots,x_K$, as we show in this paper. In this setting, we consider  $s_1,\ldots,s_K$  as \emph{nuisance variables}.
+This limitation does not, however, preclude estimation of the signals $x_1,\ldots,x_K$, as we show in this paper. In this setting, we refer to  $s_1,\ldots,s_K$  as \emph{nuisance variables}.
 
 In order to recover the signals in the high noise regime, we use autocorrelation analysis.
-For any noise level, the autocorrelations of the observation can be estimated to any desired accuracy for large enough $N$. 
+In any noise level, the autocorrelations of the observation can be estimated to any desired accuracy for large enough $N$. 
 This computation is straightforward and requires only one pass over the data.
 The underlying principle is to relate the autocorrelations of the observation $y$ to the autocorrelations of $x_1,\ldots,x_K$.
 Below we describe two generative models for $s$.  
