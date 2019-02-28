@@ -333,7 +333,7 @@ where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, 
 
 \subsection{Autocorrelations under the Poisson model}
 
-In this section, we give the expressions for the autocorrelations of the observed signal $y$ under the Poisson model. In this model, each location $k$, $1 \le k \le N-L+1$, contains a Poisson-distributed number of random signals. More precisely, lettin $M_k$ be the number of signals starting at location $k$, $M_k \overset{iid}{\sim} \Poisson(\gamma / L)$. Note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
+In this section, we give the expressions for the autocorrelations of the observed signal $y$ under the Poisson model. In this model, each location $k$, $1 \le k \le N-L+1$ is the starting point of a Poisson-distributed number of random signals. More precisely, letting $s[k]$ be the number of signals starting at location $k$, $s[k] \overset{iid}{\sim} \Poisson(\gamma / L)$. Note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
 %
 \begin{align}
 \frac{N - L + 1}{N} \cdot L \cdot \frac{\gamma  }{L} 
@@ -345,11 +345,11 @@ Therefore, in the large $N$ limit $\gamma$ may be interpreted as the signal dens
 We will show the following expressions for the autocorrelations of $y$, expressed in terms of the autocorrelations of $x$ and the parameters $\gamma$ and $\sigma$:
 %
 \begin{align}
-a_y^1  = & \gamma a_{x}^1, 
+a_y^1  &=  \gamma a_{x}^1, 
 \label{eq:mean_micrograph2} \\
-a_y^2[\ell] = & (\gamma a_x^1)^2 + \gamma a_x^2[\ell] + \sigma^2 \delta[\ell], 
+a_y^2[\ell] &=  (\gamma a_x^1)^2 + \gamma a_x^2[\ell] + \sigma^2 \delta[\ell], 
 \label{eq:ac2_micrograph2} \\
-a_y^3[\ell_1,\ell_2] = & (\gamma a_x^1)^3 + \gamma a_x^1  
+a_y^3[\ell_1,\ell_2]  & = (\gamma a_x^1)^3 + \gamma a_x^1  
 \cdot ( \gamma a_x^2[\ell_1] + \gamma a_x^2[\ell_2]
 + \gamma a_x^2[\ell_2-\ell_1]) + \gamma a_x^3[\ell_1,\ell_2] 
 \nonumber \\
@@ -367,29 +367,32 @@ From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\el
 + a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(\gamma a_x^1)^2 \big).
 \end{align}
 
+\TODO{Does the equivalence hold for $\ell\neq 0$?}
+\begin{corollary}
+	The autocorrelations are equivalent...
+\end{corollary}
 
 It is now easy to show how to solve for both $\gamma$ and $\sigma$ from these expressions, assuming $x$ is generic. Indeed, we observe the product
 %
 \begin{align}
 (\gamma a_x^1) (\gamma a_x^2[1])
 &=  \frac{\gamma^2}{L^2} \left( \sum_{i=0}^{L-1} x[i] \right)
-\left(\sum_{j=0}^{L-1} x[j]x[j+1] \right)
+\left(\sum_{j=0}^{L-2} x[j]x[j+1] \right)
 \nonumber \\
-&= \frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} \sum_{i=0}^{L-1} x[i]x[j]x[j+1]
+&= \frac{\gamma^2}{L^2} \sum_{j=0}^{L-2} \sum_{i=0}^{L-1} x[i]x[j]x[j+1]
 \nonumber \\
 &= \frac{\gamma^2}{L} \left\{ \sum_{\ell=0}^{L-1} a_x^3[1,\ell]
 + \sum_{\ell=1}^{L-2} a_x^3[\ell,\ell+1]  \right\}.
 \end{align}
 %
-Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, we can form the ratio and solve for $\gamma$:
-%
+Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, \TODO{Is there a bias?} we can form the ratio and solve for $\gamma$: 
+
 \begin{align}
 \gamma = L \frac{(\gamma a_x^1) (\gamma a_x^2[1])}
 {\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] 
 	+ \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]}.
 \end{align}
-%
-With $\gamma$ in hand, we can estimate $\sigma^2$:
+%With $\gamma$ in hand, we can estimate $\sigma^2$:
 %
 \begin{align}
 \sigma^2 = a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
@@ -432,15 +435,15 @@ In the following,  we show that the moments of the observed data under the Poiss
 	From the first three moments of the Poisson process model, one can recover the first three moments from the strongly-separated model.
 \end{corollary}
 \end{comment}
-
-\TODO{What we want to have in this section}
-\begin{enumerate}
-	\item Recall the Poisson model (it's already described at the end of intro, so keep it short).
-	\item Define a proper notion of $\gamma$ (careful with scaling $L$).
-	\item State formulas for $a_y^q$ with $q = 1, 2, 3$ (ideally, including noise terms) to parallel what we did in the well-separated section. It would be better to do everything with autocorrelations rather than moments to keep the story uniform.
-	\item (optional) Claim: under some assumptions (knowing $\gamma$? Others?), the autocorrelations of $y$ of order $q = 1, 2, 3$ under the Poisson model provide the same information about $x$ as the corresponding autocorrelations under the well-separated model. Could also be in Section 4.1.
-\end{enumerate}
-
+%
+%\TODO{What we want to have in this section}
+%\begin{enumerate}
+%	\item Recall the Poisson model (it's already described at the end of intro, so keep it short).
+%	\item Define a proper notion of $\gamma$ (careful with scaling $L$).
+%	\item State formulas for $a_y^q$ with $q = 1, 2, 3$ (ideally, including noise terms) to parallel what we did in the well-separated section. It would be better to do everything with autocorrelations rather than moments to keep the story uniform.
+%	\item (optional) Claim: under some assumptions (knowing $\gamma$? Others?), the autocorrelations of $y$ of order $q = 1, 2, 3$ under the Poisson model provide the same information about $x$ as the corresponding autocorrelations under the well-separated model. Could also be in Section 4.1.
+%\end{enumerate}
+%
 
 \section{Theory}
 
