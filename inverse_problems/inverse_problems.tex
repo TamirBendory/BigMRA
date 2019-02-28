@@ -333,6 +333,69 @@ where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, 
 
 \subsection{Autocorrelations under the Poisson model}
 
+In this section, we give the expressions for the autocorrelations of the observed signal $y$ under the Poisson model. In this model, each location $k$, $1 \le k \le N-L+1$, contains a Poisson-distributed number of random signals. More precisely, lettin $M_k$ be the number of signals starting at location $k$, $M_k \overset{iid}{\sim} \Poisson(\gamma / L)$. Note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
+%
+\begin{align}
+\frac{N - L + 1}{N} \cdot L \cdot \frac{\gamma  }{L} 
+\quad \overset{N\to\infty}{\longrightarrow} \quad \gamma.
+\end{align}
+%
+Therefore, in the large $N$ limit $\gamma$ may be interpreted as the signal density, as in the well-separated model.
+
+We will show the following expressions for the autocorrelations of $y$, expressed in terms of the autocorrelations of $x$ and the parameters $\gamma$ and $\sigma$:
+%
+\begin{align}
+a_y^1  = & \gamma a_{x}^1, 
+\label{eq:mean_micrograph2} \\
+a_y^2[\ell] = & (\gamma a_x^1)^2 + \gamma a_x^2[\ell] + \sigma^2 \delta[\ell], 
+\label{eq:ac2_micrograph2} \\
+a_y^3[\ell_1,\ell_2] = & (\gamma a_x^1)^3 + \gamma a_x^1  
+\cdot ( \gamma a_x^2[\ell_1] + \gamma a_x^2[\ell_2]
++ \gamma a_x^2[\ell_2-\ell_1]) + \gamma a_x^3[\ell_1,\ell_2] 
+\nonumber \\
+& + \gamma a_x^1 \sigma^2 \big(\delta[\ell_1]+\delta[\ell_2] +\delta[\ell_1-\ell_2] \big).
+\label{eq:ac3_micrograph2}
+\end{align}
+
+
+From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
+%
+\begin{align}
+\gamma a_x^3[\ell_1,\ell_2]
+= a_y^3[\ell_1,\ell_2] - (\gamma a_x^1)^3
+- \gamma a_x^1 \cdot \big(a_y^2[\ell_1]  
++ a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(\gamma a_x^1)^2 \big).
+\end{align}
+
+
+It is now easy to show how to solve for both $\gamma$ and $\sigma$ from these expressions, assuming $x$ is generic. Indeed, we observe the product
+%
+\begin{align}
+(\gamma a_x^1) (\gamma a_x^2[1])
+&=  \frac{\gamma^2}{L^2} \left( \sum_{i=0}^{L-1} x[i] \right)
+\left(\sum_{j=0}^{L-1} x[j]x[j+1] \right)
+\nonumber \\
+&= \frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} \sum_{i=0}^{L-1} x[i]x[j]x[j+1]
+\nonumber \\
+&= \frac{\gamma^2}{L} \left\{ \sum_{\ell=0}^{L-1} a_x^3[1,\ell]
++ \sum_{\ell=1}^{L-2} a_x^3[\ell,\ell+1]  \right\}.
+\end{align}
+%
+Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, we can form the ratio and solve for $\gamma$:
+%
+\begin{align}
+\gamma = L \frac{(\gamma a_x^1) (\gamma a_x^2[1])}
+{\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] 
+	+ \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]}.
+\end{align}
+%
+With $\gamma$ in hand, we can estimate $\sigma^2$:
+%
+\begin{align}
+\sigma^2 = a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
+- (2 L - 1) (a_y^1)^2.
+\end{align}
+
 \begin{comment}
 In this section we omit the affect of the noise as it remains the same for the well-separated model. We aim to show that the moments of 
 
