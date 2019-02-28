@@ -183,9 +183,7 @@ We consider two  models for the distribution of signal occurrences in the observ
 
 \paragraph{The well-separated model.}
 
-%Our approach is based on considering the first few entries of the observation's autocorrelations. These entries correspond to products of $y$ with its shifted version, for some small shifts.
-%If $s$ would be too clustered, then 
-
+\TODO{The models are not equivalent but related through Corollary~\ref{cor:ac_equivalence}.}
 As a first setup, we allow any generative model for $s$ which meets the following separation requirement: $s$ is binary, and
 \begin{equation}
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
@@ -367,9 +365,9 @@ From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\el
 + a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(\gamma a_x^1)^2 \big).
 \end{align}
 
-\TODO{Does the equivalence hold for $\ell\neq 0$?}
-\begin{corollary}
-	The autocorrelations are equivalent...
+\begin{corollary}[informal for now] \label{cor:ac_equivalence}
+The first and the second autocorrelations  in the well-separated and the Poisson models are equivalent. 
+If $\sigma$ is known, then it is also true for the third-order autocorrelation. If $\sigma$ is unknown, the it is true whenever $\ell_1\neq 0$, $\ell_2\neq 0$ and $\ell_1\neq \ell_2$. 
 \end{corollary}
 
 It is now easy to show how to solve for both $\gamma$ and $\sigma$ from these expressions, assuming $x$ is generic. Indeed, we observe the product
@@ -475,7 +473,7 @@ First, we observe that if the noise level $\sigma$ is known, generally, one can 
 
 \begin{proposition} \label{prop:gamma}
 	\TODO{Can we do this simultaneously for Poisson? or do we only need to do it for well-separated and invoke the equivalence claim? Not if that claim requires knowledge of $\gamma, \sigma$.}
-	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then 
+	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then  \TODO{Should remove the limit}
 	\begin{equation}
 	\gamma  \aseq \lim_{N \to \infty}\frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
 	\end{equation}
