@@ -328,7 +328,7 @@ Under the separation condition~\eqref{eq:spacing}, the relation between autocorr
 \gamma  = \frac{|s| L}{N}.
 \label{eq:gamma}
 \end{equation}
-This $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. Henceforth, we call it the signal density.
+This $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. %Henceforth, we call it the signal density.
 The separation condition  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. 
 
 Owing to the separation condition, when correlating $y$ with shifted versions of itself for shifts in $0, \ldots, L-1$, any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result, the autocorrelations of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the density $\gamma$ (which is a weak dependence on the support signal $s$). Specifically, we show the following identities in Section~\ref{sec:autocorrelation_computation}:
@@ -341,10 +341,8 @@ Owing to the separation condition, when correlating $y$ with shifted versions of
 where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to the noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
 
 
-
-
-
-\TODO{We show in Section~\ref{sec:theory_homogeneous} how to estimate $\gamma$ from observations for the particular case where $K = 1$ (all signal occurrences are the same).}
+We show in Section~\ref{sec:theory_homogeneous} 
+that $x,\gamma$ and $\sigma$ can be identified uniquely from the autocorrelations for the particular case where $K = 1$ (all signal occurrences are the same).
 
 %Furthermore, in Section~\ref{sec:poisson} we show that the autocorrelations under the Poisson model provide the same information about $x$ as those presented in this section.
 
