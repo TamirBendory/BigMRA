@@ -341,15 +341,14 @@ Owing to the separation condition, when correlating $y$ with shifted versions of
 where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to the noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
 
 
-We show in Section~\ref{sec:theory_homogeneous} 
-that $x,\gamma$ and $\sigma$ can be identified uniquely from the autocorrelations for the particular case where $K = 1$ (all signal occurrences are the same).
-
-%Furthermore, in Section~\ref{sec:poisson} we show that the autocorrelations under the Poisson model provide the same information about $x$ as those presented in this section.
+We show in Section~\ref{sec:theory_homogeneous_well_separated} 
+that $x,\gamma$ and $\sigma$ can be identified uniquely from the autocorrelations for the homogeneous case where $K = 1$ (all signal occurrences are the same).
 
 \subsection{Autocorrelations under the Poisson model}
 
-In this section, we give the expressions for the autocorrelations of the observed signal $y$ under the Poisson model. In this model, each location $k$, $1 \le k \le N-L+1$ is the starting point of a Poisson-distributed number of random signals. 
-More precisely, letting $s[k]$ be the number of signals starting at location $k$, $s[k] \overset{iid}{\sim} \Poisson(\gamma / L)$. Note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
+In this section, we give the expressions for the autocorrelations of the observed signal $y$ under the Poisson model. %In this model, each location $k$, $1 \le k \le N-L+1$ is the starting point of a Poisson-distributed number of random signals. 
+%More precisely, letting $s[k]$ be the number of signals starting at location $k$, $s[k] \overset{iid}{\sim} \Poisson(\gamma / L)$.
+ We first note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
 %
 \begin{align}
 \frac{N - L + 1}{N} \cdot L \cdot \frac{\gamma  }{L} 
@@ -358,7 +357,7 @@ More precisely, letting $s[k]$ be the number of signals starting at location $k$
 %
 Therefore, in the large $N$ limit $\gamma$ may be interpreted as the signal density, as in the well-separated model.
 
-We will show the following expressions for the autocorrelations of $y$, expressed in terms of the autocorrelations of $x$ and the parameters $\gamma$ and $\sigma$:
+In Section~\ref{sec:proof_prop_poisson}, we prove the following expressions for the autocorrelations of $y$ under the Poisson model, expressed in terms of the autocorrelations of $x$ and the parameters $\gamma$ and $\sigma$:
 %
 \begin{align}
 a_y^1  &=  \gamma a_{x}^1, 
@@ -373,6 +372,7 @@ a_y^3[\ell_1,\ell_2]  & = (\gamma a_x^1)^3 + \gamma a_x^1
 \label{eq:ac3_micrograph2}
 \end{align}
 
+In the homogeneous case ($K=1$), we show in Section~\ref{sec:theory_homogeneous_poisson} that $a_y^1,a_y^2$ and $a_y^3$ identify the signal $x$, the Poisson parameter $\gamma$ and the noise level $\sigma$ for generic $x$. 
 %
 %From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
 %%
@@ -463,11 +463,7 @@ In the following,  we show that the moments of the observed data under the Poiss
 
 \section{Theory}
 
-\TODO{Explain difference between homogeneous and heterogeneous}
 
-\subsection{Guarantees for the homogeneous case} \label{sec:theory_homogeneous}
-%In this section, we derive some theoretical results for the homogeneous case. \TODO{Note: I am using terms interchangeably}
- 
 A signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
 %
 \begin{equation}
@@ -482,9 +478,10 @@ This proves the following useful fact:
 	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$. 
 \end{proposition}
 
-A couple of remarks are in order. First, \eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
-%Second, note that the second-order autocorrelation is not by itself sufficient to determine the signal uniquely. %~\cite{beinert2015ambiguities,bendory2017fourier}.
+Note that~\eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
 
+\subsection{Guarantees for the homogeneous well-separated model} \label{sec:theory_homogeneous_well_separated}
+ 
 The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that $x$ is still determined by the observed moments of $y$.
 
 First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Appendix~\ref{sec:proof_prop_gamma}.
@@ -512,6 +509,10 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce t
 \end{corollary}
 
 As a side note, under the separation condition, the length $L$ of the signal can also be determined from the autocorrelations in the asymptotic regime, by inspection of the support of $a_y^2$.
+
+
+\subsection{Guarantees for the homogeneous Poisson model} \label{sec:theory_homogeneous_poisson}
+
 
 For the Poisson model: 
 From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
