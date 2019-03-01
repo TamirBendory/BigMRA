@@ -312,12 +312,14 @@ $x$ is sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots,
 	a_x^q  & = \sum_{k=1}^{K} \pi_ka_{x_k}^q.
 	\label{eq:mixedautocorr}
 \end{align}
-We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ converge to the actual autocorrelations of $y$, that is, % (ergodicity)
+Explicit expressions of the autocorrelations for the more involved model of  cryo-EM are given in~\cite{bendory2018toward}.
+
+We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ converge to the actual (population) autocorrelations of $y$, that is, % (ergodicity)
 \begin{align}
 \lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] = a_y^q[\ell_1, \ldots, \ell_{q-1}].
 \end{align}
+\TODO{Why do we need constant $\gamma$?}
 This provides a concrete means of estimating the quantities $a_y^ q$. In the remainder of this section, we relate the observables $a_y^q$  to the unknowns $a_x^q$, first under the well-separated model, then under the Poisson model.
-\TODO{Explicit expressions of the autocorrelations for cryo-EM are given in~\cite{bendory2018toward}.}
 
 \subsection{Autocorrelations under the well-separated model}
 
