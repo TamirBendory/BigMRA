@@ -200,11 +200,29 @@ This property ensures that correlating $y$ with versions of itself shifted by at
 
 If the separation condition is violated, more knowledge about the location distribution is necessary to disentangle the autocorrelations of $y$. To that effect, we consider a Poisson model.
 
-%The models we described so far assume a well-separated support. The separation condition can be alleviated by assuming a Poisson process. 
-%We consider the following observation model. Let $X \in\RL$ be a random vector drawn from some fixed distribution.
+Specifically, 
+ letting $s[i]$ be the number of signals starting at location $i$, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$  for some parameter $\gamma > 0$. 
+ Then, each of those $s[i]$ is chosen independently at random from a fixed distribution over $\{1,\ldots,K,\}$ and the corresponding
+signal $x_1, \ldots, x_K$ is added to the observation $y$ with first entry positioned at $i$. 
+As in the well-separated model, the autocorrelations under this model depend only on the signals and the parameter $\gamma$.
 
-\TODO{Careful that $\gamma$ changed by a factor of $L$: need to modify here too.} Specifically, for some parameter $\gamma > 0$, the total number of signal occurrences is drawn from a Poisson distribution with expectation $(N-L+1)\gamma$. For each occurrence, a starting location $i$ is drawn uniformly and independently at random from $\{0, \ldots, N-L\}$. Then, one of the signals $x_1, \ldots, x_K$ is selected independently at random from a fixed distribution and added to the observation $y$ with first entry positioned at $i$. 
-By definition of the Poisson process, the entries of $s$ are independent and follow a Poisson distribution with expectation $\gamma$. In particular, this model allows for (additive) signal overlap. %In Section~\TODO{ref?}, we show that the autocorrelations of $y$ are nonetheless equivalent to those arising under our well-separated model above.
+
+ %Note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
+%
+%\begin{align}
+%\frac{N - L + 1}{N} \cdot L \cdot \frac{\gamma  }{L} 
+%\quad \overset{N\to\infty}{\longrightarrow} \quad \gamma.
+%\end{align}
+%
+%In particular, this model allows for (additive) signal overlap
+
+%Specifically, for some parameter $\gamma > 0$, the total number of signal occurrences is drawn from a Poisson distribution with expectation $(N-L+1)\gamma$. For each occurrence, a starting location $i$ is drawn uniformly and independently at random from $\{0, \ldots, N-L\}$. 
+%Then, one of the signals $x_1, \ldots, x_K$ is selected independently at random from a fixed distribution and added to the observation $y$ with first entry positioned at $i$. 
+%By definition of the Poisson process, the entries of $s$ are independent and follow a Poisson distribution with expectation $\gamma$. In particular, this model allows for (additive) signal overlap. %In Section~\TODO{ref?}, we show that the autocorrelations of $y$ are nonetheless equivalent to those arising under our well-separated model above.
+ 
+ %More precisely,
+ %Therefore, in the large $N$ limit $\gamma$ may be interpreted as the signal density, as in the well-separated model.
+ 
  
 \subsection*{Extensions} \label{sec:extensions}
 
@@ -330,7 +348,8 @@ where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, 
 
 \subsection{Autocorrelations under the Poisson model}
 
-In this section, we give the expressions for the autocorrelations of the observed signal $y$ under the Poisson model. In this model, each location $k$, $1 \le k \le N-L+1$ is the starting point of a Poisson-distributed number of random signals. More precisely, letting $s[k]$ be the number of signals starting at location $k$, $s[k] \overset{iid}{\sim} \Poisson(\gamma / L)$. Note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
+In this section, we give the expressions for the autocorrelations of the observed signal $y$ under the Poisson model. In this model, each location $k$, $1 \le k \le N-L+1$ is the starting point of a Poisson-distributed number of random signals. 
+More precisely, letting $s[k]$ be the number of signals starting at location $k$, $s[k] \overset{iid}{\sim} \Poisson(\gamma / L)$. Note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
 %
 \begin{align}
 \frac{N - L + 1}{N} \cdot L \cdot \frac{\gamma  }{L} 
