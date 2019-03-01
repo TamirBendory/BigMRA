@@ -332,11 +332,11 @@ This $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. 
 The separation condition  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. 
 
 Owing to the separation condition, when correlating $y$ with shifted versions of itself for shifts in $0, \ldots, L-1$, any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result, the autocorrelations of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the density $\gamma$ (which is a weak dependence on the support signal $s$). Specifically, we show the following identities in Section~\ref{sec:autocorrelation_computation}:
-\begin{align}
-	a_y^1 & = \gamma a_{x}^1, \label{eq:mean_micrograph} \\
-	a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell], \label{eq:ac2_micrograph} \\
+\begin{align} \label{eq:ac_well_separated}
+	a_y^1 & = \gamma a_{x}^1, \nonumber \\
+	a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell], \\
 	a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{x}^1  \big(\delta[\ell_1]+\delta[\ell_2]
-	+\delta[\ell_1-\ell_2]\big), \label{eq:ac3_micrograph}
+	+\delta[\ell_1-\ell_2]\big), 
 \end{align}
 where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to the noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
 
@@ -464,7 +464,7 @@ In the following,  we show that the moments of the observed data under the Poiss
 \section{Theory}
 
 
-A signal is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
+A signal $z\in\RL$ is determined uniquely by its second- and third-order autocorrelations. Indeed, assuming $z[0]$ and $z[L-1]$ are nonzero (otherwise, redefine the length of the signal), we can recover $z$ explicitly using this identity for $k = 0, \ldots, L-1$:
 %
 \begin{equation}
 %
@@ -478,13 +478,15 @@ This proves the following useful fact:
 	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$. 
 \end{proposition}
 
-Note that~\eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
+Note that the procedure described in~\eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares (LS) procedure, which is empirically more robust to additive noise; we have observed similar phenomena for related problems~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
+
+In what follows, we show that in the homogeneous case $K=1$, the signal $x$, the parameter $\gamma$ and $\sigma^2$ are identified uniquely from the first three observed autocorrelations under both the well-separated and Poisson models. Then, we bound the maximal number of signals that can be recovered from  those autocorrelations in the heterogeneous case, and discuss extensions to multi-dimensional signals.
 
 \subsection{Guarantees for the homogeneous well-separated model} \label{sec:theory_homogeneous_well_separated}
  
-The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield the moments of the signal $x$, as seen by~\eqref{eq:mean_micrograph},~\eqref{eq:ac2_micrograph} and~\eqref{eq:ac3_micrograph}; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that $x$ is still determined by the observed moments of $y$.
+The observed moments $a_y^1,a_y^2$ and $a_y^3$ under the well-separated model~\eqref{eq:ac_well_separated} do not immediately yield the autocorrelations  of the signal $x$; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that $x$ is still determined by the observed moments of $y$.
 
-First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Appendix~\ref{sec:proof_prop_gamma}.
+First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Section~\ref{sec:proof_prop_gamma}.
 
 \begin{proposition} \label{prop:gamma}
 	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then  \TODO{Should remove the limit}
@@ -544,14 +546,14 @@ It is now easy to show how to solve for both $\gamma$ and $\sigma$ from these ex
 Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, \TODO{Is there a bias?} we can form the ratio and solve for $\gamma$: 
 
 \begin{align}
-\gamma = L \frac{(\gamma a_x^1) (\gamma a_x^2[1])}
+\gamma &= L \frac{(\gamma a_x^1) (\gamma a_x^2[1])}
 {\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] 
 	+ \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]}.
 \end{align}
 %With $\gamma$ in hand, we can estimate $\sigma^2$:
 %
 \begin{align}
-\sigma^2 = a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
+\sigma^2 &= a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
 - (2 L - 1) (a_y^1)^2.
 \end{align}
 
