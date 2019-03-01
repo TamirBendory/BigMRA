@@ -183,7 +183,6 @@ We consider two  models for the distribution of signal occurrences in the observ
 
 \paragraph{The well-separated model.}
 
-\TODO{The models are not equivalent but related through Corollary~\ref{cor:ac_equivalence}.}
 As a first setup, we allow any generative model for $s$ which meets the following separation requirement: $s$ is binary, and
 \begin{equation}
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
@@ -205,7 +204,7 @@ If the separation condition is violated, more knowledge about the location distr
 %We consider the following observation model. Let $X \in\RL$ be a random vector drawn from some fixed distribution.
 
 \TODO{Careful that $\gamma$ changed by a factor of $L$: need to modify here too.} Specifically, for some parameter $\gamma > 0$, the total number of signal occurrences is drawn from a Poisson distribution with expectation $(N-L+1)\gamma$. For each occurrence, a starting location $i$ is drawn uniformly and independently at random from $\{0, \ldots, N-L\}$. Then, one of the signals $x_1, \ldots, x_K$ is selected independently at random from a fixed distribution and added to the observation $y$ with first entry positioned at $i$. 
-By definition of the Poisson process, the entries of $s$ are independent and follow a Poisson distribution with expectation $\gamma$. In particular, this model allows for (additive) signal overlap. In Section~\TODO{ref?}, we show that the autocorrelations of $y$ are nonetheless equivalent to those arising under our well-separated model above.
+By definition of the Poisson process, the entries of $s$ are independent and follow a Poisson distribution with expectation $\gamma$. In particular, this model allows for (additive) signal overlap. %In Section~\TODO{ref?}, we show that the autocorrelations of $y$ are nonetheless equivalent to those arising under our well-separated model above.
  
 \subsection*{Extensions} \label{sec:extensions}
 
@@ -300,7 +299,7 @@ We are given one observation (one realization) of $y$. Thus, we cannot compute t
 \lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] = a_y^q[\ell_1, \ldots, \ell_{q-1}].
 \end{align}
 This provides a concrete means of estimating the quantities $a_y^ q$. In the remainder of this section, we relate the observables $a_y^q$  to the unknowns $a_x^q$, first under the well-separated model, then under the Poisson model.
-\TODO{Explicit expressions of the autocorrelations for cryo-EM are given in~\cite{bendory2018toward}}
+\TODO{Explicit expressions of the autocorrelations for cryo-EM are given in~\cite{bendory2018toward}.}
 
 \subsection{Autocorrelations under the well-separated model}
 
@@ -351,52 +350,52 @@ a_y^3[\ell_1,\ell_2]  & = (\gamma a_x^1)^3 + \gamma a_x^1
 \cdot ( \gamma a_x^2[\ell_1] + \gamma a_x^2[\ell_2]
 + \gamma a_x^2[\ell_2-\ell_1]) + \gamma a_x^3[\ell_1,\ell_2] 
 \nonumber \\
-& + \gamma a_x^1 \sigma^2 \big(\delta[\ell_1]+\delta[\ell_2] +\delta[\ell_1-\ell_2] \big).
+& \qquad + \gamma a_x^1 \sigma^2 \big(\delta[\ell_1]+\delta[\ell_2] +\delta[\ell_1-\ell_2] \big).
 \label{eq:ac3_micrograph2}
 \end{align}
 
-
-From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
 %
-\begin{align}
-\gamma a_x^3[\ell_1,\ell_2]
-= a_y^3[\ell_1,\ell_2] - (\gamma a_x^1)^3
-- \gamma a_x^1 \cdot \big(a_y^2[\ell_1]  
-+ a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(\gamma a_x^1)^2 \big).
-\end{align}
+%From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
+%%
+%\begin{align}
+%\gamma a_x^3[\ell_1,\ell_2]
+%= a_y^3[\ell_1,\ell_2] - (\gamma a_x^1)^3
+%- \gamma a_x^1 \cdot \big(a_y^2[\ell_1]  
+%+ a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(\gamma a_x^1)^2 \big).
+%\end{align}
 
-\begin{corollary}[informal for now] \label{cor:ac_equivalence}
-The first and the second autocorrelations  in the well-separated and the Poisson models are equivalent. 
-If $\sigma$ is known, then it is also true for the third-order autocorrelation. If $\sigma$ is unknown, the it is true whenever $\ell_1\neq 0$, $\ell_2\neq 0$ and $\ell_1\neq \ell_2$. 
-\end{corollary}
-
-It is now easy to show how to solve for both $\gamma$ and $\sigma$ from these expressions, assuming $x$ is generic. Indeed, we observe the product
+%\begin{corollary}[informal for now] \label{cor:ac_equivalence}
+%The first and the second autocorrelations  in the well-separated and the Poisson models are equivalent. 
+%If $\sigma$ is known, then it is also true for the third-order autocorrelation. If $\sigma$ is unknown, the it is true whenever $\ell_1\neq 0$, $\ell_2\neq 0$ and $\ell_1\neq \ell_2$. 
+%\end{corollary}
 %
-\begin{align}
-(\gamma a_x^1) (\gamma a_x^2[1])
-&=  \frac{\gamma^2}{L^2} \left( \sum_{i=0}^{L-1} x[i] \right)
-\left(\sum_{j=0}^{L-2} x[j]x[j+1] \right)
-\nonumber \\
-&= \frac{\gamma^2}{L^2} \sum_{j=0}^{L-2} \sum_{i=0}^{L-1} x[i]x[j]x[j+1]
-\nonumber \\
-&= \frac{\gamma^2}{L} \left\{ \sum_{\ell=0}^{L-1} a_x^3[1,\ell]
-+ \sum_{\ell=1}^{L-2} a_x^3[\ell,\ell+1]  \right\}.
-\end{align}
+%It is now easy to show how to solve for both $\gamma$ and $\sigma$ from these expressions, assuming $x$ is generic. Indeed, we observe the product
+%%
+%\begin{align}
+%(\gamma a_x^1) (\gamma a_x^2[1])
+%&=  \frac{\gamma^2}{L^2} \left( \sum_{i=0}^{L-1} x[i] \right)
+%\left(\sum_{j=0}^{L-2} x[j]x[j+1] \right)
+%\nonumber \\
+%&= \frac{\gamma^2}{L^2} \sum_{j=0}^{L-2} \sum_{i=0}^{L-1} x[i]x[j]x[j+1]
+%\nonumber \\
+%&= \frac{\gamma^2}{L} \left\{ \sum_{\ell=0}^{L-1} a_x^3[1,\ell]
+%+ \sum_{\ell=1}^{L-2} a_x^3[\ell,\ell+1]  \right\}.
+%\end{align}
+%%
+%Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, \TODO{Is there a bias?} we can form the ratio and solve for $\gamma$: 
 %
-Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, \TODO{Is there a bias?} we can form the ratio and solve for $\gamma$: 
-
-\begin{align}
-\gamma = L \frac{(\gamma a_x^1) (\gamma a_x^2[1])}
-{\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] 
-	+ \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]}.
-\end{align}
-%With $\gamma$ in hand, we can estimate $\sigma^2$:
+%\begin{align}
+%\gamma = L \frac{(\gamma a_x^1) (\gamma a_x^2[1])}
+%{\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] 
+%	+ \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]}.
+%\end{align}
+%%With $\gamma$ in hand, we can estimate $\sigma^2$:
+%%
+%\begin{align}
+%\sigma^2 = a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
+%- (2 L - 1) (a_y^1)^2.
+%\end{align}
 %
-\begin{align}
-\sigma^2 = a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
-- (2 L - 1) (a_y^1)^2.
-\end{align}
-
 \begin{comment}
 In this section we omit the affect of the noise as it remains the same for the well-separated model. We aim to show that the moments of 
 
@@ -472,7 +471,6 @@ The observed moments $a_y^1,a_y^2$ and $a_y^3$ of $y$ do not immediately yield t
 First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Appendix~\ref{sec:proof_prop_gamma}.
 
 \begin{proposition} \label{prop:gamma}
-	\TODO{Can we do this simultaneously for Poisson? or do we only need to do it for well-separated and invoke the equivalence claim? Not if that claim requires knowledge of $\gamma, \sigma$.}
 	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then  \TODO{Should remove the limit}
 	\begin{equation}
 	\gamma  \aseq \lim_{N \to \infty}\frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
@@ -496,12 +494,55 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce t
 
 As a side note, under the separation condition, the length $L$ of the signal can also be determined from the autocorrelations in the asymptotic regime, by inspection of the support of $a_y^2$.
 
+For the Poisson model: 
+From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
+%
+\begin{align}
+\gamma a_x^3[\ell_1,\ell_2]
+= a_y^3[\ell_1,\ell_2] - (a_y^1)^3
+- a_y^1 \cdot \big(a_y^2[\ell_1]  
++ a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(a_y^1)^2 \big).
+\end{align}
+
+\begin{proposition}
+	Poisson result 
+\end{proposition}
+\begin{proof}
+It is now easy to show how to solve for both $\gamma$ and $\sigma$ from these expressions, assuming $x$ is generic. Indeed, we observe the product
+%
+\begin{align}
+(\gamma a_x^1) (\gamma a_x^2[1])
+&=  \frac{\gamma^2}{L^2} \left( \sum_{i=0}^{L-1} x[i] \right)
+\left(\sum_{j=0}^{L-2} x[j]x[j+1] \right)
+\nonumber \\
+&= \frac{\gamma^2}{L^2} \sum_{j=0}^{L-2} \sum_{i=0}^{L-1} x[i]x[j]x[j+1]
+\nonumber \\
+&= \frac{\gamma^2}{L} \left\{ \sum_{\ell=0}^{L-1} a_x^3[1,\ell]
++ \sum_{\ell=1}^{L-2} a_x^3[\ell,\ell+1]  \right\}.
+\end{align}
+%
+Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, \TODO{Is there a bias?} we can form the ratio and solve for $\gamma$: 
+
+\begin{align}
+\gamma = L \frac{(\gamma a_x^1) (\gamma a_x^2[1])}
+{\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] 
+	+ \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]}.
+\end{align}
+%With $\gamma$ in hand, we can estimate $\sigma^2$:
+%
+\begin{align}
+\sigma^2 = a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
+- (2 L - 1) (a_y^1)^2.
+\end{align}
+
+\end{proof}
 
 \subsection{Elemetary limitations of the heterogeneous case}
 \label{sec:heterogeneity}
 
 \TODO{Check and specify if this holds for both models}
 \TODO{Did we define densities $\gamma_k$?}
+\TODO{We write the section for the Poisson model, but it would be the same for the Poisson model}
 
 In the heterogeneous model~\eqref{eq:model}, the unknowns are $K$ signals of length $L$, together with their densities $\gamma_1, \ldots, \gamma_K$ (equivalently: the distribution $\pi$ and overall density $\gamma$) and possibly the noise level $\sigma$. To estimate these parameters, we must collect at least as many independent equations. Within our framework, polynomial equations are provided by the observable autocorrelations, which correspond to mixed autocorrelations of the unknowns as per~\eqref{eq:mixedautocorr}. In this section, following~\cite{boumal2017heterogeneous}, we count how many equations the first three autocorrelations may provide in the best case (discounting symmetries). This leads to a straightforward information-theoretic upper bound on the number $K$ of signals which can be estimated, as a function of $L$. This is only an upper bound, though a bound of the same type was shown to be tight in a similar setting~\cite{bandeira2017estimation}.
 
@@ -537,7 +578,7 @@ Autocorrelations in $d$ dimensions is defined for  $\ell_1,\ldots,\ell_{q-1}\in\
 a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
 \label{eq:ac_d_dimension}
 \end{equation}
-Interestingly, for dimensions greater than one almost all deterministic (that is, the distribution of $z$ is a Delta function) \TODO{Do we call it the homogeneous case?} signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
+Interestingly, for the homogeneous case ($K=1$) in dimensions greater than one, almost all  signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
 If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
 The case of 1-D signals is essentially different: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating  symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
 
