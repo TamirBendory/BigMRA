@@ -514,9 +514,10 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce t
 
 \subsection{Guarantees for the homogeneous Poisson model} \label{sec:theory_homogeneous_poisson}
 
+Similarly to the homogeneous well-separated model, the observed autocorrelations under the Poisson model identify $x,\gamma$ and $\sigma^2$ uniquely. Furthermore, these quantities can be computed explicitly. 
 
-For the Poisson model: 
-From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
+We first note that $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$ can be computed directly form the observed autocorrelations~\eqref{eq:mean_micrograph2},~\eqref{eq:ac2_micrograph2} and~\eqref{eq:ac3_micrograph2}.
+ Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
 %
 \begin{align}
 \gamma a_x^3[\ell_1,\ell_2]
@@ -524,10 +525,17 @@ From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\el
 - a_y^1 \cdot \big(a_y^2[\ell_1]  
 + a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(a_y^1)^2 \big).
 \end{align}
-
-The proof is provided in Section~\ref{sec:proof_uniqueness_poisson}.
+Using these expressions, we prove the following in Section~\ref{sec:proof_uniqueness_poisson}.
 \begin{proposition} \label{prop:uniqueness_poisson}
-	Poisson result 
+Under the homogeneous Poisson model, the signal $x$, and the noise level $\sigma^2$ and the Poisson parameter $\gamma$ are identified uniquely. 
+In particular, 
+	\begin{align}
+\gamma &= L \frac{(\gamma a_y^1) (\gamma a_x^2[1])}
+{\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] 
+	+ \sum_{\ell=2}^{L-1} \gamma a_x^3[\ell,\ell+1]}, \\
+\sigma^2 &= a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
+- (2 L - 1) (a_y^1)^2.
+\end{align}
 \end{proposition}
 
 \subsection{Elemetary limitations of the heterogeneous case}
@@ -535,7 +543,7 @@ The proof is provided in Section~\ref{sec:proof_uniqueness_poisson}.
 
 \TODO{Check and specify if this holds for both models}
 \TODO{Did we define densities $\gamma_k$?}
-\TODO{We write the section for the Poisson model, but it would be the same for the Poisson model}
+\TODO{We write the section for the well-separated model, but it would be the same for the Poisson model}
 
 In the heterogeneous model~\eqref{eq:model}, the unknowns are $K$ signals of length $L$, together with their densities $\gamma_1, \ldots, \gamma_K$ (equivalently: the distribution $\pi$ and overall density $\gamma$) and possibly the noise level $\sigma$. To estimate these parameters, we must collect at least as many independent equations. Within our framework, polynomial equations are provided by the observable autocorrelations, which correspond to mixed autocorrelations of the unknowns as per~\eqref{eq:mixedautocorr}. In this section, following~\cite{boumal2017heterogeneous}, we count how many equations the first three autocorrelations may provide in the best case (discounting symmetries). This leads to a straightforward information-theoretic upper bound on the number $K$ of signals which can be estimated, as a function of $L$. This is only an upper bound, though a bound of the same type was shown to be tight in a similar setting~\cite{bandeira2017estimation}.
 
@@ -1736,8 +1744,7 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 
 
 \subsection{Proof of Proposition~\ref{prop:uniqueness_poisson}} \label{sec:proof_uniqueness_poisson}
-	
-	It is now easy to show how to solve for both $\gamma$ and $\sigma$ from these expressions, assuming $x$ is generic. Indeed, we observe the product (where $x[j]=0$ whenever $j < 0$ or $j > L-1$):
+	Let us assume that $x$ is generic. Indeed, we observe the product:
 	%
 	\begin{align}
 	L^2(\gamma a_x^1) (\gamma a_x^2[1])
@@ -1772,10 +1779,10 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 	\sigma^2 = a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
 	- (2 L - 1) (a_y^1)^2.
 	\end{align}
-
+Once $\gamma$ and $\sigma$ were computed, one can recover $x$ from $a_x^2$ and $a_x^3$  by Proposition~\ref{prop:uniqueness}.
 
 \section*{Acknowledgment} \TODO{To check}
-The authors  thank Ayelet Heimowitz, Joe Kileel, Ti-Yen Kan and Amit Moscovich  for helpful discussions..
+The authors  thank Ayelet Heimowitz, Joe Kileel, Ti-Yen Lan and Amit Moscovich  for helpful discussions..
 The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.
 NB is partially supported by NSF award DMS-1719558.
 
