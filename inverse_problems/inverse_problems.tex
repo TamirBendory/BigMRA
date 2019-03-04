@@ -227,37 +227,44 @@ In the next section, we show how this flexibility allows us to model an importan
 
 
 \section{Motivation: single-particle reconstruction using cryo-electron microscopy}
-Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}. 
-In contrast X-ray and NMR which aggregate information from an ensembles of
-particles, single particle cryo-EM produces images of individual particles and thus can, in principle, elucidate multiple  structures simultaneously.
-%In addition, it does not require the formation of crystalline arrays of macromolecules.
 
+Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}.
+%In contrast to X-ray and NMR which aggregate information from an ensembles of
+%particles, single particle cryo-EM produces images of individual particles and thus can, in principle, elucidate multiple  structures simultaneously.
+%In addition, it does not require the formation of crystalline arrays of macromolecules.
 In a cryo--EM experiment, biological samples (e.g., macromolecules, viruses) are rapidly frozen in a thin layer of vitreous ice.
 The microscope produces 2-D tomographic images of the samples embedded in the ice, called \emph{micrographs}. Each micrograph contains multiple tomographic projections of the samples at unknown locations and under unknown viewing directions. 
-Importantly, the electron dose must be kept low to mitigate  radiation damage, leading to high noise levels.
+Importantly, the electron dose must be kept low to mitigate  radiation damage, inducing high noise levels.
 The goal is to construct 3-D models of the molecular structures from the micrographs. 
+Since  cryo-EM produces images of individual particles, it can, in principle, elucidate multiple  structures simultaneously.
+This is in clear contrast to  X-ray and NMR, which aggregate information from an ensembles of
+particles.
 
 A 2-D micrograph $y$ can be written in terms 
 of the models described in Section~\ref{sec:intro} as
 \begin{equation}  \label{eq:model_cryo}
 y  =   s \ast x + \varepsilon,
 \end{equation}
-where tomographic projections are placed according to the signal $s$. In this model, the signal $x$ represents the 2-D tomographic projections of the 3-D structure taken from  random viewing directions according to (possibly unknown) distribution. In particular, by letting $V$ describes the underlying volume, $R_\omega$ a random 3-D rotation drawn from some unknown distribution and $P$ a tomographic projection, we have
+where tomographic projections are placed according to the signal $s$. In this model, the signal $x$ represents 2-D tomographic projections of the 3-D structure taken from  random viewing directions according to (possibly unknown) distribution over $SO(3)$ (the group of 3-D rotations). In particular, by letting $V$ describes the underlying volume, $R_\omega$ a random 3-D rotation for $\omega\in SO(3)$, and $P$ a tomographic projection, we have
 \begin{equation}
 x= P(R_\omega V).
 \end{equation}
 By allowing $V$ to be a random signal as well, this model can encode a mixture of structures  
 (which might be continuous as well).
 
-All contemporary methods in the field split the reconstruction procedure into two main  stages.
-The first stage, called \emph{particle picking},  extracts the particle projections from the micrographs. Given the projections, the second stage aims to construct a 3-D model of the molecular structure, usually using a  expectation-maximization algorithm~\cite{scheres2012relion}. 
+All contemporary methods for single particle reconstruction using cryo-EM  split the reconstruction procedure into two main  stages.
+The first stage, called \emph{particle picking},  detects and extracts the particle projections from the micrographs. Given the projections, the second stage aims to construct a 3-D model of the molecular structure, usually using an expectation-maximization algorithm~\cite{scheres2012relion}. 
 %The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
 Crucially, reliable detection of individual particles is impossible in a highly noisy environment. This fact has been recognized early on by the cryo-EM community. 
-Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was established that particle picking is impossible for molecules below a certain weight (below $\sim$50 kDa). 
+Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was established that particle picking is impossible for molecules below a certain weight (below~$\sim$50 kDa). 
 %The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
 %Despite this progress, detecting small molecules in the micrographs remains a challenge.
 
-Another potential pitfall of particle picking is related  to \emph{model bias}, whose importance in cryo-EM was stressed by a number of authors~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. It was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template~\cite{shatsky2009method}. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles biases the reconstructed structure. %This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
+Even if particle picking is feasible, it may suffer from a phenomenon called \emph{model bias}.
+The main mechanism leads most particle pickers is based on correlating the micrograph with several templates; areas with high correlation are identified as areas that  are likely to contain a projection (these are the picked particles). 
+Clearly, the picked particles depend heavily on the chosen templates.
+The potential pitfall of model biased
+has been recognized early by the cryo-EM community~\cite{shatsky2009method,vanheel1992correlation,henderson2013avoiding,vanheel2013finding}. In the classical ``Einstein from noise'' experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. It was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template~\cite{shatsky2009method}. In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles biases the reconstructed structure. %This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
 A recent work of the authors suggests to bypass the particle picking stage and  reconstruct the 3-D structure directly from the micrograph~\cite{bendory2018toward}.
 Based on autocorrelation analysis it was shown that---at least in principle---the limits particle picking imposes on molecule size do not necessarily  translate into limits on particle reconstruction.
