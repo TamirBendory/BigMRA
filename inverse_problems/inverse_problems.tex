@@ -129,7 +129,7 @@ We consider the multi-target detection problem of recovering a set of signals th
 multiple times at unknown locations in a noisy measurement.
 In the low noise regime, one can estimate the signals by first detect their occurrences and then cluster them.
 However, in the high noise regime neither detection nor  clustering can be performed reliably and thus such a strategy is destined to fail.  
-By employing autocorrelation analysis, we show that the impossibility to detect and cluster signals' occurrences in high noise levels does not necessarily impose limitations on signal estimation.
+By employing autocorrelation analysis, we show that the impossibility to detect and cluster signals' occurrences in high noise levels does not necessarily preclude signal estimation.
 Specifically, to estimate the signals, we derive simple relations between the autocorrelations of the observation and those of the signals. These autocorrelations can be estimated accurately in any noise level given sufficiently long measurement. 
 To recover the signals from their autocorrelations, we suggest to solve a nonlinear least-squares. 
 We provide rigorous analysis for the special case in which a single signal appears multiple times in the data, and demonstrate numerically the effectiveness of the method in a variety of settings. 
@@ -159,15 +159,15 @@ The goal is  to estimate $x_1,\ldots,x_K$ from $y$. % while $s$ is the \emph{nui
 In parts of the paper, we focus on the case $K = 1$, called the \emph{homogeneous} case; the case $K > 2$ is called \emph{heterogeneous}.
 This idealized setup appears in several scientific applications, including structural biology~\cite{bendory2018toward} (as we detail below), spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive}, and system identification~\cite{ljung1998system}. 
 
-In the low noise regime, a valid strategy is to first detect the signal occurrences in $y$ (that is, estimate $s$), cluster them (that is, separate $s$ into $s_1,\ldots,s_K$), and solve a standard deconvolution problem. Crucially, we focus on the high noise regime, where \emph{reliable detection of signal occurrences is  impossible}~\cite{bendory2018toward,aguerrebere2016fundamental}.
+In the low noise regime, a valid strategy is to first detect the signal occurrences in $y$ (that is, estimate $s$), cluster them (that is, separate $s$ into $s_1,\ldots,s_K$), and solve  standard deconvolution problems. Crucially, we focus on the high noise regime, where \emph{reliable detection of signal occurrences is  impossible}~\cite{bendory2018toward,aguerrebere2016fundamental}.
 This limitation does not, however, preclude estimation of the signals $x_1,\ldots,x_K$, as we show in this paper. In this setting, we refer to  $s_1,\ldots,s_K$  as \emph{nuisance variables}.
 
 In order to recover the signals in the high noise regime, we use autocorrelation analysis.
-In any noise level, the autocorrelations of the observation can be estimated to any desired accuracy for large enough $N$. 
+In any noise level, the autocorrelations of the observation can be estimated to any desired accuracy for sufficiently large  $N$. 
 This computation is straightforward and requires only one pass over the data.
 The underlying principle is to relate the autocorrelations of the observation $y$ to the autocorrelations of $x_1,\ldots,x_K$.
 Below we describe two generative models for $s$.  
-In these models, the relationship between the autocorrelations of $y$ and those of $x_1,\ldots,x_K$ depend on $s_1,\ldots,s_K$ only through their sums, that is, the total number of occurrences of each signal.
+In these models, the relationship between the autocorrelations of $y$ and those of $x_1,\ldots,x_K$ depend on $s_1,\ldots,s_K$ only through their expected sums, that is, the expected total number of occurrences of each signal.
 To estimate the signals and occurrence counts from the computed autocorrelations, we solve a nonlinear least-squares (LS) problem as explained in Section~\ref{sec:numerics}. 
 
 The multi-target detection problem  is an instance of  
@@ -186,20 +186,15 @@ As a first setup, we allow any generative model for $s$ which meets the followin
 \label{eq:spacing}
 \end{equation}
 In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the data.
-%Under the separation condition~\eqref{eq:spacing}, we refer to this model as the \emph{homogeneous well-separated model}. 
-%In the next section we present a model that alleviates this condition.
-%As will be shown next, in a low SNR environment, estimating $s$ is impossible, whereas in some cases estimating $x$ is tractable.
 Furthermore, we require that the last signal occurrence in $y$ is also followed by at least $L-1$ signal-free (but still noisy) entries.
-% This last sentence is required for the proof of the identity of the third-order autocorrelation in Section 3.
 This property ensures that correlating $y$ with versions of itself shifted by at most $L-1$ entries does not involve correlating distinct signal occurrences. Once $s$ is determined, for each position $i$ such that $s[i] = 1$, one of the signals $x_k$ is selected independently at random, and accordingly we set $s_k[i] = 1$. As a result, the only properties of $s_1, \ldots, s_K$ that affect the autocorrelations of $y$ are the total number of occurrences of the distinct signals: their individual and relative locations do not intervene.
 
 \paragraph{The Poisson model.}
 
-If the separation condition is violated, more knowledge about the location distribution is necessary to disentangle the autocorrelations of $y$. To that effect, we consider a Poisson model.
+If the separation condition is violated, more knowledge about the location distribution is necessary to disentangle the autocorrelations of $y$. To that effect, we consider a Poisson generative model.
 
-Specifically, 
- letting $s[i]$ be the number of signals starting at location $i$, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$  for some parameter $\gamma > 0$. 
- Then, each of those $s[i]$ is chosen independently at random from a fixed distribution over $\{1,\ldots,K,\}$ and the corresponding
+Specifically,  each $s[i]$ is drawn independently from a Poisson distribution with parameter $\gamma/L$, that is, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$  for some parameter $\gamma > 0$. 
+ Then, each of those $s[i]$ is chosen independently at random from a fixed distribution over $\{1,\ldots,K\},$ and the corresponding
 signal $x_1, \ldots, x_K$ is added to the observation $y$ with first entry positioned at $i$. 
 As in the well-separated model, the autocorrelations under this model depend only on the signals and the parameter $\gamma$.
 
