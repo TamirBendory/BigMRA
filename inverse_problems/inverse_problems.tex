@@ -490,14 +490,14 @@ Note that the procedure described in~\eqref{eq-uniqueness} is not numerically st
 
 \subsection{Guarantees for the homogeneous well-separated model} \label{sec:theory_homogeneous_well_separated}
  
-The observed moments $a_y^1,a_y^2$ and $a_y^3$ under the well-separated model do not immediately yield the autocorrelations  of the signal $x$; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that all parameters---$x, \gamma$ and $\sigma^2$---are still identified uniquely by the observed moments of $y$.
+The observed moments $a_y^1,a_y^2$ and $a_y^3$ under the well-separated model do not immediately yield the autocorrelations  of the signal $x$; rather, the two are related by the noise level $\sigma$ and the signal density $\gamma$. We will show, however, that all parameters---$x, \gamma$ and $\sigma^2$---are still identified uniquely by the observed moments of $y$.
 
 First, we observe that if  the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph.
 The other direction is true as well: if $\gamma>0$ is known, then one can estimate $\sigma^2$.
  The proof is provided in Section~\ref{sec:proof_prop_gamma}.
 
 \begin{proposition} \label{prop:gamma}
-	Assume that the separation condition~\eqref{eq:spacing} holds and $K=1$ (a single signal). If the mean of $x$ is nonzero, then  
+	Assume the separation condition~\eqref{eq:spacing} holds and $K=1$ (all signal occurrences in $y$ are identical, up to noise). If the mean of $x$ is nonzero, then  
 	\begin{equation}
 	\gamma  = \frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
 	\end{equation}
@@ -1645,15 +1645,16 @@ We conclude by averaging over $i_1$, $i_2$, and $i_3$ leaving the gaps $\ell_1 =
 %%
 
 \subsection{Proof of Proposition~\ref{prop:gamma}} \label{sec:proof_prop_gamma}
-First,  note that 
-\begin{equation*}
-(a^1_y)^2=\frac{\gamma^2}{L^2}\sum_{i=0}^{L-1}\sum_{j=0}^{L-1}x[i]x[j].
-\end{equation*}
-Similarly,  
-\begin{equation*}
-\sum_{\ell = 1}^{L-1}a_y^2[\ell]=\frac{\gamma}{L}\sum_{\ell = 1}^{L-1}\sum_{i=0}^{L-1-\ell}x[i]x[i+\ell],
-\end{equation*}
-and $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x^2[i] + \sigma^2$. The proof is concluded by noting that  $a_x^2[-\ell]=a_x^2[\ell]$. 
+Refer to equations \eqref{eq:mean_micrograph}--\eqref{eq:ac3_micrograph} for expressions relating the moments of $y$ and those of $x$, and the parameters $\gamma$ and $\sigma$. First,  note that 
+\begin{align*}
+	(a^1_y)^2 & = \frac{\gamma^2}{L^2}\sum_{i=0}^{L-1}\sum_{j=0}^{L-1}x[i]x[j].
+\end{align*}
+Similarly, using $a_x^2[-\ell] = a_x^2[\ell]$:
+\begin{align*}
+	2\sum_{\ell = 1}^{L-1}a_y^2[\ell] & = \gamma \sum_{\ell = 1}^{L-1} a_x^2[\ell] + a_x^2[-\ell] \\
+									  & = \frac{\gamma}{L}\sum_{i=0}^{L-1}\sum_{\ell = 1}^{L-1} x[i]\left(x[i+\ell] + x[i-\ell]\right) = \frac{\gamma}{L} \sum_{i = 0}^{L-1} \sum_{j = 0, j \neq i}^{L-1} x[i] x[j],
+\end{align*}
+where the last equality is obtained by noting that, given the summation bounds, the set of pairs $(i, i\pm\ell)$ and $(i, j)$ are the same over the valid range $\{0, \ldots, L-1\}^2$. To conclude, notice that $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x[i]^2 + \sigma^2$ and combine.
 
 
 \subsection{Proof of Proposition~\ref{prop:gamma_sigma}} \label{sec:proof_prop_gamma_sigma}
