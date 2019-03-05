@@ -289,14 +289,14 @@ We follow the same line of research by considering the multi-target detection as
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
-In what follows, we consider autocorrelations of both the observation $y$ and of the signal occurrences in $y$. As per our discussion of extensions, the signal occurrences may be sampled from a discrete set $\{x_1, \ldots, x_K\}$ (as in~\eqref{eq:heterogeneousdistribution}), or from a more general distribution. Accordingly, we define autocorrelations for a random signal $z$ of length $M$. For our purposes, this will be applied both to signal occurrences (of length $L$) and to $y$ (of length $N$).
+In what follows, we consider autocorrelations of both the observation $y$ and of the signal occurrences in $y$. As per our discussion of extensions, the signal occurrences may be sampled from a discrete set $\{x_1, \ldots, x_K\}$ (as in~\eqref{eq:heterogeneousdistribution}), or from a more general distribution. Accordingly, we define autocorrelations broadly for a random signal $z$ of length $M$. For our purposes, this will be applied both to signal occurrences (of length $L$) and to $y$ (of length $N$).
 
 For a random signal $z\in \R^M$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{equation}
 a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E_z\left\{\frac{1}{M} \sum_{i=-\infty}^{\infty} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\},
 \label{eq:ac_general}
 \end{equation}
-where the expectation is taken with respect to the distribution of $z$. Indexing of $z$ out of the range $0, \ldots, M-1$ is zero-padded.
+where the expectation is taken with respect to the distribution of $z$. Indexing out of bounds is zero-padded, that is, $z[i] = 0$ for $i$ out of the range $0, \ldots, M-1$.
 Explicitly, the first-, second- and third-order autocorrelations are given by: 
 \begin{align}  
 a_z^1 & = \E_z\left\{\frac{1}{M} \sum_{i=0}^{M-1} 
@@ -311,14 +311,14 @@ $$
 % In particular, for the model~\eqref{eq:model}, 
 %$x=x_k$ with probability $\pi_k$.
 In particular, for
-$x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$ as in~\eqref{eq:heterogeneousdistribution}, the autocorrelations are given in explicit form as:
+$x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$ as in~\eqref{eq:heterogeneousdistribution}, the autocorrelations of $x$ are given in explicit form in terms of those of the deterministic signals $x_1, \ldots, x_K$ as:
 \begin{align}
 	a_x^q  & = \sum_{k=1}^{K} \pi_ka_{x_k}^q.
 	\label{eq:mixedautocorr}
 \end{align}
 Explicit expressions of the autocorrelations for the more involved model of  cryo-EM~\eqref{eq:cryoEM} are given in~\cite{bendory2018toward}.
 
-We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ almost surely (a.s.) converge to the actual (population) autocorrelations of $y$, that is, % (ergodicity)
+We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant \TODO{We didn't define $\gamma$ for the well-separated model at this point; we should reconsider this}, the empirical autocorrelations of $y$ almost surely (a.s.) converge to the actual (population) autocorrelations of $y$, that is, % (ergodicity)
 \begin{align}
 \lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] \aseq a_y^q[\ell_1, \ldots, \ell_{q-1}].
 \end{align}
