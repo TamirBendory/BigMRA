@@ -351,20 +351,20 @@ In this section, we give the expressions for the autocorrelations of the observe
 \quad \overset{N\to\infty}{\longrightarrow} \quad \gamma.
 \end{align}
 %
-Therefore, in the large $N$ limit $\gamma$ may be interpreted as the signal density, as in the well-separated model.
+Therefore, in the large $N$ limit $\gamma$ may be interpreted as the signal density, as in the well-separated model~\eqref{eq:gamma}.
 
 In Section~\ref{sec:proof_prop_poisson}, we prove the following expressions for the autocorrelations of $y$ under the Poisson model. As in the well-separated model, the observed autocorrelations do not depend on individual occurrences of the signal, but only on $x$ itself, and the parameters $\gamma$ and $\sigma$:
 %
 \begin{align}
 a_y^1  &=  \gamma a_{x}^1, 
 \label{eq:mean_micrograph2} \\
-a_y^2[\ell] &=  (\gamma a_x^1)^2 + \gamma a_x^2[\ell] + \sigma^2 \ell[\ell], 
+a_y^2[\ell] &=  (\gamma a_x^1)^2 + \gamma a_x^2[\ell] + \sigma^2 \delta[\ell], 
 \label{eq:ac2_micrograph2} \\
 a_y^3[\ell_1,\ell_2]  & = (\gamma a_x^1)^3 + \gamma a_x^1  
 \cdot ( \gamma a_x^2[\ell_1] + \gamma a_x^2[\ell_2]
 + \gamma a_x^2[\ell_2-\ell_1]) + \gamma a_x^3[\ell_1,\ell_2] 
 \nonumber \\
-& \qquad + \gamma a_x^1 \sigma^2 \big(\ell[\ell_1]+\ell[\ell_2] +\ell[\ell_1-\ell_2] \big).
+& \qquad + \gamma a_x^1 \sigma^2 \big(\delta[\ell_1]+\delta[\ell_2] +\delta[\ell_1-\ell_2] \big).
 \label{eq:ac3_micrograph2}
 \end{align}
 
@@ -877,7 +877,7 @@ a_y^3[\ell_1, \ell_2] & = \gamma a_x^3[\ell_1, \ell_2] + \gamma \sigma^2 a_x^1 \
 
 %Throughout this section, we will use the capital letter $X$ to represent the random unobserved vector of length $L$, the capital letter $Y$ to represent the random observed vector of length $N$, and the capital letter $S$ to represent the unobserved vector of occurrences.
 
-We will denote by $\M_l$ the moment tensors of $x$:
+We will denote by $\M_q$ the moment tensors of $x$:
 %
 \begin{align}
 %
@@ -896,8 +896,7 @@ We will denote by $\M_l$ the moment tensors of $x$:
 \M_3[i,j,k] = \E x[i] x[j] x[k], \quad 0 \le i,j,k \le L-1.
 %
 \end{align}
-
-We obtain the autocorrelations $a_x^l$ of $x$ by averaging over a slice of the moment tensors:
+We obtain the autocorrelations $a_x^q$ of $x$ by averaging over a slice of the moment tensors:
 %
 \begin{align}
 %
@@ -968,7 +967,8 @@ a_y^1 = \frac{1}{N} \sum_{i=1}^N \E y[i] = \gamma a_x^1.
 
 \subsubsection{Computing $a_y^2$}
 
-First we will consider the noise-free case, where $\sigma = 0$. We will condition on $s$ first, and then take the expectation over $s$. Fix $i_1 \ne i_2$, and let $\ell = i_2 - i_1$. Then:
+First we will consider the noise-free case, where $\sigma = 0$. 
+Again, we will condition on $s$ first, and then take the expectation over $s$. Fix $i_1 \ne i_2$, and let $\ell = i_2 - i_1$. Then:
 %
 \begin{align}
 %
@@ -1137,7 +1137,6 @@ and then again using Lemma~\ref{lem-choose} we get the expected value:
 \frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} \M_2[j,j+\ell_1] \M_1[j+\ell_2].
 %
 \end{align}
-
 Similarly, the expected values of terms (c) and (d) are:
 %
 \begin{align} \label{cccc}
@@ -1169,7 +1168,7 @@ Moving onto Case~\ref{case2}, we have $q_1 \equiv i_1 - j_1 = i_2 - j_2$, and al
 \begin{align}
 %
 & \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2}
-\sum_{1 \le k_1,k_2 \le S[q_1]} \sum_{k_3=1}^{s[q_2]}
+\sum_{1 \le k_1,k_2 \le s[q_1]} \sum_{k_3=1}^{s[q_2]}
 x_{(k_1)}^{q_1}[j_1] x_{(k_2)}^{q_1}[j_1 + \ell_1] x_{(k_3)}^{q_2}[j_3]   
 \nonumber \\
 =& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2} \sum_{k_3=1}^{s[q_2]}
