@@ -127,14 +127,14 @@
 
 We consider the multi-target detection problem of recovering a set of signals that appear 
 multiple times at unknown locations in a noisy measurement.
-In the low noise regime, one can estimate the signals by first detect their occurrences and then cluster them.
-However, in the high noise regime neither detection nor  clustering can be performed reliably and thus such a strategy is destined to fail.  
-By employing autocorrelation analysis, we show that the impossibility to detect and cluster signals' occurrences in high noise levels does not necessarily preclude signal estimation.
-Specifically, to estimate the signals, we derive simple relations between the autocorrelations of the observation and those of the signals. These autocorrelations can be estimated accurately in any noise level given sufficiently long measurement. 
-To recover the signals from their autocorrelations, we suggest to solve a nonlinear least-squares. 
-We provide rigorous analysis for the special case in which a single signal appears multiple times in the data, and demonstrate numerically the effectiveness of the method in a variety of settings. 
+In the low noise regime, one can estimate the signals by first detecting occurrences, then clustering and averaging them.
+In the high noise regime however, neither detection nor clustering can be performed reliably, so that strategies along these lines are destined to fail.  
+Notwithstanding, using autocorrelation analysis, we show that the impossibility to detect and cluster signal occurrences in the presence of high noise does not necessarily preclude signal estimation.
+Specifically, to estimate the signals, we derive simple relations between the autocorrelations of the observation and those of the signals. These autocorrelations can be estimated accurately at any noise level given a sufficiently long measurement. 
+To recover the signals from the observed autocorrelations, we (heuristically) solve a set of polynomial equations through nonlinear least-squares. 
+We provide analysis regarding well-posedness of the task, and demonstrate numerically the effectiveness of the method in a variety of settings.
 
-The main goal of this work is to provide theoretical and numerical support for a recently proposed framework to elucidate 3-D structures of biological macromolecules using cryo-electron microscopy in extreme noise levels~\cite{bendory2018toward}.
+The main goal of this work is to provide theoretical and numerical support for a recently proposed framework to image 3-D structures of biological macromolecules using cryo-electron microscopy in extreme noise levels. % ~\cite{bendory2018toward}. -- not references in the abstract, except if cited in full; but we don't want to write "arxiv" here.
  
 \end{abstract}
 
