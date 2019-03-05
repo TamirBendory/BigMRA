@@ -565,10 +565,10 @@ where
 
 
 In the heterogeneous model~\eqref{eq:model}, the unknowns are $K$ signals of length $L$, together with their densities $\gamma_1, \ldots, \gamma_K$~\eqref{eq:gamma_k} (equivalently: the distribution $\pi$ and overall density $\gamma$) and possibly the noise level $\sigma$. To estimate these parameters, we must collect at least as many independent equations. Within our framework, polynomial equations are provided by the observable autocorrelations, which correspond to mixed autocorrelations of the unknowns as per~\eqref{eq:mixedautocorr}. In this section, following~\cite{boumal2017heterogeneous}, we count how many equations the first three autocorrelations may provide in the best case (discounting symmetries). This leads to a straightforward information-theoretic upper bound on the number $K$ of signals which can be estimated, as a function of $L$. This is only an upper bound, though a bound of the same type was shown to be tight in a similar setting~\cite{bandeira2017estimation}.
-The counting is based on the autocorrelations of the well-separated model. For entries independent of $\sigma$, the autocorrelations of the Poisson process are equivalent to those of the well-separated model. If $\sigma$ is known, it holds true for all entries; see Section~\ref{sec:ac_poisson}.
+The counting is based on the autocorrelations of the well-separated model. For entries independent of $\sigma$, the autocorrelations of the Poisson process contain the same information as those of the well-separated model. If $\sigma$ is known, this holds true for all entries: see Section~\ref{sec:ac_poisson}.
 
 
-The first-order autocorrelation $a_y^1$~\eqref{eq:mean_micrograph} provides one equation. For second-order autocorrelations $a_y^2[\ell]$~\eqref{eq:ac2_micrograph}, if $\sigma$ is known we obtain $L$ equations with $\ell$ ranging from 0 to $L-1$. If $\sigma$ is unknown, we may disregard $a_y^2[0]$ (then only entry affected by $\sigma$) and still collect $L-1$ equations. Similarly, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$~\eqref{eq:ac3_micrograph} with $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), providing $\frac{(L+1)(L+2)}{2}-2$ equations in total. 
+The first-order autocorrelation $a_y^1$~\eqref{eq:mean_micrograph} provides one equation. For second-order autocorrelations $a_y^2[\ell]$~\eqref{eq:ac2_micrograph}, if $\sigma$ is known we obtain $L$ equations with $\ell$ ranging from 0 to $L-1$. If $\sigma$ is unknown, we may disregard $a_y^2[0]$ (the only entry affected by $\sigma$) and still collect $L-1$ equations. Similarly, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$~\eqref{eq:ac3_micrograph} with $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), providing $\frac{(L+1)(L+2)}{2}-2$ equations in total. 
 If we further exclude any entries such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$, there are $\frac{(L-1)(L-2)}{2}$ remaining entries.
 
 Hence, if $\sigma$ is known we collect
@@ -582,10 +582,10 @@ equations, while if it unknown and we choose not to estimate it, then we collect
 equations in total. Of course, there may be redundancy in these equations: we aim only to provide an upper bound. %under the assumption that these equations are independent.
 
 
-Since we aim to estimate $KL$ parameters for the $K$ signals of length $L$ plus $K$ parameters for the densities $\gamma_k$, %(or the distribution $\pi$ and overall density $\gamma$)
+Since we aim to estimate $KL$ parameters for the $K$ signals of length $L$, plus $K$ parameters for the densities $\gamma_k$, %(or the distribution $\pi$ and overall density $\gamma$)
  there are $K(L+1)$ unknowns. As a result, an absolute upper bound on $K$ such that the estimation problem may be solvable is
 \begin{align*}
-	K \leq \frac{L(L+5)}{2(L+1)},
+	K \leq \frac{L(L+5)}{2(L+1)}
 \end{align*}
 for the case of $\sigma$ known, and
 \begin{align*}
@@ -597,14 +597,14 @@ for the case of $\sigma$ unknown and not estimated. Overall, this indicates that
 
 \subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
 
-Autocorrelations in $d$ dimensions are defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
+Autocorrelations in $d$ dimensions are defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as \TODO{in equation below, should M be L?}
 \begin{equation}
 a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{M^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
 \label{eq:ac_d_dimension}
 \end{equation}
 Interestingly, for the homogeneous case ($K=1$) in dimensions greater than one, almost all  signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
-If the mean of signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
-The case of 1-D signals is essentially different: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating  symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
+If the mean of the signal is available and non-zero, the sign symmetry can be resolved. However, determining the reflection symmetry still requires additional information, beyond the second-order autocorrelation.
+The case of 1-D signals is fundamentally different: generally there are $2^{L-2}$ signals with the same second-order autocorrelation (after eliminating  symmetries)~\cite{beinert2015ambiguities,bendory2017fourier}. 
 
 
 This uniqueness result for two and three-dimensional signals is the basis of a popular imaging technique called coherent diffraction imaging (CDI). In CDI, an object is
@@ -687,7 +687,7 @@ The observations are contaminated with additive white Gaussian noise with standa
 %As explained in Section~\ref{sec:high_dimensions}, an image is determined uniquely form its second-order autocorrelation.
 %Hence, to use this property and keep things simple, we assume the number of signal occurrences and the noise standard deviation are known so that we can estimate the second-order autocorrelation of the image from thos the observation directly.  %Micrographs are generated such that any two occurrences are always separated by at least 49 pixels in each direction in accordance with the separation condition~\eqref{eq:spacing}. 
 
-We compute the average second-order autocorrelation of the observations. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform (FFT), in parallel over the numerous observations. To  keep things simple, we assume the number of signal occurrences (akin to the density $\gamma$) and the standard deviation of the noise, $\sigma$, are known. Given those quantities, the second-order autocorrelation of the image can be easily deduced from~\eqref{eq:ac2_micrograph}. As explained in Section~\ref{sec:high_dimensions}, an image is determined uniquely form its second-order autocorrelations. Then, to estimate the target image, we use a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
+We compute the average second-order autocorrelation of the observations. This is a particularly simple computation which can be efficiently executed with a fast Fourier transform (FFT), in parallel over the numerous observations. We assume the number of signal occurrences (akin to the density $\gamma$) and the standard deviation of the noise, $\sigma$, are known. Given those quantities, the second-order autocorrelation of the image can be easily deduced from~\eqref{eq:ac2_micrograph}. As explained in Section~\ref{sec:high_dimensions}, an image is determined uniquely form its second-order autocorrelations. Then, to estimate the target image, we use a standard phase retrieval algorithm called relaxed-reflect-reflect (RRR)~\cite{elser2017rrr}, initialized randomly.
 
 
 \begin{figure}[t]
