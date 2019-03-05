@@ -246,7 +246,7 @@ of the models described in Section~\ref{sec:intro} as
 y  =   s \ast x + \varepsilon,
 \end{equation}
 where tomographic projections are placed according to the signal $s$. In this model, the signal $x$ represents 2-D tomographic projections of the 3-D structure taken from  random viewing directions according to (possibly unknown) distribution over $SO(3)$ (the group of 3-D rotations). In particular, by letting $V$ describes the underlying volume, $R_\omega$ a random 3-D rotation for $\omega\in SO(3)$, and $P$ a tomographic projection, we have
-\begin{equation}
+\begin{equation} \label{eq:cryoEM}
 x= P(R_\omega V).
 \end{equation}
 By allowing $V$ to be a random signal as well, this model can encode a mixture of structures  
@@ -299,20 +299,20 @@ a_z^3[\ell_1,\ell_2] & = \E_z\left\{\frac{1}{M} \sum_{i = \max\{0, -\ell_1, -\el
 Since  autocorrelations depend only on the differences between indices, they obey the following symmetries: $$a_z^2[\ell] = a_z^2[-\ell],$$ and
 $$a_z^3[\ell_1,\ell_2] = a_z^3[\ell_2,\ell_1]=a_z^3[-\ell_1,\ell_2-\ell_1].
 $$
-
-In what follows, $x$ is the random variable corresponding to signal occurrences in $y$. In particular, for the model~\eqref{eq:model}, 
+%In what follows, $x$ is the random variable corresponding to signal occurrences in $y$.
+% In particular, for the model~\eqref{eq:model}, 
 %$x=x_k$ with probability $\pi_k$.
-%In particular, for
-$x$ is sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$, so that its autocorrelations are given in explicit form as:
+In particular, for
+$x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$,  the autocorrelations are given in explicit form as:
 \begin{align}
 	a_x^q  & = \sum_{k=1}^{K} \pi_ka_{x_k}^q.
 	\label{eq:mixedautocorr}
 \end{align}
-Explicit expressions of the autocorrelations for the more involved model of  cryo-EM are given in~\cite{bendory2018toward}.
+Explicit expressions of the autocorrelations for the more involved model of  cryo-EM~\eqref{eq:cryoEM} are given in~\cite{bendory2018toward}.
 
-We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ converge to the actual (population) autocorrelations of $y$, that is, % (ergodicity)
+We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant, the empirical autocorrelations of $y$ almost surely (a.s.) converge to the actual (population) autocorrelations of $y$, that is, % (ergodicity)
 \begin{align}
-\lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] = a_y^q[\ell_1, \ldots, \ell_{q-1}].
+\lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] \aseq a_y^q[\ell_1, \ldots, \ell_{q-1}].
 \end{align}
 \TODO{Why do we need constant $\gamma$?}
 This provides a concrete means of estimating the quantities $a_y^ q$. In the remainder of this section, we relate the observables $a_y^q$  to the unknowns $a_x^q$, first under the well-separated model, then under the Poisson model.
@@ -330,15 +330,15 @@ The separation condition  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$.
 Owing to the separation condition, when correlating $y$ with shifted versions of itself for shifts in $0, \ldots, L-1$, any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result, the autocorrelations of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the density $\gamma$ (which is a weak dependence on the support signal $s$). Specifically, we show the following identities in Section~\ref{sec:autocorrelation_computation}:
 \begin{align} 
 	a_y^1 & = \gamma a_{x}^1, \label{eq:mean_micrograph} \\
-	a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\ell[\ell], \label{eq:ac2_micrograph}\\
-	a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{x}^1  \big(\ell[\ell_1]+\ell[\ell_2]
-	+\ell[\ell_1-\ell_2]\big), \label{eq:ac3_micrograph}
+	a_y^2[\ell] & = \gamma a_{x}^2[\ell] + \sigma^2\delta[\ell], \label{eq:ac2_micrograph}\\
+	a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{x}^1  \big(\delta[\ell_1]+\delta[\ell_2]
+	+\delta[\ell_1-\ell_2]\big), \label{eq:ac3_micrograph}
 \end{align}
-where $\ell[0] = 1$ and $\ell[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to the noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
+where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to the noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
 
 
 We show in Section~\ref{sec:theory_homogeneous_well_separated} 
-that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case where $K = 1$ (all signal occurrences are the same).
+that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case $K = 1$ (all signal occurrences are the same).
 
 \subsection{Autocorrelations under the Poisson model}
 
@@ -810,12 +810,12 @@ Now switch the sums over $i$ and $j$, and observe that $I_{ij}$ is zero unless $
 \begin{align}
 a_y^1 & = \frac{1}{N} \sum_{j = 1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-1} x_{(j)}[t]\right\} + \frac{1}{N} \E_\varepsilon\left\{ \sum_{i=0}^{N-1} \varepsilon[i]\right\}.
 \end{align}
-Since the noise has zero mean and $x_{(1)}, \ldots, x_{(|s|)}$ are independent and all distributed as $x$, we further find:
+Since the noise has zero mean and $x_{(1)}, \ldots, x_{(|s|)}$ are independent, we further find:
 \begin{align}
 a_y^1 & = \frac{|s|L}{N} a_x^1 = \gamma a_x^1.
 \end{align}
 
-To address the second-order moments, we resort to the separation conditions. First, consider this expression:
+To address the second-order moments, we resort to the separation condition~\eqref{eq:spacing}. First, consider this expression:
 \begin{align*}
 N \cdot a_y^2[\ell] & = \E_y\left\{ \sum_{i = 0}^{N-\ell-1} y[i] y[i+\ell] \right\} \\
 & = \sum_{i = 0}^{N-\ell-1} \E_{x_{(1)}, \ldots, x_{(|s|)}, \varepsilon}\Bigg\{ \left( \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] + \varepsilon[i] \right) \cdot \\
@@ -831,7 +831,7 @@ N \cdot a_y^2[\ell] & = \sum_{j=1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-\el
 \end{align}
 where $\ell[0] = 1$ and $\ell[\ell \neq 0] = 0$. Since each $x_{(j)}$ is distributed as $x$, they all have the same autocorrelations as $x$ and we finally get
 \begin{align}
-a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-\ell}{N}\sigma^2 \ell[\ell] = \gamma a_x^2[\ell] + \sigma^2 \ell[\ell].
+a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-\ell}{N}\sigma^2 \ell[\ell] = \gamma a_x^2[\ell] + \sigma^2 \delta[\ell].
 \end{align}
 
 We now turn to the third-order autocorrelations. These involve the sum
@@ -860,15 +860,15 @@ I_{ij} I_{i+\ell_1, j'} I_{i+\ell_2,j''} = 1 \iff \\ j=j'=j'' \textrm{ and } i =
 \end{align}
 In expectation over the realizations $x_{(j)}$, using again that they are i.i.d.\ with the same distribution as $x$, this first term yields $|s|L a_x^3[\ell_1, \ell_2]$. Now consider the fifth term. Taking expectation against $\varepsilon$ yields
 \begin{align}
-\sum_{i=0}^{N-\max(\ell_1, \ell_2)-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \sigma^2 \ell[\ell_1 - \ell_2].
+\sum_{i=0}^{N-\max(\ell_1, \ell_2)-1} \sum_{j = 1}^{|s|} I_{ij} x_{(j)}[i-s_{(j)}] \sigma^2 \delta[\ell_1 - \ell_2].
 \end{align}
 Switch the order of summation over $i$ and $j$ again to get
 \begin{align}
-\sigma^2 \ell[\ell_1 - \ell_2] \sum_{j = 1}^{|s|} \sum_{t=0}^{L-1} x_{(j)}[t].
+\sigma^2 \delta[\ell_1 - \ell_2] \sum_{j = 1}^{|s|} \sum_{t=0}^{L-1} x_{(j)}[t].
 \end{align}
-Now taking expectation against the signal occurrences yields $|s|L \sigma^2 a_x^1 \ell[\ell_1 - \ell_2]$. A similar reasoning for terms 6 and 7 yields this final formula for the third-order autocorrelations of $y$:
+Now taking expectation against the signal occurrences yields $|s|L \sigma^2 a_x^1 \delta[\ell_1 - \ell_2]$. A similar reasoning for terms 6 and 7 yields this final formula for the third-order autocorrelations of $y$:
 \begin{align}
-a_y^3[\ell_1, \ell_2] & = \gamma a_x^3[\ell_1, \ell_2] + \gamma \sigma^2 a_x^1 \left( \ell[\ell_1] + \ell[\ell_2] + \ell[\ell_1 - \ell_2] \right).
+a_y^3[\ell_1, \ell_2] & = \gamma a_x^3[\ell_1, \ell_2] + \gamma \sigma^2 a_x^1 \left( \delta[\ell_1] + \delta[\ell_2] + \delta[\ell_1 - \ell_2] \right).
 \end{align}
 
 
