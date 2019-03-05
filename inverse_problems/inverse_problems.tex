@@ -600,9 +600,9 @@ for the case of $\sigma$ unknown and not estimated. Overall, this indicates that
 
 \subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
 
-Autocorrelations in $d$ dimensions is defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
+Autocorrelations in $d$ dimensions are defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
 \begin{equation}
-a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{m^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{M^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
 \label{eq:ac_d_dimension}
 \end{equation}
 Interestingly, for the homogeneous case ($K=1$) in dimensions greater than one, almost all  signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
@@ -613,7 +613,7 @@ The case of 1-D signals is essentially different: generally there are $2^{L-2}$ 
 This uniqueness result for two and three-dimensional signals is the basis of a popular imaging technique called coherent diffraction imaging (CDI). In CDI, an object is
 illuminated with a coherent wave, and the far field diffraction pattern  is measured, corresponding to the object's Fourier magnitude~\cite{miao1999extending,shechtman2015phase}. 
 If the diffraction pattern is over-sampled by at least  twice the Nyquist frequency,  the data is equivalent to the signal's second-order autocorrelation. In this context, the computational problem of recovering the signal from its second-order autocorrelation is usually referred to as \emph{phase retrieval} or the \emph{phase problem}.
-Despite the uniqueness result, recently it has been shown that, the problem is  ill-conditioned, at least for 2-D images~\cite{barnett2018geometry}. That is, there exist different images whose second-order autocorrelations agree up to machine precision. 
+Despite the uniqueness result, recently it has been shown that the problem is  ill-conditioned---at least for 2-D images~\cite{barnett2018geometry}. That is, there exist other images whose second-order autocorrelations agree up to machine precision. 
 
 
 
