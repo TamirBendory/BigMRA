@@ -334,6 +334,12 @@ Under the separation condition~\eqref{eq:spacing}, the relation between autocorr
 \end{equation}
 This $\gamma$ is the fraction of entries of $y$ occupied by signal occurrences. %Henceforth, we call it the signal density.
 The separation condition  imposes $\gamma\leq\frac{L}{2L-1}\approx 1/2$. 
+For the heterogeneous model~\eqref{eq:model},  one can define
+\begin{equation}
+\gamma_k  = \frac{|s_k| L}{N},
+\label{eq:gamma_k}
+\end{equation}
+where $\vert s_k\vert = \sum_i s_k[i]$ so that $\gamma=\sum_k \gamma_k$.
 
 Owing to the separation condition, when correlating $y$ with shifted versions of itself for shifts in $0, \ldots, L-1$, any given occurrence of $x$ in $y$ is only ever correlated with itself, and never with another occurrence. As a result, the autocorrelations of $y$ depend on the corresponding autocorrelations of $x$, the noise level $\sigma$ and the density $\gamma$ (which is a weak dependence on the support signal $s$). Specifically, we show the following identities in Section~\ref{sec:autocorrelation_computation}:
 \begin{align} 
@@ -348,7 +354,7 @@ where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, 
 We show in Section~\ref{sec:theory_homogeneous_well_separated} 
 that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case $K = 1$ (all signal occurrences are the same). \TODO{Do we also need to say "for generic $x$" here, as in Poisson?}
 
-\subsection{Autocorrelations under the Poisson model}
+\subsection{Autocorrelations under the Poisson model} \label{sec:ac_poisson}
 
 In this section, we give the expressions for the autocorrelations of the observed signal $y$ under the Poisson model. %In this model, each location $k$, $1 \le k \le N-L+1$ is the starting point of a Poisson-distributed number of random signals. 
 %More precisely, letting $s[k]$ be the number of signals starting at location $k$, $s[k] \overset{iid}{\sim} \Poisson(\gamma / L)$.
@@ -369,7 +375,11 @@ In Section~\ref{sec:proof_prop_poisson}, we prove the following expressions for 
 	a_y^3[\ell_1,\ell_2]  & =  \gamma a_x^3[\ell_1,\ell_2] + \sigma^2 \gamma a_x^1 \big(\delta[\ell_1]+\delta[\ell_2] +\delta[\ell_1-\ell_2] \big) \nonumber \\
 						  & \qquad + (\gamma a_x^1)^3 + \gamma a_x^1 \cdot ( \gamma a_x^2[\ell_1] + \gamma a_x^2[\ell_2] + \gamma a_x^2[\ell_2-\ell_1]). \label{eq:ac3_micrograph2}
 \end{align}
+Note that from those autocorrelations, it is easy to retrieve the autocorrelations of the well-separated model for all entries unaffected by $\sigma$. If $\sigma$ is known, then it is true for all entries. \TODO{addition}
+
 In the homogeneous case ($K=1$), we show in Section~\ref{sec:theory_homogeneous_poisson} that $a_y^1,a_y^2$ and $a_y^3$ identify uniquely the signal $x$, the Poisson parameter $\gamma$ and the noise level $\sigma$ for generic $x$. 
+
+
 %
 %From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
 %%
@@ -552,11 +562,14 @@ where
 \subsection{Elementary limitations of the heterogeneous case}
 \label{sec:heterogeneity}
 
-\TODO{Check and specify if this holds for both models}
-\TODO{Did we define densities $\gamma_k$?}
-\TODO{We write the section for the well-separated model, but it would be the same for the Poisson model}
+\TODO{Check and specify if this holds for both models: see below}
 
-In the heterogeneous model~\eqref{eq:model}, the unknowns are $K$ signals of length $L$, together with their densities $\gamma_1, \ldots, \gamma_K$ (equivalently: the distribution $\pi$ and overall density $\gamma$) and possibly the noise level $\sigma$. To estimate these parameters, we must collect at least as many independent equations. Within our framework, polynomial equations are provided by the observable autocorrelations, which correspond to mixed autocorrelations of the unknowns as per~\eqref{eq:mixedautocorr}. In this section, following~\cite{boumal2017heterogeneous}, we count how many equations the first three autocorrelations may provide in the best case (discounting symmetries). This leads to a straightforward information-theoretic upper bound on the number $K$ of signals which can be estimated, as a function of $L$. This is only an upper bound, though a bound of the same type was shown to be tight in a similar setting~\cite{bandeira2017estimation}.
+\TODO{Did we define densities $\gamma_k$? TB: yes, in section 3}
+
+
+In the heterogeneous model~\eqref{eq:model}, the unknowns are $K$ signals of length $L$, together with their densities $\gamma_1, \ldots, \gamma_K$~\eqref{eq:gamma_k} (equivalently: the distribution $\pi$ and overall density $\gamma$) and possibly the noise level $\sigma$. To estimate these parameters, we must collect at least as many independent equations. Within our framework, polynomial equations are provided by the observable autocorrelations, which correspond to mixed autocorrelations of the unknowns as per~\eqref{eq:mixedautocorr}. In this section, following~\cite{boumal2017heterogeneous}, we count how many equations the first three autocorrelations may provide in the best case (discounting symmetries). This leads to a straightforward information-theoretic upper bound on the number $K$ of signals which can be estimated, as a function of $L$. This is only an upper bound, though a bound of the same type was shown to be tight in a similar setting~\cite{bandeira2017estimation}.
+The counting is based on the autocorrelations of the well-separated model. For entries independent of $\sigma$, the autocorrelations of the Poisson process are equivalent to those of the well-separated model. If $\sigma$ is known, it holds true for all entries; see Section~\ref{sec:ac_poisson}.
+
 
 The first-order autocorrelation $a_y^1$~\eqref{eq:mean_micrograph} provides one equation. For second-order autocorrelations $a_y^2[\ell]$~\eqref{eq:ac2_micrograph}, if $\sigma$ is known we obtain $L$ equations with $\ell$ ranging from 0 to $L-1$. If $\sigma$ is unknown, we may disregard $a_y^2[0]$ (then only entry affected by $\sigma$) and still collect $L-1$ equations. Similarly, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$~\eqref{eq:ac3_micrograph} with $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), providing $\frac{(L+1)(L+2)}{2}-2$ equations in total. 
 If we further exclude any entries such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$, there are $\frac{(L-1)(L-2)}{2}$ remaining entries.
@@ -569,9 +582,11 @@ equations, while if it unknown and we choose not to estimate it, then we collect
 \begin{align*}
 	1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
 \end{align*}
-equations in total. Of course, there may be redundancy in these equations: we aim only to provide a bound, under the assumption that these equations are independent.
+equations in total. Of course, there may be redundancy in these equations: we aim only to provide an upper bound. %under the assumption that these equations are independent.
 
-Since we aim to estimate $KL$ parameters for the $K$ signals of length $L$ plus $K$ parameters for the densities $\gamma_k$ (or the distribution $\pi$ and overall density $\gamma$), there are $K(L+1)$ unknowns. As a result, an absolute upper bound on $K$ such that the estimation problem may be solvable is
+
+Since we aim to estimate $KL$ parameters for the $K$ signals of length $L$ plus $K$ parameters for the densities $\gamma_k$, %(or the distribution $\pi$ and overall density $\gamma$)
+ there are $K(L+1)$ unknowns. As a result, an absolute upper bound on $K$ such that the estimation problem may be solvable is
 \begin{align*}
 	K \leq \frac{L(L+5)}{2(L+1)},
 \end{align*}
