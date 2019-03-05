@@ -346,7 +346,7 @@ where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, 
 
 
 We show in Section~\ref{sec:theory_homogeneous_well_separated} 
-that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case $K = 1$ (all signal occurrences are the same).
+that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case $K = 1$ (all signal occurrences are the same). \TODO{Do we also need to say "for generic $x$" here, as in Poisson?}
 
 \subsection{Autocorrelations under the Poisson model}
 
@@ -355,27 +355,20 @@ In this section, we give the expressions for the autocorrelations of the observe
  We first note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
 %
 \begin{align}
-\frac{N - L + 1}{N} \cdot L \cdot \frac{\gamma  }{L} 
+\frac{N - L + 1}{N} \cdot \frac{\gamma  }{L}  \cdot L 
 \quad \overset{N\to\infty}{\longrightarrow} \quad \gamma.
 \end{align}
 %
-Therefore, in the large $N$ limit $\gamma$ may be interpreted as the signal density, as in the well-separated model~\eqref{eq:gamma}.
+Therefore, in the large $N$ limit, similarly to the role of $\gamma$ in the well-separated model~\eqref{eq:gamma}, $\gamma$ may be interpreted as the signal density.
 
-In Section~\ref{sec:proof_prop_poisson}, we prove the following expressions for the autocorrelations of $y$ under the Poisson model. As in the well-separated model, the observed autocorrelations do not depend on individual occurrences of the signal, but only on $x$ itself, and the parameters $\gamma$ and $\sigma$:
+In Section~\ref{sec:proof_prop_poisson}, we prove the following expressions for the autocorrelations of $y$ under the Poisson model. As in the well-separated model, the observed autocorrelations do not depend on individual occurrences of the signal, but only on the distribution of $x$ itself, and the parameters $\gamma$ and $\sigma$: \TODO{Do these identities hold even without taking a limit? I guess so, but let's be sure.}
 %
 \begin{align}
-a_y^1  &=  \gamma a_{x}^1, 
-\label{eq:mean_micrograph2} \\
-a_y^2[\ell] &=  (\gamma a_x^1)^2 + \gamma a_x^2[\ell] + \sigma^2 \delta[\ell], 
-\label{eq:ac2_micrograph2} \\
-a_y^3[\ell_1,\ell_2]  & = (\gamma a_x^1)^3 + \gamma a_x^1  
-\cdot ( \gamma a_x^2[\ell_1] + \gamma a_x^2[\ell_2]
-+ \gamma a_x^2[\ell_2-\ell_1]) + \gamma a_x^3[\ell_1,\ell_2] 
-\nonumber \\
-& \qquad + \gamma a_x^1 \sigma^2 \big(\delta[\ell_1]+\delta[\ell_2] +\delta[\ell_1-\ell_2] \big).
-\label{eq:ac3_micrograph2}
+	a_y^1  & =  \gamma a_{x}^1, \label{eq:mean_micrograph2} \\
+	a_y^2[\ell] & = \gamma a_x^2[\ell] + \sigma^2 \delta[\ell] + (\gamma a_x^1)^2, \label{eq:ac2_micrograph2} \\
+	a_y^3[\ell_1,\ell_2]  & =  \gamma a_x^3[\ell_1,\ell_2] + \sigma^2 \gamma a_x^1 \big(\delta[\ell_1]+\delta[\ell_2] +\delta[\ell_1-\ell_2] \big) \nonumber \\
+						  & \qquad + (\gamma a_x^1)^3 + \gamma a_x^1 \cdot ( \gamma a_x^2[\ell_1] + \gamma a_x^2[\ell_2] + \gamma a_x^2[\ell_2-\ell_1]). \label{eq:ac3_micrograph2}
 \end{align}
-
 In the homogeneous case ($K=1$), we show in Section~\ref{sec:theory_homogeneous_poisson} that $a_y^1,a_y^2$ and $a_y^3$ identify uniquely the signal $x$, the Poisson parameter $\gamma$ and the noise level $\sigma$ for generic $x$. 
 %
 %From these values, one may solve for the terms $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$. Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
