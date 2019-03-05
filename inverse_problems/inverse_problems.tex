@@ -522,31 +522,41 @@ From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce t
 
 \subsection{Guarantees for the homogeneous Poisson model} \label{sec:theory_homogeneous_poisson}
 
-Similarly to the homogeneous well-separated model, the observed autocorrelations under the Poisson model identify $x,\gamma$ and $\sigma^2$ uniquely. Furthermore, these quantities can be computed explicitly. 
-
-We first note that $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$ can be computed directly form the observed autocorrelations~\eqref{eq:mean_micrograph2},~\eqref{eq:ac2_micrograph2} and~\eqref{eq:ac3_micrograph2}.
- Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
+Similarly to the homogeneous well-separated model, the observed autocorrelations under the Poisson model identify $x,\gamma$ and $\sigma^2$ uniquely.
+Opposed to Proposition~\ref{prop:gamma_sigma}, these quantities can be computed explicitly. 
+In Section~\ref{sec:proof_uniqueness_poisson} we prove the following result:
 %
-\begin{align}
-\gamma a_x^3[\ell_1,\ell_2]
-= a_y^3[\ell_1,\ell_2] - (a_y^1)^3
-- a_y^1 \cdot \big(a_y^2[\ell_1]  
-+ a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(a_y^1)^2 \big).
-\end{align}
-Using these expressions, we prove the following in Section~\ref{sec:proof_uniqueness_poisson}.
+%We first note that $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$ can be computed directly form the observed autocorrelations~\eqref{eq:mean_micrograph2},~\eqref{eq:ac2_micrograph2} and~\eqref{eq:ac3_micrograph2}.
+% Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
+%%
+%\begin{align}
+%\gamma a_x^3[\ell_1,\ell_2]
+%= a_y^3[\ell_1,\ell_2] - (a_y^1)^3
+%- a_y^1 \cdot \big(a_y^2[\ell_1]  
+%+ a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(a_y^1)^2 \big).
+%\end{align}
+%Using these expressions, we prove the following in Section~\ref{sec:proof_uniqueness_poisson}.
 \begin{proposition} \label{prop:uniqueness_poisson}
-Under the homogeneous Poisson model, the signal $x$, and the noise level $\sigma^2$ and the Poisson parameter $\gamma$ are identified uniquely. 
-In particular, 
+Under the homogeneous Poisson model, the signal $x$, the noise level $\sigma^2$ and the Poisson parameter $\gamma$ are identified uniquely. 
+In particular, \TODO{Shouldn't it be $L^2$ for $\gamma$?}
 	\begin{align}
-\gamma &= L \frac{(\gamma a_y^1) (\gamma a_x^2[1])}
+\gamma &= L \frac{(\gamma a_y^1) (a_y^2[1] - (a_y^1)^2)}
 {\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] 
 	+ \sum_{\ell=2}^{L-1} \gamma a_x^3[\ell,\ell+1]}, \\
 \sigma^2 &= a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
-- (2 L - 1) (a_y^1)^2.
+- (2 L - 1) (a_y^1)^2,
 \end{align}
+where 
+\begin{align}
+\gamma a_x^3[\ell_1,\ell_2]
+&= a_y^3[\ell_1,\ell_2] - (a_y^1)^3
+- a_y^1 \cdot \big(a_y^2[\ell_1]  
++ a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(a_y^1)^2 \big).
+\end{align}
+
 \end{proposition}
 
-\subsection{Elemetary limitations of the heterogeneous case}
+\subsection{Elementary limitations of the heterogeneous case}
 \label{sec:heterogeneity}
 
 \TODO{Check and specify if this holds for both models}
@@ -1751,6 +1761,18 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 
 
 \subsection{Proof of Proposition~\ref{prop:uniqueness_poisson}} \label{sec:proof_uniqueness_poisson}
+
+
+We first note that $\gamma a_x^1$, $\gamma a_x^2[\ell] + \sigma^2 \delta[\ell]$, and $\gamma a_x^3[\ell_1,\ell_2]$ can be computed directly form the observed autocorrelations~\eqref{eq:mean_micrograph2},~\eqref{eq:ac2_micrograph2} and~\eqref{eq:ac3_micrograph2}.
+Indeed, recovering  $\gamma a_x^1$ and $\gamma a_x^2[\ell] + \sigma^2 \ell[\ell]$ is immediate from \eqref{eq:mean_micrograph2} and \eqref{eq:ac2_micrograph2}, and $\gamma a_x^3[\ell_1,\ell_2]$ then follows from
+%
+\begin{align}
+\gamma a_x^3[\ell_1,\ell_2]
+= a_y^3[\ell_1,\ell_2] - (a_y^1)^3
+- a_y^1 \cdot \big(a_y^2[\ell_1]  
++ a_y^2[\ell_2] + a_y^2[\ell_1-\ell_2]- 3(a_y^1)^2 \big).
+\end{align}
+
 	Let us assume that $x$ is generic. Indeed, we observe the product:
 	%
 	\begin{align}
@@ -1770,11 +1792,11 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 	&=  \gamma^2\sum_{\ell=0}^{L-1} a_x^3[1,\ell] 
 	+ \gamma^2\sum_{\ell > 0} \sum_{j} x[j]x[j+\ell]x[j+\ell+1]
 	\nonumber \\
-	&= \gamma\left\{ \sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell]
-	+ \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]  \right\}.
+	&= \gamma\left( \sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell]
+	+ \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]  \right).
 	\end{align}
 	%
-	Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, we can form the ratio and solve for $\gamma$, and then $\sigma^2$:
+	Since we also observe $\sum_{\ell=0}^{L-1} \gamma a_x^3[1,\ell] + \sum_{\ell=1}^{L-2} \gamma a_x^3[\ell,\ell+1]$, we can form the ratio and solve for $\gamma$.
 	
 	\begin{align}
 	\gamma = L \frac{(\gamma a_x^1) (\gamma a_x^2[1])}
@@ -1782,6 +1804,7 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 		+ \sum_{\ell=2}^{L-1} \gamma a_x^3[\ell,\ell+1]},
 	\end{align}
 	%
+	Then, similarly to Section~\ref{sec:proof_prop_gamma}, one can solve for $\sigma^2$:
 	\begin{align}
 	\sigma^2 = a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\frac{L (a^1_y)^2}{\gamma}
 	- (2 L - 1) (a_y^1)^2.
@@ -1789,7 +1812,7 @@ Furthermore, from the inequality $L\|x\|^2 \ge (\1^\top x)^2$ it follows immedia
 Once $\gamma$ and $\sigma$ were computed, one can recover $x$ from $a_x^2$ and $a_x^3$  by Proposition~\ref{prop:uniqueness}.
 
 \section*{Acknowledgment} \TODO{To check}
-The authors  thank Ayelet Heimowitz, Joe Kileel, Ti-Yen Lan and Amit Moscovich  for helpful discussions..
+The authors  thank Ayelet Heimowitz, Joe Kileel, Ti-Yen Lan and Amit Moscovich  for helpful discussions.
 The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, and the Moore Foundation Data-Driven Discovery Investigator Award.
 NB is partially supported by NSF award DMS-1719558.
 
