@@ -229,10 +229,10 @@ Extending the problem setup and autocorrelation analysis to signals in more than
 
 Likewise, it is easy to extend the model to situations where the signal occurrences are sampled from a general distribution rather than from a finite set of choices $x_1, \ldots, x_K$. The finite setup corresponds to the following distribution for signal occurrences:
 \begin{align}
-	x \sim \sum_{k=1}^K \pi_k \delta[x - x_k],
+	x \sim \sum_{k=1}^K \pi_k \delta(x - x_k),
 	\label{eq:heterogeneousdistribution}
 \end{align}
-where $\delta[x - x_k]$ is a Dirac delta (a point mass) located at $x_k$, and $(\pi_1, \ldots, \pi_K)$ encodes the discrete distribution over $\{1, \ldots, K\}$.
+where $\delta(x - x_k)$ is a Dirac delta (a point mass) located at $x_k$, and $(\pi_1, \ldots, \pi_K)$ encodes the discrete distribution over $\{1, \ldots, K\}$.
 In the generalized setup, the goal is to estimate the distribution (possibly defined by a finite set of parameters). In particular, this allows for continuous distributions of targets. We adopt this perspective when deriving the autocorrelations in Section~\ref{sec:AC_analysis}.
 
 In the next section, we show how this flexibility allows us to model an important imaging problem in structural biology.
@@ -342,7 +342,7 @@ Owing to the separation condition, when correlating $y$ with shifted versions of
 	a_y^3[\ell_1,\ell_2] & = \gamma a_{x}^3[\ell_1,\ell_2]  + \sigma^2\gamma a_{x}^1  \big(\delta[\ell_1]+\delta[\ell_2]
 	+\delta[\ell_1-\ell_2]\big), \label{eq:ac3_micrograph}
 \end{align}
-where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to the noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
+where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, \ell_2$ are in the range $0 \leq \ell \leq L-1$. Terms proportional to $\sigma^2$ are due to noise. If $\sigma$ is known, they can be handled easily. If $\sigma$ is unknown, one can either estimate it form the data, or one can ignore the few entries of the autocorrelations that are affected by $\sigma$---one in $a_y^2$ and $3L-2$ in $a_y^3$, a relatively small number in both cases.
 
 
 We show in Section~\ref{sec:theory_homogeneous_well_separated} 
