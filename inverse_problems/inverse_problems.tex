@@ -318,11 +318,10 @@ $x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \p
 \end{align}
 Explicit expressions of the autocorrelations for the more involved model of  cryo-EM~\eqref{eq:cryoEM} are given in~\cite{bendory2018toward}.
 
-We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity with $\gamma$ remaining constant \TODO{We didn't define $\gamma$ for the well-separated model at this point; we should reconsider this}, the empirical autocorrelations of $y$ almost surely (a.s.) converge to the actual (population) autocorrelations of $y$, that is, % (ergodicity)
+We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity  the empirical autocorrelations of $y$ almost surely (a.s.) converge to the actual (population) autocorrelations of $y$, that is, % (ergodicity)
 \begin{align}
-\lim_{N \to \infty, \gamma \textrm{ constant}} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] \aseq a_y^q[\ell_1, \ldots, \ell_{q-1}].
+\lim_{N \to \infty} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] \aseq a_y^q[\ell_1, \ldots, \ell_{q-1}].
 \end{align}
-\TODO{Why do we need constant $\gamma$?}
 This provides a concrete means of estimating the quantities $a_y^ q$. In the remainder of this section, we relate the observables $a_y^q$  to the unknowns $a_x^q$, first under the well-separated model, then under the Poisson model.
 
 \subsection{Autocorrelations under the well-separated model}
@@ -375,7 +374,7 @@ In Section~\ref{sec:proof_prop_poisson}, we prove the following expressions for 
 	a_y^3[\ell_1,\ell_2]  & =  \gamma a_x^3[\ell_1,\ell_2] + \sigma^2 \gamma a_x^1 \big(\delta[\ell_1]+\delta[\ell_2] +\delta[\ell_1-\ell_2] \big) \nonumber \\
 						  & \qquad + (\gamma a_x^1)^3 + \gamma a_x^1 \cdot ( \gamma a_x^2[\ell_1] + \gamma a_x^2[\ell_2] + \gamma a_x^2[\ell_2-\ell_1]). \label{eq:ac3_micrograph2}
 \end{align}
-Note that from those autocorrelations, it is easy to retrieve the autocorrelations of the well-separated model for all entries unaffected by $\sigma$. If $\sigma$ is known, then it is true for all entries. \TODO{addition}
+Note that from those autocorrelations, it is easy to retrieve the autocorrelations of the well-separated model for all entries unaffected by $\sigma$. If $\sigma$ is known, then it is true for all entries. 
 
 In the homogeneous case ($K=1$), we show in Section~\ref{sec:theory_homogeneous_poisson} that $a_y^1,a_y^2$ and $a_y^3$ identify uniquely the signal $x$, the Poisson parameter $\gamma$ and the noise level $\sigma$ for generic $x$. 
 
@@ -562,9 +561,6 @@ where
 \subsection{Elementary limitations of the heterogeneous case}
 \label{sec:heterogeneity}
 
-\TODO{Check and specify if this holds for both models: see below}
-
-\TODO{Did we define densities $\gamma_k$? TB: yes, in section 3}
 
 
 In the heterogeneous model~\eqref{eq:model}, the unknowns are $K$ signals of length $L$, together with their densities $\gamma_1, \ldots, \gamma_K$~\eqref{eq:gamma_k} (equivalently: the distribution $\pi$ and overall density $\gamma$) and possibly the noise level $\sigma$. To estimate these parameters, we must collect at least as many independent equations. Within our framework, polynomial equations are provided by the observable autocorrelations, which correspond to mixed autocorrelations of the unknowns as per~\eqref{eq:mixedautocorr}. In this section, following~\cite{boumal2017heterogeneous}, we count how many equations the first three autocorrelations may provide in the best case (discounting symmetries). This leads to a straightforward information-theoretic upper bound on the number $K$ of signals which can be estimated, as a function of $L$. This is only an upper bound, though a bound of the same type was shown to be tight in a similar setting~\cite{bandeira2017estimation}.
