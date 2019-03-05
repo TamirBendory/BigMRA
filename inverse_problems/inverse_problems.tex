@@ -249,48 +249,43 @@ In a cryo--EM experiment, biological samples (e.g., macromolecules, viruses) are
 The microscope produces 2-D tomographic images of the samples embedded in the ice, called \emph{micrographs}. Each micrograph contains multiple tomographic projections of the samples at unknown locations and under unknown viewing directions. 
 Importantly, the electron dose must be kept low to mitigate  radiation damage, inducing high noise levels.
 The goal is to construct 3-D models of the molecular structures from the micrographs. 
-Since  cryo-EM produces images of individual particles, it can, in principle, elucidate multiple  structures simultaneously.
+Since  cryo-EM produces images of individual particles, it can elucidate multiple  structures simultaneously.
 This is in clear contrast to  X-ray and NMR, which aggregate information from an ensembles of
 particles.
 
-A 2-D micrograph $y$ can be written in terms 
-of the models described in Section~\ref{sec:intro} as
-\begin{equation}  \label{eq:model_cryo}
-y  =   s \ast x + \varepsilon,
-\end{equation}
-where tomographic projections are placed according to the signal $s$. In this model, the signal $x$ represents 2-D tomographic projections of the 3-D structure taken from  random viewing directions according to (possibly unknown) distribution over $SO(3)$ (the group of 3-D rotations). In particular, by letting $V$ describes the underlying volume, $R_\omega$ a random 3-D rotation for $\omega\in SO(3)$, and $P$ a tomographic projection, we have
-\begin{equation} \label{eq:cryoEM}
-x= P(R_\omega V).
-\end{equation}
-By allowing $V$ to be a random signal as well, this model can encode a mixture of structures  
-(which might be continuous as well).
+Considering the extensions described in the previous section, we can phrase a simplified generative model for micrographs (the observation $y$) within our framework. Specifically, locations are chosen in the 2-D plane of the image, corresponding to $s$: this is where the molecules are fixed in the plane of the ice layer. At each selected location, a 2-D tomographic projection of a molecule (a signal occurrence) is added in the observation $y$. This signal is drawn from a probability distribution described by a discrete number of parameters which correspond to the sought 3-D structure, as follows.
+
+The 3-D structure $V$ (the target parameter) can be expanded into a linear combination of basis functions (for example, spherical harmonics for the spherical part and Bessel functions for the radial part): the coefficients of this expansion are the unknowns. Then, a rotation $R_\omega$ is applied to the volume (to model viewing directions) according to a (possibly unknown) distribution of $\omega$ over $SO(3)$ (the group of 3-D rotations). With tomographic projection denoted by $P$, we have the following probability distribution for particles in the micrograph:
+\begin{align}
+	x & = P(R_\omega V).
+	\label{eq:cryoEM}
+\end{align}
+By further allowing $V$ itself to be a random signal as well, this model can also encode a mixture of structures in the biological sample. This mixture might also be continuous, corresponding to continuous conformational variability.
 
 All contemporary methods for single particle reconstruction using cryo-EM  split the reconstruction procedure into two main  stages.
 The first stage, called \emph{particle picking},  detects and extracts the particle projections from the micrographs. Given the projections, the second stage aims to construct a 3-D model of the molecular structure, usually using an expectation-maximization algorithm~\cite{scheres2012relion}. 
 %The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
 Crucially, reliable detection of individual particles is impossible in a highly noisy environment. This fact has been recognized early on by the cryo-EM community. 
-Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was established that particle picking is impossible for molecules below a certain weight (below~$\sim$50 kDa). 
+Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was reasoned that particle picking is impossible for molecules below a certain weight (below~$\sim$50 kDa). 
 %The unique issues raised by small particles have been mitigated by recent technological advances in the field, including the use of Volta phase plates~\cite{khoshouei2017cryo,liang2017phase} and scaffolding cages~\cite{liu2018nearatomic}.
 %Despite this progress, detecting small molecules in the micrographs remains a challenge.
 
-Even if particle picking is feasible, it may suffer from a phenomenon called \emph{model bias}.
-The main mechanism guides  most particle pickers is based on correlating the micrograph with several templates; highly correlated areas are associated with projections (these are the picked particles). 
-Clearly, the picked particles depend heavily on the chosen templates: different templates may lead to different picked particles, and thus to different 3-D structures.
-This potential pitfall 
-has been recognized early by the cryo-EM community~\cite{vanheel1992correlation,henderson2013avoiding,vanheel2013finding} and was  exemplified using the
-``Einstein from noise'' experiment~\cite{shatsky2009method}. %In this experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. It was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template.
+Even if particle picking is feasible, procedures may be affected by \emph{model bias}.
+Particle picking algorithms are typically based on correlating the micrograph with several templates. Areas highly correlated with some of the templates are assumed to contain projections: these yield the picked particles. 
+Clearly, the picked particles depend heavily on the chosen templates: different templates may lead to different picked particles, hence, which is more problematic, to different 3-D structure reconstructions.
+The cryo-EM community is well aware of this potential pitfall~\cite{vanheel1992correlation,henderson2013avoiding,vanheel2013finding}, which was notably exemplified in the ``Einstein from noise'' experiment~\cite{shatsky2009method}. %In this experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. It was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template.
  %In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles biases the reconstructed structure. %This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
 
 A recent work of the authors suggests a methodology to bypass particle picking and  reconstruct the 3-D structure directly from the micrograph~\cite{bendory2018toward}.
 Based on autocorrelation analysis, it was shown that---at least in principle---the limits high noise regimes 
 impose on particle picking  do not necessarily translate into limits on 3-D reconstruction.
-The main goal of  this paper is to provide theoretical justification and numerical support  for this method.
+The main goal of  the present paper is to provide theoretical and numerical support for this approach, in a simplified setting.
 
 In the next section, we introduce autocorrelation analysis in detail, focusing on the multi-target detection model. 
-We mention that similar ideas in  cryo-EM trace back to the seminal paper of Zvi Kam~\cite{kam1980reconstruction}. Kam proposed autocorrelation analysis for {3-D} reconstruction, under the assumption of picked, perfectly centered, particles. Kam's method has been extended and employed in X-ray free electron lasers and cryo-EM~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}.  
+We mention that similar ideas in  cryo-EM can be traced back to a seminal paper of Zvi Kam~\cite{kam1980reconstruction}. Kam proposed autocorrelation analysis for \mbox{3-D} reconstruction, under the assumption of picked, perfectly centered, particles. Kam's method has been extended and used in X-ray free electron lasers (XFEL) and cryo-EM~\cite{liu2013three,kurta2017correlations,levin20173d,von2018structure}.  
 In order to investigate the computational and statistical properties of Kam's method, a series of papers have studied a simplified model, 
 called   \emph{multi-reference alignment}~\cite{bandeira2014multireference,bendory2017bispectrum,bandeira2017optimal,perry2017sample,bandeira2017estimation,abbe2017multireference}.
-We follows the same line of research by considering the multi-target detection as an abstraction to the application of reconstructing 3-D structures directly from the micrograph~\cite{bendory2018toward}.
+We follow the same line of research by considering the multi-target detection as an abstraction to the application of reconstructing 3-D structures directly from the micrograph~\cite{bendory2018toward}.
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
