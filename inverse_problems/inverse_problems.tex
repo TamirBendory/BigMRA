@@ -176,7 +176,7 @@ The underlying principle is to relate the autocorrelations of the observation $y
 
 Below we describe two generative models for $s$.  
 In these models, the relationship between the autocorrelations of $y$ and those of $x_1,\ldots,x_K$ depends on $s_1,\ldots,s_K$ only through their expected sums, that is, the expected total number of occurrences of each signal.
-To estimate the signals and occurrence counts from the computed autocorrelations, we solve a nonlinear least-squares (LS) problem as explained in Section~\ref{sec:numerics}. 
+To estimate the signals and occurrence counts from the computed autocorrelations, we solve a nonlinear least-squares problem as explained in Section~\ref{sec:numerics}. 
 
 The multi-target detection problem  is an instance of  
 \emph{blind deconvolution}---a longstanding problem arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, to name a few. 
@@ -486,7 +486,7 @@ This proves the following useful fact:
 	A signal $z\in\RL$ is determined uniquely from  $a_z^2$ and $a_z^3$. 
 \end{proposition}
 
-Note that the procedure described in~\eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex LS procedure, which is empirically more robust to additive noise; we have observed similar phenomena for the related problem of multi-reference alignment~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
+Note that the procedure described in~\eqref{eq-uniqueness} is not numerically stable: if $z[0]$ or $z[L-1]$ are close to 0, recovery of $z$ is sensitive to errors in the autocorrelations. In practice, we recover $z$ by fitting it to its autocorrelations using a nonconvex least-squares procedure, which is empirically more robust to additive noise; we have observed similar phenomena for the related problem of multi-reference alignment~\cite{bendory2017bispectrum,boumal2017heterogeneous,abbe2017multireference}.
 
 \subsection{Guarantees for the homogeneous well-separated model} \label{sec:theory_homogeneous_well_separated}
  
@@ -616,6 +616,7 @@ Despite the uniqueness result, recently it has been shown that the problem is  i
 \section{Algorithms and numerical experiments} \label{sec:numerics}
 
 In this section, we present three numerical experiments. In the first two experiments, we consider the heterogeneous model~\eqref{eq:model}. First, with a fixed noise level, we show how the estimation quality improves as the length of the observation grows. Second, we explore how many signals can be recovered as a function of their length, in an infinite data regime where effects of the noise have been averaged out. In the last experiment, we extend our model to 2-D signals.
+The code for all experiments is available at \url{https://github.com/PrincetonUniversity/BreakingDetectionLimit}. \TODO{Need to upload the code}
 
 \subsection{Experiment 1} 
 \label{sec:XP1}
@@ -624,7 +625,7 @@ In this section, we present three numerical experiments. In the first two experi
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=1\linewidth]{heterogeneous_progressive_n12300000000_466300}
-	\caption{Experiment described in Section~\ref{sec:XP1}. For a fixed noise level $\sigma = 3$ and a fixed set of $K = 3$ signals of length $L = 21$, an observation $y$ of length $N = 12.3 \cdot 10^9$ is generated according to~\eqref{eq:model} in the well-separated model, with fixed density and occurrence probabilities. Each rows corresponds to one of the signals. The last column shows evolution of the relative root mean squared error in estimating each signal, as a longer and longer subset of $y$ is observed. Red dots mark the three snapshots that are illustrated in columns 1--3: red signals are the ground truth and blue signals are the estimators.}
+	\caption{Experiment described in Section~\ref{sec:XP1}. For a fixed noise level $\sigma = 3$ and a fixed set of $K = 3$ signals of length $L = 21$, an observation $y$ of length $N = 12.3 \cdot 10^9$ is generated according to~\eqref{eq:model} in the well-separated model, with fixed d occurrence probabilities. Each rows corresponds to one of the signals. The last column shows evolution of the relative root mean squared error in estimating each signal, as a longer and longer subset of $y$ is observed. Red dots mark the three snapshots that are illustrated in columns 1--3: red signals are the ground truth and blue signals are the estimators.}
 	\label{fig:1Dheterosignals}
 \end{figure}
 
@@ -632,17 +633,7 @@ For the experiment depicted in Figure~\ref{fig:1Dheterosignals}, we fix $K = 3$ 
 % sqrt((m_want*sum(X.^2)')/(sigma^2*n))
 is about 1/9.
 
-Visually, the noise dominates the signal to the point that it is challenging to detect occurrences. More precisely, the cross-correlations of $y$ even with the true signals presents peaks at essentially random locations, apparently uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to classify them according to which signal appears where.
-
-%Given the observation $y$, we proceed to compute the autocorrelations. The first-order autocorrelation is straightforward. For second-order autocorrelations, notice from equation~\eqref{eq:data_ac} that $a_y^2[\ell]$ suffers no noise-induced bias for $\ell$ in $1$ to $L-1$. Thus, we omit $\ell = 0$, which has the practical effect that we need not know $\sigma$ to make sense of the computed quantities. Likewise, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$ for $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), and we further exclude any such that $\ell_1, \ell_2$ or $\ell_1 - \ell_2$ are zero to avoid the need to estimate $\sigma$---there are $\frac{(L-1)(L-2)}{2}$ remaining entries. We have
-%\begin{align*}
-%1 + (L-1) + \frac{(L-1)(L-2)}{2} = \frac{1}{2} L (L-1) + 1
-%\end{align*}
-%coefficients in total. Since we aim to estimate $KL$ parameters (for the $K$ signals of length $L$) plus $K$ parameters (for the densities $\gamma_k$), an absolute upper bound on $K$ (simply to ensure we have at least as many equations as we have unknowns) is
-%\begin{align*}
-%K(L+1) \leq \frac{1}{2} L (L-1) + 1.
-%\end{align*}
-%Thus, $(L-1)/2$ (up to a small approximation) is an absolute upper limit on $K$ (compare with~\cite{boumal2017heterogeneous,bandeira2017estimation}).
+Visually, the noise dominates the signal to the point that it is challenging to detect occurrences. More precisely, the cross-correlations of $y$ even with the true signals presents peaks at essentially random locations, apparently uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to cluster them according to which signal appears where.
 
 Our aim is to investigate how accurately we can estimate the signals as a function of the observation length. To this end, we consider a growing part of the observation $y$. For each length, we compute autocorrelations on that part, then we go on to estimate the signals from these ``mixed'' quantities. In practice, the autocorrelations are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can  be handled in parallel.
 
@@ -654,9 +645,9 @@ Having computed the autocorrelations of interest, we estimate signals $x_1, \ldo
 \end{multline}
 where $W \geq L$ is the length of the sought signals and the weights are set to $w_1 = 1/2, w_2 = 1/2n_2, w_3 = 1/2n_3$, where $n_2, n_3$ are the number of coefficients used for each autocorrelation order: $n_2 = L-1$, $n_3 = \frac{(L-1)(L-2)}{2}$ (weights could also be set in accordance with variance estimates as in~\cite{boumal2017heterogeneous}).
 
-Setting $W = L$ (as is a priori desired) is problematic because the above optimization problems appears to have numerous poor local optimizers. Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded on either side to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
+Setting $W = L$ (as is a priori desired) is problematic because the above optimization problem appears to have numerous poor local optimizers. Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded on either side to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
 
-In Figure~\ref{fig:1Dheterosignals}, we find that the signals can be recovered with good accuracy despite the noise levels which seemingly preempts location and classification. We also note that the amount of data required to produce these good estimations is large. Furthermore, as illustrated here and as we have observed in numerous experiments, signals with more variations (such as the third signal in this experiment which was generated once from a Gaussian distribution) are easier to estimate accurately than more regular signals (in this case, despite the fact that the third signal occurs less frequently than the others).
+In Figure~\ref{fig:1Dheterosignals}, we find that the signals can be recovered with good accuracy despite the noise levels which seemingly preempts location and clustering. We also note that the amount of data required to produce these good estimations is large. Furthermore, as illustrated here and as we have observed in numerous experiments, signals with more variations (such as the third signal in this experiment which was generated once from a Gaussian distribution) are easier to estimate accurately than more regular signals (in this case, despite the fact that the third signal occurs less frequently than the others).
 This phenomenon has been also observed in multi-reference alignment~\cite[Section 3.2]{perry2017sample}.
 
 \subsection{Experiment 2}
