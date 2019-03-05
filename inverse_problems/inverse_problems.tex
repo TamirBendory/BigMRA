@@ -100,6 +100,9 @@
 \numberwithin{equation}{section}
 
 
+\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue,linkcolor=blue]{hyperref}
+
+
 \begin{document}
 
 %\begin{frontmatter}
@@ -143,36 +146,41 @@ The main goal of this work is to provide theoretical and numerical support for a
 We consider the \emph{multi-target detection} problem of recovering a set of $K$ signals that appear 
 multiple times at unknown locations in a noisy measurement.
 Let ${x_1,\ldots,x_K\in\RL}$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. 
-Let  $s[i]$ count the number of signals whose first element is positioned in $y[i]$. Each of those $s[i]$ is chosen according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
+Let  $s[i]$ count the number of signal occurrences whose first entry is positioned at $y[i]$. Each of those $s[i]$ signals is chosen among $x_1, \ldots, x_K$ according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
 If signal occurrences overlap, they interfere additively. %We think of those events as being rare. 
 With additive white Gaussian noise, the measurement model can be written as 
 \begin{equation} 
 	y  =  \sum_{k=1}^K s_k \ast x_k + \varepsilon, \qquad  \varepsilon   \sim \mathcal{N}(0,\sigma^2 I_N),
 	\label{eq:model}
 \end{equation}
-where $\ast$ denotes linear convolution, and $s_k[i]$ indicates the number of starting positions of $x_k$ in $y[i]$ so that $s =  s_1+\cdots+s_K$. Explicitly, with zero-based indexing, % and zero-padding out of bounds,
+where $\ast$ denotes linear convolution, and $s_k[i]$ indicates the number of occurrences of $x_k$ starting at $y[i]$, so that $s =  s_1+\cdots+s_K$. Explicitly, with zero-based indexing, % and zero-padding out of bounds,
 \begin{align*}
 	y[i] & = \sum_{k=1}^{K} \sum_{j = 0}^{L-1} s_k[i-j] x_k[j] + \varepsilon[i].
 \end{align*}
+%We discuss generative models for $s_1, \ldots, s_K$ below.
+%
 The goal is  to estimate $x_1,\ldots,x_K$ from $y$. % while $s$ is the \emph{nuisance variable} of the problem.
 %We name this problem \emph{multi-target detection}.
-In parts of the paper, we focus on the case $K = 1$, called the \emph{homogeneous} case; the case $K > 2$ is called \emph{heterogeneous}.
+In parts of the paper, we focus on the case $K = 1$, called the \emph{homogeneous} case; the case $K \geq 2$ is called \emph{heterogeneous}.
 This idealized setup appears in several scientific applications, including structural biology~\cite{bendory2018toward} (as we detail below), spike sorting~\cite{lewicki1998review}, passive radar~\cite{gogineni2017passive}, and system identification~\cite{ljung1998system}. 
 
-In the low noise regime, a valid strategy is to first detect the signal occurrences in $y$ (that is, estimate $s$), cluster them (that is, separate $s$ into $s_1,\ldots,s_K$), and solve  standard deconvolution problems. Crucially, we focus on the high noise regime, where \emph{reliable detection of signal occurrences is  impossible}~\cite{bendory2018toward,aguerrebere2016fundamental}.
-This limitation does not, however, preclude estimation of the signals $x_1,\ldots,x_K$, as we show in this paper. In this setting, we refer to  $s_1,\ldots,s_K$  as \emph{nuisance variables}.
+In the low noise regime (small $\sigma$), a valid strategy is to first detect the signal occurrences in $y$ (that is, estimate $s$), cluster them (that is, separate $s$ into $s_1,\ldots,s_K$), and solve  standard deconvolution problems.
+
+Crucially, we focus on the high noise regime, where \emph{reliable detection of signal occurrences is  impossible}~\cite{bendory2018toward,aguerrebere2016fundamental}.
+This limitation does not, however, preclude estimation of the signals $x_1,\ldots,x_K$, as we show in this paper. In this setting, we refer to  $s_1,\ldots,s_K$  as \emph{nuisance variables}: knowing them would certainly help, but we do not aim to estimate them.
 
 In order to recover the signals in the high noise regime, we use autocorrelation analysis.
-In any noise level, the autocorrelations of the observation can be estimated to any desired accuracy for sufficiently large  $N$. 
+At any noise level, the autocorrelations of the observation can be estimated to any desired accuracy for sufficiently large  $N$. 
 This computation is straightforward and requires only one pass over the data.
 The underlying principle is to relate the autocorrelations of the observation $y$ to the autocorrelations of $x_1,\ldots,x_K$.
+
 Below we describe two generative models for $s$.  
-In these models, the relationship between the autocorrelations of $y$ and those of $x_1,\ldots,x_K$ depend on $s_1,\ldots,s_K$ only through their expected sums, that is, the expected total number of occurrences of each signal.
+In these models, the relationship between the autocorrelations of $y$ and those of $x_1,\ldots,x_K$ depends on $s_1,\ldots,s_K$ only through their expected sums, that is, the expected total number of occurrences of each signal.
 To estimate the signals and occurrence counts from the computed autocorrelations, we solve a nonlinear least-squares (LS) problem as explained in Section~\ref{sec:numerics}. 
 
 The multi-target detection problem  is an instance of  
-\emph{blind deconvolution}---a longstanding problem arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, just to name a few. 
-Different variants of the blind deconvolution problem have been subject recently to a thorough  analysis~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}. In clear contrast to multi-target detection, these works focus on the low noise regime and aim at estimating both unknown signals.
+\emph{blind deconvolution}---a longstanding problem arising in a variety of engineering and scientific applications, such as astronomy, communication, image deblurring, system identification and optics; see~\cite{jefferies1993restoration,shalvi1990new,ayers1988iterative,abed1997blind}, to name a few. 
+Different variants of the blind deconvolution problem have been thoroughly analyzed recently~\cite{ahmed2014blind,li2016identifiability,li2016rapid,lee2017blind,ling2017blind,kuo2019geometry}. In clear contrast to multi-target detection, these works focus on the low noise regime and aim to estimate both unknown signals (in our setting, this means estimating both $x_k$'s and $s_k$'s).
 
 \subsection*{Models for target distribution}
 
@@ -185,18 +193,17 @@ As a first setup, we allow any generative model for $s$ which meets the followin
 \textrm{If } s[i] = 1 \textrm{ and } s[j] = 1 \textrm{ for } i \neq j, \textrm{ then } |i - j| \geq 2L-1.
 \label{eq:spacing}
 \end{equation}
-In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free entries in the data.
-Furthermore, we require that the last signal occurrence in $y$ is also followed by at least $L-1$ signal-free (but still noisy) entries.
-This property ensures that correlating $y$ with versions of itself shifted by at most $L-1$ entries does not involve correlating distinct signal occurrences. Once $s$ is determined, for each position $i$ such that $s[i] = 1$, one of the signals $x_k$ is selected independently at random, and accordingly we set $s_k[i] = 1$. As a result, the only properties of $s_1, \ldots, s_K$ that affect the autocorrelations of $y$ are the total number of occurrences of the distinct signals: their individual and relative locations do not intervene.
+In words: the starting positions of any two occurrences  must be separated by at least $2L-1$ positions, so that their end points are necessarily separated by at least $L-1$ signal-free (but still noisy) entries in the data.
+Furthermore, we require that the last signal occurrence in $y$ is also followed by at least $L-1$ signal-free entries.
+This property ensures that correlating $y$ with versions of itself shifted by at most $L-1$ entries does not involve correlating distinct signal occurrences. Once $s$ is determined, for each position $i$ such that $s[i] = 1$, one of the signals $x_k$ is selected independently at random, and accordingly we set $s_k[i] = 1$. As a result, the only properties of $s_1, \ldots, s_K$ that affect the autocorrelations of $y$ (for shifts up to $L-1$) are the total number of occurrences of the distinct signals: their individual and relative locations do not intervene. We detail this in Section~\ref{sec:AC_analysis}.
 
 \paragraph{The Poisson model.}
 
 If the separation condition is violated, more knowledge about the location distribution is necessary to disentangle the autocorrelations of $y$. To that effect, we consider a Poisson generative model.
 
-Specifically,  each $s[i]$ is drawn independently from a Poisson distribution with parameter $\gamma/L$, that is, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$  for some parameter $\gamma > 0$. 
- Then, each of those $s[i]$ is chosen independently at random from a fixed distribution over $\{1,\ldots,K\},$ and the corresponding
-signal $x_1, \ldots, x_K$ is added to the observation $y$ with first entry positioned at $i$. 
-As in the well-separated model, the autocorrelations under this model depend only on the signals and the parameter $\gamma$.
+Specifically, for each position $i$, the number $s[i]$ of signal occurrences starting at that position is drawn independently from a Poisson distribution with parameter $\gamma/L$, that is, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$ for some parameter $\gamma > 0$. Then, $s[i]$ is split into $s_1[i] + \cdots + s_K[i]$ by selecting $s[i]$ signals among $x_1, \ldots, x_K$, independently at random (with replacement) following a fixed distribution over $\{1,\ldots,K\}$.
+%and the corresponding signal $x_1, \ldots, x_K$ is added to the observation $y$ with first entry positioned at $i$.  --- No need for this, since we already explained the convolution model.
+As for the well-separated model, the autocorrelations of $y$ under this model depend weakly on $s$ and $s_1, \ldots, s_K$, essentially through the parameter $\gamma$: see Section~\ref{sec:AC_analysis}.
 
 
  %Note that the expected total number of signals occurring in $y$ is equal to $(N - L + 1)\gamma / L$, and consequently the total lengths of all signals (including overlaps) divided by $N$ is equal to
@@ -218,15 +225,21 @@ As in the well-separated model, the autocorrelations under this model depend onl
  
 \subsection*{Extensions} \label{sec:extensions}
 
-Extending the problem setup and autocorrelation analysis to signals in more than one dimension is straightforward: see discussion in Section~\ref{sec:high_dimensions} and numerical experiments in Section~\ref{sec:numerics}.
+Extending the problem setup and autocorrelation analysis to signals in more than one dimension is straightforward: see the discussion in Section~\ref{sec:high_dimensions} and numerical experiments in Section~\ref{sec:numerics}.
 
-Likewise, it is easy to extend the model to situations where the signal occurrences are sampled from a general distribution rather than from a finite set of choices $x_1, \ldots, x_K$. In this setup, the goal is to estimate the distribution (possibly defined by a finite set of parameters). In particular, this allows for continuous distributions of targets. We adopt this perspective when deriving the autocorrelations in Section~\ref{sec:AC_analysis}.
+Likewise, it is easy to extend the model to situations where the signal occurrences are sampled from a general distribution rather than from a finite set of choices $x_1, \ldots, x_K$. The finite setup corresponds to the following distribution for signal occurrences:
+\begin{align}
+	x \sim \sum_{k=1}^K \pi_k \delta[x - x_k],
+	\label{eq:heterogeneousdistribution}
+\end{align}
+where $\delta[x - x_k]$ is a Dirac delta (a point mass) located at $x_k$, and $(\pi_1, \ldots, \pi_K)$ encodes the discrete distribution over $\{1, \ldots, K\}$.
+In the generalized setup, the goal is to estimate the distribution (possibly defined by a finite set of parameters). In particular, this allows for continuous distributions of targets. We adopt this perspective when deriving the autocorrelations in Section~\ref{sec:AC_analysis}.
 
 In the next section, we show how this flexibility allows us to model an important imaging problem in structural biology.
 
 
 
-\section{Motivation: single-particle reconstruction using cryo-electron microscopy}
+\section{Connection with single-particle reconstruction via cryo-electron microscopy}
 
 Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}.
 %In contrast to X-ray and NMR which aggregate information from an ensembles of
@@ -281,7 +294,7 @@ We follows the same line of research by considering the multi-target detection a
 
 \section{Autocorrelation analysis} \label{sec:AC_analysis}
 
-In what follows, we consider autocorrelations of both the observation $y$ and of the signal occurrences in $y$. As per our discussion of extensions, the signal occurrences may be sampled from a discrete set $\{x_1, \ldots, x_K\}$, or from a more general distribution. Accordingly, we define autocorrelations for a random signal $z$ of length $M$ . For our purposes, this will be applied both to signal occurrences (of length $L$) and to $y$ (of length $N$).
+In what follows, we consider autocorrelations of both the observation $y$ and of the signal occurrences in $y$. As per our discussion of extensions, the signal occurrences may be sampled from a discrete set $\{x_1, \ldots, x_K\}$ (as in~\eqref{eq:heterogeneousdistribution}), or from a more general distribution. Accordingly, we define autocorrelations for a random signal $z$ of length $M$. For our purposes, this will be applied both to signal occurrences (of length $L$) and to $y$ (of length $N$).
 
 For a random signal $z\in \R^M$, the autocorrelation of order $q = 1, 2, \ldots$ is given for any integer shifts $\ell_1, \ldots, \ell_{q-1}$ by
 \begin{equation}
@@ -303,7 +316,7 @@ $$
 % In particular, for the model~\eqref{eq:model}, 
 %$x=x_k$ with probability $\pi_k$.
 In particular, for
-$x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$,  the autocorrelations are given in explicit form as:
+$x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \pi_K)$ as in~\eqref{eq:heterogeneousdistribution}, the autocorrelations are given in explicit form as:
 \begin{align}
 	a_x^q  & = \sum_{k=1}^{K} \pi_ka_{x_k}^q.
 	\label{eq:mixedautocorr}
