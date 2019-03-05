@@ -480,29 +480,32 @@ Note that the procedure described in~\eqref{eq-uniqueness} is not numerically st
 
 \subsection{Guarantees for the homogeneous well-separated model} \label{sec:theory_homogeneous_well_separated}
  
-The observed moments $a_y^1,a_y^2$ and $a_y^3$ under the well-separated model do not immediately yield the autocorrelations  of the signal $x$; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that all parameters---$x, \gamma$ and $\sigma^2$---are still determined by the observed moments of $y$.
+The observed moments $a_y^1,a_y^2$ and $a_y^3$ under the well-separated model do not immediately yield the autocorrelations  of the signal $x$; rather, the two are related by the noise level $\sigma$ and the ratio $\gamma$. We will show, however, that all parameters---$x, \gamma$ and $\sigma^2$---are still identified uniquely by the observed moments of $y$.
 
-First, we observe that if the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph. The proof is provided in Section~\ref{sec:proof_prop_gamma}.
+First, we observe that if  the noise level $\sigma$ is known, generally, one can estimate $\gamma$ from the first two moments of the micrograph.
+The other direction is true as well: if $\gamma>0$ is known, then one can estimate $\sigma^2$.
+ The proof is provided in Section~\ref{sec:proof_prop_gamma}.
 
 \begin{proposition} \label{prop:gamma}
-	Let $\sigma > 0$ be fixed and assume that the separation condition~\eqref{eq:spacing} holds. If the mean of $x$ is nonzero, then  
+	Assume that the separation condition~\eqref{eq:spacing} holds and $K=1$ (a single signal). If the mean of $x$ is nonzero, then  
 	\begin{equation}
 	\gamma  = \frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
 	\end{equation}
 \end{proposition}
 
-Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are determined. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
+Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are determined simultaneously. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
 has Lebesgue measure zero. 
 In particular, this means that we can recover
 almost all signals with the given measurements. The proof is provided in Appendix~\ref{sec:proof_prop_gamma_sigma}.
 
 \begin{proposition} \label{prop:gamma_sigma}
-	Assume $L \geq 3$ and assume that the separation condition~\eqref{eq:spacing} holds. 
+	Assume $L \geq 3$, $K=1$ and assume that the separation condition~\eqref{eq:spacing} holds. 
 	Then, the observed autocorrelations $a_y^1,a_y^2$ and  $a_y^3$ determine the ratio $\gamma$ and noise level $\sigma$ uniquely for a generic signal $x$. If $\gamma > \frac{1}{4}$, then this holds for any signal $x$ with nonzero mean. 
 \end{proposition}
 
 From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce the following:
 \begin{corollary}
+	Assume $L \geq 3$ and $K=1$.
 	Under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if either the signal $x$ is generic or $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
 \end{corollary}
 %
