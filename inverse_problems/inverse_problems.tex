@@ -499,14 +499,15 @@ The other direction is true as well: if $\gamma>0$ is known, then one can estima
 \begin{proposition} \label{prop:gamma}
 	Assume the separation condition~\eqref{eq:spacing} holds and $K=1$ (all signal occurrences in $y$ are identical, up to noise). If the mean of $x$ is nonzero, then  
 	\begin{equation}
-	\gamma  = \frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2}.
+	\gamma  = \frac{L (a^1_y)^2}{a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]-\sigma^2},
 	\end{equation}
+	meaning $\gamma$ can be determined from $\sigma$ (and vice versa) using the observables $a_y^1, a_y^2$.
 \end{proposition}
 
-Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ are determined simultaneously. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
+Using third-order autocorrelation information of $y$, both the ratio $\gamma$ and the noise $\sigma$ can be determined simultaneously. For the following results, when we say that a result holds for a ``generic'' signal $x$, we mean that the set of signals which cannot be determined by these measurements
 has Lebesgue measure zero. 
 In particular, this means that we can recover
-almost all signals with the given measurements. The proof is provided in Appendix~\ref{sec:proof_prop_gamma_sigma}.
+almost all signals with the given measurements. The proof is provided in Section~\ref{sec:proof_prop_gamma_sigma}.
 
 \begin{proposition} \label{prop:gamma_sigma}
 	Assume $L \geq 3$, $K=1$ and assume that the separation condition~\eqref{eq:spacing} holds. 
@@ -1664,25 +1665,24 @@ We prove that both $\sigma$ and $\gamma$ are identifiable from the observed firs
 Throughout the proof, it is important to distinguish between observed and unobserved values.
 We denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$. We use $F_i$ to denote functions of the signal's autocorrelations (which are not directly observable).
 
-Recall that $a_y^1 = \beta(\one^Tx)$ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ is the vector of all-ones.  Consider the product:
+Recall that $a_y^1 = \beta(\one^Tx)$ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ is the vector of all-ones and $\|x\|=\sqrt{x[0]^2 + \cdots + x[L-1]^2}$ is the 2-norm. Consider the product $E_1$:
 \begin{equation}\label{eq:E1}
 \begin{split}
-E_1 := a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2)  = \sigma^2a_y^1 + L\beta^2F_1,
+E_1 = a_y^1a_y^2[0] =  (\beta(\one^Tx))(\beta\|x\|^2+\sigma^2)  = \sigma^2a_y^1 + L\beta^2F_1,
 \end{split}
 \end{equation}
-where $F_1 := a_x^3[0,0] + \sum_{j=1}^{L-1}(a_x^3[j,j] + a_x^3[0,j])$. 
+where $F_1 = a_x^3[0,0] + \sum_{j=1}^{L-1}(a_x^3[j,j] + a_x^3[0,j])$. 
 % Nicolas: the expression for F_1 is correct, see identifiability_of_gamma_and_sigma_Sep4_2018.m and notes Sep 4, 2018
-The terms of $F_1$ can also be estimated from $a_y^3$, while taking the scaling and bias terms into account. This yields another observable:
+The terms of $F_1$ can also be estimated from $a_y^3$, while taking the scaling and bias terms into account. This yields another observable, $E_2$:
 \begin{align} 
-E_2 & := a_y^3[0,0] + \sum_{j=1}^{L-1}(a_y^3[j,j] + a_y^3[0,j]) \nonumber\\
-& = L\beta F_1 + (2L+1)\sigma^2a_y^1. \label{eq:E2}
+E_2 & = a_y^3[0,0] + \sum_{j=1}^{L-1}(a_y^3[j,j] + a_y^3[0,j]) = L\beta F_1 + (2L+1)\sigma^2a_y^1. \label{eq:E2}
 \end{align}
 % Nicolas: checked this one too.
 Therefore, from~\eqref{eq:E1} and~\eqref{eq:E2} we get:
 \begin{equation} \label{eq:E12}
 E_2\beta -(2L+1)\sigma^2\beta a_y^1 = E_1-\sigma^2a_y^1.
 \end{equation}
-Let $E_3:=a_y^2[0] + 2\sum_{j = 1}^{L-1}a_y^2[j]$; recall from Proposition~\ref{prop:gamma}:
+Let $E_3 =a_y^2[0] + 2\sum_{\ell = 1}^{L-1}a_y^2[\ell]$; recall from Proposition~\ref{prop:gamma}:
 \begin{equation} \label{eq:sigma2}
 \sigma^2 = E_3 - (a^1_y)^2/\beta. 
 \end{equation} 
@@ -1700,7 +1700,7 @@ Importantly, these coefficients are observable quantities. As we assume througho
 
 Next, we derive the second quadratic equation for $\beta$. We notice that 
 \begin{equation} \label{eq:E3}
-E_4 := \frac{1}{L}(a_y^1)^3 = \frac{1}{L}\beta^3 (\one ^Tx)^3   = \beta^3 F_2,
+E_4 = \frac{1}{L}(a_y^1)^3 = \frac{1}{L}\beta^3 (\one ^Tx)^3   = \beta^3 F_2,
 \end{equation}
 where $F_2 = \frac{1}{L}(\one ^Tx)^3$, and we can work out that:
 \begin{equation*}
@@ -1708,7 +1708,7 @@ F_2 = a_x^3[0,0] + 3\sum_{j=1}^{L-1} \left(a_x^3[j,j] + a_x^3[0,j]\right) + 6\su
 \end{equation*}
 Once again, $F_2$ can be estimated from $a_y^3$, taking bias and scaling into account:
 \begin{align}
-E_5 & := a_y^3[0,0] + 3\sum_{j=1}^{L-1} \left(a_y^3[j,j] + a_y^3[0,j]\right) + 6\sum_{1\leq i < j\leq L-1}a_y^3[i,j]  = L \beta F_2 + (6L-3)\sigma^2a_y^1.
+E_5 & = a_y^3[0,0] + 3\sum_{j=1}^{L-1} \left(a_y^3[j,j] + a_y^3[0,j]\right) + 6\sum_{1\leq i < j\leq L-1}a_y^3[i,j]  = L \beta F_2 + (6L-3)\sigma^2a_y^1.
 \end{align}
 Consider the following ratio:
 \begin{equation*} 
