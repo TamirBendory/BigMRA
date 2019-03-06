@@ -351,7 +351,7 @@ where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, 
 
 
 We show in Section~\ref{sec:theory_homogeneous_well_separated} 
-that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case $K = 1$ (all signal occurrences are the same). \TODO{Do we also need to say "for generic $x$" here, as in Poisson?}
+that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case $K = 1$ (all signal occurrences are the same). %\TODO{Do we also need to say "for generic $x$" here, as in Poisson?}
 
 \subsection{Autocorrelations under the Poisson model} \label{sec:ac_poisson}
 
@@ -366,7 +366,7 @@ In this section, we give the expressions for the autocorrelations of the observe
 %
 Therefore, in the large $N$ limit, similarly to the role of $\gamma$ in the well-separated model~\eqref{eq:gamma}, $\gamma$ may be interpreted as the signal density.
 
-In Section~\ref{sec:proof_prop_poisson}, we prove the following expressions for the autocorrelations of $y$ under the Poisson model. As in the well-separated model, the observed autocorrelations do not depend on individual occurrences of the signal, but only on the distribution of $x$ itself, and the parameters $\gamma$ and $\sigma$: \TODO{Do these identities hold even without taking a limit? I guess so, but let's be sure.}
+In Section~\ref{sec:proof_prop_poisson}, we prove the following expressions for the autocorrelations of $y$ under the Poisson model. As in the well-separated model, the observed autocorrelations do not depend on individual occurrences of the signal, but only on the distribution of $x$ itself, and the parameters $\gamma$ and $\sigma$: %\TODO{Do these identities hold even without taking a limit? I guess so, but let's be sure.}
 %
 \begin{align}
 	a_y^1  & =  \gamma a_{x}^1, \label{eq:mean_micrograph2} \\
@@ -597,9 +597,9 @@ for the case of $\sigma$ unknown and not estimated. Overall, this indicates that
 
 \subsection{Autocorrelations in higher dimensions} \label{sec:high_dimensions}
 
-Autocorrelations in $d$ dimensions are defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as \TODO{in equation below, should M be L?}
+Autocorrelations in $d$ dimensions are defined for  $\ell_1,\ldots,\ell_{q-1}\in\mathbb{Z}^d$  as 
 \begin{equation}
-a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{M^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
+a_z^q[\ell_1,\ldots,\ell_{q-1}]   = \E\left\{\frac{1}{L^d} \sum_{i\in\mathbb{Z}^d} z[i]z[i+\ell_1]\cdots z[i+\ell_{q-1}]\right\}.
 \label{eq:ac_d_dimension}
 \end{equation}
 Interestingly, for the homogeneous case ($K=1$) in dimensions greater than one, almost all  signals are determined uniquely from their second-order autocorrelation, up to two symmetries: sign (or phase for complex signals) and reflection through the origin (with conjugation in the complex case)~\cite{hayes1982reconstruction}. 
@@ -1653,7 +1653,7 @@ Refer to equations \eqref{eq:mean_micrograph}--\eqref{eq:ac3_micrograph} for exp
 Similarly, using $a_x^2[-\ell] = a_x^2[\ell]$:
 \begin{align*}
 	2\sum_{\ell = 1}^{L-1}a_y^2[\ell] & = \gamma \sum_{\ell = 1}^{L-1} a_x^2[\ell] + a_x^2[-\ell] \\
-									  & = \frac{\gamma}{L}\sum_{i=0}^{L-1}\sum_{\ell = 1}^{L-1} x[i]\left(x[i+\ell] + x[i-\ell]\right) = \frac{\gamma}{L} \sum_{i = 0}^{L-1} \sum_{j = 0, j \neq i}^{L-1} x[i] x[j],
+									  & = \frac{\gamma}{L}\sum_{i=0}^{L-1}\sum_{\ell = 1}^{L-1} x[i]\left(x[i+\ell] + x[i-\ell]\right) \\ &= \frac{\gamma}{L} \sum_{i = 0}^{L-1} \sum_{j = 0, j \neq i}^{L-1} x[i] x[j],
 \end{align*}
 where the last equality is obtained by noting that, given the summation bounds, the set of pairs $(i, i\pm\ell)$ and $(i, j)$ are the same over the valid range $\{0, \ldots, L-1\}^2$. To conclude, notice that $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x[i]^2 + \sigma^2$ and combine.
 
