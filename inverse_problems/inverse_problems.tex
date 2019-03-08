@@ -200,7 +200,8 @@ This property ensures that correlating $y$ with versions of itself shifted by at
 
 If the separation condition is violated, more knowledge about the location distribution is necessary to disentangle the autocorrelations of $y$. To that effect, we analyze a Poisson generative model.
 
-Specifically, for each position $i$, the number $s[i]$ of signal occurrences starting at that position is drawn independently from a Poisson distribution with parameter $\gamma/L$, that is, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$ for some parameter $\gamma > 0$. Then, $s[i]$ is split into $s_1[i] + \cdots + s_K[i]$ by selecting $s[i]$ signals among $x_1, \ldots, x_K$, independently at random (with replacement) following a fixed distribution over $\{1,\ldots,K\}$.
+Specifically, for each position $i$, the number $s[i]$ of signal occurrences starting at that position is drawn independently from a Poisson distribution with parameter $\gamma/L$, that is, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$ for some parameter $\gamma > 0$. Then, $s[i]$ is split into $s_1[i] + \cdots + s_K[i]$ by selecting $s[i]$ signals among $x_1, \ldots, x_K$, independently at random  following a fixed distribution over $\{1,\ldots,K\}$.
+It is possible for more than one occurrence of the same $x_k$ to start at the same position~$i$.
 %and the corresponding signal $x_1, \ldots, x_K$ is added to the observation $y$ with first entry positioned at $i$.  --- No need for this, since we already explained the convolution model.
 As for the well-separated model, the autocorrelations of $y$ under this model depend weakly on $s$ and $s_1, \ldots, s_K$, essentially through the parameter $\gamma$: see Section~\ref{sec:AC_analysis}.
 
@@ -516,7 +517,7 @@ almost all signals with the given measurements. The proof is provided in Section
 From Propositions~\ref{prop:uniqueness} and~\ref{prop:gamma_sigma} we   deduce the following:
 \begin{corollary}
 	Assume $L \geq 3$ and $K=1$.
-	Under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if either the signal $x$ is generic or $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
+	Under the separation condition~\eqref{eq:spacing}, the signal $x$, the ratio $\gamma$, and the noise level $\sigma$ are determined from the first three autocorrelation functions of $y$ if either the signal $x$ is generic, or $x$ has nonzero mean  and $\gamma > \frac{1}{4}$.
 \end{corollary}
 %
 %As a side note, under the separation condition, the length $L$ of the signal can also be determined from the autocorrelations in the asymptotic regime, by inspection of the support of $a_y^2$.
