@@ -615,16 +615,25 @@ As evidenced by these figures, the ground truth image can be estimated increasin
 
 \section{Summary}
 
-This paper suggests a computational framework for estimating a signal (signals) from their multiple occurrences in noisy data based on autocorrelation analysis. 
-The autocorrelations can be estimated accurately in any new level, given sufficiently long measurement. 
-Given accurate estimates of the autocorrelations, the problem reduces to estimate a signal from their autocorrelation, that is, solving a system of low-order polynomials equations. The crux of the method lies in the distinctions between parameters that we aim to estimate (the signal) and the nuisance variables (individual locations of signals' occurrences). In particular, we show that the signals can be estimated, although we cannot detect the occurrences in the data.
+This paper suggests a computational  framework for estimation in extreme noise levels. 
+The crux of the method lies in the distinction between parameters that we aim to estimate (the signals) and nuisance variables (parameters associated with signals' individual occurrences). In particular, we show that estimating the signals might be possible, although we cannot detect signal occurrences in the data. The method consists of two steps. First, we estimate the autocorrelations of the observation; 
+these autocorrelations can be estimated to any desired accuracy 
+ given sufficiently long observation. 
+Second, the signal is recovered from the autocorrelations. 
+The recovery entails solving a system of low-order polynomial equations; the properties of the specific systems  (e.g., condition number) affects the feasibility of the estimation procedure.
 
-The prime motivation for this project arises from the problem of reconstructing 3-D of macromolecules using cryo-EM.
-Currently, small molecules cannot be elucidated using cryo-EM; the signal-to-noise ratio on the micrograph is too low and thus it is impossible to detection the tomographic projections. However, the goal of the cryo-EM is not to detect these projections but rather to estimate the 3-D itself; the locations of the projections, as well as the viewing direction associated with each projection, are nuisance variables. Recently, we proposed to estimate the 3-D structure directly from the micrograph, without particle picking~\cite{bendory2018toward}. 
-Currently, the reconstructed volumes are of low-resolutions. It is not clear whether it is possible to achieve higher resolution without considering higher autocorrelation, which in turn will increase the sample complexity of the problem. 
-Application on cryo-EM data will also require incorporating additional parameters into the model: the distribution of 3-D orientation of the molecules in the ice, the noise power spectrum (usually colored noise), the contrast-transfer function, and the distribution of the projection across the   micrograph.
-These parameters will be encoded within the autocorrelations.
-Then, the goal would be to estimate these parameters, along with the 3-D structure, by solving the polynomial system of equations. 
+The prime motivation of this paper emanates from the problem of reconstructing small particles using cryo-EM.
+Small particles induce low signal-to-noise ratio on the micrograph, which  in turn implies that particle picking---the first step in any current cryo-EM reconstruction algorithm---is impossible. 
+The main message of our recent manuscript~\cite{bendory2018toward} is that  particle picking is merely an intermediate step (although frequently very useful) and the location of individual projections are nuisance variables. The ultimate goal is to estimate the 3-D structure. 
+To this end,  we employed autocorrelation analysis to estimate the structure directly from the micrograph, without particle picking. 
+The numerical results in~\cite{bendory2018toward} suggest that the achieved resolution using the third-order autocorrelation is limited;  higher resolution may require computing high-order autocorrelations, which will increase the sample complexity of the problem and computational complexity of the method. 
+
+
+Autocorrelation analysis enables a flexible framework to incorporate additional parameters into the model.
+This is of particular importance for cryo-EM.
+The cryo-EM model includes, in addition to the target volume, the 3-D orientation distribution of molecules in the ice, the distribution of projections across the  micrograph, the noise power spectrum (which is usually colored) and  the microscope contrast-transfer function.
+These parameters will be encoded within the estimated autocorrelations.
+If those parameters are unknown, they should  be  estimated, simultaneously with the 3-D structure, by solving the polynomial system of equations. 
 
 
 \section*{Acknowledgment} 
