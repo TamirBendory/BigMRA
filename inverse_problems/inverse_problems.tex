@@ -201,7 +201,7 @@ This property ensures that correlating $y$ with versions of itself shifted by at
 If the separation condition is violated, more knowledge about the location distribution is necessary to disentangle the autocorrelations of $y$. To that effect, we analyze a Poisson generative model.
 
 Specifically, for each position $i$, the number $s[i]$ of signal occurrences starting at that position is drawn independently from a Poisson distribution with parameter $\gamma/L$, that is, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$ for some parameter $\gamma > 0$. Then, $s[i]$ is split into $s_1[i] + \cdots + s_K[i]$ by selecting $s[i]$ signals among $x_1, \ldots, x_K$, independently at random  following a fixed distribution over $\{1,\ldots,K\}$.
-It is possible for more than one occurrence of the same $x_k$ to start at the same position~$i$.
+It is possible for more than one occurrence of the same $x_k$ to start at position~$i$.
 %and the corresponding signal $x_1, \ldots, x_K$ is added to the observation $y$ with first entry positioned at $i$.  --- No need for this, since we already explained the convolution model.
 As for the well-separated model, the autocorrelations of $y$ under this model depend weakly on $s$ and $s_1, \ldots, s_K$, essentially through the parameter $\gamma$: see Section~\ref{sec:AC_analysis}.
 
@@ -222,7 +222,7 @@ In the next section, we show how this flexibility allows us to model an importan
 
 
 
-\section{Connection with single-particle reconstruction via cryo-electron microscopy}
+\section{Connection with single-particle reconstruction via cryo-electron microscopy} \label{sec:cryoem}
 
 Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography and nuclear magnetic resonance (NMR) spectroscopy as a high-resolution structural method for biological macromolecules~\cite{frank2006three,kuhlbrandt2014resolution,bartesaghi20152}.
 %In contrast to X-ray and NMR which aggregate information from an ensembles of
@@ -620,20 +620,20 @@ The crux of the method lies in the distinction between parameters that we aim to
 these autocorrelations can be estimated to any desired accuracy 
  given sufficiently long observation. 
 Second, the signal is recovered from the autocorrelations. 
-The recovery entails solving a system of low-order polynomial equations; the properties of the specific systems  (e.g., condition number) affects the feasibility of the estimation procedure.
+The recovery entails solving a system of low-order polynomial equations; the properties of the specific systems  (e.g., its condition number) affects the feasibility of the estimation procedure.
 
 The prime motivation of this paper emanates from the problem of reconstructing small particles using cryo-EM.
 Small particles induce low signal-to-noise ratio on the micrograph, which  in turn implies that particle picking---the first step in any current cryo-EM reconstruction algorithm---is impossible. 
 The main message of our recent manuscript~\cite{bendory2018toward} is that  particle picking is merely an intermediate step (although frequently very useful) and the location of individual projections are nuisance variables. The ultimate goal is to estimate the 3-D structure. 
 To this end,  we employed autocorrelation analysis to estimate the structure directly from the micrograph, without particle picking. 
-The numerical results in~\cite{bendory2018toward} suggest that the achieved resolution using the third-order autocorrelation is limited;  higher resolution may require computing high-order autocorrelations, which will increase the sample complexity of the problem and computational complexity of the method. 
-
-
-Autocorrelation analysis enables a flexible framework to incorporate additional parameters into the model.
-This is of particular importance for cryo-EM.
-The cryo-EM model includes, in addition to the target volume, the 3-D orientation distribution of molecules in the ice, the distribution of projections across the  micrograph, the noise power spectrum (which is usually colored) and  the microscope contrast-transfer function.
-These parameters will be encoded within the estimated autocorrelations.
-If those parameters are unknown, they should  be  estimated, simultaneously with the 3-D structure, by solving the polynomial system of equations. 
+The numerical results in~\cite{bendory2018toward} suggest that the achieved resolution using the third-order autocorrelation is limited;  higher resolution may require computing high-order autocorrelations, which will increase the sample complexity of the problem and the algorithm's computational complexity. 
+%
+%In addition, the model analyzed in~\cite{bendory2018toward} is somewhat simplified. 
+%A full cryo-EM model includes, in addition to the target volume,
+%multiple parameters:
+%the 3-D orientation distribution of molecules in the ice, the distribution of projections across the  micrograph, the noise power spectrum (which is usually colored), and  the microscope contrast-transfer function.
+%These parameters will be encoded within the estimated autocorrelations.
+%If those parameters are unknown, they should  be  estimated, simultaneously with the 3-D structure, by solving the polynomial system of equations. Again, estimating those parameters may require high-order autocorrelations.
 
 
 \section*{Acknowledgment} 
@@ -724,46 +724,50 @@ a_y^3[\ell_1, \ell_2] & = \gamma a_x^3[\ell_1, \ell_2] + \gamma \sigma^2 a_x^1 \
 \end{align}
 
 
+%\section{Autocorrelations in the Poisson model} \label{sec:proof_prop_poisson}
+
 \section{Autocorrelations in the Poisson model} \label{sec:proof_prop_poisson}
 
-We will denote by $\M_q$ the moment tensors of $x$:
+
+We will denote by $m_l$ the moment tensors of $x$:
 %
 \begin{align}
 %
-\M_1[i] = \E x[i], \quad 0 \le i \le L-1,
+m_1[i] = \E x[i], \quad 0 \le i \le L-1,
 %
 \end{align}
 %
 \begin{align}
 %
-\M_2[i,j] = \E x[i] x[j], \quad 0 \le i,j \le L-1,
+m_2[i,j] = \E x[i] x[j], \quad 0 \le i,j \le L-1,
 %
 \end{align}
 %
 \begin{align}
 %
-\M_3[i,j,k] = \E x[i] x[j] x[k], \quad 0 \le i,j,k \le L-1.
+m_3[i,j,k] = \E x[i] x[j] x[k], \quad 0 \le i,j,k \le L-1.
 %
 \end{align}
-We obtain the autocorrelations $a_x^q$ of $x$ by averaging over a slice of the moment tensors:
+
+We obtain the autocorrelations $a_x^l$ of $x$ by averaging over a slice of the moment tensors:
 %
 \begin{align}
 %
-a_x^1 = \frac{1}{L}\sum_{i=0}^{L-1} \M_1[i],
+a_x^1 = \frac{1}{L}\sum_{i=0}^{L-1} m_1[i],
 %
 \end{align}
 %
 \begin{align}
 %
-a_x^2[\ell] = \frac{1}{L} \sum_{i=0}^{L-1} \M_2[i,i+\ell],
+a_x^2[\ell] = \frac{1}{L} \sum_{i=0}^{L-1} m_2[i,i+\ell],
 %
 \end{align}
 %
-and \TODO{Compare with~\eqref{eq:ac_special}: the limits on the sum should be modified}
+and
 %
 \begin{align}
 %
-a_x^3[\ell_1,\ell_2] = \frac{1}{L}\sum_{i=0}^{L-1} \M_3[i,i+\ell_1,i+\ell_2].
+a_x^3[\ell_1,\ell_2] = \frac{1}{L}\sum_{i=0}^{L-1} m_3[i,i+\ell_1,i+\ell_2].
 %
 \end{align}
 
@@ -780,9 +784,13 @@ We will make repeated use of the following elementary lemma:
 \end{lem}
 
 
+%
+
+
+
 \subsection{Computing $a_y^1$}
 
-We will first condition on the vector $s$ of locations of the subsignals in $y$, and then average over $s$. We will denote by $x_{(1)}^i,\dots,x_{(s[i])}^i$ the random vectors with position 0 located at $i$. We have:
+We will first condition on the vector $s$ of locations of the subsignals in $y$, and then average over $s$. We will denote by $x_{(1)}^{i},\dots,x_{(s[i])}^i$ the random vectors with position 0 located at $i$. We have:
 %
 \begin{align}
 %
@@ -803,13 +811,16 @@ Now taking expectations over $s$ and using $\E s[i-j] = \gamma/L$ we get:
 Consequently,
 %
 \begin{align}
-a_y^1 = \frac{1}{N} \sum_{i=1}^N \E y[i] = \gamma a_x^1.
+a_y^1 = \frac{1}{N} \sum_{i=1}^n \E y[i] = \gamma a_x^1.
 \end{align}
+
+
+%
+
 
 \subsection{Computing $a_y^2$}
 
-First we will consider the noise-free case, where $\sigma = 0$. 
-Again, we will condition on $s$ first, and then take the expectation over $s$. Fix $i_1 \ne i_2$, and let $\ell = i_2 - i_1$. Then:
+First we will consider the noise-free case, where $\sigma = 0$. We will condition on $s$ first, and then take the expectation over $s$. Fix $i_1 \ne i_2$, and let $\ell = i_2 - i_1$. Then:
 %
 \begin{align}
 %
@@ -830,7 +841,7 @@ We break up the double sum over $j_1$ and $j_2$ into two terms: one where $j_2 \
 \E x_{(k_1)}^{i_1-j_1}[j_1] x_{(k_2)}^{i_2 - j_2}[j_2]
 \nonumber \\
 =& \sum_{j_1 - j_2 \ne \ell} \sum_{k_1} 
-\sum_{k_2} \E x_{(k_1)}^{i_1-j_1}[j_1] x_{k_2}^{i_2 - j_2}[j_2]
+\sum_{k_2} \E x_{(k_1)}^{i_1-j_1}[j_1] x_{(k_2)}^{i_2 - j_2}[j_2]
 \nonumber \\
 & + \sum_{j_1 = 0}^{L-1} \sum_{k_1 \ne k_2} 
 \E x_{(k_1)}^{i_1-j_1}[j_1] x_{(k_2)}^{i_1 - j_1}[j_1+\ell]
@@ -838,11 +849,11 @@ We break up the double sum over $j_1$ and $j_2$ into two terms: one where $j_2 \
 & + \sum_{j_1 = 0}^{L-1} \sum_{k_1=1}^{s[i_1-j_1]} 
 \E x_{(k_1)}^{i_1-j_1}[j_1] x_{(k_1)}^{i_1-j_1}[j_1 + \ell] 
 \nonumber \\
-=& \sum_{j_1 - j_2 \ne \ell} s[i_1-j_1] s[i_2 - j_2] \M_1[j_1] \M_1[j_2]
+=& \sum_{j_1 - j_2 \ne \ell} s[i_1-j_1] s[i_2 - j_2] m_1[j_1] m_1[j_2]
 \nonumber \\
-& + \sum_{j_1 = 0}^{L-1} s[i_1-j_1](s[i_1-j_1] - 1) \M_1[j_1] \M_1[j_1 + \ell]
+& + \sum_{j_1 = 0}^{L-1} s[i_1-j_1](s[i_1-j_1] - 1) m_1[j_1] m_1[j_1 + \ell]
 \nonumber \\
-& + \sum_{j_1 = 0}^{L-1} s[i_1-j_1] \M_2[j_1,j_1 + \ell] .
+& + \sum_{j_1 = 0}^{L-1} s[i_1-j_1] m_2[j_1,j_1 + \ell] .
 %
 \end{align}
 %
@@ -851,19 +862,19 @@ Now take expectations over the Poisson random variables, using Lemma \ref{lem-ch
 \begin{align}
 %
 \E y[i_1] y[i_2]
-=& \sum_{j_1 - j_2 \ne \ell} \E s[i_1-j_1] s[i_2 - j_2] \M_1[j_1] \M_1[j_2]
+=& \sum_{j_1 - j_2 \ne \ell} \E s[i_1-j_1] s[i_2 - j_2] m_1[j_1] m_1[j_2]
 \nonumber \\
-&       + \sum_{j_1 = 0}^{L-1} \E s[i_1-j_1](s[i_1-j_1] - 1) \M_1[j_1] \M_1[j_1 + \ell]
+&       + \sum_{j_1 = 0}^{L-1} \E s[i_1-j_1](s[i_1-j_1] - 1) m_1[j_1] m_1[j_1 + \ell]
 \nonumber \\
-&       + \sum_{j_1 = 0}^{L-1} \E s[i_1-j_1] \M_2[j_1,j_1 + \ell]
+&       + \sum_{j_1 = 0}^{L-1} \E s[i_1-j_1] m_2[j_1,j_1 + \ell]
 \nonumber \\
-=& \frac{1}{L^2}\sum_{j_1 - j_2 \ne \ell} \gamma^2 \M_1[j_1] \M_1[j_2]
-+ \frac{1}{L^2} \sum_{j_1 = 0}^{L-1} \gamma^2 \M_1[j_1] \M_1[j_1 + \ell]
+=& \frac{1}{L^2}\sum_{j_1 - j_2 \ne \ell} \gamma^2 m_1[j_1] m_1[j_2]
++ \frac{1}{L^2} \sum_{j_1 = 0}^{L-1} \gamma^2 m_1[j_1] m_1[j_1 + \ell]
 \nonumber \\
-&       + \frac{1}{L}\sum_{j_1 = 0}^{L-1} \gamma \M_2[j_1,j_1 + \ell]
+&       + \frac{1}{L}\sum_{j_1 = 0}^{L-1} \gamma m_2[j_1,j_1 + \ell]
 \nonumber \\
-=&  \bigg(\frac{\gamma}{L}  \sum_{j = 0}^{L-1} \M_1[j] \bigg)^2
-+ \frac{\gamma}{L} \sum_{j = 0}^{L-1} \M_2[j,j + \ell]
+=&  \bigg(\frac{\gamma}{L}  \sum_{j = 0}^{L-1} m_1[j] \bigg)^2
++ \frac{\gamma}{L} \sum_{j = 0}^{L-1} m_2[j,j + \ell]
 \nonumber \\
 =&  (\gamma a_x^1)^2 + \gamma a_x^2[\ell].
 %
@@ -877,7 +888,11 @@ For positive $\sigma$, we observe that any terms linear in the noise vanish in e
 = (\gamma a_x^1)^2 + \gamma a_x^2[\ell] + \sigma^2 \delta[i_1 - i_2].
 \end{align}
 %
-We conclude by averaging over $i_1$ and $i_2$, leaving the gap $\ell = i_2 - i_1$ fixed.
+We conclude by averaging over $i_1$ and $i_2$ with a fixed value of $\ell = i_2 - i_1$.
+
+
+%
+
 
 \subsection{Computing $a_x^3$}
 
@@ -913,31 +928,31 @@ We will break up the outer three sums into disjoint sums with the following rang
 \end{enumerate}
 
 
-For Case \ref{case1}, we have $q \equiv i_1 - j_1 = i_2 - j_2 = i_3 - j_3$. We further break up the sum:
+For Case \ref{case1}, we have $\ell \equiv i_1 - j_1 = i_2 - j_2 = i_3 - j_3$. We further break up the sum:
 %
 \begin{align}
 %
-&\sum_{j=0}^{L-1} \sum_{k_1=1}^{s[q]} \sum_{k_2=1}^{s[q]} \sum_{k_3=1}^{s[q]} 
-x_{(k_1)}^{q}[j] x_{(k_2)}^{q}[j + \ell_1] x_{(k_3)}^{q}[j + \ell_2]
+&\sum_{j=0}^{L-1} \sum_{k_1=1}^{s[\ell]} \sum_{k_2=1}^{s[\ell]} \sum_{k_3=1}^{s[\ell]} 
+x_{(k_1)}^{\ell}[j] x_{(k_2)}^{\ell}[j + \ell_1] x_{(k_3)}^{\ell}[j + \ell_2]
 \nonumber \\
 =& \underbrace{ \sum_{j=0}^{L-1} \sum_{k_i \text{distinct}} 
-	x_{(k_1)}^{q}[j] x_{(k_2)}^{q}[j + \ell_1] x_{(k_3)}^{q}[j + \ell_2]
+	x_{(k_1)}^{\ell}[j] x_{(k_2)}^{\ell}[j + \ell_1] x_{(k_3)}^{\ell}[j + \ell_2]
 }_{\text{(a)}}
 \nonumber \\
 &+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_2\ne k_3} 
-	x_{(k_1)}^{q}[j] x_{(k_2)}^{q}[j + \ell_1] x_{(k_3)}^{q}[j + \ell_2]
+	x_{(k_1)}^{\ell}[j] x_{(k_2)}^{\ell}[j + \ell_1] x_{(k_3)}^{\ell}[j + \ell_2]
 }_{\text{(b)}}
 \nonumber \\
 &+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_3\ne k_2} 
-	x_{(k_1)}^{q}[j] x_{(k_2)}^{q}[j + \ell_1] x_{(k_3)}^{q}[j + \ell_2]
+	x_{(k_1)}^{\ell}[j] x_{(k_2)}^{\ell}[j + \ell_1] x_{(k_3)}^{\ell}[j + \ell_2]
 }_{\text{(c)}}
 \nonumber \\
 &+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_2=k_3\ne k_1} 
-	x_{(k_1)}^{q}[j] x_{(k_2)}^{q}[j + \ell_1] x_{(k_3)}^{q}[j + \ell_2]
+	x_{(k_1)}^{\ell}[j] x_{(k_2)}^{\ell}[j + \ell_1] x_{(k_3)}^{\ell}[j + \ell_2]
 }_{\text{(d)}}
 \nonumber \\
 &+\underbrace{ \sum_{j=0}^{L-1} \sum_{k_1=k_2=k_3} 
-	x_{(k_1)}^{q}[j] x_{(k_2)}^{q}[j + \ell_1] x_{(k_3)}^{q}[j + \ell_2]
+	x_{(k_1)}^{\ell}[j] x_{(k_2)}^{\ell}[j + \ell_1] x_{(k_3)}^{\ell}[j + \ell_2]
 }_{\text{(e)}}.
 %
 \end{align}
@@ -946,7 +961,7 @@ For term (a), the expectation conditional on $s$ is:
 %
 \begin{align}
 %
-\sum_{j=0}^{L-1} s[q](s[q]-1)(s[q]-2)\M[j] \M[j+\ell_1] \M[j+\ell_2].
+\sum_{j=0}^{L-1} s[\ell](s[\ell]-1)(s[\ell]-2)m_1[j] m_1[j+\ell_1] m_1[j+\ell_2].
 %
 \end{align}
 %
@@ -954,31 +969,32 @@ Using Lemma \ref{lem-choose}, the unconditional expectation of (a) is then:
 %
 \begin{align} \label{aaaa}
 %
-\frac{\gamma^3}{L^3} \sum_{j=0}^{L-1} \M_1[j] \M_1[j+\ell_1] \M_1[j+\ell_2].
+\frac{\gamma^3}{L^3} \sum_{j=0}^{L-1} m_1[j] m_1[j+\ell_1] m_1[j+\ell_2].
 %
 \end{align}
 
 
-For term (b), the expectation conditional on $S$ is:
+For term (b), the expectation conditional on $s$ is:
 %
 \begin{align}
 %
-\sum_{j=0}^{L-1} s[q] (s[q] - 1) \M_2[j,j+\ell_1] \M_1[j + \ell_2]
+\sum_{j=0}^{L-1} s[\ell] (s[\ell] - 1) m_2[j,j+\ell_1] m_1[j + \ell_2]
 %
 \end{align}
 %
-and then again using Lemma~\ref{lem-choose} we get the expected value:
+and then again using Lemma \ref{lem-choose} we get the expected value:
 %
 \begin{align} \label{bbbb}
 %
-\frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} \M_2[j,j+\ell_1] \M_1[j+\ell_2].
+\frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} m_2[j,j+\ell_1] m_1[j+\ell_2].
 %
 \end{align}
+
 Similarly, the expected values of terms (c) and (d) are:
 %
 \begin{align} \label{cccc}
 %
-\frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} \M_2[j,j+\ell_2] \M_1[j+\ell_1].
+\frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} m_2[j,j+\ell_2] m_1[j+\ell_1].
 %
 \end{align}
 %
@@ -986,7 +1002,7 @@ and
 %
 \begin{align} \label{dddd}
 %
-\frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} \M_2[j+\ell_1,j+\ell_2] \M_1[j].
+\frac{\gamma^2}{L^2} \sum_{j=0}^{L-1} m_2[j+\ell_1,j+\ell_2] m_1[j].
 %
 \end{align}
 
@@ -994,26 +1010,26 @@ Finally, the expected value of term (e) is easily shown to be:
 %
 \begin{align} \label{eeee}
 %
-\frac{\gamma}{L} \sum_{j=0}^{L-1} \M_3[j,j+\ell_1,j+\ell_2].
+\frac{\gamma}{L} \sum_{j=0}^{L-1} m_3[j,j+\ell_1,j+\ell_2].
 %
 \end{align}
 %
 This concludes the computation for Case \ref{case1}.
 
-Moving onto Case~\ref{case2}, we have $q_1 \equiv i_1 - j_1 = i_2 - j_2$, and also define $q_2 \equiv i_3 - j_3$. By definition, $q_1 \ne q_2$. The sum is:
+Moving onto Case \ref{case2}, we have $\Delta_1 \equiv i_1 - j_1 = i_2 - j_2$, and also define $\Delta_2 \equiv i_3 - j_3$. By definition, $\Delta_1 \ne \Delta_2$. The sum is:
 %
 \begin{align}
 %
 & \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2}
-\sum_{1 \le k_1,k_2 \le s[q_1]} \sum_{k_3=1}^{s[q_2]}
-x_{(k_1)}^{q_1}[j_1] x_{(k_2)}^{q_1}[j_1 + \ell_1] x_{(k_3)}^{q_2}[j_3]   
+\sum_{1 \le k_1,k_2 \le s[\Delta_1]} \sum_{k_3=1}^{s[\Delta_2]}
+x_{(k_1)}^{\Delta_1}[j_1] x_{(k_2)}^{\Delta_1}[j_1 + \ell_1] x_{(k_3)}^{\Delta_2}[j_3]   
 \nonumber \\
-=& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2} \sum_{k_3=1}^{s[q_2]}
-\Bigg\{  \sum_{1 \le k_1 \ne k_2 \le s[q_1]} 
-x_{(k_1)}^{q_1}[j_1] x_{(k_2)}^{q_1}[j_1 + \ell_1] x_{(k_3)}^{q_2}[j_3]
+=& \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2} \sum_{k_3=1}^{s[\Delta_2]}
+\Bigg\{  \sum_{1 \le k_1 \ne k_2 \le s[\Delta_1]} 
+x_{(k_1)}^{\Delta_1}[j_1] x_{(k_2)}^{\Delta_1}[j_1 + \ell_1] x_{(k_3)}^{\Delta_2}[j_3]
 \nonumber \\
-& + \sum_{k_1=1}^{s[q_1]} x_{(k_1)}^{q_1}[j_1] x_{(k_1)}^{q_1}[j_1 + \ell_1] 
-x_{(k_3)}^{q_2}[j_3]  \Bigg\}.
+& + \sum_{k_1=1}^{s[\Delta_1]} x_{(k_1)}^{\Delta_1}[j_1] x_{(k_1)}^{\Delta_1}[j_1 + \ell_1] 
+x_{(k_3)}^{\Delta_2}[j_3]  \Bigg\}.
 %
 \end{align}
 %
@@ -1022,20 +1038,21 @@ Taking expectations conditional on $s$, we then get:
 \begin{align}
 %
 \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2} 
-\Bigg( & s[q_1] (s[q_1]-1) s[q_2] \M_1[j_1] \M_1[j_1 + \ell_1] \M_1[j_3]
-+ s[q_1] s[q_2] \M_2[j_1,j_1+\ell_1] \M_1[j_3] \Bigg).
+\Bigg( & s[\Delta_1] (s[\Delta_1]-1) s[\Delta_2] m_1[j_1] m_1[j_1 + \ell_1] m_1[j_3]
+\nonumber \\
+&  + s[\Delta_1] s[\Delta_2] m_2[j_1,j_1+\ell_1] m_1[j_3] \Bigg).
 %
 \end{align}
 
-Taking expectations over $s$ and using Lemma~\ref{lem-choose} then gives:
+Taking expectations over $s$ and using Lemma \ref{lem-choose} then gives:
 %
 \begin{align}
 %
 & \frac{\gamma^3}{L^3} \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2} 
-\M_1[j_1] \M_1[j_1 + \ell_1] \M_1[j_3]
+m_1[j_1] m_1[j_1 + \ell_1] m_1[j_3]
 \label{ffff} \\
 & + \frac{\gamma^2}{L^2} \sum_{j_1=0}^{L-1} \sum_{j_3 \ne j_1 + \ell_2}  
-\M_2[j_1,j_1+\ell_1] \M_1[j_3].
+m_2[j_1,j_1+\ell_1] m_1[j_3].
 \label{gggg}
 %
 \end{align}
@@ -1046,10 +1063,10 @@ Similarly, Cases \ref{case3} and \ref{case4} give the expressions:
 \begin{align}
 %
 & \frac{\gamma^3}{L^3} \sum_{j_1=0}^{L-1} \sum_{j_2 \ne j_1 + \ell_1} 
-\M_1[j_1] \M_1[j_1 + \ell_2] \M_1[j_2]
+m_1[j_1] m_1[j_1 + \ell_2] m_1[j_2]
 \label{hhhh} \\
 & + \frac{\gamma^2}{L^2} \sum_{j_1=0}^{L-1} \sum_{j_2 \ne j_1 + \ell_1}  
-\M_2[j_1,j_1+\ell_2] \M_1[j_2]
+m_2[j_1,j_1+\ell_2] m_1[j_2]
 \label{iiii}
 %
 \end{align}
@@ -1059,27 +1076,27 @@ and
 \begin{align}
 %
 & \frac{\gamma^3}{L^3} \sum_{j_2=0}^{L-1} \sum_{j_1 \ne j_2} 
-\M_1[j_1] \M_1[j_2 + \ell_1] \M_1[j_2 + \ell_2]
+m_1[j_1] m_1[j_2 + \ell_1] m_1[j_2 + \ell_2]
 \label{jjjj}\\
 & + \frac{\gamma^2}{L^2} \sum_{j_2=0}^{L-1} \sum_{j_1 \ne j_2}  
-\M_2[j_2+\ell_1,j_2+\ell_2] \M_1[j_1].
+m_2[j_2+\ell_1,j_2+\ell_2] m_1[j_1].
 \label{kkkk}
 %
 \end{align}
 
-Finally, in Case \ref{case5} we have $i_1 - j_1$, $i_2 - j_2$, and $i_3 - j_3$ are all pairwise distinct. Consequently, the $x$ variables are always independent, and the expectation conditional on $s$ (letting $q_\ell = i_\ell - j_\ell$, $\ell=1,2,3$),
+Finally, in Case \ref{case5} we have $i_1 - j_1$, $i_2 - j_2$, and $i_3 - j_3$ are all pairwise distinct. Consequently, the $x$ variables are always independent, and the expectation conditional on $s$ (letting $\Delta_{q} = i_q - j_q$, $q=1,2,3$),
 %
 \begin{align}
 %
-\sum_{j_1,j_2,j_3} s[q_1] s[q_2] s[q_3] \M_1[j_1] \M_1[j_2] \M_1[j_3];
+\sum_{j_1,j_2,j_3} s[\Delta_1] s[\Delta_2] s[\Delta_3] m_1[j_1] m_1[j_2] m_1[j_3];
 %
 \end{align}
 %
-since the $s[q_\ell]$'s are pairwise independent, $\ell=1,2,3$, the expectation over $s$ then yields:
+since the $s[\Delta_q]$'s are pairwise independent, the expectation over $s$ then yields:
 %
 \begin{align} \label{llll}
 %
-\frac{\gamma^3}{L^3} \sum_{j_1,j_2,j_3} \M_1[j_1] \M_1[j_2] \M_1[j_3].
+\frac{\gamma^3}{L^3} \sum_{j_1,j_2,j_3} m_1[j_1] m_1[j_2] m_1[j_3].
 %
 \end{align}
 
@@ -1112,18 +1129,21 @@ Finally, expression \eqref{eeee} is simply:
 Now when $\sigma > 0$, we write $y = x^* + \ep$, and
 %
 \begin{align}
-\E y[i_1] y[i_2] y[i_3] =& \E x^*[i_1] x^*[i_2] x^*[i_3] + \E x^*[i_1] \ep[i_2] \ep[i_3]
+\E y[i_1] y[i_2] y[i_3] =\,\, & \E x^*[i_1] x^*[i_2] x^*[i_3] + \E x^*[i_1] \ep[i_2] \ep[i_3]
 \nonumber \\
 & + \E\ep[i_1] x^*[i_2] \ep[i_3] + \E \ep[i_1] \ep[i_2] x^*[i_3] 
 + \E \ep[i_1] \ep[i_2]\ep[i_3]
 \nonumber \\
-=& \E x^*[i_1] x^*[i_2] x^*[i_3] + \gamma  a_x^1 \cdot \sigma^2 \delta[i_2-i_3]
+=\,\, & \E x^*[i_1] x^*[i_2] x^*[i_3] + \gamma  a_x^1 \cdot \sigma^2 \delta[i_2-i_3]
 \nonumber \\
 & + \gamma a_x^1 \cdot \sigma^2 \delta[i_3-i_1] 
 + \gamma a_x^1 \cdot \sigma^2 \delta[i_2-i_1] .
 \end{align}
 
-We conclude by averaging over $i_1$, $i_2$, and $i_3$ leaving the gaps $\ell_1 = i_2 - i_1$ and $\ell_2 = i_3 - i_1$ fixed.
+We conclude by averaging over all $i_1$, $i_2$, and $i_3$ with fixed values of $\ell_1 = i_2 - i_1$ and $\ell_2 = i_3 - i_1$.
+
+%
+
 
 \section{Proof of Proposition~\ref{prop:gamma}} \label{sec:proof_prop_gamma}
 Refer to equations \eqref{eq:mean_micrograph}--\eqref{eq:ac3_micrograph} for expressions relating the moments of $y$ and those of $x$, and the parameters $\gamma$ and $\sigma$. First,  note that 
