@@ -626,7 +626,10 @@ The prime motivation of this paper emanates from the problem of reconstructing s
 Small particles induce low signal-to-noise ratio on the micrograph, which  in turn implies that particle picking---the first step in any current cryo-EM reconstruction algorithm---is impossible. 
 The main message of our recent manuscript~\cite{bendory2018toward} is that  particle picking is merely an intermediate step (although frequently very useful) and the location of individual projections are nuisance variables. The ultimate goal is to estimate the 3-D structure. 
 To this end,  we employed autocorrelation analysis to estimate the structure directly from the micrograph, without particle picking. 
-The numerical results in~\cite{bendory2018toward} suggest that the achieved resolution using the third-order autocorrelation is limited;  higher resolution may require computing high-order autocorrelations, which will increase the sample complexity of the problem and the algorithm's computational complexity. 
+In order to gain better understanding of the method, this paper focused on an abstraction of cryo-EM---the multi-target detection model. 
+Our next goal is to reconsider the full cryo-EM model, both from theoretical and algorithmic perspectives. 
+In particular, the numerical results in~\cite{bendory2018toward} suggest that the achieved resolution using the third-order autocorrelation is limited;  higher resolution may require computing high-order autocorrelations, which will increase the sample complexity of the problem and the algorithm's computational complexity. 
+
 %
 %In addition, the model analyzed in~\cite{bendory2018toward} is somewhat simplified. 
 %A full cryo-EM model includes, in addition to the target volume,
