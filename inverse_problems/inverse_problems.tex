@@ -615,20 +615,17 @@ As evidenced by these figures, the ground truth image can be estimated increasin
 
 \section{Summary}
 
-This paper suggests a computational  framework for estimation in extreme noise levels. 
-The crux of the method lies in the distinction between parameters that we aim to estimate (the signals) and nuisance variables (parameters associated with signals' individual occurrences). In particular, we show that estimating the signals might be possible, although we cannot detect signal occurrences in the data. The method consists of two steps. First, we estimate the autocorrelations of the observation; 
-these autocorrelations can be estimated to any desired accuracy 
- given sufficiently long observation. 
-Second, the signal is recovered from the autocorrelations. 
-The recovery entails solving a system of low-order polynomial equations; the properties of the specific systems  (e.g., its condition number) affects the feasibility of the estimation procedure.
+This paper suggests a computational  framework for estimation under extreme noise levels. 
+The crux of the method lies in the distinction between parameters of interest (the signals) and nuisance variables (parameters associated with individual signal occurrences, such as location and class). In part through theory and in part through numerical experiments, we show that estimating the signals is possible even when they cannot be detected in the data. The method consists of two steps. First, we estimate the autocorrelations of the observation. A key feature is that, for any noise level, these autocorrelations can be estimated to any desired accuracy given sufficiently rich observations. Second, we recover the signals from the autocorrelations. This recovery entails solving a system of low-order polynomial equations. While solving such systems is hard in general, we found that in the homogeneous case we can solve them explicitly, and in both the homogeneous and heterogeneous cases we can solve them with reasonable robustness through non-convex optimization, in a wide regime of parameters.
+%The properties of the specific systems (e.g., its condition number) affects the feasibility of the estimation procedure.
 
-The prime motivation of this paper emanates from the problem of reconstructing small particles using cryo-EM.
-Small particles induce low signal-to-noise ratio on the micrograph, which  in turn implies that particle picking---the first step in any current cryo-EM reconstruction algorithm---is impossible. 
-The main message of our recent manuscript~\cite{bendory2018toward} is that  particle picking is merely an intermediate step (although frequently very useful) and the location of individual projections are nuisance variables. The ultimate goal is to estimate the 3-D structure. 
-To this end,  we employed autocorrelation analysis to estimate the structure directly from the micrograph, without particle picking. 
-In order to gain better understanding of the method, this paper focused on an abstraction of cryo-EM---the multi-target detection model. 
+The prime motivation of this paper emanates from challenges in small particle reconstruction using cryo-EM.
+Small particles induce such low signal-to-noise ratio in the micrograph that particle picking---the first step in any current cryo-EM reconstruction algorithm---is impossible. 
+The main message of our recent report~\cite{bendory2018toward} is that particle picking is merely a means to an end (although admittedly of key usefulness when it can be done): the locations and classes of individual particle projections are nuisance variables. The ultimate goal is only to estimate the 3-D structures. 
+To this end,  we used autocorrelation analysis to estimate the structure directly from the micrograph, without particle picking. 
+In order to gain better understanding of the method, this paper focuses on an abstraction of cryo-EM---the multi-target detection model. 
 Our next goal is to reconsider the full cryo-EM model, both from theoretical and algorithmic perspectives. 
-In particular, the numerical results in~\cite{bendory2018toward} suggest that the achieved resolution using the third-order autocorrelation is limited;  higher resolution may require computing high-order autocorrelations, which will increase the sample complexity of the problem and the algorithm's computational complexity. 
+In particular, the numerical results in~\cite{bendory2018toward} suggest that the achieved resolution using autocorrelations up to third order is limited by ill-conditioning of the system of polynomial equations. Higher resolution may require computing higher-order autocorrelations, which would increase the sample complexity and computational complexity of the algorithm. Despite the challenges, we believe that this approach may ultimately offer a way to reconstruct 3-D structures that are too small for current algorithmic pipelines.
 
 %
 %In addition, the model analyzed in~\cite{bendory2018toward} is somewhat simplified. 
@@ -641,7 +638,7 @@ In particular, the numerical results in~\cite{bendory2018toward} suggest that th
 
 \section*{Acknowledgment} 
 The authors  thank Ayelet Heimowitz, Joe Kileel, Ti-Yen Lan and Amit Moscovich  for helpful discussions.
-The research was partially supported by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, the Moore Foundation Data-Driven Discovery Investigator Award, and NSF BIGDATA Award IIS-1837992.
+The research is supported in parts by Award Number R01GM090200 from the NIGMS, FA9550-17-1-0291 from AFOSR, Simons Foundation Math+X Investigator Award, the Moore Foundation Data-Driven Discovery Investigator Award, and NSF BIGDATA Award IIS-1837992.
 NB is partially supported by NSF award DMS-1719558.
 
 \bibliographystyle{plain}
