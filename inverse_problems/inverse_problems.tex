@@ -134,7 +134,8 @@ In the low noise regime, one can estimate the signals by first detecting occurre
 In the high noise regime however, neither detection nor clustering can be performed reliably, so that strategies along these lines are destined to fail.  
 Notwithstanding, using autocorrelation analysis, we show that the impossibility to detect and cluster signal occurrences in the presence of high noise does not necessarily preclude signal estimation.
 Specifically, to estimate the signals, we derive simple relations between the autocorrelations of the observation and those of the signals. These autocorrelations can be estimated accurately at any noise level given a sufficiently long measurement. 
-To recover the signals from the observed autocorrelations, we (heuristically) solve a set of polynomial equations through nonlinear least-squares. 
+%To recover the signals from the observed autocorrelations, we (heuristically) solve a set of polynomial equations through nonlinear least-squares. 
+To recover the signals from the observed autocorrelations, we  solve a set of polynomial equations through nonlinear least-squares. 
 We provide analysis regarding well-posedness of the task, and demonstrate numerically the effectiveness of the method in a variety of settings.
 
 The main goal of this work is to provide theoretical and numerical support for a recently proposed framework to image 3-D structures of biological macromolecules using cryo-electron microscopy in extreme noise levels. % ~\cite{bendory2018toward}. -- not references in the abstract, except if cited in full; but we don't want to write "arxiv" here.
@@ -145,7 +146,7 @@ The main goal of this work is to provide theoretical and numerical support for a
 
 We consider the \emph{multi-target detection} problem of recovering a set of $K$ signals that appear 
 multiple times at unknown locations in a noisy measurement.
-Let ${x_1,\ldots,x_K\in\RL}$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  far larger than $L$. 
+Let ${x_1,\ldots,x_K\in\RL}$ be the sought signals and let $y\in\RN$ be the observed data, where we assume $N$ is  much larger than $L$. 
 Let  $s[i]$ count the number of signal occurrences whose first entry is positioned at $y[i]$. Each of those $s[i]$ signals is chosen among $x_1, \ldots, x_K$ according to some (possibly unknown) distribution over $\{1,\ldots,K\}$. 
 If signal occurrences overlap, they interfere additively. %We think of those events as being rare. 
 With additive white Gaussian noise, the measurement model can be written as 
@@ -231,14 +232,15 @@ Cryo-electron microscopy (cryo-EM)  has recently joined X-ray crystallography an
 In a cryo--EM experiment, biological samples (e.g., macromolecules, viruses) are rapidly frozen in a thin layer of vitreous ice.
 The microscope produces 2-D tomographic images of the samples embedded in the ice, called \emph{micrographs}. Each micrograph contains multiple tomographic projections of the samples at unknown locations and under unknown viewing directions. 
 Importantly, the electron dose must be kept low to mitigate  radiation damage, inducing high noise levels.
-The goal is to construct 3-D models of the molecular structures from the micrographs. 
+The goal is to reconstruct 3-D models of the molecular structures from the micrographs. 
 Since  cryo-EM produces images of individual particles, it can elucidate multiple  structures simultaneously.
 This is in clear contrast to  X-ray and NMR, which aggregate information from an ensembles of
 particles.
 
 Considering the extensions described in the previous section, we can phrase a simplified generative model for micrographs (the observation $y$) within our framework. Specifically, locations are chosen in the 2-D plane of the image, corresponding to $s$: this is where the molecules are fixed in the plane of the ice layer. At each selected location, a 2-D tomographic projection of a molecule (a signal occurrence) is added in the observation $y$. This signal is drawn from a probability distribution described by a discrete number of parameters which correspond to the sought 3-D structure, as follows.
 
-The 3-D structure $V$ (the target parameter) can be expanded into a linear combination of basis functions (for example, spherical harmonics for the spherical part and Bessel functions for the radial part): the coefficients of this expansion are the unknowns. Then, a rotation $R_\omega$ is applied to the volume (to model viewing directions) according to a (possibly unknown) distribution of $\omega$ over $SO(3)$ (the group of 3-D rotations). With tomographic projection denoted by $P$, we have the following probability distribution for particles in the micrograph:
+The 3-D structure $V$ (the target parameter) can be expanded into a linear combination of basis functions (for example, spherical harmonics for the spherical part and Bessel functions for the radial part): the coefficients of this expansion are the unknowns. Then, a rotation $R_\omega$ is applied to the volume (to model viewing directions) according to a (possibly unknown) distribution of $\omega$ over $SO(3)$ (the group of 3-D rotations). With tomographic projection denoted by $P$, $x$ is a random signal, related to the distribution of $\omega$ through: 
+%we have the following probability distribution for particles in the micrograph:
 \begin{align}
 	x & = P(R_\omega V).
 	\label{eq:cryoEM}
@@ -246,7 +248,7 @@ The 3-D structure $V$ (the target parameter) can be expanded into a linear combi
 By further allowing $V$ itself to be a random signal as well, this model can also encode a mixture of structures in the biological sample. This mixture might also be continuous, corresponding to continuous conformational variability.
 
 All contemporary methods for single particle reconstruction using cryo-EM  split the reconstruction procedure into two main  stages.
-The first stage, called \emph{particle picking},  detects and extracts the particle projections from the micrographs. Given the projections, the second stage aims to construct a 3-D model of the molecular structure, usually using an expectation-maximization algorithm~\cite{scheres2012relion}. 
+The first stage, called \emph{particle picking},  detects and extracts the particle projections from the micrographs. Given the projections, the second stage aims to reconstruct a 3-D model of the molecular structure, usually using an expectation-maximization algorithm~\cite{scheres2012relion}. 
 %The quality of the reconstruction eventually hinges on the quality of the particle picking stage.
 Crucially, reliable detection of individual particles is impossible in a highly noisy environment. This fact has been recognized early on by the cryo-EM community. 
 Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was reasoned that particle picking is impossible for molecules below a certain weight (below~$\sim$50 kDa). 
@@ -301,7 +303,7 @@ $x$ sampled from $\{ x_1, \ldots, x_K \}$ with probabilities $(\pi_1, \ldots, \p
 \end{align}
 Explicit expressions of the autocorrelations for the more involved model of  cryo-EM~\eqref{eq:cryoEM} are given in~\cite{bendory2018toward}.
 
-We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity  the empirical autocorrelations of $y$ almost surely (a.s.) converge to the actual (population) autocorrelations of $y$, that is, % (ergodicity)
+We are given one observation (one realization) of $y$. Thus, we cannot compute the autocorrelations of $y$ exactly as they involve taking an expectation against the distribution of $y$. However, by the law of large numbers, as $N$ grows to infinity  the empirical autocorrelations of $y$ almost surely (a.s.) converge to the actual (population) autocorrelations of $y\in \RN$, that is, % (ergodicity)
 \begin{align}
 \lim_{N \to \infty} \frac{1}{N} \sum_{i=-\infty}^{\infty} y[i]y[i+\ell_1]\cdots y[i+\ell_{q-1}] \aseq a_y^q[\ell_1, \ldots, \ell_{q-1}].
 \end{align}
@@ -334,7 +336,7 @@ where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$, and indices $\ell, \ell_1, 
 
 
 We show in Section~\ref{sec:theory_homogeneous_well_separated} 
-that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case $K = 1$ (all signal occurrences are the same). %\TODO{Do we also need to say "for generic $x$" here, as in Poisson?}
+that $x,\gamma$ and $\sigma$ can be identified uniquely from the observed autocorrelations for the homogeneous case $K = 1$ (all signal occurrences are the same). 
 
 \subsection{Autocorrelations under the Poisson model} \label{sec:ac_poisson}
 
@@ -373,7 +375,7 @@ z[k]  = \frac{z[0]z[k]z[L-1]}{z[0]z[L-1]} = \frac{a_z^3[k,L-1]}{a_z^2[L-1]},
 \label{eq-uniqueness}
 %
 \end{equation}
-for $k = 0, \ldots, L-1$. If $z[0]$ or $z[L-1]$ are equal to zero, then $a_z^2[L-1] = 0$ and we can use that indication to redefine $L$.
+for $k = 0, \ldots, L-1$. If $z[0]$ or $z[L-1]$ are equal to zero, then $a_z^2[L-1] = 0$ and we can use that indication to shrink $L$.
 This proves the following useful fact:
 \begin{proposition} \label{prop:uniqueness}
 	%
@@ -512,7 +514,7 @@ The code for all experiments is available at \url{https://github.com/PrincetonUn
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=1\linewidth]{heterogeneous_progressive_n12300000000_466300}
-	\caption{Experiment described in Section~\ref{sec:XP1}. For a fixed noise level $\sigma = 3$ and a fixed set of $K = 3$ signals of length $L = 21$, an observation $y$ of length $N = 12.3 \cdot 10^9$ is generated according to~\eqref{eq:model} in the well-separated model, with fixed  occurrence probabilities. Each row corresponds to one of the signals. The last column shows evolution of the relative root mean squared error in estimating each signal, as a longer and longer subset of $y$ is observed. Red dots mark the three snapshots that are illustrated in columns 1--3: red signals are the ground truth and blue signals are the estimators.}
+	\caption{Experiment described in Section~\ref{sec:XP1}. For a fixed noise level $\sigma = 3$ and a fixed set of $K = 3$ signals of length $L = 21$, an observation $y$ of length $N = 1.23 \cdot 10^{10}$ is generated according to~\eqref{eq:model} in the well-separated model, with fixed  occurrence probabilities. Each row corresponds to one of the signals. The last column shows evolution of the relative root mean squared error in estimating each signal, as a longer and longer subset of $y$ is observed. Red dots mark the three snapshots that are illustrated in columns 1--3: red signals are the ground truth and blue signals are the estimators.}
 	\label{fig:1Dheterosignals}
 \end{figure}
 
@@ -520,7 +522,7 @@ For the experiment depicted in Figure~\ref{fig:1Dheterosignals}, we fix $K = 3$ 
 % sqrt((m_want*sum(X.^2)')/(sigma^2*n))
 is about 1/9.
 
-Visually, the noise dominates the signal to the point that it is challenging to detect occurrences. More precisely, the cross-correlations of $y$ even with the true signals presents peaks at essentially random locations, apparently uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to cluster them according to which signal appears where.
+Visually, the noise dominates the signal to the point that it is challenging to detect occurrences. More precisely, the cross-correlations of $y$ even with the true signals presents peaks at essentially random locations,  uninformative of the actual locations of the signal occurrences. Thus, we contend that it would be difficult for any algorithm to locate the signal occurrences, let alone to cluster them according to which signal appears where.
 
 Our aim is to investigate how accurately we can estimate the signals as a function of the observation length. To this end, we consider a growing part of the observation $y$. For each length, we compute autocorrelations on that part, then we go on to estimate the signals from these ``mixed'' quantities. In practice, the autocorrelations are computed on disjoint segments of $y$ of length $100\cdot10^6$ and added up, without correction for the junction points. Segments are handled sequentially on a GPU, as GPUs are particularly well suited to execute simple instructions across large vectors of data. If multiple GPUs are available, segments can  be handled in parallel.
 
@@ -534,7 +536,7 @@ where $W \geq L$ is the length of the sought signals and the weights are set to 
 
 Setting $W = L$ (as is a priori desired) is problematic because the above optimization problem appears to have numerous poor local optimizers. Thus, we first run the optimization with $W = 2L-1$. This problem appears to have few poor local optima, perhaps because the additional degrees of freedom allow for more escape directions. Since we hope the signals estimated this way correspond to the true signals zero-padded on either side to length $W$, we extract from each one a subsignal of length $L$ that has largest $\ell_2$-norm. This estimator is then used as initial iterate for~\eqref{eq:optim1D}, this time with $W = L$. We find that this procedure is reliable for a wide range of experimental parameters. To solve~\eqref{eq:optim1D}, we run the trust-region method implemented in Manopt~\cite{manopt}, which allows to treat the positivity constraints on coefficients $\hat \gamma_k$. Notice that the cost function is a polynomial in the variables, so that it is straightforward to compute it and its derivatives.
 
-In Figure~\ref{fig:1Dheterosignals}, we find that the signals can be recovered with good accuracy despite the noise levels which seemingly preempts location and clustering. We also note that the amount of data required to produce these good estimations is large. Furthermore, as illustrated here and as we have observed in numerous experiments, signals with more variations (such as the third signal in this experiment which was generated once from a Gaussian distribution) are easier to estimate accurately than more regular signals (in this case, despite the fact that the third signal occurs less frequently than the others).
+In Figure~\ref{fig:1Dheterosignals}, we find that the signals can be recovered with good accuracy despite the noise levels which seemingly hinders location and clustering. We also note that the amount of data required to produce these good estimations is large. Furthermore, as illustrated here and as we have observed in numerous experiments, signals with more variations (such as the third signal in this experiment which was generated once from a Gaussian distribution) are easier to estimate accurately than more regular signals (in this case, despite the fact that the third signal occurs less frequently than the others).
 This phenomenon has been also observed in multi-reference alignment~\cite[Section 3.2]{perry2017sample}.
 
 \subsection{Experiment 2}
@@ -662,7 +664,7 @@ Now switch the sums over $i$ and $j$, and observe that $I_{ij}$ is zero unless $
 \begin{align}
 a_y^1 & = \frac{1}{N} \sum_{j = 1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-1} x_{(j)}[t]\right\} + \frac{1}{N} \E_\varepsilon\left\{ \sum_{i=0}^{N-1} \varepsilon[i]\right\}.
 \end{align}
-Since the noise has zero mean and $x_{(1)}, \ldots, x_{(|s|)}$ are independent, we further find:
+Since the noise has zero mean and $x_{(1)}, \ldots, x_{(|s|)}$ are identically distributed, we further find:
 \begin{align}
 a_y^1 & = \frac{|s|L}{N} a_x^1 = \gamma a_x^1.
 \end{align}
@@ -679,11 +681,11 @@ N \cdot a_y^2[\ell] & = \E_y\left\{ \sum_{i = 0}^{N-\ell-1} y[i] y[i+\ell] \righ
 \end{align*}
 The cross-terms vanish in expectation since $\varepsilon$ is zero mean and independent from the signal occurrences. The last term vanishes in expectation unless $\ell = 0$ since distinct entries of $\varepsilon$ are independent. For $\ell = 0$, $\E\{\varepsilon[i]^2\} = \sigma^2$. Finally, using the separation property, observe that if $I_{ij}  I_{i+\ell,j'}$ is nonzero, then it is equal to one, $j = j'$ and $i = s_{(j)} + t$ for some $t$ in $0, \ldots, L-\ell-1$. Then, switch the order of summations to get
 \begin{align}
-N \cdot a_y^2[\ell] & = \sum_{j=1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-\ell-1} x_{(j)}[t] x_{(j)}[t+\ell] \right\} + (N-\ell)\sigma^2 \ell[\ell],
+N \cdot a_y^2[\ell] & = \sum_{j=1}^{|s|} \E_{x_{(j)}}\left\{ \sum_{t = 0}^{L-\ell-1} x_{(j)}[t] x_{(j)}[t+\ell] \right\} + (N-\ell)\sigma^2 \delta[\ell],
 \end{align}
-where $\ell[0] = 1$ and $\ell[\ell \neq 0] = 0$. Since each $x_{(j)}$ is distributed as $x$, they all have the same autocorrelations as $x$ and we finally get
+where $\delta[0] = 1$ and $\delta[\ell \neq 0] = 0$. Since each $x_{(j)}$ is distributed as $x$, they all have the same autocorrelations as $x$ and we finally get
 \begin{align}
-a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-\ell}{N}\sigma^2 \ell[\ell] = \gamma a_x^2[\ell] + \sigma^2 \delta[\ell].
+a_y^2[\ell] & = \gamma a_x^2[\ell] + \frac{N-\ell}{N}\sigma^2 \delta[\ell] = \gamma a_x^2[\ell] + \sigma^2 \delta[\ell].
 \end{align}
 
 We now turn to the third-order autocorrelations. These involve the sum
@@ -790,7 +792,8 @@ We will make repeated use of the following elementary lemma:
 
 \subsection{Computing $a_y^1$}
 
-We will first condition on the vector $s$ of locations of the subsignals in $y$, and then average over $s$. We will denote by $x_{(1)}^{i},\dots,x_{(s[i])}^i$ the random vectors with position 0 located at $i$. We have:
+We will first condition on the vector $s$ of locations of the subsignals in $y$, and then average over $s$. We will denote by $x_{(1)}^{i},\dots,x_{(s[i])}^i$ the random vectors starting  in $y[i]$. We have:
+%with position 0 located at $i$. We have:
 %
 \begin{align}
 %
@@ -1152,7 +1155,7 @@ Refer to equations \eqref{eq:mean_micrograph}--\eqref{eq:ac3_micrograph} for exp
 \end{align*}
 Similarly, using $a_x^2[-\ell] = a_x^2[\ell]$:
 \begin{align*}
-2\sum_{\ell = 1}^{L-1}a_y^2[\ell] & = \gamma \sum_{\ell = 1}^{L-1} a_x^2[\ell] + a_x^2[-\ell] \\
+2\sum_{\ell = 1}^{L-1}a_y^2[\ell] & = \gamma \sum_{\ell = 1}^{L-1} \left(a_x^2[\ell] + a_x^2[-\ell]\right) \\
 & = \frac{\gamma}{L}\sum_{i=0}^{L-1}\sum_{\ell = 1}^{L-1} x[i]\left(x[i+\ell] + x[i-\ell]\right) \\ &= \frac{\gamma}{L} \sum_{i = 0}^{L-1} \sum_{j = 0, j \neq i}^{L-1} x[i] x[j],
 \end{align*}
 where the last equality is obtained by noting that, given the summation bounds, the set of pairs $(i, i\pm\ell)$ and $(i, j)$ are the same over the valid range $\{0, \ldots, L-1\}^2$. To conclude, notice that $a_y^2[0]=\frac{\gamma}{L}\sum_{i=0}^{L-1}x[i]^2 + \sigma^2$ and combine.
@@ -1163,7 +1166,7 @@ where the last equality is obtained by noting that, given the summation bounds, 
 We prove that both $\sigma$ and $\gamma$ are identifiable from the observed first three moments of $y$. For convenience, we work with $\beta = \gamma / L$ rather than $\gamma$ itself. To this end, we construct two quadratic equations satisfied by $\beta$ and whose coefficients can be computed from observable quantities. Then, we show that these equations are independent, and hence that $\beta$ is uniquely defined. Given $\beta$, we can estimate $\sigma$ using Proposition~\ref{prop:gamma}.
 
 Throughout the proof, it is important to distinguish between observed and unobserved values.
-We denote the observed values by $E_i$ or $a_y^1,a_y^2,a_y^3$. We use $F_i$ to denote functions of the signal's autocorrelations (which are not directly observable).
+We denote the observed values by $E_i$ and $a_y^1,a_y^2,a_y^3$. We use $F_i$ to denote functions of the signal's autocorrelations (which are not directly observable).
 
 Recall that $a_y^1 = \beta(\one^Tx)$ and $a_y^2[0] = \beta\|x\|^2+\sigma^2$, where $\one\in\RL$ is the vector of all-ones and $\|x\|=\sqrt{x[0]^2 + \cdots + x[L-1]^2}$ is the 2-norm. Consider the product $E_1$:
 \begin{equation}\label{eq:E1}
