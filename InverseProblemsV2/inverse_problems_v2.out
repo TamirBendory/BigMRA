@@ -1,0 +1,23 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Connection with single-particle reconstruction via cryo-electron microscopy}{}% 2
+\BOOKMARK [1][-]{section.3}{Autocorrelation analysis}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Autocorrelations under the well-separated model}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Autocorrelations under the Poisson model}{section.3}% 5
+\BOOKMARK [1][-]{section.4}{Theory}{}% 6
+\BOOKMARK [2][-]{subsection.4.1}{Guarantees for the homogeneous well-separated model}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.2}{Guarantees for the homogeneous Poisson model}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.3}{Elementary limitations of the heterogeneous case}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.4}{Autocorrelations in higher dimensions}{section.4}% 10
+\BOOKMARK [1][-]{section.5}{Algorithms and numerical experiments}{}% 11
+\BOOKMARK [2][-]{subsection.5.1}{Experiment 1}{section.5}% 12
+\BOOKMARK [2][-]{subsection.5.2}{Experiment 2}{section.5}% 13
+\BOOKMARK [2][-]{subsection.5.3}{Experiment 3}{section.5}% 14
+\BOOKMARK [1][-]{section.6}{Summary}{}% 15
+\BOOKMARK [1][-]{appendix.A}{Autocorrelations in the well-separated model}{}% 16
+\BOOKMARK [1][-]{appendix.B}{Autocorrelations in the Poisson model}{}% 17
+\BOOKMARK [2][-]{subsection.B.1}{Computing ay1}{appendix.B}% 18
+\BOOKMARK [2][-]{subsection.B.2}{Computing ay2}{appendix.B}% 19
+\BOOKMARK [2][-]{subsection.B.3}{Computing ax3}{appendix.B}% 20
+\BOOKMARK [1][-]{appendix.C}{Proof of Proposition 4.2}{}% 21
+\BOOKMARK [1][-]{appendix.D}{Proof of Proposition 4.3}{}% 22
+\BOOKMARK [1][-]{appendix.E}{Proof of Proposition 4.5}{}% 23
