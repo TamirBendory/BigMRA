@@ -197,16 +197,16 @@ In words: the starting positions of any two occurrences  must be separated by at
 Furthermore, we require that the last signal occurrence in $y$ is also followed by at least $L-1$ signal-free entries.
 This property ensures that correlating $y$ with versions of itself shifted by at most $L-1$ entries does not involve correlating distinct signal occurrences. Once $s$ is determined, for each position $i$ such that $s[i] = 1$, one of the signals $x_k$ is selected independently at random, and accordingly we set $s_k[i] = 1$. As a result, the only properties of $s_1, \ldots, s_K$ that affect the autocorrelations of $y$ (for shifts up to $L-1$) are the total number of occurrences of the distinct signals: their individual and relative locations do not intervene. We detail this in Section~\ref{sec:AC_analysis}.
 
+%\revised{A follow-up paper~\cite{lan2019multi} extends this model by allowing an arbitrary spacing between signal occurrences, while excluding overlapping occurrences}. 
+
 \paragraph{The Poisson model.}
 
 If the separation condition is violated, more knowledge about the location distribution is necessary to disentangle the autocorrelations of $y$. To that effect, we analyze a Poisson generative model.
 
 Specifically, for each position $i$, the number $s[i]$ of signal occurrences starting at that position is drawn independently from a Poisson distribution with parameter $\gamma/L$, that is, ${s[i] \overset{i.i.d.}{\sim} \Poisson(\gamma / L)}$ for some parameter $\gamma > 0$. Then, $s[i]$ is split into $s_1[i] + \cdots + s_K[i]$ by selecting $s[i]$ signals among $x_1, \ldots, x_K$, independently at random  following a fixed distribution over $\{1,\ldots,K\}$.
 It is possible for more than one occurrence of the same $x_k$ to start at position~$i$.
-%and the corresponding signal $x_1, \ldots, x_K$ is added to the observation $y$ with first entry positioned at $i$.  --- No need for this, since we already explained the convolution model.
 As for the well-separated model, the autocorrelations of $y$ under this model depend weakly on $s$ and $s_1, \ldots, s_K$, essentially through the parameter $\gamma$: see Section~\ref{sec:AC_analysis}.
 
- 
 \subsection*{Extensions} \label{sec:extensions}
 
 Extending the problem setup and autocorrelation analysis to signals in more than one dimension is straightforward: see the discussion in Section~\ref{sec:high_dimensions} and numerical experiments in Section~\ref{sec:numerics}.
@@ -258,8 +258,7 @@ Particularly, in~\cite{henderson1995limitations,glaeser1999electron}, it was rea
 Even if particle picking is feasible, procedures may be affected by \emph{model bias}.
 Particle picking algorithms are typically based on correlating the micrograph with several templates. Areas highly correlated with some of the templates are assumed to contain projections: these yield the picked particles. 
 Clearly, the picked particles depend heavily on the chosen templates: different templates may lead to different picked particles, hence, which is more problematic, to different 3-D structure reconstructions.
-The cryo-EM community is well aware of this potential pitfall~\cite{vanheel1992correlation,henderson2013avoiding,vanheel2013finding}, which was notably exemplified in the ``Einstein from noise'' experiment~\cite{shatsky2009method}. %In this experiment, multiple realizations of pure noise are aligned to a picture of Einstein using template matching and then averaged. It was shown that the averaged noise rapidly becomes remarkably similar to the Einstein template.
- %In the context of cryo--EM, this experiment exemplifies how prior assumptions about the particles biases the reconstructed structure. %This model bias is common to all particle picking methods based on template matching. %In our approach, no templates or human intervention are required, thus significantly reducing concerns about model bias. %
+The cryo-EM community is well aware of this potential pitfall~\cite{vanheel1992correlation,henderson2013avoiding,vanheel2013finding}, which was notably exemplified \revised{by} the ``Einstein from noise'' experiment~\cite{shatsky2009method}.
 
 A recent work of the authors suggests a methodology to bypass particle picking and  reconstruct the 3-D structure directly from the micrograph~\cite{bendory2018toward}.
 Based on autocorrelation analysis, it was shown that---at least in principle---the limits high noise regimes 
@@ -451,7 +450,7 @@ where
 
 
 In the heterogeneous model~\eqref{eq:model}, the unknowns are $K$ signals of length $L$, together with their densities $\gamma_1, \ldots, \gamma_K$~\eqref{eq:gamma_k} (equivalently: the distribution $\pi$ and overall density $\gamma$) and possibly the noise level $\sigma$. To estimate these parameters, we must collect at least as many independent equations. Within our framework, polynomial equations are provided by the observable autocorrelations, which correspond to mixed autocorrelations of the unknowns as per~\eqref{eq:mixedautocorr}. In this section, following~\cite{boumal2017heterogeneous}, we count how many equations the first three autocorrelations may provide in the best case (discounting symmetries). This leads to a straightforward information-theoretic upper bound on the number $K$ of signals which can be estimated, as a function of $L$. This is only an upper bound, though a bound of the same type was shown to be tight in a similar setting~\cite{bandeira2017estimation}.
-The counting is based on the autocorrelations of the well-separated model. For entries independent of $\sigma$, the autocorrelations of the Poisson process contain the same information as those of the well-separated model. If $\sigma$ is known, this holds true for all entries: see Section~\ref{sec:ac_poisson}.
+The counting is based on the autocorrelations of the well-separated model. For entries independent of $\sigma$, the autocorrelations of the Poisson process contain the same information as those of the well-separated model. If $\sigma$ is known, this holds true for all entries; see Section~\ref{sec:ac_poisson}.
 
 
 The first-order autocorrelation $a_y^1$~\eqref{eq:mean_micrograph} provides one equation. For second-order autocorrelations $a_y^2[\ell]$~\eqref{eq:ac2_micrograph}, if $\sigma$ is known we obtain $L$ equations with $\ell$ ranging from 0 to $L-1$. If $\sigma$ is unknown, we may disregard $a_y^2[0]$ (the only entry affected by $\sigma$) and still collect $L-1$ equations. Similarly, for third-order autocorrelations, $a_y^3[\ell_1, \ell_2]$~\eqref{eq:ac3_micrograph} with $0 \leq \ell_1, \ell_2 \leq L-1$ such that $\ell_2 \leq \ell_1$ includes all relevant entries for our purpose (this accounts for symmetries), providing $\frac{(L+1)(L+2)}{2}-2$ equations in total. 
@@ -548,7 +547,7 @@ This phenomenon has been also observed in multi-reference alignment~\cite[Sectio
 	\label{fig:KLXP}
 \end{figure}
 
-In this second experiment, presented in Figure~\ref{fig:KLXP}, we investigate how many distinct signals ${x_1, \ldots, x_K}$ can be estimated from mixed autocorrelations~\eqref{eq:mixedautocorr}. In order to do so, we consider a setup where the mixed autocorrelations are known perfectly. This corresponds to the limit of an infinitely long observation $y$ with fixed density $\gamma$ and fixed noise level (that may be arbitrarily high). The specific value of $\sigma$ is immaterial since we only consider autocorrelations that are unaffected by noise bias. Furthermore, we assume uniform occurrence distribution $\gamma_k$ (known to the algorithm), and known density $\gamma$ (which is then irrelevant as it only induces a global scaling of the autocorrelations of $y$).
+In this second experiment, presented in Figure~\ref{fig:KLXP}, we investigate how many distinct signals ${x_1, \ldots, x_K}$ can be estimated from mixed autocorrelations~\eqref{eq:mixedautocorr}. In order to do so, we consider a setup where the mixed autocorrelations are known perfectly. This corresponds to the limit of an infinitely long observation $y$ with fixed density $\gamma$ and fixed noise level (that may be arbitrarily high). The specific value of $\sigma$ is immaterial since we only consider autocorrelations that are unaffected by noise bias. Furthermore, we assume uniform occurrence distribution $\gamma_k$ (known to the algorithm), and known density $\gamma$ (which is then irrelevant as it only induces a global scaling of the autocorrelations of~$y$).
 
 To produce Figure~\ref{fig:KLXP}, we consider each pair $(K, L)$ in turn, with $K = 1, 2, 3, \ldots, 10$ and $L = 5, 10, 15, \ldots, 100$. For each pair, we generate $K$ random normal signals of length $L$, once. The perfect mixed autocorrelations are computed. They are then provided to the inversion algorithm described in Section~\ref{sec:XP1}, together with the knowledge that signals occur with equal probability, as well as the correct density $\gamma$. The algorithm is initialized 50 times with an independent random initial guess, also following a normal distribution. For each run, we record three metrics:
 \begin{enumerate}
@@ -598,8 +597,6 @@ We compute the average second-order autocorrelation of the observations. This is
 Relative error is measured as the ratio of the root mean square error to the norm of the ground truth (square root of the sum of squared pixel intensities). Figure~\ref{fig:Einst_example} shows several estimated images for a growing number of observations. Figure~\ref{fig:error_per_micro} presents the normalized recovery error as a function of the amount of data available.  This is computed after fixing the reflection symmetries (see Section~\ref{sec:high_dimensions}).
 
 As evidenced by these figures, the ground truth image can be estimated increasingly well from increasingly many observations, without the need to locate the signal occurrences.
-
-
 
 \begin{figure}[t]
 	\centering

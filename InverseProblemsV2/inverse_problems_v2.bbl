@@ -1,11 +1,12 @@
 \begin{thebibliography}{10}
 
 \bibitem{abbe2017multireference}
-Emmanuel Abbe, Tamir Bendory, William Leeb, Jo{\~a}o~M Pereira, Nir Sharon, and
-  Amit Singer.
+Emmanuel {Abbe}, Tamir {Bendory}, William {Leeb}, Jo{\~a}o~M {Pereira}, Nir
+  {Sharon}, and Amit {Singer}.
 \newblock Multireference alignment is easier with an aperiodic translation
   distribution.
-\newblock {\em IEEE Transactions on Information Theory}, 2018.
+\newblock {\em IEEE Transactions on Information Theory}, 65(6):3565--3584,
+  2019.
 
 \bibitem{abed1997blind}
 Karim Abed-Meraim, Wanzhi Qiu, and Yingbo Hua.
@@ -55,8 +56,8 @@ Alexander Barnett, Charles~L Epstein, Leslie Greengard, and Jeremy Magland.
 \bibitem{bartesaghi20152}
 Alberto Bartesaghi, Alan Merk, Soojay Banerjee, Doreen Matthies, Xiongwu Wu,
   Jacqueline~LS Milne, and Sriram Subramaniam.
-\newblock 2.2 {\aa} resolution cryo-em structure of $\beta$-galactosidase in
-  complex with a cell-permeant inhibitor.
+\newblock 2.2 {{\AA} resolution} cryo-{EM} structure of $\beta$-galactosidase
+  in complex with a cell-permeant inhibitor.
 \newblock {\em Science}, 348(6239):1147--1151, 2015.
 
 \bibitem{beinert2015ambiguities}
@@ -166,6 +167,11 @@ Ruslan~P Kurta, Jeffrey~J Donatelli, Chun~Hong Yoon, Peter Berntsen, Johan
 \newblock Correlations in scattered {X}-ray laser pulses reveal nanoscale
   structural features of viruses.
 \newblock {\em Physical review letters}, 119(15):158102, 2017.
+
+\bibitem{lan2019multi}
+Ti-Yen Lan, Tamir Bendory, Nicolas Boumal, and Amit Singer.
+\newblock Multi-target detection with an arbitrary spacing distribution.
+\newblock {\em arXiv preprint arXiv:1905.03176}, 2019.
 
 \bibitem{lee2017blind}
 Kiryung Lee, Yanjun Li, Marius Junge, and Yoram Bresler.
