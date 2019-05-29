@@ -425,7 +425,7 @@ Opposed to Proposition~\ref{prop:gamma_sigma}, these quantities can be computed 
 In Appendix~\ref{sec:proof_uniqueness_poisson} we prove the following result:
 
 \begin{proposition} \label{prop:uniqueness_poisson}
-Under the homogeneous Poisson model, the signal $x$, the noise level $\sigma^2$ and the Poisson parameter $\gamma$ are identified uniquely. 
+Under the homogeneous Poisson model, the signal $x$, the noise level $\sigma^2$ and the Poisson parameter $\gamma$ are identified uniquely \revised{from the observed autocorrelations}. 
 In particular,
 	\begin{align}
 \gamma &= L \frac{(\gamma a_y^1) (a_y^2[1] - (a_y^1)^2)}
@@ -616,7 +616,9 @@ As evidenced by these figures, the ground truth image can be estimated increasin
 
 This paper suggests a computational  framework for estimation under extreme noise levels. 
 The crux of the method lies in the distinction between parameters of interest (the signals) and nuisance variables (parameters associated with individual signal occurrences, such as location and class). In part through theory and in part through numerical experiments, we show that estimating the signals is possible even when they cannot be detected in the data. The method consists of two steps. First, we estimate the autocorrelations of the observation. A key feature is that, for any noise level, these autocorrelations can be estimated to any desired accuracy given sufficiently rich observations. Second, we recover the signals from the autocorrelations. This recovery entails solving a system of low-order polynomial equations. While solving such systems is hard in general, we found that in the homogeneous case we can solve them explicitly, and in both the homogeneous and heterogeneous cases we can solve them with reasonable robustness through non-convex optimization, in a wide regime of parameters.
-%The properties of the specific systems (e.g., its condition number) affects the feasibility of the estimation procedure.
+
+\revised{In addition, autocorrelation analysis provides a flexible framework to extend the multi-target detection model by  relating the expected autocorrelations
+of the data with the signals, and all parameters necessary to describe the generative model. For instance,  a follow-up paper relaxes the separation condition~\eqref{eq:spacing} and allows  an arbitrary spacing of targets, as long as the signal occurrences do not overlap~\cite{lan2019multi}. In that case, the autocorrelations of the data are functions of the signal and the unknown target distribution. In a similar fashion, one may include more realistic noise models, the effect of a blurring kernel (e.g., the point spread function of the microscope) and so on.}
 
 The prime motivation of this paper emanates from challenges in small particle reconstruction using cryo-EM.
 Small particles induce such low signal-to-noise ratio in the micrograph that particle picking---the first step in any current cryo-EM reconstruction algorithm---is impossible. 
