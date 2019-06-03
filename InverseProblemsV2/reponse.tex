@@ -135,10 +135,19 @@ It is easy to apply the same technique to our framework. We added a few sentence
 
 \noindent \textbf{Comment:} An important point in practical image reconstruction, especially in modalities like phase retrieval, is that precise knowledge of the support of the image makes the reconstruction problem considerably easier.  Beyond that, having an image with a sharply delineated, known boundary is, in fact, a huge advantage. Such images are used in the examples in this paper, along with an exact knowledge of their support.  In most realistic imaging applications such information is not available, and this renders these problems inherently more difficult, regardless of the algorithm used. Some mention of this fact should appear in this paper.\\
 
-\noindent \textbf{Response:} Section 4.4 discusses the application of our approach to 2-D images. In this section, we underscore the importance of the knowledge of the exact support for phase retrieval (recovery from second-order autocorrelation) as was shown in [9]. 
+\noindent \textbf{Response:} Section 4.4 discusses the application of our approach to 2-D images. For Einstein's image used in the manuscript, the boundary of the second-order autocorrelation  can be identified easily if the second-order autocorrelation is known precisely (that is, $N\to\infty$); see Figure~\ref{fig:XC} (in this report). 
+Since the image is square, it implies the support of the image itself. 
+In Section 4.4, we underscore the importance of the knowledge of the exact support for phase retrieval (recovery from second-order autocorrelation) as was shown in [9]. 
 We revised a couple of sentences in this section for the sake of clarity. 
+
 If exact support knowledge is not available, our proposed solution is to consider the third-order autocorrelation.
 To demonstrate it, in the revised manuscript, we changed Experiment 1. Now, half of the first signal in Figure 1 is zero, which allows us to simulate the situation in which the support of the signal is overestimated. Our algorithm still recovers the signal accurately. \\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.3]{Xcorr}
+	\caption{	\label{fig:XC} The second-order autocorrelation of Einstein's image used in the paper (padded by zeros).}
+\end{figure}
 
 \noindent \textbf{Comment:} Though it is clarified in the proof of Prop. 4.5 it is not immediately clear that  the right hand sides of formulae (4.3), (4.4), (4.5) are observable quantities. A remark, after the statement of the proposition, clarifying this  point would be useful.\\
 
@@ -147,7 +156,7 @@ To demonstrate it, in the revised manuscript, we changed Experiment 1. Now, half
 \noindent \textbf{Comment:}  I found it difficult to understand what Figure 2 is demonstrating. Perhaps it is a result of the poor rendering of the grey-scale.
 \\ 
 
-\noindent \textbf{Response:} The number of numbers we compute (as autocorrelations) is a growing function of the signal length $L$. Hence, we expect that, as $L$ grows, we should be able to estimate more and more distinct signals in the heterogeneous case. The experiment reported in Figure 2 illustrates how $K$ (the number of signals we can estimate simultaneously) grows as a function of $L$. Since to do the actual recovery we need to solve a non-convex optimization problem, this experiment is setup so that we can distinguish between the effects of statistical and computational difficulties.
+\noindent \textbf{Response:} The number of autocorrelation entries we compute increases with the signal length $L$. Hence, we expect that, as $L$ grows, we should be able to estimate more and more distinct signals in the heterogeneous case. The experiment reported in Figure 2 illustrates how $K$ (the number of signals we can estimate simultaneously) grows as a function of $L$. Since to do the actual recovery we need to solve a non-convex optimization problem, this experiment is setup so that we can distinguish between the effects of statistical and computational difficulties.
 
 We find this figure important to inspect (empirically) how many signals can be estimated simultaneously from a mix of their autocorrelations. We agree that this figure should be visualized in a colored version of the manuscript. We used a similar figure for the same purpose (but for a different problem) in a previous publication: Boumal, N., et al. ``Heterogeneous multireference alignment: A single pass approach.'' \emph{2018 52nd Annual Conference on Information Sciences and Systems (CISS)}. IEEE, 2018.
 
