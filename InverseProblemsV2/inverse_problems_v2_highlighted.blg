@@ -1,0 +1,22 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: inverse_problems_v2_highlighted.aux
+The style file: plain.bst
+Database file #1: ref.bib
+You're missing a field name---line 16 of file ref.bib
+ : 
+ : % howpublished = {\url{https://www.nobelprize.org/nobel_prizes/chemistry/laureates/2017/
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Repeated entry---line 238 of file ref.bib
+ : @article{bartesaghi20152
+ :                         ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 829 of file ref.bib
+ : @article{kuhlbrandt2014resolution
+ :                                  ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 840 of file ref.bib
+ : @article{lan2019multi
+ :                      ,
+I'm skipping whatever remains of this entry
+Warning--empty school in weinthesis
+(There were 4 error messages)
